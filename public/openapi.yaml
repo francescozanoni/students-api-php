@@ -1,0 +1,515 @@
+openapi: 3.0.0
+info:
+  title: Student management API
+  version: 1.0.0
+paths:
+  /students:
+    get:
+      summary: Returns a list of students
+      operationId: getStudents
+      tags:
+        - students
+      responses:
+        '200':
+          $ref: '#/components/responses/Students'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      summary: Creates a new student
+      operationId: createStudent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewStudent'
+      tags:
+        - students
+      responses:
+        '200':
+          $ref: '#/components/responses/Student'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /students/{id}:
+    get:
+      summary: Returns a student
+      operationId: getStudentById
+      tags:
+        - students
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the student to retrieve
+          schema:
+            type: integer
+      responses:
+        '200':
+          $ref: '#/components/responses/Student'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      summary: Updates a student
+      operationId: updateStudentById
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Student'
+      tags:
+        - students
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the student to update
+          schema:
+            type: integer
+      responses:
+        '200':
+          $ref: '#/components/responses/Student'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      summary: Deletes a student
+      operationId: deleteStudentById
+      tags:
+        - students
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the student to delete
+          schema:
+            type: integer
+      responses:
+        '200':
+          $ref: '#/components/responses/ResourceDeletion'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /annotations:
+    get:
+      summary: Returns a list of annotations
+      operationId: getAnnotations
+      tags:
+        - annotations
+      responses:
+        '200':
+          $ref: '#/components/responses/Annotations'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      summary: Creates a new annotation
+      operationId: createAnnotation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewAnnotation'
+      tags:
+        - annotations
+      responses:
+        '200':
+          $ref: '#/components/responses/Annotation'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /annotations/{id}:
+    get:
+      summary: Returns an annotation
+      operationId: getAnnotationById
+      tags:
+        - annotations
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the annotation to retrieve
+          schema:
+            type: integer
+      responses:
+        '200':
+          $ref: '#/components/responses/Annotation'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      summary: Updates an annotation
+      operationId: updateAnnotationById
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Annotation'
+      tags:
+        - annotations
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the annotation to update
+          schema:
+            type: integer
+      responses:
+        '200':
+          $ref: '#/components/responses/Annotation'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      summary: Deletes an annotation
+      operationId: deleteAnnotationById
+      tags:
+        - annotations
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the annotation to delete
+          schema:
+            type: integer
+      responses:
+        '200':
+          $ref: '#/components/responses/ResourceDeletion'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /students/{id}/annotations:
+    get:
+      summary: Return the list of a student's annotations
+      operationId: getStudentAnnotations
+      tags:
+        - annotations
+        - students
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the student
+          schema:
+            type: integer
+      responses:
+        '200':
+          $ref: '#/components/responses/Annotations'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      summary: Creates a new annotation
+      operationId: createStudentAnnotation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewAnnotation'
+      tags:
+        - annotations
+        - students
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the annotation's student
+          schema:
+            type: integer
+      responses:
+        '200':
+          $ref: '#/components/responses/Annotation'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  responses:
+    BadRequest:
+      description: Response reporting invalid request (default format of Joi plugin used by hapi framework)
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: integer
+                description: HTTP status code
+              error:
+                type: string
+                description: HTTP status description
+              message:
+                type: string
+                description: Reason making request invalid
+              validation:
+                type: object
+                description: Input item making request invalid
+            required:
+              - statusCode
+              - error
+              - message
+            example:
+              statusCode: 400
+              error: Bad Request
+              message: child "id" fails because ["id" must be a number]
+              validation:
+                source: params
+                keys:
+                - id
+    NotFound:
+      description: Generic response reporting no resource(s) found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: integer
+                description: HTTP status code
+              error:
+                type: string
+                description: HTTP status description
+              message:
+                type: string
+            required:  
+              - statusCode
+              - error
+              - message
+            example:
+              statusCode: 404
+              error: Not Found
+              message: Resource(s) not found
+    InternalServerError:
+      description: Generic response reporting an unexpected error (default format of hapi framework)
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: integer
+                description: HTTP status code
+              error:
+                type: string
+                description: HTTP status description
+              message:
+                type: string
+            required:  
+              - statusCode
+              - error
+              - message
+            example:
+              statusCode: 500
+              error: Internal Server Error
+              message: An internal server error occurred
+    Students:
+      description: Response returning a list of students
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: integer
+              message:
+                type: string
+              data:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Student'
+            required: 
+              - statusCode
+              - message
+              - data
+            example:
+              statusCode: 200
+              message: Resource(s) found
+              data:
+              - id: 1
+                firstName: John
+                lastName: Doe
+              - id: 2
+                firstName: Joan
+                lastName: Doe
+    Student:
+      description: Response returning a student
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: integer
+              message:
+                type: string
+              data:
+                $ref: '#/components/schemas/Student'
+            required: 
+              - statusCode
+              - message
+              - data
+            example:
+              statusCode: 200
+              message: Resource(s) found
+              data:
+                id: 1
+                firstName: John
+                lastName: Doe
+    Annotations:
+      description: Response returning a list of annotations
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: integer
+              message:
+                type: string
+              data:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Annotation'
+            required: 
+              - statusCode
+              - message
+              - data
+            example:
+              statusCode: 200
+              message: Resource(s) found
+              data:
+              - id: 1
+                title: First annotation title
+                body: First annotation body
+              - id: 2
+                title: Second annotation title
+                body: Second annotation body
+    Annotation:
+      description: Response returning a annotation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: integer
+              message:
+                type: string
+              data:
+                $ref: '#/components/schemas/Annotation'
+            required: 
+              - statusCode
+              - message
+              - data
+            example:
+              statusCode: 200
+              message: Resource(s) found
+              data:
+                id: 1
+                title: First annotation title
+                body: First annotation body
+    ResourceDeletion:
+      description: Response confirming deletion of a resource
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: integer
+              message:
+                type: string
+            required: 
+              - statusCode
+              - message
+            example:
+              statusCode: 200
+              message: Resource deleted
+  schemas:
+    NewStudent:
+      type: object
+      properties:
+        firstName:
+          type: string
+          minLength: 2
+        lastName:
+          type: string
+          minLength: 2
+      required:  
+        - firstName
+        - lastName
+      example:
+        firstName: John
+        lastName: Doe
+    Student:
+      allOf:
+        - $ref: '#/components/schemas/NewStudent'
+        - type: object
+          properties:
+            id:
+              type: integer
+          required:  
+            - id
+      example:
+        id: 1
+        firstName: John
+        lastName: Doe
+    NewAnnotation:
+      type: object
+      properties:
+        title:
+          type: string
+        body:
+          type: string
+      required:  
+        - title
+        - body
+      example:
+        title: First annotation title
+        body: First annotation body
+    Annotation:
+      allOf:
+        - $ref: '#/components/schemas/NewAnnotation'
+        - type: object
+          properties:
+            id:
+              type: integer
+          required:  
+            - id
+      example:
+        id: 1
+        title: First annotation title
+        body: First annotation body
