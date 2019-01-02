@@ -7,5 +7,6 @@ storage/*.key
 public/.htaccess
 database/*.sqlite
 phpunit.xml
+public/docs/
 public/phpliteadmin/*
 !public/phpliteadmin/phpliteadmin.config.clqei.php

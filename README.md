@@ -30,6 +30,7 @@ php artisan migrate --seed
 
 ```bash
 rm -rf vendor
+rm -rf public/docs
 ```
 
 #### Set down
@@ -41,5 +42,5 @@ php scripts/setdown.php
 ### Local deployment
 
 ```bash
-php -S localhost -t public
+php -S localhost:80 -t public public/router.php
 ```
