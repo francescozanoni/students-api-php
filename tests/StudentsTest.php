@@ -1,16 +1,16 @@
 <?php
 
 use Laravel\Lumen\Testing\DatabaseMigrations;
-use Laravel\Lumen\Testing\DatabaseTransactions;
 
-class ExampleTest extends TestCase
+class StudentsTest extends TestCase
 {
+
+    use DatabaseMigrations;
+    
     /**
-     * A basic test example.
-     *
-     * @return void
+     * List students.
      */
-    public function testExample()
+    public function testList()
     {
         $this->get('/');
 
@@ -18,4 +18,5 @@ class ExampleTest extends TestCase
             $this->app->version(), $this->response->getContent()
         );
     }
+
 }
