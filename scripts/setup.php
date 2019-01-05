@@ -129,7 +129,7 @@ if ($options['with_phpliteadmin'] === true) {
     }
     unlink(PHPLITEADMIN_ZIP_FILE_PATH);
     copy(
-        PHPLITEADMIN_FOLDER_PATH . '/phpliteadmin.config.students-api-php.php',
+        PHPLITEADMIN_FOLDER_PATH . '/phpliteadmin.config.app.php',
         PHPLITEADMIN_FOLDER_PATH . '/phpliteadmin.config.php'
     );
 
