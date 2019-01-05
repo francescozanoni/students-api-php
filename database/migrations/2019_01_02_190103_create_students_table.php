@@ -13,8 +13,16 @@ class CreateStudentsTable extends Migration
      */
     public function up()
     {
-        Schema::table('students', function (Blueprint $table) {
-            //
+        Schema::create('students', function (Blueprint $table) {
+            $table->increments('id')->autoIncrement();
+            $table->char('first_name')->nullable(false);
+            $table->char('last_name')->nullable(false);
+            $table->char('phone')->nullable(true);
+            $table->char('e_mail')->nullable(true);
+            // Nationality consists of the ISO country code.
+            $table->char('nationality', 2)->nullable(false);
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -25,8 +33,6 @@ class CreateStudentsTable extends Migration
      */
     public function down()
     {
-        Schema::table('students', function (Blueprint $table) {
-            //
-        });
+        Schema::drop('students');
     }
 }

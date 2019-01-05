@@ -21,7 +21,7 @@ php scripts/setup.php
 # To add phpLiteAdmin, reachable at URL <APPLICATION_URL>/phpliteadmin/phpliteadmin.php
 # php scripts/setup.php --with_phpliteadmin
 
-php artisan migrate --seed
+php artisan migrate
 ```
 
 ### Uninstallation

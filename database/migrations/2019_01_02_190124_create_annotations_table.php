@@ -13,8 +13,15 @@ class CreateAnnotationsTable extends Migration
      */
     public function up()
     {
-        Schema::table('annotations', function (Blueprint $table) {
-            //
+        Schema::create('annotations', function (Blueprint $table) {
+            $table->increments('id')->autoIncrement();
+            $table->integer('student_id')->nullable(false);
+            $table->char('title')->nullable(false);
+            $table->char('content')->nullable(false);
+            $table->integer('user_id')->nullable(false); // annotation author
+            $table->timestamps();
+            $table->softDeletes();
+            $table->foreign('student_id')->references('id')->on('students');
         });
     }
 
@@ -25,8 +32,6 @@ class CreateAnnotationsTable extends Migration
      */
     public function down()
     {
-        Schema::table('annotations', function (Blueprint $table) {
-            //
-        });
+        Schema::drop('annotations');
     }
 }
