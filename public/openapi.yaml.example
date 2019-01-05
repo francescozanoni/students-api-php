@@ -3,7 +3,7 @@ info:
   title: Student management API
   version: 1.0.0
 servers:
-  - url: http://192.168.1.71/students-api-php
+  - url: http://localhost
 paths:
   /students:
     get:

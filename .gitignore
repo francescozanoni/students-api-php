@@ -5,6 +5,7 @@ storage/*.key
 .env
 
 public/.htaccess
+public/openapi.yaml
 database/*.sqlite
 phpunit.xml
 public/docs/

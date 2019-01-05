@@ -12,6 +12,8 @@ $filePathsToDelete = [
     BASE_PATH . '/.env',
 
     BASE_PATH . '/phpunit.xml',
+    
+    BASE_PATH . '/public/openapi.yaml',
 
 ];
 
