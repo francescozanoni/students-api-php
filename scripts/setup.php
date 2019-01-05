@@ -94,6 +94,7 @@ foreach ($iterator as $item) {
     }
     chmod($item, 0777);
 }
+chmod(BASE_PATH . '/storage', 0775);
 
 # #####################################################
 
