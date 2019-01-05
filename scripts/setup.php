@@ -89,6 +89,9 @@ echo 'Setting up directories...' . PHP_EOL;
 # Directories writable by the web user
 $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator('storage'));
 foreach ($iterator as $item) {
+    if (basename($item) === '.gitignore') {
+        continue;
+    }
     chmod($item, 0777);
 }
 
