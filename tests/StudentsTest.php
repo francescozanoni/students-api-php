@@ -1,7 +1,6 @@
 <?php
 
 use Laravel\Lumen\Testing\DatabaseMigrations;
-//use Illuminate\Database\Seeder\DatabaseSeeder;
 
 class StudentsTest extends TestCase
 {
@@ -20,6 +19,7 @@ class StudentsTest extends TestCase
     public function testList()
     {
         $this->get('/students')
+        ->seeStatusCode(200)
         ->seeJsonEquals([
                 [
                 'id' => 1,
@@ -44,6 +44,36 @@ class StudentsTest extends TestCase
             'deleted_at' => null,
         ]
              ]);
+    }
+    
+    /**
+     * Get a student.
+     */
+    public function testGet()
+    {
+        $this->get('/students/1')
+        ->seeStatusCode(200)
+        ->seeJsonEquals([
+                'id' => 1,
+            'first_name' => 'John',
+            'last_name' => 'Doe',
+            'e_mail' => 'john.doe@foo.com',
+            'phone' => '1234-567890',
+            'nationality' => 'UK',
+            'created_at' => '2019-01-01 00:00:00',
+            'updated_at' => '2019-01-01 00:00:00',
+            'deleted_at' => null,
+             ]);
+    }
+    
+    /**
+     * Delete a student.
+     */
+    public function testDelete()
+    {
+        $this->delete('/students/2')
+        ->seeStatusCode(200)
+        ->notSeeInDatabase('students', ['id' => 2, 'deleted_at' => null]);
     }
 
 }

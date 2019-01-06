@@ -23,4 +23,5 @@ $router->get('/', function () use ($router) {
 });
 
 $router->get('students', 'StudentsController@list');
-
+$router->get('students/{id}', 'StudentsController@get');
+$router->delete('students/{id}', 'StudentsController@delete');
