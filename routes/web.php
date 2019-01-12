@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +23,8 @@ $router->get('/', function () use ($router) {
 
 });
 
-$router->get('students', 'StudentsController@list');
-$router->get('students/{id}', 'StudentsController@get');
-$router->delete('students/{id}', 'StudentsController@delete');
+$router->get('students', 'StudentsController@index');
+$router->post('students', 'StudentsController@store');
+$router->get('students/{id}', 'StudentsController@show');
+$router->put('students/{id}', 'StudentsController@update');
+$router->delete('students/{id}', 'StudentsController@destroy');

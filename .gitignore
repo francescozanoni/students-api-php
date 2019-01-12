@@ -4,6 +4,7 @@ vendor/
 storage/*.key
 .env
 
+# Application specific
 public/.htaccess
 public/openapi.yaml
 database/*.sqlite
@@ -11,3 +12,7 @@ phpunit.xml
 public/docs/
 public/phpliteadmin/*
 !public/phpliteadmin/phpliteadmin.config.app.php
+
+# IDE specific
+.vscode/
+.idea/
