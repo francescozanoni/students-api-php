@@ -7,10 +7,10 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
 /**
- * Class PrettyPrintMiddleware
+ * Class PrettyPrint
  * @package App\Http\Middleware
  */
-class PrettyPrintMiddleware
+class PrettyPrint
 {
 
     /**

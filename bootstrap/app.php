@@ -63,7 +63,8 @@ $app->singleton(
 */
 
 $app->middleware([
-    App\Http\Middleware\ PrettyPrintMiddleware::class
+    App\Http\Middleware\PrettyPrint::class,
+    App\Http\Middleware\ValidateRequest::class,
 ]);
 
 // $app->routeMiddleware([
