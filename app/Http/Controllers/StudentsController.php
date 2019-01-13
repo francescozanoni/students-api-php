@@ -11,6 +11,8 @@ class StudentsController extends Controller
 
     /**
      * Retrieve all students.
+     *
+     * @return Student[]|\Illuminate\Database\Eloquent\Collection
      */
     public function index()
     {
@@ -22,11 +24,12 @@ class StudentsController extends Controller
      *
      * @param Request $request
      *
-     * @return Student[]|\Illuminate\Database\Eloquent\Collection
+     * @return Student
      */
     public function store(Request $request)
     {
-        return Student::all();
+        $student = Student::create($request->all());
+        return $student;
     }
 
     /**
@@ -34,7 +37,7 @@ class StudentsController extends Controller
      *
      * @param int $id
      *
-     * @return
+     * @return Student
      */
     public function show(int $id)
     {
@@ -47,11 +50,13 @@ class StudentsController extends Controller
      * @param Request $request
      * @param int $id
      *
-     * @return Student[]|\Illuminate\Database\Eloquent\Collection
+     * @return Student
      */
     public function update(Request $request, int $id)
     {
-        return Student::all();
+        $student = Student::findOrFail($id);
+        $student->fill($request->all());
+        return $student;
     }
 
     /**
