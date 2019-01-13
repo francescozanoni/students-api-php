@@ -26,8 +26,8 @@ class ValidateRequest
         // THIS MIDDLEWARE CANNOT BE GLOBAL,
         // OTHERWISE CURRENT ROUTE IS NOT AVAILABLE YET.
     
-        if (isset(app('request')->route()[1]) === true &&
-            isset(app('request')->route()[1]['as']) === true) {
+        if (isset($request->route()[1]) === true &&
+            isset($request->route()[1]['as']) === true) {
         
         }
     
