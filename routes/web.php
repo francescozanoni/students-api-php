@@ -14,17 +14,21 @@ declare(strict_types = 1);
 
 $router->get('/', function () use ($router) {
 
+    $openapiSchemaFilePath = config('openapi.schema_file_path');
+    $openapiSwaggerUiUrl = app('url')->to(config('openapi.swagger_ui_url'));
     // If Swagger UI is available, automatic redirection to it.
-    if (file_exists(config('openapi.schema_file_path')) === true) {
-        return redirect(app('url')->to(config('openapi.swagger_ui_url') . '?url=' . app('url')->to(basename(config('openapi.schema_file_path')))));
+    if (file_exists($openapiSchemaFilePath) === true) {
+        return redirect($openapiSwaggerUiUrl . '?url=' . app('url')->to(basename($openapiSchemaFilePath)));
     }
 
     return $router->app->version();
 
 });
 
-$router->get('students', 'StudentsController@index');
-$router->post('students', 'StudentsController@store');
-$router->get('students/{id}', 'StudentsController@show');
-$router->put('students/{id}', 'StudentsController@update');
-$router->delete('students/{id}', 'StudentsController@destroy');
+$router->group(['middleware' => 'validate_request'], function () use ($router) {
+    $router->get('students', ['as' => 'getStudents'], 'StudentsController@index');
+$router->post('students',  ['as' => 'createStudent'], 'StudentsController@store');
+$router->get('students/{id}', ['as' => 'getStudentById'], 'StudentsController@show');
+$router->put('students/{id}', ['as' => 'updateStudentById'], 'StudentsController@update');
+$router->delete('students/{id}', ['as' => 'deleteStudentById'], 'StudentsController@destroy');
+});

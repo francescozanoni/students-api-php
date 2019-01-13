@@ -64,12 +64,12 @@ $app->singleton(
 
 $app->middleware([
     App\Http\Middleware\PrettyPrint::class,
-    App\Http\Middleware\ValidateRequest::class,
 ]);
 
-// $app->routeMiddleware([
+$app->routeMiddleware([
 //     'auth' => App\Http\Middleware\Authenticate::class,
-// ]);
+    'validate_request' => App\Http\Middleware\ValidateRequest::class,
+]);
 
 /*
 |--------------------------------------------------------------------------

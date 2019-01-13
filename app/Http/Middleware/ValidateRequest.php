@@ -22,7 +22,15 @@ class ValidateRequest
      */
     public function handle($request, \Closure $next)
     {
-
+    
+        // THIS MIDDLEWARE CANNOT BE GLOBAL,
+        // OTHERWISE CURRENT ROUTE IS NOT AVAILABLE YET.
+    
+        if (isset(app('request')->route()[1]) === true &&
+            isset(app('request')->route()[1]['as']) === true) {
+        
+        }
+    
         $response = $next($request);
 
         return $response;
