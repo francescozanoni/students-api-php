@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Student;
 use Illuminate\Http\Request;
+use App\Http\Resources\Student as StudentResource;
 
 class StudentsController extends Controller
 {
@@ -12,11 +13,11 @@ class StudentsController extends Controller
     /**
      * Retrieve all students.
      *
-     * @return Student[]|\Illuminate\Database\Eloquent\Collection
+     * @return StudentResource[]
      */
     public function index()
     {
-        return Student::all();
+        return StudentResource::collection(Student::all());
     }
 
     /**
@@ -24,12 +25,12 @@ class StudentsController extends Controller
      *
      * @param Request $request
      *
-     * @return Student
+     * @return StudentResource
      */
     public function store(Request $request)
     {
         $student = Student::create($request->all());
-        return $student;
+        return new StudentResource($student);
     }
 
     /**
@@ -37,11 +38,11 @@ class StudentsController extends Controller
      *
      * @param int $id
      *
-     * @return Student
+     * @return StudentResource
      */
     public function show(int $id)
     {
-        return Student::findOrFail($id);
+        return new StudentResource(Student::findOrFail($id));
     }
 
     /**
@@ -50,13 +51,13 @@ class StudentsController extends Controller
      * @param Request $request
      * @param int $id
      *
-     * @return Student
+     * @return StudentResource
      */
     public function update(Request $request, int $id)
     {
         $student = Student::findOrFail($id);
         $student->fill($request->all());
-        return $student;
+        return new StudentResource($student);
     }
 
     /**
