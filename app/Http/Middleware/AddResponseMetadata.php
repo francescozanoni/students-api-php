@@ -4,14 +4,14 @@ declare(strict_types = 1);
 namespace App\Http\Middleware;
 
 /**
- * Class ValidateRequest
+ * Class AddResponseMetadata
  * @package App\Http\Middleware
  */
-class ValidateRequest
+class AddResponseMetadata
 {
 
     /**
-     * Validate request
+     * Add response metadata
      *
      * @param $request
      * @param \Closure $next
@@ -19,17 +19,6 @@ class ValidateRequest
      */
     public function handle($request, \Closure $next)
     {
-
-        switch (app('current_route_alias')) {
-            case 'getStudents':
-            case 'createStudent':
-            case 'getStudentById':
-            case 'updateStudentById':
-            case 'deleteStudentById':
-
-                break;
-            default:
-        }
     
         $response = $next($request);
 

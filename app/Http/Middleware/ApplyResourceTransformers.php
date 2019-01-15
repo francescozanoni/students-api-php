@@ -3,15 +3,17 @@ declare(strict_types = 1);
 
 namespace App\Http\Middleware;
 
+use App\Http\Resources\Student as StudentResource;
+
 /**
- * Class ValidateRequest
+ * Class ApplyTransformers
  * @package App\Http\Middleware
  */
-class ValidateRequest
+class ApplyResourceTransformers
 {
 
     /**
-     * Validate request
+     * Add response metadata
      *
      * @param $request
      * @param \Closure $next
@@ -19,19 +21,22 @@ class ValidateRequest
      */
     public function handle($request, \Closure $next)
     {
+    
+        $response = $next($request);
 
         switch (app('current_route_alias')) {
             case 'getStudents':
+                // $response->setContent(StudentResource::collection($response->original));
+                break;
             case 'createStudent':
             case 'getStudentById':
             case 'updateStudentById':
+                $response->setContent(new StudentResource($response->original));
+                break;
             case 'deleteStudentById':
-
                 break;
             default:
         }
-    
-        $response = $next($request);
 
         return $response;
         

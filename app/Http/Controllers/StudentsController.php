@@ -13,7 +13,7 @@ class StudentsController extends Controller
     /**
      * Retrieve all students.
      *
-     * @return StudentResource[]
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
     public function index()
     {
@@ -25,12 +25,11 @@ class StudentsController extends Controller
      *
      * @param Request $request
      *
-     * @return StudentResource
+     * @return Student
      */
     public function store(Request $request)
     {
-        $student = Student::create($request->all());
-        return new StudentResource($student);
+        return Student::create($request->all());
     }
 
     /**
@@ -38,11 +37,11 @@ class StudentsController extends Controller
      *
      * @param int $id
      *
-     * @return StudentResource
+     * @return Student
      */
     public function show(int $id)
     {
-        return new StudentResource(Student::findOrFail($id));
+        return Student::findOrFail($id);
     }
 
     /**
@@ -51,13 +50,13 @@ class StudentsController extends Controller
      * @param Request $request
      * @param int $id
      *
-     * @return StudentResource
+     * @return Student
      */
     public function update(Request $request, int $id)
     {
         $student = Student::findOrFail($id);
         $student->fill($request->all());
-        return new StudentResource($student);
+        return $student;
     }
 
     /**
