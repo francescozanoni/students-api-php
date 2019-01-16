@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 
 use App\Http\Resources\Student as StudentResource;
 use App\Models\Student;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
 /**
@@ -38,7 +39,10 @@ class ApplyResourceTransformers
             case 'createStudent':
             case 'getStudentById':
             case 'updateStudentById':
-                $response->setContent(new StudentResource($response->original));
+                // Since response contains data as JSON, data must be first converted
+                // to an Eloquent model, which can be used as input of resource transformer.
+                $data = $this->jsonToModel($response->original, Student::class);
+                $response->setContent(new StudentResource($data));
                 break;
 
             case 'deleteStudentById':
@@ -70,9 +74,29 @@ class ApplyResourceTransformers
             $model->forceFill($datum);
             return $model;
         }, $data);
-        $data = collect($data);
+        $collection = collect($data);
 
-        return $data;
+        return $collection;
+
+    }
+
+    /**
+     * Convert a JSON object to an Eloquent model.
+     *
+     * @param string $json
+     * @param string $modelClass
+     *
+     * @return Model
+     */
+    private function jsonToModel(string $json, string $modelClass) : Model
+    {
+
+        $data = json_decode($json, true);
+
+        $model = new $modelClass();
+        $model->forceFill($data);
+
+        return $model;
 
     }
 
