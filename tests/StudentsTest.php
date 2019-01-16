@@ -80,7 +80,8 @@ class StudentsTest extends TestCase
                 'e_mail' => 'jack.doe@faz.com',
                 'phone' => '0000-11111111',
                 'nationality' => 'AU',
-            ]);
+            ])
+            ->seeInDatabase('students', ['id' => 4, 'deleted_at' => null]);
     }
 
     /**
@@ -88,6 +89,8 @@ class StudentsTest extends TestCase
      */
     public function testModifyById()
     {
+
+        // Success
         $this->put(
             '/students/2',
             [
@@ -108,6 +111,43 @@ class StudentsTest extends TestCase
                 'phone' => '3333-11111111',
                 'nationality' => 'IE',
             ]);
+
+        // Unmatching ID in path
+        $this->put(
+            '/students/3',
+            [
+                'id' => 2,
+                'first_name' => 'Jane',
+                'last_name' => 'Doe',
+                'e_mail' => 'jane.doe@bar.com',
+                'phone' => '3333-11111111',
+                'nationality' => 'IE',
+            ]
+        )
+            ->seeStatusCode(400)
+            ->seeJsonEquals([
+                'id' => ['The id must be one of the following values: 3'],
+            ])
+            ->notSeeInDatabase('students', ['id' => 3, 'first_name' => 'Jane']);
+
+        // Unmatching ID in body
+        $this->put(
+            '/students/2',
+            [
+                'id' => 3,
+                'first_name' => 'Jane',
+                'last_name' => 'Doe',
+                'e_mail' => 'jane.doe@bar.com',
+                'phone' => '3333-11111111',
+                'nationality' => 'IE',
+            ]
+        )
+            ->seeStatusCode(400)
+            ->seeJsonEquals([
+                'id' => ['The id must be one of the following values: 2'],
+            ])
+            ->notSeeInDatabase('students', ['id' => 3, 'first_name' => 'Jane']);
+
     }
 
     /**

@@ -27,6 +27,10 @@ class ApplyResourceTransformers
 
         $response = $next($request);
 
+        if ($response->isSuccessful() === false) {
+            return $response;
+        }
+
         switch (app('current_route_alias')) {
 
             case 'getStudents':

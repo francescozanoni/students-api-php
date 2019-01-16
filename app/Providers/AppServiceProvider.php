@@ -43,6 +43,20 @@ class AppServiceProvider extends ServiceProvider
 
         });
 
+        $this->app->bind('resource_id_path_parameter', function ($app) {
+
+            // $app->request->route('id') cannot be used, since during tests it triggers the following error:
+            // "Call to a member function parameter() on array"
+
+            if (isset($app->request->route()[2]) === true &&
+                isset($app->request->route()[2]['id']) === true) {
+                return $app->request->route()[2]['id'];
+            }
+
+            return null;
+
+        });
+
     }
 
 }
