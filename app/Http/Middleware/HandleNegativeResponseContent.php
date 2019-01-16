@@ -6,14 +6,14 @@ namespace App\Http\Middleware;
 use Illuminate\Validation\ValidationException;
 
 /**
- * Class SetFailedValidationMessages
+ * Class HandleNegativeResponseContent
  * @package App\Http\Middleware
  */
-class SetFailedValidationMessages
+class HandleNegativeResponseContent
 {
 
     /**
-     * Set failed validation messages as response content.
+     * Handle responses reporting negative results.
      *
      * @param $request
      * @param \Closure $next
@@ -25,10 +25,16 @@ class SetFailedValidationMessages
 
         $response = $next($request);
 
+        // Set failed validation messages as response content.
         if ($response->exception &&
             $response->exception instanceof ValidationException) {
             $response->setContent($response->exception->validator->errors()->toArray());
             $response->setStatusCode(400);
+        }
+
+        // In case of NOT FOUND, empty content.
+        if ($response->isNotFound() === true) {
+            $response->setContent('');
         }
 
         return $response;

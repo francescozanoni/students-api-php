@@ -64,7 +64,7 @@ $app->singleton(
 
 $app->middleware([
     App\Http\Middleware\ApplyResourceTransformers::class,
-    App\Http\Middleware\SetFailedValidationMessages::class,
+    App\Http\Middleware\HandleNegativeResponseContent::class,
     App\Http\Middleware\AddResponseMetadata::class,
     App\Http\Middleware\PrettyPrint::class,
 ]);

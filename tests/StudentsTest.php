@@ -45,6 +45,8 @@ class StudentsTest extends TestCase
      */
     public function testGetById()
     {
+
+        // Existing
         $this->get('/students/1')
             ->seeStatusCode(200)
             ->seeJsonEquals([
@@ -55,6 +57,12 @@ class StudentsTest extends TestCase
                 'phone' => '1234-567890',
                 'nationality' => 'UK',
             ]);
+
+        // Non existing
+        $this->get('/students/9999')
+            ->seeStatusCode(404);
+        $this->assertEquals('', $this->response->getContent());
+
     }
 
     /**
@@ -148,6 +156,21 @@ class StudentsTest extends TestCase
             ])
             ->notSeeInDatabase('students', ['id' => 3, 'first_name' => 'Jane']);
 
+        // Non existing student
+        $this->put(
+            '/students/999',
+            [
+                'id' => 999,
+                'first_name' => 'AAA',
+                'last_name' => 'BBB',
+                'e_mail' => 'aaa.bbb@ccc.com',
+                'phone' => '3333-11111111',
+                'nationality' => 'NO',
+            ]
+        )
+            ->seeStatusCode(404);
+        $this->assertEquals('', $this->response->getContent());
+
     }
 
     /**
@@ -155,9 +178,16 @@ class StudentsTest extends TestCase
      */
     public function testDeleteById()
     {
+
+        // Existing student
         $this->delete('/students/2')
             ->seeStatusCode(200)
             ->notSeeInDatabase('students', ['id' => 2, 'deleted_at' => null]);
+
+        // Non existing student
+        $this->delete('/students/999')
+            ->seeStatusCode(404);
+        $this->assertEquals('', $this->response->getContent());
     }
 
 }
