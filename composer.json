@@ -1,19 +1,24 @@
 {
     "name": "francescozanoni/students-api-php",
-    "description": "The Laravel Lumen Framework.",
+    "description": "Student management API",
     "keywords": [
-        "framework",
-        "laravel",
-        "lumen"
+        "students",
+        "management",
+        "rest",
+        "api"
     ],
     "license": "MIT",
     "type": "project",
     "require": {
         "php": ">=7.1.3",
         "ext-json": "*",
+        "hkarlstrom/openapi-validation-middleware": "^0.2.0",
         "laravel/lumen-framework": "5.7.*",
         "swagger-api/swagger-ui": "^3.20",
-        "vlucas/phpdotenv": "~2.2"
+        "symfony/psr-http-message-bridge": "^1.1",
+        "symfony/yaml": "^4.2",
+        "vlucas/phpdotenv": "~2.2",
+        "zendframework/zend-diactoros": "^2.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

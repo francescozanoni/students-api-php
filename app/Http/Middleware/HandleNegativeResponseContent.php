@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace App\Http\Middleware;
 
 use Illuminate\Validation\ValidationException;
+use Respect\Validation\Exceptions\ValidationException as OpenApiValidationException;
 
 /**
  * Class HandleNegativeResponseContent
@@ -25,10 +26,17 @@ class HandleNegativeResponseContent
 
         $response = $next($request);
 
-        // Set failed validation messages as response content and 400 as status code.
+        // In case of Lumen validation errors, set messages as response content and 400 as status code.
         if ($response->exception &&
             $response->exception instanceof ValidationException) {
             $response->setContent($response->exception->validator->errors()->toArray());
+            $response->setStatusCode(400);
+        }
+
+        // In case of OpenAPI validation errors, set messages as response content and 400 as status code.
+        if ($response->exception &&
+            $response->exception instanceof OpenApiValidationException) {
+            $response->setContent($response->exception->getMessage());
             $response->setStatusCode(400);
         }
 

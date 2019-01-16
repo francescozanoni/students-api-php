@@ -3,6 +3,11 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
+use Tuupola\Http\Factory\ResponseFactory;
+use Tuupola\Http\Factory\ServerRequestFactory;
+use Tuupola\Http\Factory\StreamFactory;
+use Tuupola\Http\Factory\UploadedFileFactory;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -43,6 +48,33 @@ class AppServiceProvider extends ServiceProvider
 
         });
 
+        // Get the current route path, e.g. /students/{id}
+        $this->app->bind('current_route_path', function ($app) {
+
+            if (isset($app->request->route()[1]) === true &&
+                isset($app->request->route()[1]['as']) === true) {
+
+                $routeAlias = $app->request->route()[1]['as'];
+                $routes = app('router')->getRoutes();
+                $route = array_filter(
+                    $routes,
+                    function ($r) use ($routeAlias) {
+                        return isset($r['action']) === true &&
+                            isset($r['action']['as']) === true &&
+                            $r['action']['as'] === $routeAlias;
+                    }
+                );
+                if (empty($route) === false) {
+                    return reset($route)['uri'];
+                }
+
+            }
+
+
+            return null;
+
+        });
+
         $this->app->bind('resource_id_path_parameter', function ($app) {
 
             // $app->request->route('id') cannot be used, since during tests it triggers the following error:
@@ -54,6 +86,21 @@ class AppServiceProvider extends ServiceProvider
             }
 
             return null;
+
+        });
+
+        $this->app->bind('psr7_request', function ($app) {
+
+            $factory = new PsrHttpFactory (
+                new ServerRequestFactory(),
+                new StreamFactory(),
+                new UploadedFileFactory(),
+                new ResponseFactory()
+            );
+
+            $psr7Request = $factory->createRequest($app->request);
+
+            return $psr7Request;
 
         });
 
