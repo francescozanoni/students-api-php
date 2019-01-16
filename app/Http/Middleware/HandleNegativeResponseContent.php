@@ -38,16 +38,21 @@ class HandleNegativeResponseContent
         }
 
         // In case of server error (500 status code, typically),
-        // light exception information is stored to response content.
+        // JSON-ized light exception information is stored to response content.
         if ($response->isServerError() === true &&
             $response->exception) {
-            $response->setContent([
-                'class' => get_class($response->exception),
-                'message' => $response->exception->getMessage(),
-                'file' => $response->exception->getFile(),
-                'line' => $response->exception->getLine(),
-                'trace' => $response->exception->getTrace(),
-            ]);
+            $response->setContent(
+                json_encode(
+                    [
+                        'class' => get_class($response->exception),
+                        'message' => $response->exception->getMessage(),
+                        'file' => $response->exception->getFile(),
+                        'line' => $response->exception->getLine(),
+                        'trace' => $response->exception->getTrace(),
+                    ],
+                    JSON_PARTIAL_OUTPUT_ON_ERROR | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
+                )
+            );
         }
 
         return $response;

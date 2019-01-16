@@ -1,4 +1,4 @@
-# students-api-php
+# Student management API
 
 
 ### Installation
