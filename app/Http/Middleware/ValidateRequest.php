@@ -27,9 +27,11 @@ class ValidateRequest
         switch (app('current_route_alias')) {
 
             case 'getStudents':
-            case 'createStudent':
             case 'getStudentById':
             case 'deleteStudentById':
+                break;
+
+            case 'createStudent':
                 break;
 
             case 'updateStudentById':

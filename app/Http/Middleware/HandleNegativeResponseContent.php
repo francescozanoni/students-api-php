@@ -37,6 +37,19 @@ class HandleNegativeResponseContent
             $response->setContent('');
         }
 
+        // In case of server error (500 status code, typically),
+        // light exception information is stored to response content.
+        if ($response->isServerError() === true &&
+            $response->exception) {
+            $response->setContent([
+                'class' => get_class($response->exception),
+                'message' => $response->exception->getMessage(),
+                'file' => $response->exception->getFile(),
+                'line' => $response->exception->getLine(),
+                'trace' => $response->exception->getTrace(),
+            ]);
+        }
+
         return $response;
 
     }
