@@ -267,10 +267,10 @@ components:
           schema:
             type: object
             properties:
-              statusCode:
+              status_code:
                 type: integer
                 description: HTTP status code
-              error:
+              status:
                 type: string
                 description: HTTP status description
               message:
@@ -280,12 +280,12 @@ components:
                 type: object
                 description: Input item making request invalid
             required:
-              - statusCode
-              - error
+              - status_code
+              - status
               - message
             example:
-              statusCode: 400
-              error: Bad Request
+              status_code: 400
+              status: Bad Request
               message: child "id" fails because ["id" must be a number]
               validation:
                 source: params
@@ -298,21 +298,21 @@ components:
           schema:
             type: object
             properties:
-              statusCode:
+              status_code:
                 type: integer
                 description: HTTP status code
-              error:
+              status:
                 type: string
                 description: HTTP status description
               message:
                 type: string
-            required:  
-              - statusCode
-              - error
+            required:
+              - status_code
+              - status
               - message
             example:
-              statusCode: 404
-              error: Not Found
+              status_code: 404
+              status: Not Found
               message: Resource(s) not found
     InternalServerError:
       description: Generic response reporting an unexpected error (default format of hapi framework)
@@ -321,21 +321,21 @@ components:
           schema:
             type: object
             properties:
-              statusCode:
+              status_code:
                 type: integer
                 description: HTTP status code
-              error:
+              status:
                 type: string
                 description: HTTP status description
               message:
                 type: string
-            required:  
-              - statusCode
-              - error
+            required:
+              - status_code
+              - status
               - message
             example:
-              statusCode: 500
-              error: Internal Server Error
+              status_code: 500
+              status: Internal Server Error
               message: An internal server error occurred
     Students:
       description: Response returning a list of students
@@ -344,28 +344,34 @@ components:
           schema:
             type: object
             properties:
-              statusCode:
+              status_code:
                 type: integer
+                description: HTTP status code
+              status:
+                type: string
+                description: HTTP status description
               message:
                 type: string
               data:
                 type: array
                 items:
                   $ref: '#/components/schemas/Student'
-            required: 
-              - statusCode
+            required:
+              - status_code
+              - status
               - message
               - data
             example:
-              statusCode: 200
+              status_code: 200
+              status: OK
               message: Resource(s) found
               data:
               - id: 1
-                firstName: John
-                lastName: Doe
+                first_name: John
+                last_name: Doe
               - id: 2
-                firstName: Joan
-                lastName: Doe
+                first_name: Joan
+                last_name: Doe
     Student:
       description: Response returning a student
       content:
@@ -373,23 +379,29 @@ components:
           schema:
             type: object
             properties:
-              statusCode:
+              status_code:
                 type: integer
+                description: HTTP status code
+              status:
+                type: string
+                description: HTTP status description
               message:
                 type: string
               data:
                 $ref: '#/components/schemas/Student'
-            required: 
-              - statusCode
+            required:
+              - status_code
+              - status
               - message
               - data
             example:
-              statusCode: 200
+              status_code: 200
+              status: OK
               message: Resource(s) found
               data:
                 id: 1
-                firstName: John
-                lastName: Doe
+                first_name: John
+                last_name: Doe
     Annotations:
       description: Response returning a list of annotations
       content:
@@ -397,20 +409,26 @@ components:
           schema:
             type: object
             properties:
-              statusCode:
+              status_code:
                 type: integer
+                description: HTTP status code
+              status:
+                type: string
+                description: HTTP status description
               message:
                 type: string
               data:
                 type: array
                 items:
                   $ref: '#/components/schemas/Annotation'
-            required: 
-              - statusCode
+            required:
+              - status_code
+              - status
               - message
               - data
             example:
-              statusCode: 200
+              status_code: 200
+              status: OK
               message: Resource(s) found
               data:
               - id: 1
@@ -426,18 +444,24 @@ components:
           schema:
             type: object
             properties:
-              statusCode:
+              status_code:
                 type: integer
+                description: HTTP status code
+              status:
+                type: string
+                description: HTTP status description
               message:
                 type: string
               data:
                 $ref: '#/components/schemas/Annotation'
-            required: 
-              - statusCode
+            required:
+              - status_code
+              - status
               - message
               - data
             example:
-              statusCode: 200
+              status_code: 200
+              status: OK
               message: Resource(s) found
               data:
                 id: 1
@@ -450,32 +474,50 @@ components:
           schema:
             type: object
             properties:
-              statusCode:
+              status_code:
                 type: integer
+                description: HTTP status code
+              status:
+                type: string
+                description: HTTP status description
               message:
                 type: string
-            required: 
-              - statusCode
+            required:
+              - status_code
+              - status
               - message
             example:
-              statusCode: 200
+              status_code: 200
+              status: OK
               message: Resource deleted
   schemas:
     NewStudent:
       type: object
       properties:
-        firstName:
+        first_name:
           type: string
           minLength: 2
-        lastName:
+        last_name:
           type: string
           minLength: 2
-      required:  
-        - firstName
-        - lastName
+        e_mail:
+          type: string
+        phone:
+          type: string
+        nationality:
+          type: string
+          pattern: '^[A-Z]{2}$'
+      required:
+        - first_name
+        - last_name
+        - e_mail
+        - nationality
       example:
-        firstName: John
-        lastName: Doe
+        first_name: John
+        last_name: Doe
+        e_mail: john.doe@foo.com
+        phone: 1234-567890
+        nationality: UK
     Student:
       allOf:
         - $ref: '#/components/schemas/NewStudent'
@@ -483,12 +525,15 @@ components:
           properties:
             id:
               type: integer
-          required:  
+          required:
             - id
       example:
         id: 1
-        firstName: John
-        lastName: Doe
+        first_name: John
+        last_name: Doe
+        e_mail: john.doe@foo.com
+        phone: 1234-567890
+        nationality: UK
     NewAnnotation:
       type: object
       properties:
