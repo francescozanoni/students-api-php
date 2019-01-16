@@ -14,9 +14,9 @@ class StudentsTest extends TestCase
     }
 
     /**
-     * List students.
+     * Get all students.
      */
-    public function testList()
+    public function testGet()
     {
         $this->get('/students')
             ->seeStatusCode(200)
@@ -28,9 +28,6 @@ class StudentsTest extends TestCase
                     'e_mail' => 'john.doe@foo.com',
                     'phone' => '1234-567890',
                     'nationality' => 'UK',
-                    'created_at' => '2019-01-01 00:00:00',
-                    'updated_at' => '2019-01-01 00:00:00',
-                    'deleted_at' => null,
                 ],
                 [
                     'id' => 2,
@@ -39,9 +36,6 @@ class StudentsTest extends TestCase
                     'e_mail' => 'jane.doe@bar.com',
                     'phone' => null,
                     'nationality' => 'CA',
-                    'created_at' => '2019-01-02 00:00:00',
-                    'updated_at' => '2019-01-02 00:00:00',
-                    'deleted_at' => null,
                 ],
             ]);
     }
@@ -49,7 +43,7 @@ class StudentsTest extends TestCase
     /**
      * Get a student.
      */
-    public function testGet()
+    public function testGetById()
     {
         $this->get('/students/1')
             ->seeStatusCode(200)
@@ -60,16 +54,66 @@ class StudentsTest extends TestCase
                 'e_mail' => 'john.doe@foo.com',
                 'phone' => '1234-567890',
                 'nationality' => 'UK',
-                'created_at' => '2019-01-01 00:00:00',
-                'updated_at' => '2019-01-01 00:00:00',
-                'deleted_at' => null,
+            ]);
+    }
+
+    /**
+     * Create a student.
+     */
+    public function testCreate()
+    {
+        $this->post(
+            '/students',
+            [
+                'first_name' => 'Jack',
+                'last_name' => 'Doe',
+                'e_mail' => 'jack.doe@faz.com',
+                'phone' => '0000-11111111',
+                'nationality' => 'AU',
+            ]
+        )
+            ->seeStatusCode(200)
+            ->seeJsonEquals([
+                'id' => 4,
+                'first_name' => 'Jack',
+                'last_name' => 'Doe',
+                'e_mail' => 'jack.doe@faz.com',
+                'phone' => '0000-11111111',
+                'nationality' => 'AU',
+            ]);
+    }
+
+    /**
+     * Modify a student.
+     */
+    public function testModifyById()
+    {
+        $this->put(
+            '/students/2',
+            [
+                'id' => 2,
+                'first_name' => 'Jane',
+                'last_name' => 'Doe',
+                'e_mail' => 'jane.doe@bar.com',
+                'phone' => '3333-11111111',
+                'nationality' => 'IE',
+            ]
+        )
+            ->seeStatusCode(200)
+            ->seeJsonEquals([
+                'id' => 2,
+                'first_name' => 'Jane',
+                'last_name' => 'Doe',
+                'e_mail' => 'jane.doe@bar.com',
+                'phone' => '3333-11111111',
+                'nationality' => 'IE',
             ]);
     }
 
     /**
      * Delete a student.
      */
-    public function testDelete()
+    public function testDeleteById()
     {
         $this->delete('/students/2')
             ->seeStatusCode(200)
