@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Student;
 use Illuminate\Http\Request;
-use App\Http\Resources\Student as StudentResource;
 
 class StudentsController extends Controller
 {
@@ -13,11 +12,11 @@ class StudentsController extends Controller
     /**
      * Retrieve all students.
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return Student[]|\Illuminate\Database\Eloquent\Collection
      */
     public function index()
     {
-        return StudentResource::collection(Student::all());
+        return Student::all();
     }
 
     /**
