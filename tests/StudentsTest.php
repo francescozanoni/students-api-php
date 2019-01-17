@@ -18,7 +18,7 @@ class StudentsTest extends TestCase
      */
     public function testGet()
     {
-        $this->get('/students')
+        $this->json('GET', '/students')
             ->seeStatusCode(200)
             ->seeJsonEquals([
                 [
@@ -47,7 +47,7 @@ class StudentsTest extends TestCase
     {
 
         // Existing
-        $this->get('/students/1')
+        $this->json('GET', '/students/1')
             ->seeStatusCode(200)
             ->seeJsonEquals([
                 'id' => 1,
@@ -59,9 +59,14 @@ class StudentsTest extends TestCase
             ]);
 
         // Non existing
-        $this->get('/students/9999')
+        $this->json('GET', '/students/9999')
             ->seeStatusCode(404);
         $this->assertEquals('', $this->response->getContent());
+
+        // Invalid ID
+        $this->json('GET', '/students/abc')
+            ->seeStatusCode(400);
+        // @todo add response content test
 
     }
 
@@ -70,7 +75,9 @@ class StudentsTest extends TestCase
      */
     public function testCreate()
     {
-        $this->post(
+
+        // Valid data
+        $this->json('POST',
             '/students',
             [
                 'first_name' => 'Jack',
@@ -89,7 +96,65 @@ class StudentsTest extends TestCase
                 'phone' => '0000-11111111',
                 'nationality' => 'AU',
             ])
-            ->seeInDatabase('students', ['id' => 4, 'deleted_at' => null]);
+            ->seeInDatabase('students', ['id' => 4, 'deleted_at' => null])
+            ->notSeeInDatabase('students', ['id' => 5]);
+
+        // Missing required first_name
+        $this->json('POST',
+            '/students',
+            [
+                'last_name' => 'Doe',
+                'e_mail' => 'jack.doe@faz.com',
+                'phone' => '0000-11111111',
+                'nationality' => 'AU',
+            ]
+        )
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('students', ['id' => 5]);
+        // @todo add response content test
+
+        // Missing required last_name
+        $this->json('POST',
+            '/students',
+            [
+                'first_name' => 'Jack',
+                'e_mail' => 'jack.doe@faz.com',
+                'phone' => '0000-11111111',
+                'nationality' => 'AU',
+            ]
+        )
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('students', ['id' => 5]);
+        // @todo add response content test
+
+        // Missing required e_mail
+        $this->json('POST',
+            '/students',
+            [
+                'first_name' => 'Jack',
+                'last_name' => 'Doe',
+                'phone' => '0000-11111111',
+                'nationality' => 'AU',
+            ]
+        )
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('students', ['id' => 5]);
+        // @todo add response content test
+
+        // Missing required nationality
+        $this->json('POST',
+            '/students',
+            [
+                'first_name' => 'Jack',
+                'last_name' => 'Doe',
+                'e_mail' => 'jack.doe@faz.com',
+                'phone' => '0000-11111111',
+            ]
+        )
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('students', ['id' => 5]);
+        // @todo add response content test
+
     }
 
     /**
@@ -99,7 +164,7 @@ class StudentsTest extends TestCase
     {
 
         // Success
-        $this->put(
+        $this->json('PUT',
             '/students/2',
             [
                 'id' => 2,
@@ -121,7 +186,7 @@ class StudentsTest extends TestCase
             ]);
 
         // Unmatching ID in path
-        $this->put(
+        $this->json('PUT',
             '/students/3',
             [
                 'id' => 2,
@@ -139,7 +204,7 @@ class StudentsTest extends TestCase
             ->notSeeInDatabase('students', ['id' => 3, 'first_name' => 'Jane']);
 
         // Unmatching ID in body
-        $this->put(
+        $this->json('PUT',
             '/students/2',
             [
                 'id' => 3,
@@ -157,7 +222,7 @@ class StudentsTest extends TestCase
             ->notSeeInDatabase('students', ['id' => 3, 'first_name' => 'Jane']);
 
         // Non existing student
-        $this->put(
+        $this->json('PUT',
             '/students/999',
             [
                 'id' => 999,
@@ -180,12 +245,12 @@ class StudentsTest extends TestCase
     {
 
         // Existing student
-        $this->delete('/students/2')
+        $this->json('DELETE', '/students/2')
             ->seeStatusCode(200)
             ->notSeeInDatabase('students', ['id' => 2, 'deleted_at' => null]);
 
         // Non existing student
-        $this->delete('/students/999')
+        $this->json('DELETE', '/students/999')
             ->seeStatusCode(404);
         $this->assertEquals('', $this->response->getContent());
     }

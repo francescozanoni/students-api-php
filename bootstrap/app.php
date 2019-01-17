@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__.'/../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 try {
     (new Dotenv\Dotenv(dirname(__DIR__)))->load();
@@ -70,7 +70,10 @@ $app->middleware([
 ]);
 
 $app->routeMiddleware([
-//     'auth' => App\Http\Middleware\Authenticate::class,
+    // 'auth' => App\Http\Middleware\Authenticate::class,
+
+    // This middleware cannot be global because, during execution of global before-middlewares,
+    // current route is not available yet and it is required to find the right validation rules.
     'validate_request' => App\Http\Middleware\ValidateRequest::class,
 ]);
 
@@ -88,6 +91,7 @@ $app->routeMiddleware([
 $app->register(App\Providers\AppServiceProvider::class);
 // $app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
+$app->register(App\Providers\RouteServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -103,7 +107,7 @@ $app->register(App\Providers\AppServiceProvider::class);
 $app->router->group([
     'namespace' => 'App\Http\Controllers',
 ], function ($router) {
-    require __DIR__.'/../routes/web.php';
+    require __DIR__ . '/../routes/web.php';
 });
 
 return $app;

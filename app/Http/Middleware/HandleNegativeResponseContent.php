@@ -27,14 +27,14 @@ class HandleNegativeResponseContent
         $response = $next($request);
 
         // In case of Lumen validation errors, set messages as response content and 400 as status code.
-        if ($response->exception &&
+        if (isset($response->exception) &&
             $response->exception instanceof ValidationException) {
             $response->setContent($response->exception->validator->errors()->toArray());
             $response->setStatusCode(400);
         }
 
         // In case of OpenAPI validation errors, set messages as response content and 400 as status code.
-        if ($response->exception &&
+        if (isset($response->exception) &&
             $response->exception instanceof OpenApiValidationException) {
             $response->setContent($response->exception->getMessage());
             $response->setStatusCode(400);
@@ -48,7 +48,7 @@ class HandleNegativeResponseContent
         // In case of server error (500 status code, typically),
         // JSON-ized light exception information is stored to response content.
         if ($response->isServerError() === true &&
-            $response->exception) {
+            isset($response->exception)) {
             $response->setContent(
                 json_encode(
                     [
@@ -56,7 +56,7 @@ class HandleNegativeResponseContent
                         'message' => $response->exception->getMessage(),
                         'file' => $response->exception->getFile(),
                         'line' => $response->exception->getLine(),
-                        'trace' => $response->exception->getTrace(),
+                        //'trace' => $response->exception->getTrace(),
                     ],
                     JSON_PARTIAL_OUTPUT_ON_ERROR | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
                 )
