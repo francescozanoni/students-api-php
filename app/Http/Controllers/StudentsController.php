@@ -28,7 +28,7 @@ class StudentsController extends Controller
      */
     public function store(Request $request)
     {
-        return Student::create($request->all());
+        return Student::create($request->request->all());
     }
 
     /**
@@ -54,7 +54,7 @@ class StudentsController extends Controller
     public function update(Request $request, int $id)
     {
         $student = Student::findOrFail($id);
-        $student->fill($request->all());
+        $student->fill($request->request->all());
         return $student;
     }
 
