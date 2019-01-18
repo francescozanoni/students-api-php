@@ -32,7 +32,7 @@ class ValidateRequest
         $validator = new OpenApiValidator(config('openapi.schema_file_path'));
         $errors = $validator->validateRequest($request);
         if (empty($errors) === false) {
-            $errors = json_encode($errors, JSON_PRETTY_PRINT | JSON_PARTIAL_OUTPUT_ON_ERROR | JSON_UNESCAPED_SLASHES);
+            $errors = json_encode($errors, JSON_PARTIAL_OUTPUT_ON_ERROR | JSON_UNESCAPED_SLASHES);
             throw new OpenApiValidationException($errors);
         }
 

@@ -69,7 +69,7 @@ class HandleNegativeResponseContent
                         'line' => $response->exception->getLine(),
                         //'trace' => $response->exception->getTrace(),
                     ],
-                    JSON_PARTIAL_OUTPUT_ON_ERROR | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
+                    JSON_PARTIAL_OUTPUT_ON_ERROR | JSON_UNESCAPED_SLASHES
                 )
             );
         }

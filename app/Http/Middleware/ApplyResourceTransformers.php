@@ -3,14 +3,11 @@ declare(strict_types = 1);
 
 namespace App\Http\Middleware;
 
+use App\Http\Resources\Annotation as AnnotationResource;
 use App\Http\Resources\Student as StudentResource;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Collection;
-
-// use App\Models\Student;
 
 /**
- * Class ApplyTransformers
+ * Class ApplyResourceTransformers
  * @package App\Http\Middleware
  */
 class ApplyResourceTransformers
@@ -36,79 +33,26 @@ class ApplyResourceTransformers
         switch (app('current_route_alias')) {
 
             case 'getStudents':
-                // Since response contains data as JSON, data must be first converted
-                // to a collection of Eloquent models, which can be used as input of resource collection transformer.
-                $data = $response->original;
-                //if (($data instanceof Collection) === false) {
-                //    $data = $this->jsonToModelCollection($response->original, Student::class);
-                //}
-                $response->setContent(StudentResource::collection($data));
+                $response->setContent(StudentResource::collection($response->original));
                 break;
 
             case 'createStudent':
             case 'getStudentById':
             case 'updateStudentById':
-                // Since response contains data as JSON, data must be first converted
-                // to an Eloquent model, which can be used as input of resource transformer.
-                $data = $response->original;
-                //if (($data instanceof Student) === false) {
-                //    $data = $this->jsonToModel($data, Student::class);
-                //}
-                $response->setContent(new StudentResource($data));
+                $response->setContent(new StudentResource($response->original));
                 break;
 
-            case 'deleteStudentById':
+            case 'getAnnotations':
+            case 'getStudentAnnotations':
+                $response->setContent(AnnotationResource::collection($response->original));
                 break;
+
 
             default:
 
         }
 
         return $response;
-
-    }
-
-    /**
-     * Convert a JSON array to a collection of Eloquent models.
-     *
-     * @param string $json
-     * @param string $modelClass
-     *
-     * @return \Illuminate\Support\Collection
-     */
-    private function jsonToModelCollection(string $json, string $modelClass) : Collection
-    {
-
-        $data = json_decode($json, true);
-
-        $data = array_map(function ($datum) use ($modelClass) {
-            $model = new $modelClass();
-            $model->forceFill($datum);
-            return $model;
-        }, $data);
-        $collection = collect($data);
-
-        return $collection;
-
-    }
-
-    /**
-     * Convert a JSON object to an Eloquent model.
-     *
-     * @param string $json
-     * @param string $modelClass
-     *
-     * @return Model
-     */
-    private function jsonToModel(string $json, string $modelClass) : Model
-    {
-
-        $data = json_decode($json, true);
-
-        $model = new $modelClass();
-        $model->forceFill($data);
-
-        return $model;
 
     }
 
