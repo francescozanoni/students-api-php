@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Annotation;
 use App\Models\Student;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AnnotationsController extends Controller
@@ -37,6 +36,18 @@ class AnnotationsController extends Controller
         }
 
         return $annotations;
+    }
+
+    /**
+     * Retrieve an annotation.
+     *
+     * @param int $id
+     *
+     * @return Annotation
+     */
+    public function show(int $id)
+    {
+        return Annotation::findOrFail($id);
     }
 
 }

@@ -47,6 +47,9 @@ class ApplyResourceTransformers
                 $response->setContent(AnnotationResource::collection($response->original));
                 break;
 
+            case 'getAnnotationById':
+                $response->setContent(new AnnotationResource($response->original));
+                break;
 
             default:
 

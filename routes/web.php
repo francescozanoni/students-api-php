@@ -38,5 +38,6 @@ $router->group(['middleware' => 'validate_request'], function () use ($router) {
     $router->get('students/{id}/annotations', ['as' => 'getStudentAnnotations', 'uses' => 'AnnotationsController@getRelatedToStudent']);
 
     $router->get('annotations', ['as' => 'getAnnotations', 'uses' => 'AnnotationsController@index']);
+    $router->get('annotations/{id}', ['as' => 'getAnnotationById', 'uses' => 'AnnotationsController@show']);
 
 });
