@@ -5,6 +5,7 @@ namespace App\Models;
 
 use App\Models\Traits\EloquentGetTableName;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Student extends Model
@@ -19,7 +20,7 @@ class Student extends Model
      * @var array
      */
     protected $dates = ['deleted_at'];
-    
+
     /**
      * The attributes that aren't mass assignable.
      *
@@ -27,7 +28,10 @@ class Student extends Model
      */
     protected $guarded = ['id', 'created_at', 'updated_at', 'deleted_at'];
 
-    public function annotations()
+    /**
+     * @return HasMany
+     */
+    public function annotations() : HasMany
     {
         return $this->hasMany('App\Models\Annotation');
     }

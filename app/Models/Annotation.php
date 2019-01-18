@@ -5,6 +5,7 @@ namespace App\Models;
 
 use App\Models\Traits\EloquentGetTableName;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Annotation extends Model
@@ -19,7 +20,7 @@ class Annotation extends Model
      * @var array
      */
     protected $dates = ['deleted_at'];
-    
+
     /**
      * The attributes that aren't mass assignable.
      *
@@ -27,7 +28,10 @@ class Annotation extends Model
      */
     protected $guarded = ['id', 'created_at', 'updated_at', 'deleted_at'];
 
-    public function student()
+    /**
+     * @return BelongsTo
+     */
+    public function student() : BelongsTo
     {
         return $this->belongsTo('App\Models\Student');
     }
