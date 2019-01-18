@@ -36,7 +36,18 @@ class HandleNegativeResponseContent
         // In case of OpenAPI validation errors, set messages as response content and 400 as status code.
         if (isset($response->exception) &&
             $response->exception instanceof OpenApiValidationException) {
-            $response->setContent($response->exception->getMessage());
+            $originalErrors = json_decode($response->exception->getMessage(), true);
+            $errors = [];
+            // @todo refactor OpenApiValidationException output conversion to Laravel/lumen validation error messages
+            foreach ($originalErrors as $originalError) {
+                $name = $originalError['name'];
+                unset($originalError['name']);
+                $errors[$name] = [];
+                foreach ($originalError as $key => $value) {
+                    $errors[$name][] = $key . ' ' . $value;
+                }
+            }
+            $response->setContent($errors);
             $response->setStatusCode(400);
         }
 

@@ -21,22 +21,27 @@ class StudentsTest extends TestCase
         $this->json('GET', '/students')
             ->seeStatusCode(200)
             ->seeJsonEquals([
-                [
-                    'id' => 1,
-                    'first_name' => 'John',
-                    'last_name' => 'Doe',
-                    'e_mail' => 'john.doe@foo.com',
-                    'phone' => '1234-567890',
-                    'nationality' => 'UK',
-                ],
-                [
-                    'id' => 2,
-                    'first_name' => 'Jane',
-                    'last_name' => 'Doe',
-                    'e_mail' => 'jane.doe@bar.com',
-                    'phone' => null,
-                    'nationality' => 'CA',
-                ],
+                'status_code' => 200,
+                'status' => 'OK',
+                'message' => 'Resource(s) found',
+                'data' => [
+                    [
+                        'id' => 1,
+                        'first_name' => 'John',
+                        'last_name' => 'Doe',
+                        'e_mail' => 'john.doe@foo.com',
+                        'phone' => '1234-567890',
+                        'nationality' => 'UK',
+                    ],
+                    [
+                        'id' => 2,
+                        'first_name' => 'Jane',
+                        'last_name' => 'Doe',
+                        'e_mail' => 'jane.doe@bar.com',
+                        'phone' => null,
+                        'nationality' => 'CA',
+                    ],
+                ]
             ]);
     }
 
@@ -50,23 +55,44 @@ class StudentsTest extends TestCase
         $this->json('GET', '/students/1')
             ->seeStatusCode(200)
             ->seeJsonEquals([
-                'id' => 1,
-                'first_name' => 'John',
-                'last_name' => 'Doe',
-                'e_mail' => 'john.doe@foo.com',
-                'phone' => '1234-567890',
-                'nationality' => 'UK',
+                'status_code' => 200,
+                'status' => 'OK',
+                'message' => 'Resource successfully retrieved/created/modified',
+                'data' => [
+                    'id' => 1,
+                    'first_name' => 'John',
+                    'last_name' => 'Doe',
+                    'e_mail' => 'john.doe@foo.com',
+                    'phone' => '1234-567890',
+                    'nationality' => 'UK',
+                ]
             ]);
 
         // Non existing
         $this->json('GET', '/students/9999')
-            ->seeStatusCode(404);
-        $this->assertEquals('', $this->response->getContent());
+            ->seeStatusCode(404)
+            ->seeJsonEquals([
+                'status_code' => 404,
+                'status' => 'Not Found',
+                'message' => 'Resource(s) not found',
+            ]);
 
         // Invalid ID
         $this->json('GET', '/students/abc')
-            ->seeStatusCode(400);
-        // @todo add response content test
+            ->seeStatusCode(400)
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'id' => [
+                        'code error_type',
+                        'value abc',
+                        'expected integer',
+                        'used string',
+                    ],
+                ]
+            ]);
 
     }
 
@@ -89,12 +115,17 @@ class StudentsTest extends TestCase
         )
             ->seeStatusCode(200)
             ->seeJsonEquals([
-                'id' => 4,
-                'first_name' => 'Jack',
-                'last_name' => 'Doe',
-                'e_mail' => 'jack.doe@faz.com',
-                'phone' => '0000-11111111',
-                'nationality' => 'AU',
+                'status_code' => 200,
+                'status' => 'OK',
+                'message' => 'Resource successfully retrieved/created/modified',
+                'data' => [
+                    'id' => 4,
+                    'first_name' => 'Jack',
+                    'last_name' => 'Doe',
+                    'e_mail' => 'jack.doe@faz.com',
+                    'phone' => '0000-11111111',
+                    'nationality' => 'AU',
+                ]
             ])
             ->seeInDatabase('students', ['id' => 4, 'deleted_at' => null])
             ->notSeeInDatabase('students', ['id' => 5]);
@@ -110,8 +141,17 @@ class StudentsTest extends TestCase
             ]
         )
             ->seeStatusCode(400)
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'first_name' => [
+                        'code error_required',
+                    ]
+                ]
+            ])
             ->notSeeInDatabase('students', ['id' => 5]);
-        // @todo add response content test
 
         // Missing required last_name
         $this->json('POST',
@@ -124,8 +164,17 @@ class StudentsTest extends TestCase
             ]
         )
             ->seeStatusCode(400)
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'last_name' => [
+                        'code error_required',
+                    ]
+                ]
+            ])
             ->notSeeInDatabase('students', ['id' => 5]);
-        // @todo add response content test
 
         // Missing required e_mail
         $this->json('POST',
@@ -138,8 +187,17 @@ class StudentsTest extends TestCase
             ]
         )
             ->seeStatusCode(400)
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'e_mail' => [
+                        'code error_required',
+                    ]
+                ]
+            ])
             ->notSeeInDatabase('students', ['id' => 5]);
-        // @todo add response content test
 
         // Missing required nationality
         $this->json('POST',
@@ -152,8 +210,17 @@ class StudentsTest extends TestCase
             ]
         )
             ->seeStatusCode(400)
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'nationality' => [
+                        'code error_required',
+                    ]
+                ]
+            ])
             ->notSeeInDatabase('students', ['id' => 5]);
-        // @todo add response content test
 
     }
 
@@ -177,12 +244,17 @@ class StudentsTest extends TestCase
         )
             ->seeStatusCode(200)
             ->seeJsonEquals([
-                'id' => 2,
-                'first_name' => 'Jane',
-                'last_name' => 'Doe',
-                'e_mail' => 'jane.doe@bar.com',
-                'phone' => '3333-11111111',
-                'nationality' => 'IE',
+                'status_code' => 200,
+                'status' => 'OK',
+                'message' => 'Resource successfully retrieved/created/modified',
+                'data' => [
+                    'id' => 2,
+                    'first_name' => 'Jane',
+                    'last_name' => 'Doe',
+                    'e_mail' => 'jane.doe@bar.com',
+                    'phone' => '3333-11111111',
+                    'nationality' => 'IE',
+                ]
             ]);
 
         // Unmatching ID in path
@@ -199,7 +271,12 @@ class StudentsTest extends TestCase
         )
             ->seeStatusCode(400)
             ->seeJsonEquals([
-                'id' => ['The id must be one of the following values: 3'],
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'id' => ['The id must be one of the following values: 3'],
+                ]
             ])
             ->notSeeInDatabase('students', ['id' => 3, 'first_name' => 'Jane']);
 
@@ -217,7 +294,12 @@ class StudentsTest extends TestCase
         )
             ->seeStatusCode(400)
             ->seeJsonEquals([
-                'id' => ['The id must be one of the following values: 2'],
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'id' => ['The id must be one of the following values: 2'],
+                ]
             ])
             ->notSeeInDatabase('students', ['id' => 3, 'first_name' => 'Jane']);
 
@@ -233,8 +315,12 @@ class StudentsTest extends TestCase
                 'nationality' => 'NO',
             ]
         )
-            ->seeStatusCode(404);
-        $this->assertEquals('', $this->response->getContent());
+            ->seeStatusCode(404)
+            ->seeJsonEquals([
+                'status_code' => 404,
+                'status' => 'Not Found',
+                'message' => 'Resource(s) not found',
+            ]);
 
     }
 
@@ -247,12 +333,22 @@ class StudentsTest extends TestCase
         // Existing student
         $this->json('DELETE', '/students/2')
             ->seeStatusCode(200)
+            ->seeJsonEquals([
+                'status_code' => 200,
+                'status' => 'OK',
+                'message' => 'Resource deleted',
+            ])
             ->notSeeInDatabase('students', ['id' => 2, 'deleted_at' => null]);
 
         // Non existing student
         $this->json('DELETE', '/students/999')
-            ->seeStatusCode(404);
-        $this->assertEquals('', $this->response->getContent());
+            ->seeStatusCode(404)
+            ->seeJsonEquals([
+                'status_code' => 404,
+                'status' => 'Not Found',
+                'message' => 'Resource(s) not found',
+            ]);
+
     }
 
 }

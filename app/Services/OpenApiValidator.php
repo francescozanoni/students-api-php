@@ -58,6 +58,7 @@ class OpenApiValidator
         $schema = Yaml::parseFile($openApiSchemaFilePath);
         $schema = json_encode($schema, JSON_PARTIAL_OUTPUT_ON_ERROR);
         file_put_contents($tmpSchemaFilePath, $schema);
+        // @todo make constructor options dynamic (request/response validation mutual exclusion)
         $this->validator = new OpenApiValidation($tmpSchemaFilePath, ['validateResponse' => false]);
         unlink($tmpSchemaFilePath);
 
@@ -103,6 +104,7 @@ class OpenApiValidator
 
             /* Example of $r->getBody()->__toString() content,
              * related to request with URL http://localhost/students/a:
+             *
              * {
              *   "message": "Request validation failed",
              *   "errors": [
@@ -135,7 +137,8 @@ class OpenApiValidator
     protected function getPsr7Request(Request $request) : ServerRequestInterface
     {
 
-        // Shamelessly taken from https://github.com/symfony/psr-http-message-bridge/blob/master/Tests/Factory/PsrHttpFactoryTest.php
+        // Shamelessly taken from
+        // https://github.com/symfony/psr-http-message-bridge/blob/master/Tests/Factory/PsrHttpFactoryTest.php
 
         $requestFactory = new PsrHttpFactory (
             new ServerRequestFactory(),

@@ -4,9 +4,10 @@ declare(strict_types = 1);
 namespace App\Http\Middleware;
 
 use App\Http\Resources\Student as StudentResource;
-use App\Models\Student;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+
+// use App\Models\Student;
 
 /**
  * Class ApplyTransformers
@@ -20,6 +21,7 @@ class ApplyResourceTransformers
      *
      * @param $request
      * @param \Closure $next
+     *
      * @return mixed
      */
     public function handle($request, \Closure $next)
@@ -36,7 +38,10 @@ class ApplyResourceTransformers
             case 'getStudents':
                 // Since response contains data as JSON, data must be first converted
                 // to a collection of Eloquent models, which can be used as input of resource collection transformer.
-                $data = $this->jsonToModelCollection($response->original, Student::class);
+                $data = $response->original;
+                //if (($data instanceof Collection) === false) {
+                //    $data = $this->jsonToModelCollection($response->original, Student::class);
+                //}
                 $response->setContent(StudentResource::collection($data));
                 break;
 
@@ -45,7 +50,10 @@ class ApplyResourceTransformers
             case 'updateStudentById':
                 // Since response contains data as JSON, data must be first converted
                 // to an Eloquent model, which can be used as input of resource transformer.
-                $data = $this->jsonToModel($response->original, Student::class);
+                $data = $response->original;
+                //if (($data instanceof Student) === false) {
+                //    $data = $this->jsonToModel($data, Student::class);
+                //}
                 $response->setContent(new StudentResource($data));
                 break;
 
