@@ -27,4 +27,9 @@ class Student extends Model
      */
     protected $guarded = ['id', 'created_at', 'updated_at', 'deleted_at'];
 
+    public function annotations()
+    {
+        return $this->hasMany('App\Models\Annotation');
+    }
+
 }

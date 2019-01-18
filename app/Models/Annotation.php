@@ -27,4 +27,9 @@ class Annotation extends Model
      */
     protected $guarded = ['id', 'created_at', 'updated_at', 'deleted_at'];
 
+    public function student()
+    {
+        return $this->belongsTo('App\Models\Student');
+    }
+
 }
