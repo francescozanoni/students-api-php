@@ -28,9 +28,15 @@ $router->get('/', function () use ($router) {
 });
 
 $router->group(['middleware' => 'validate_request'], function () use ($router) {
+
     $router->get('students', ['as' => 'getStudents', 'uses' => 'StudentsController@index']);
     $router->post('students',  ['as' => 'createStudent', 'uses' => 'StudentsController@store']);
     $router->get('students/{id}', ['as' => 'getStudentById', 'uses' => 'StudentsController@show']);
     $router->put('students/{id}', ['as' => 'updateStudentById', 'uses' => 'StudentsController@update']);
     $router->delete('students/{id}', ['as' => 'deleteStudentById', 'uses' => 'StudentsController@destroy']);
+
+    $router->get('students/{id}/annotations', ['as' => 'getStudentAnnotations', 'uses' => 'AnnotationsController@getRelatedToStudent']);
+
+    $router->get('annotations', ['as' => 'getAnnotations', 'uses' => 'AnnotationsController@index']);
+
 });
