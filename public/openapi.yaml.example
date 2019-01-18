@@ -519,30 +519,14 @@ components:
         phone: 1234-567890
         nationality: UK
     Student:
-      # allOf cannot be used yet
-      type: object
-      properties:
-        id:
-          type: integer
-        first_name:
-          type: string
-          minLength: 2
-        last_name:
-          type: string
-          minLength: 2
-        e_mail:
-          type: string
-        phone:
-          type: string
-        nationality:
-          type: string
-          pattern: '^[A-Z]{2}$'
-      required:
-        - id
-        - first_name
-        - last_name
-        - e_mail
-        - nationality
+      allOf:
+        - $ref: '#/components/schemas/NewStudent'
+        - type: object
+          properties:
+            id:
+              type: integer
+          required:
+            - id
       example:
         id: 1
         first_name: John
