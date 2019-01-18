@@ -12,10 +12,12 @@ class Annotation extends JsonResource
     {
         return [
             'id' => $this->id,
-            'student_id' => $this->student_id,
+            // This field is returned as string, but cannot understand why...
+            'student_id' => (int)$this->student_id,
             'title' => $this->title,
             'content' => $this->content,
-            'user_id' => $this->user_id,
+            // This field is returned as string, but cannot understand why...
+            'user_id' => (int)$this->user_id,
             'created_at' => (string)$this->created_at,
             'updated_at' => (string)$this->updated_at,
         ];
