@@ -67,6 +67,7 @@ $app->middleware([
     App\Http\Middleware\HandleNegativeResponseContent::class,
     App\Http\Middleware\AddResponseMetadata::class,
     App\Http\Middleware\PrettyPrint::class,
+    App\Http\Middleware\ValidateResponse::class,
 ]);
 
 $app->routeMiddleware([
