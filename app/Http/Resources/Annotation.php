@@ -10,7 +10,8 @@ class Annotation extends JsonResource
 
     public function toArray($request)
     {
-        return [
+
+        $output = [
 
             'id' => $this->id,
 
@@ -27,6 +28,13 @@ class Annotation extends JsonResource
             'updated_at' => (string)$this->updated_at,
 
         ];
+
+        if (app('current_route_alias') === 'getStudentAnnotations') {
+            unset($output['student_id']);
+        }
+
+        return $output;
+
     }
 
 }

@@ -107,7 +107,6 @@ class AnnotationsTest extends TestCase
                 'data' => [
                     [
                         'id' => 1,
-                        'student_id' => 1,
                         'title' => 'First title',
                         'content' => 'First content',
                         'user_id' => 123,
