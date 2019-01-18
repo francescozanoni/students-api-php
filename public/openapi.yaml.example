@@ -261,7 +261,7 @@ paths:
 components:
   responses:
     BadRequest:
-      description: Response reporting invalid request (default format of Joi plugin used by hapi framework)
+      description: Response reporting invalid request
       content:
         application/json:
           schema:
@@ -286,11 +286,13 @@ components:
             example:
               status_code: 400
               status: Bad Request
-              message: child "id" fails because ["id" must be a number]
-              validation:
-                source: params
-                keys:
-                - id
+              message: Request is not valid
+              data:
+                - id:
+                  - code error_type
+                  - value abc
+                  - expected integer
+                  - used string
     NotFound:
       description: Generic response reporting no resource(s) found
       content:
@@ -366,12 +368,18 @@ components:
               status: OK
               message: Resource(s) found
               data:
-              - id: 1
-                first_name: John
-                last_name: Doe
-              - id: 2
-                first_name: Joan
-                last_name: Doe
+                - id: 1
+                  first_name: John
+                  last_name: Doe
+                  e_mail: john.doe@foo.com
+                  phone: 1234-567890
+                  nationality: UK
+                - id: 2
+                  first_name: Joan
+                  last_name: Doe
+                  e_mail: joan.doe@bar.com
+                  phone: null
+                  nationality: CA
     Student:
       description: Response returning a student
       content:
@@ -397,11 +405,14 @@ components:
             example:
               status_code: 200
               status: OK
-              message: Resource(s) found
+              message: Resource successfully retrieved/created/modified
               data:
                 id: 1
                 first_name: John
                 last_name: Doe
+                e_mail: john.doe@foo.com
+                phone: 1234-567890
+                nationality: UK
     Annotations:
       description: Response returning a list of annotations
       content:
@@ -431,12 +442,12 @@ components:
               status: OK
               message: Resource(s) found
               data:
-              - id: 1
-                title: First annotation title
-                body: First annotation body
-              - id: 2
-                title: Second annotation title
-                body: Second annotation body
+                - id: 1
+                  title: First annotation title
+                  body: First annotation body
+                - id: 2
+                  title: Second annotation title
+                  body: Second annotation body
     Annotation:
       description: Response returning a annotation
       content:
@@ -541,7 +552,7 @@ components:
           type: string
         body:
           type: string
-      required:  
+      required:
         - title
         - body
       example:
@@ -554,7 +565,7 @@ components:
           properties:
             id:
               type: integer
-          required:  
+          required:
             - id
       example:
         id: 1
