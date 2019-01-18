@@ -58,7 +58,6 @@ class OpenApiValidator
         $schema = Yaml::parseFile($openApiSchemaFilePath);
         $schema = json_encode($schema, JSON_PARTIAL_OUTPUT_ON_ERROR);
         file_put_contents($tmpSchemaFilePath, $schema);
-        // @todo make constructor options dynamic (request/response validation mutual exclusion)
         $this->validator = new OpenApiValidation($tmpSchemaFilePath, ['validateResponse' => false]);
         unlink($tmpSchemaFilePath);
 
@@ -128,6 +127,45 @@ class OpenApiValidator
     }
 
     /**
+     * Validate a response against OpenAPI schema.
+     *
+     * @param mixed $response
+     * @param string $path
+     * @param string $method
+     *
+     * @return array validation errors, e.g. Array (
+     *                                         [0] => Array (
+     *                                           [name] => id
+     *                                           [code] => error_type
+     *                                           [value] => a
+     *                                           [expected] => integer
+     *                                           [used] => string
+     *                                         )
+     *                                       )
+     *
+     */
+    public function validateResponse($response, string $path, string $method) : array
+    {
+
+        // @todo remove $path and $method from input (if possible)
+
+        // Response object is cloned because validator methods use it by reference.
+        $_response = clone $response;
+
+        if (($_response instanceof ResponseInterface) === false) {
+            $_response = $this->getPsr7Response($_response);
+        }
+
+        $errors = array_merge(
+            $this->validator->validateResponseBody($_response, $path, $method),
+            $this->validator->validateResponseHeaders($_response, $path, $method)
+        );
+
+        return $errors;
+
+    }
+
+    /**
      * Convert Lumen request to PSR-7 request.
      *
      * @param Request $request
@@ -140,14 +178,38 @@ class OpenApiValidator
         // Shamelessly taken from
         // https://github.com/symfony/psr-http-message-bridge/blob/master/Tests/Factory/PsrHttpFactoryTest.php
 
-        $requestFactory = new PsrHttpFactory (
+        $factory = new PsrHttpFactory (
             new ServerRequestFactory(),
             new StreamFactory(),
             new UploadedFileFactory(),
             new ResponseFactory()
         );
 
-        return $requestFactory->createRequest($request);
+        return $factory->createRequest($request);
+
+    }
+
+    /**
+     * Convert Lumen response to PSR-7 response.
+     *
+     * @param $response
+     *
+     * @return ResponseInterface
+     */
+    protected function getPsr7Response($response) : ResponseInterface
+    {
+
+        // Shamelessly taken from
+        // https://github.com/symfony/psr-http-message-bridge/blob/master/Tests/Factory/PsrHttpFactoryTest.php
+
+        $factory = new PsrHttpFactory (
+            new ServerRequestFactory(),
+            new StreamFactory(),
+            new UploadedFileFactory(),
+            new ResponseFactory()
+        );
+
+        return $factory->createResponse($response);
 
     }
 

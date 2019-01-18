@@ -56,8 +56,11 @@ class AddResponseMetadata
      *                      [status] => OK
      *                      [message] => Resource(s) found
      *                    )
+     *
+     * Currently this method is public because App\Http\Middleware\ValidateResponse uses it.
+     * @todo find a better way to share this logic
      */
-    private function getMetadata(Request $request, $response) : array
+    public function getMetadata(Request $request, $response) : array
     {
 
         // Step 1: create the OpenAPI schema reader, which then searches the schema for the requested response.
