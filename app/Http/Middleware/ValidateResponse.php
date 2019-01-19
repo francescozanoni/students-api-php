@@ -50,9 +50,12 @@ class ValidateResponse
          * }
          */
         return $response;
+        
+        $path = (string)app('current_route_path');
+        $httpMethod = strtolower($request->getMethod());
 
         $validator = new OpenApiValidator(config('openapi.schema_file_path'));
-        $errors = $validator->validateResponse($response, (string)app('current_route_path'), strtolower($request->getMethod()));
+        $errors = $validator->validateResponse($response, $path, $httpMethod);
 
         /* Current $errors in case of missing item (it should be fixed by H. Karlstrom):
          *
@@ -72,10 +75,13 @@ class ValidateResponse
          */
 
         if (empty($errors) === false) {
+            // Since AddResponseMetadata and PrettyPrint middlewares have already been executed,
+            // their logic is here applied manually.
+            // @todo improve design of this
             $response->setStatusCode(500);
             $metadata = app('App\Http\Middleware\AddResponseMetadata')->getMetadata($request, $response);
             $fullData = array_merge($metadata, ['data' => $errors]);
-            $response->setContent($fullData);
+            $response->setContent(json_encode($fullData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
         }
 
         return $response;

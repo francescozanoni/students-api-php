@@ -29,13 +29,13 @@ class PrettyPrint
 
             // https://www.aaronsaray.com/2017/laravel-pretty-print-middleware
             if ($response instanceof JsonResponse) {
-                $response->setEncodingOptions(JSON_PRETTY_PRINT);
+                $response->setEncodingOptions(JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
             }
             if ($response instanceof Response &&
                 $response->headers->get('Content-Type') === 'application/json') {
                 $content = $response->getContent();
                 $content = json_decode($content);
-                $content = json_encode($content, JSON_PRETTY_PRINT);
+                $content = json_encode($content, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
                 $response->setContent($content);
             }
 
