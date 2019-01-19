@@ -1,4 +1,16 @@
-# Student management API
+# Student management API - PHP - [![Build Status](https://travis-ci.org/francescozanoni/students-api-php.svg?branch=master)](https://travis-ci.org/francescozanoni/students-api-php)
+
+This is a [RESTful](https://en.wikipedia.org/wiki/Representational_state_transfer) API providing generic management functionalities of university students:
+
+- students
+- student annotations
+- student stages
+  - stage evaluations
+  - interrupted stage reports
+- seminars
+- additional educational activities
+
+The API is documented with [OpenAPI](https://swagger.io/docs/specification/about/) specification (version 3.0) and can be accessed via [Swagger UI](https://swagger.io/tools/swagger-ui) interface at URL **/docs**.
 
 
 ### Installation
