@@ -28,9 +28,16 @@ class AnnotationsTest extends TestCase
                 'data' => [
                     [
                         'id' => 1,
-                        'student_id' => 1,
                         'title' => 'First title',
                         'content' => 'First content',
+                        'student' => [
+                            'id' => 1,
+                            'first_name' => 'John',
+                            'last_name' => 'Doe',
+                            'e_mail' => 'john.doe@foo.com',
+                            'phone' => '1234-567890',
+                            'nationality' => 'UK',
+                        ],
                         'user_id' => 123,
                         'created_at' => '2019-01-01 01:00:00',
                         'updated_at' => '2019-01-01 01:00:00',
@@ -54,9 +61,16 @@ class AnnotationsTest extends TestCase
                 'message' => 'Resource(s) found',
                 'data' => [
                     'id' => 1,
-                    'student_id' => 1,
                     'title' => 'First title',
                     'content' => 'First content',
+                    'student' => [
+                        'id' => 1,
+                        'first_name' => 'John',
+                        'last_name' => 'Doe',
+                        'e_mail' => 'john.doe@foo.com',
+                        'phone' => '1234-567890',
+                        'nationality' => 'UK',
+                    ],
                     'user_id' => 123,
                     'created_at' => '2019-01-01 01:00:00',
                     'updated_at' => '2019-01-01 01:00:00',

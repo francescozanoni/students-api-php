@@ -28,7 +28,9 @@ class ValidateResponse
         $response = $next($request);
 
         /* This middleware cannot be used until hkarlstrom/openapi-validation-middleware does not support
-         * anyOf, oneOf and not in schemas (planned enhancement), therefore return $response;
+         * allOf in any part of the schema (planned enhancement), therefore immediately return $response;,
+         * otherwise the following error occurs:
+         *
          * {
          *   "status_code": 500,
          *   "status": "Internal Server Error",
@@ -50,33 +52,16 @@ class ValidateResponse
          * }
          */
         return $response;
-        
+
         $path = (string)app('current_route_path');
         $httpMethod = strtolower($request->getMethod());
 
         $validator = new OpenApiValidator(config('openapi.schema_file_path'));
         $errors = $validator->validateResponse($response, $path, $httpMethod);
 
-        /* Current $errors in case of missing item (it should be fixed by H. Karlstrom):
-         *
-         * Array (
-         *   [0] => Array (
-         *     [name] => data
-         *     [code] => error_allOf
-         *     [value] => stdClass Object (
-         *       [id] => 1
-         *       [last_name] => Doe
-         *       [e_mail] => john.doe@foo.com
-         *       [phone] => 1234-567890
-         *       [nationality] => UK
-         *     )
-         *   )
-         * )
-         */
-
         if (empty($errors) === false) {
             // Since AddResponseMetadata and PrettyPrint middlewares have already been executed,
-            // their logic is here applied manually.
+            // their logic is here re-applied manually on the error response.
             // @todo improve design of this
             $response->setStatusCode(500);
             $metadata = app('App\Http\Middleware\AddResponseMetadata')->getMetadata($request, $response);

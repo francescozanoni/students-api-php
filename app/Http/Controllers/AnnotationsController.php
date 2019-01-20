@@ -23,13 +23,13 @@ class AnnotationsController extends Controller
     /**
      * Retrieve all annotations of a student.
      *
-     * @param int $id student ID
+     * @param int $studentId
      *
      * @return Annotation[]|\Illuminate\Database\Eloquent\Collection
      */
-    public function getRelatedToStudent(int $id)
+    public function getRelatedToStudent(int $studentId)
     {
-        $annotations = Student::findOrFail($id)->annotations;
+        $annotations = Student::findOrFail($studentId)->annotations;
 
         if (count($annotations) === 0) {
             throw new NotFoundHttpException();

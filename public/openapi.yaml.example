@@ -552,12 +552,16 @@ components:
           type: string
         body:
           type: string
+        user_id:
+          type: integer
       required:
         - title
         - body
+        - user_id
       example:
         title: First annotation title
         body: First annotation body
+        user_id: 123
     Annotation:
       allOf:
         - $ref: '#/components/schemas/NewAnnotation'
@@ -565,9 +569,29 @@ components:
           properties:
             id:
               type: integer
+            student:
+              $ref: '#/components/schemas/NewStudent'
+            created_at:
+              type: string
+              pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$'
+            updated_at:
+              type: string
+              pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$'
           required:
             - id
+            # student is not required because it is omitted in case of student ID is a path parameter
+            - created_at
       example:
         id: 1
         title: First annotation title
         body: First annotation body
+        user_id: 123
+        student:
+          id: 1
+          first_name: John
+          last_name: Doe
+          e_mail: john.doe@foo.com
+          phone: 1234-567890
+          nationality: UK
+        created_at: '2019-01-01 01:00:00'
+        updated_at: '2019-01-01 01:00:00'

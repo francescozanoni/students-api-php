@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\Student as StudentResource;
 
 class Annotation extends JsonResource
 {
@@ -14,12 +15,9 @@ class Annotation extends JsonResource
         $output = [
 
             'id' => $this->id,
-
-            // This field is returned as string, but cannot understand why...
-            'student_id' => (int)$this->student_id,
-
             'title' => $this->title,
             'content' => $this->content,
+            'student' => $this->when(app('current_route_alias') !== 'getStudentAnnotations', new StudentResource($this->student)),
 
             // This field is returned as string, but cannot understand why...
             'user_id' => (int)$this->user_id,
@@ -28,10 +26,6 @@ class Annotation extends JsonResource
             'updated_at' => (string)$this->updated_at,
 
         ];
-
-        if (app('current_route_alias') === 'getStudentAnnotations') {
-            unset($output['student_id']);
-        }
 
         return $output;
 
