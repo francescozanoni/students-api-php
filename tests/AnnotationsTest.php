@@ -67,6 +67,14 @@ class AnnotationsTest extends TestCase
             ])
             ->seeStatusCode(200);
 
+    }
+
+    /**
+     * Get annotation by ID: failure.
+     */
+    public function testGetByIdFailure()
+    {
+
         // Non existing
         $this->json('GET', '/annotations/9999')
             ->seeJsonEquals([
@@ -96,7 +104,7 @@ class AnnotationsTest extends TestCase
     }
 
     /**
-     * Get student's annotations.
+     * Get student's annotations: success.
      */
     public function testGetRelatedToStudent()
     {
@@ -119,6 +127,14 @@ class AnnotationsTest extends TestCase
                 ],
             ])
             ->seeStatusCode(200);
+
+    }
+
+    /**
+     * Get student's annotations: failure.
+     */
+    public function testGetRelatedToStudentFailure()
+    {
 
         // Non existing annotations
         $this->json('GET', '/students/2/annotations')
@@ -189,6 +205,14 @@ class AnnotationsTest extends TestCase
             ->seeStatusCode(200)
             ->seeInDatabase('annotations', ['id' => 2, 'deleted_at' => null])
             ->notSeeInDatabase('annotations', ['id' => 3]);
+
+    }
+
+    /**
+     * Create a student's annotation: failure.
+     */
+    public function testCreateRelatedToStudentFailure()
+    {
 
         // Non existing student
         $this->json('POST',
@@ -373,7 +397,7 @@ class AnnotationsTest extends TestCase
     }
 
     /**
-     * Modify an annotation.
+     * Modify an annotation: success.
      */
     public function testModifyById()
     {
@@ -413,12 +437,22 @@ class AnnotationsTest extends TestCase
             ->seeInDatabase('annotations', ['id' => 1, 'title' => 'First title modified'])
             ->notSeeInDatabase('annotations', ['id' => 1, 'title' => 'First title']);
 
-        // @todo add required and minLength tests
+    }
+
+    /**
+     * Modify an annotation: failure.
+     */
+    public function testModifyByIdFailure()
+    {
+
+        $this->assertTrue(true);
+
+        // @todo add tests
 
     }
 
     /**
-     * Delete an annotation.
+     * Delete an annotation: success.
      */
     public function testDeleteById()
     {
@@ -433,6 +467,14 @@ class AnnotationsTest extends TestCase
             ->seeStatusCode(200)
             ->seeInDatabase('annotations', ['id' => 1, 'deleted_at' => date('Y-m-d H:i:s')])
             ->notSeeInDatabase('annotations', ['id' => 1, 'deleted_at' => null]);
+
+    }
+
+    /**
+     * Delete an annotation: failure.
+     */
+    public function testDeleteByIdFailure()
+    {
 
         // Non existing annotation
         $this->json('DELETE', '/annotations/999')
