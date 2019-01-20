@@ -182,7 +182,7 @@ class AnnotationsTest extends TestCase
                 'user_id' => 456,
             ]
         )
-            ->seeJson([
+            ->seeJsonEquals([
                 'status_code' => 200,
                 'status' => 'OK',
                 'message' => 'Resource successfully retrieved/created/modified',
