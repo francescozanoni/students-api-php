@@ -296,6 +296,8 @@ class StudentsTest extends TestCase
                 'message' => 'Resource deleted',
             ])
             ->seeStatusCode(200)
+
+            ->seeInDatabase('students', ['id' => 2, 'deleted_at' => date('Y-m-d H:i:s')])
             ->notSeeInDatabase('students', ['id' => 2, 'deleted_at' => null]);
 
         // Non existing student
@@ -307,6 +309,23 @@ class StudentsTest extends TestCase
             ])
             ->seeStatusCode(404)
             ->notSeeInDatabase('students', ['id' => 999]);
+
+        // Invalid ID
+        $this->json('DELETE', '/students/abc')
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'id' => [
+                        'code error_type',
+                        'value abc',
+                        'expected integer',
+                        'used string',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400);
 
     }
 

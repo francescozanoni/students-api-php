@@ -427,4 +427,50 @@ class AnnotationsTest extends TestCase
 
     }
 
+    /**
+     * Delete an annotation.
+     */
+    public function testDeleteById()
+    {
+
+        // Existing student
+        $this->json('DELETE', '/annotations/1')
+            ->seeJsonEquals([
+                'status_code' => 200,
+                'status' => 'OK',
+                'message' => 'Resource deleted',
+            ])
+            ->seeStatusCode(200)
+            ->seeInDatabase('annotations', ['id' => 1, 'deleted_at' => date('Y-m-d H:i:s')])
+            ->notSeeInDatabase('annotations', ['id' => 1, 'deleted_at' => null]);
+
+        // Non existing annotation
+        $this->json('DELETE', '/annotations/999')
+            ->seeJsonEquals([
+                'status_code' => 404,
+                'status' => 'Not Found',
+                'message' => 'Resource(s) not found',
+            ])
+            ->seeStatusCode(404)
+            ->notSeeInDatabase('annotations', ['id' => 999]);
+
+        // Invalid ID
+        $this->json('DELETE', '/annotations/abc')
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'id' => [
+                        'code error_type',
+                        'value abc',
+                        'expected integer',
+                        'used string',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400);
+
+    }
+
 }

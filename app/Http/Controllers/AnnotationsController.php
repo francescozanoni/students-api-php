@@ -87,4 +87,15 @@ class AnnotationsController extends Controller
         return $annotation;
     }
 
+    /**
+     * Delete an annotation.
+     *
+     * @param int $id
+     */
+    public function destroy(int $id)
+    {
+        $annotation = Annotation::findOrFail($id);
+        $annotation->delete();
+    }
+
 }
