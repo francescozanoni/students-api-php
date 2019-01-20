@@ -47,7 +47,7 @@ class StudentsTest extends TestCase
     }
 
     /**
-     * Get a student.
+     * Get a student: success.
      */
     public function testGetById()
     {
@@ -68,6 +68,14 @@ class StudentsTest extends TestCase
                 ]
             ])
             ->seeStatusCode(200);
+
+    }
+
+    /**
+     * Get a student: failure.
+     */
+    public function testGetByIdFailure()
+    {
 
         // Non existing
         $this->json('GET', '/students/9999')
@@ -98,7 +106,7 @@ class StudentsTest extends TestCase
     }
 
     /**
-     * Create a student.
+     * Create a student: success.
      */
     public function testCreate()
     {
@@ -130,6 +138,14 @@ class StudentsTest extends TestCase
             ->seeStatusCode(200)
             ->seeInDatabase('students', ['id' => 4, 'deleted_at' => null])
             ->notSeeInDatabase('students', ['id' => 5]);
+
+    }
+
+    /**
+     * Create a student: failure.
+     */
+    public function testCreateFailure()
+    {
 
         // Missing required first_name
         $this->json('POST',
@@ -228,7 +244,7 @@ class StudentsTest extends TestCase
     }
 
     /**
-     * Modify a student.
+     * Modify a student: success.
      */
     public function testModifyById()
     {
@@ -261,6 +277,14 @@ class StudentsTest extends TestCase
             ->seeInDatabase('students', ['id' => 2, 'nationality' => 'IE'])
             ->notSeeInDatabase('students', ['id' => 2, 'nationality' => 'CA']);
 
+    }
+
+    /**
+     * Modify a student: failure.
+     */
+    public function testModifyByIdFailure()
+    {
+
         // Non existing student
         $this->json('PUT',
             '/students/999',
@@ -280,10 +304,39 @@ class StudentsTest extends TestCase
             ->seeStatusCode(404)
             ->notSeeInDatabase('students', ['id' => 999]);
 
+        // Non existing student
+        $this->json('PUT',
+            '/students/abc',
+            [
+                'first_name' => 'AAA',
+                'last_name' => 'BBB',
+                'e_mail' => 'aaa.bbb@ccc.com',
+                'phone' => '3333-11111111',
+                'nationality' => 'NO',
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'id' => [
+                        'code error_type',
+                        'value abc',
+                        'expected integer',
+                        'used string',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('students', ['id' => 999]);
+
+        // @todo add required and minLength tests
+
     }
 
     /**
-     * Delete a student.
+     * Delete a student: success.
      */
     public function testDeleteById()
     {
@@ -300,6 +353,14 @@ class StudentsTest extends TestCase
             ->seeInDatabase('students', ['id' => 2, 'deleted_at' => date('Y-m-d H:i:s')])
             ->notSeeInDatabase('students', ['id' => 2, 'deleted_at' => null]);
 
+    }
+
+    /**
+     * Delete a student: failure.
+     */
+    public function testDeleteByIdFailure()
+    {
+
         // Non existing student
         $this->json('DELETE', '/students/999')
             ->seeJsonEquals([
@@ -311,6 +372,23 @@ class StudentsTest extends TestCase
             ->notSeeInDatabase('students', ['id' => 999]);
 
         // Invalid ID
+        $this->json('DELETE', '/students/abc')
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'id' => [
+                        'code error_type',
+                        'value abc',
+                        'expected integer',
+                        'used string',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400);
+
+        // Missing ID
         $this->json('DELETE', '/students/abc')
             ->seeJsonEquals([
                 'status_code' => 400,
