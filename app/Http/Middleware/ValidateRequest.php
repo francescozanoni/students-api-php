@@ -39,7 +39,6 @@ class ValidateRequest
         // -------------------------------------------------------------------------------------------------------------
 
         // STEP 2: validations not achievable by OpenAPI schema
-        $pathParameters = app('current_route_path_parameters');
 
         switch (app('current_route_alias')) {
 
@@ -52,11 +51,6 @@ class ValidateRequest
                 break;
 
             case 'updateStudentById':
-                Validator::make(
-                    $request->all(),
-                    ['id' => 'in:' . $pathParameters['id']],
-                    ['id.in' => 'The :attribute must be one of the following values: :values']
-                )->validate();
                 break;
 
             default:

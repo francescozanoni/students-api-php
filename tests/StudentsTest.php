@@ -237,7 +237,6 @@ class StudentsTest extends TestCase
         $this->json('PUT',
             '/students/2',
             [
-                'id' => 2,
                 'first_name' => 'Jane',
                 'last_name' => 'Doe',
                 'e_mail' => 'jane.doe@bar.com',
@@ -262,57 +261,10 @@ class StudentsTest extends TestCase
             ->seeInDatabase('students', ['id' => 2, 'nationality' => 'IE'])
             ->notSeeInDatabase('students', ['id' => 2, 'nationality' => 'CA']);
 
-        // Unmatching ID in path
-        $this->json('PUT',
-            '/students/3',
-            [
-                'id' => 2,
-                'first_name' => 'Jane',
-                'last_name' => 'Doe',
-                'e_mail' => 'jane.doe@bar.com',
-                'phone' => '3333-11111111',
-                'nationality' => 'IE',
-            ]
-        )
-            ->seeJsonEquals([
-                'status_code' => 400,
-                'status' => 'Bad Request',
-                'message' => 'Request is not valid',
-                'data' => [
-                    'id' => ['The id must be one of the following values: 3'],
-                ]
-            ])
-            ->seeStatusCode(400)
-            ->notSeeInDatabase('students', ['id' => 3, 'first_name' => 'Jane']);
-
-        // Unmatching ID in body
-        $this->json('PUT',
-            '/students/2',
-            [
-                'id' => 3,
-                'first_name' => 'Jane',
-                'last_name' => 'Doe',
-                'e_mail' => 'jane.doe@bar.com',
-                'phone' => '3333-11111111',
-                'nationality' => 'IE',
-            ]
-        )
-            ->seeJsonEquals([
-                'status_code' => 400,
-                'status' => 'Bad Request',
-                'message' => 'Request is not valid',
-                'data' => [
-                    'id' => ['The id must be one of the following values: 2'],
-                ]
-            ])
-            ->seeStatusCode(400)
-            ->notSeeInDatabase('students', ['id' => 3, 'first_name' => 'Jane']);
-
         // Non existing student
         $this->json('PUT',
             '/students/999',
             [
-                'id' => 999,
                 'first_name' => 'AAA',
                 'last_name' => 'BBB',
                 'e_mail' => 'aaa.bbb@ccc.com',
