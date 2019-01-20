@@ -1,18 +1,8 @@
 <?php
 declare(strict_types = 1);
 
-use Laravel\Lumen\Testing\DatabaseMigrations;
-
 class StudentsTest extends TestCase
 {
-
-    use DatabaseMigrations;
-
-    public function setUp()
-    {
-        parent::setUp();
-        app(DatabaseSeeder::class)->run();
-    }
 
     /**
      * Get all students.
