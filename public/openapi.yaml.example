@@ -560,8 +560,10 @@ components:
       properties:
         title:
           type: string
+          minLength: 3
         content:
           type: string
+          minLength: 3
         user_id:
           type: integer
       required:

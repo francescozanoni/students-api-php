@@ -242,7 +242,143 @@ class AnnotationsTest extends TestCase
             ->seeStatusCode(400)
             ->notSeeInDatabase('annotations', ['id' => 3]);
 
-        // @todo test required annotation properties
+        // Missing required title
+        $this->json('POST',
+            '/students/1/annotations',
+            [
+                'content' => 'Second content',
+                'user_id' => 456,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'title' => [
+                        'code error_required',
+                    ]
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('annotations', ['id' => 3]);
+
+        // Too short title
+        $this->json('POST',
+            '/students/1/annotations',
+            [
+                'title' => 'A',
+                'content' => 'Second content',
+                'user_id' => 456,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'title' => [
+                        'code error_minLength',
+                        'length 1',
+                        'min 3',
+                        'value A',
+                    ]
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('annotations', ['id' => 3]);
+
+        // Missing required content
+        $this->json('POST',
+            '/students/1/annotations',
+            [
+                'title' => 'Second title',
+                'user_id' => 456,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'content' => [
+                        'code error_required',
+                    ]
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('annotations', ['id' => 3]);
+
+        // Too short content
+        $this->json('POST',
+            '/students/1/annotations',
+            [
+                'title' => 'Second title',
+                'content' => 'A',
+                'user_id' => 456,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'content' => [
+                        'code error_minLength',
+                        'length 1',
+                        'min 3',
+                        'value A',
+                    ]
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('annotations', ['id' => 3]);
+
+        // Missing required user_id
+        $this->json('POST',
+            '/students/1/annotations',
+            [
+                'title' => 'Second title',
+                'content' => 'Second content',
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'user_id' => [
+                        'code error_required',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('annotations', ['id' => 3]);
+
+        // Invalid user_id
+        $this->json('POST',
+            '/students/1/annotations',
+            [
+                'title' => 'Second title',
+                'content' => 'Second content',
+                'user_id' => 'abc',
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'user_id' => [
+                        'code error_type',
+                        'value abc',
+                        'expected integer',
+                        'used string',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('annotations', ['id' => 3]);
 
     }
 }
