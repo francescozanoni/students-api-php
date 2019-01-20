@@ -71,4 +71,20 @@ class AnnotationsController extends Controller
         return $annotation;
     }
 
+    /**
+     * Modify an annotation.
+     *
+     * @param Request $request
+     * @param int $id
+     *
+     * @return Annotation
+     */
+    public function update(Request $request, int $id) : Annotation
+    {
+        $annotation = Annotation::findOrFail($id);
+        $annotation->fill($request->request->all());
+        $annotation->save();
+        return $annotation;
+    }
+
 }

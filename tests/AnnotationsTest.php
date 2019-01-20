@@ -381,4 +381,50 @@ class AnnotationsTest extends TestCase
             ->notSeeInDatabase('annotations', ['id' => 3]);
 
     }
+
+    /**
+     * Modify an annotation.
+     */
+    public function testModifyById()
+    {
+
+        // Success
+        $this->json('PUT',
+            '/annotations/1',
+            [
+                'title' => 'First title modified',
+                'content' => 'First content',
+                'user_id' => 123,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 200,
+                'status' => 'OK',
+                'message' => 'Resource successfully retrieved/created/modified',
+                'data' => [
+                    'id' => 1,
+                    'title' => 'First title modified',
+                    'content' => 'First content',
+                    'student' => [
+                        'id' => 1,
+                        'first_name' => 'John',
+                        'last_name' => 'Doe',
+                        'e_mail' => 'john.doe@foo.com',
+                        'phone' => '1234-567890',
+                        'nationality' => 'UK',
+                    ],
+                    'user_id' => 123,
+                    'created_at' => '2019-01-01 01:00:00',
+                    // @todo CHANGE THE FOLLOWING TWO LINES, TO AVOID TEST FAILURE BECAUSE OF CROSS-SECOND EXECUTION
+                    'updated_at' => date('Y-m-d H:i:s'),
+                ]
+            ])
+            ->seeStatusCode(200)
+            ->seeInDatabase('annotations', ['id' => 1, 'title' => 'First title modified'])
+            ->notSeeInDatabase('annotations', ['id' => 1, 'title' => 'First title']);
+
+        // @todo add required and minLength tests
+
+    }
+
 }

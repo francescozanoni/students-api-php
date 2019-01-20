@@ -49,6 +49,7 @@ class ApplyResourceTransformers
 
             case 'getAnnotationById':
             case 'createStudentAnnotation':
+            case 'updateAnnotationById':
                 $response->setContent(new AnnotationResource($response->original));
                 break;
 
