@@ -457,7 +457,7 @@ class AnnotationsTest extends TestCase
     public function testDeleteById()
     {
 
-        // Existing student
+        // Existing annotation
         $this->json('DELETE', '/annotations/1')
             ->seeJsonEquals([
                 'status_code' => 200,
