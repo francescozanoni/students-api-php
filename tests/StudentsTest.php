@@ -229,7 +229,7 @@ class StudentsTest extends TestCase
             ->seeStatusCode(400)
             ->notSeeInDatabase('students', ['id' => 5]);
 
-        // @todo add minLength test
+        // @todo add invalid and minLength test
 
     }
 

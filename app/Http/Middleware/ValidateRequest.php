@@ -29,6 +29,7 @@ class ValidateRequest
     {
 
         // STEP 1: validation against OpenAPI schema
+
         $validator = new OpenApiValidator(config('openapi.schema_file_path'));
         $errors = $validator->validateRequest($request);
         if (empty($errors) === false) {
@@ -48,16 +49,24 @@ class ValidateRequest
                 break;
 
             case 'createStudent':
-                // @todo add country_code validation
-                break;
-
             case 'updateStudentById':
-                // @todo add country_code validation
+                Validator::make(
+                    $request->request->all(),
+                    [
+                        'e_mail' => 'email',
+                        'country_code' => 'in:' . implode(',', app('country_codes')),
+                    ],
+                    [
+                        'country_code.in' => 'The :attribute must be one of the following values: :values'
+                    ]
+                )->validate();
                 break;
 
             default:
 
         }
+
+        // -------------------------------------------------------------------------------------------------------------
 
         $response = $next($request);
 
