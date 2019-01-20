@@ -20,7 +20,6 @@ class StudentsTest extends TestCase
     public function testGet()
     {
         $this->json('GET', '/students')
-            ->seeStatusCode(200)
             ->seeJsonEquals([
                 'status_code' => 200,
                 'status' => 'OK',
@@ -43,7 +42,8 @@ class StudentsTest extends TestCase
                         'nationality' => 'CA',
                     ],
                 ]
-            ]);
+            ])
+            ->seeStatusCode(200);
     }
 
     /**
@@ -54,7 +54,6 @@ class StudentsTest extends TestCase
 
         // Existing
         $this->json('GET', '/students/1')
-            ->seeStatusCode(200)
             ->seeJsonEquals([
                 'status_code' => 200,
                 'status' => 'OK',
@@ -67,20 +66,20 @@ class StudentsTest extends TestCase
                     'phone' => '1234-567890',
                     'nationality' => 'UK',
                 ]
-            ]);
+            ])
+            ->seeStatusCode(200);
 
         // Non existing
         $this->json('GET', '/students/9999')
-            ->seeStatusCode(404)
             ->seeJsonEquals([
                 'status_code' => 404,
                 'status' => 'Not Found',
                 'message' => 'Resource(s) not found',
-            ]);
+            ])
+            ->seeStatusCode(404);
 
         // Invalid ID
         $this->json('GET', '/students/abc')
-            ->seeStatusCode(400)
             ->seeJsonEquals([
                 'status_code' => 400,
                 'status' => 'Bad Request',
@@ -93,7 +92,8 @@ class StudentsTest extends TestCase
                         'used string',
                     ],
                 ]
-            ]);
+            ])
+            ->seeStatusCode(400);
 
     }
 
@@ -114,7 +114,6 @@ class StudentsTest extends TestCase
                 'nationality' => 'AU',
             ]
         )
-            ->seeStatusCode(200)
             ->seeJsonEquals([
                 'status_code' => 200,
                 'status' => 'OK',
@@ -128,6 +127,7 @@ class StudentsTest extends TestCase
                     'nationality' => 'AU',
                 ]
             ])
+            ->seeStatusCode(200)
             ->seeInDatabase('students', ['id' => 4, 'deleted_at' => null])
             ->notSeeInDatabase('students', ['id' => 5]);
 
@@ -141,7 +141,6 @@ class StudentsTest extends TestCase
                 'nationality' => 'AU',
             ]
         )
-            ->seeStatusCode(400)
             ->seeJsonEquals([
                 'status_code' => 400,
                 'status' => 'Bad Request',
@@ -152,6 +151,7 @@ class StudentsTest extends TestCase
                     ]
                 ]
             ])
+            ->seeStatusCode(400)
             ->notSeeInDatabase('students', ['id' => 5]);
 
         // Missing required last_name
@@ -164,7 +164,6 @@ class StudentsTest extends TestCase
                 'nationality' => 'AU',
             ]
         )
-            ->seeStatusCode(400)
             ->seeJsonEquals([
                 'status_code' => 400,
                 'status' => 'Bad Request',
@@ -175,6 +174,7 @@ class StudentsTest extends TestCase
                     ]
                 ]
             ])
+            ->seeStatusCode(400)
             ->notSeeInDatabase('students', ['id' => 5]);
 
         // Missing required e_mail
@@ -187,7 +187,6 @@ class StudentsTest extends TestCase
                 'nationality' => 'AU',
             ]
         )
-            ->seeStatusCode(400)
             ->seeJsonEquals([
                 'status_code' => 400,
                 'status' => 'Bad Request',
@@ -198,6 +197,7 @@ class StudentsTest extends TestCase
                     ]
                 ]
             ])
+            ->seeStatusCode(400)
             ->notSeeInDatabase('students', ['id' => 5]);
 
         // Missing required nationality
@@ -210,7 +210,6 @@ class StudentsTest extends TestCase
                 'phone' => '0000-11111111',
             ]
         )
-            ->seeStatusCode(400)
             ->seeJsonEquals([
                 'status_code' => 400,
                 'status' => 'Bad Request',
@@ -221,6 +220,7 @@ class StudentsTest extends TestCase
                     ]
                 ]
             ])
+            ->seeStatusCode(400)
             ->notSeeInDatabase('students', ['id' => 5]);
 
     }
@@ -243,7 +243,6 @@ class StudentsTest extends TestCase
                 'nationality' => 'IE',
             ]
         )
-            ->seeStatusCode(200)
             ->seeJsonEquals([
                 'status_code' => 200,
                 'status' => 'OK',
@@ -256,7 +255,10 @@ class StudentsTest extends TestCase
                     'phone' => '3333-11111111',
                     'nationality' => 'IE',
                 ]
-            ]);
+            ])
+            ->seeStatusCode(200)
+            ->seeInDatabase('students', ['id' => 2, 'nationality' => 'IE'])
+            ->notSeeInDatabase('students', ['id' => 2, 'nationality' => 'CA']);
 
         // Unmatching ID in path
         $this->json('PUT',
@@ -270,7 +272,6 @@ class StudentsTest extends TestCase
                 'nationality' => 'IE',
             ]
         )
-            ->seeStatusCode(400)
             ->seeJsonEquals([
                 'status_code' => 400,
                 'status' => 'Bad Request',
@@ -279,6 +280,7 @@ class StudentsTest extends TestCase
                     'id' => ['The id must be one of the following values: 3'],
                 ]
             ])
+            ->seeStatusCode(400)
             ->notSeeInDatabase('students', ['id' => 3, 'first_name' => 'Jane']);
 
         // Unmatching ID in body
@@ -293,7 +295,6 @@ class StudentsTest extends TestCase
                 'nationality' => 'IE',
             ]
         )
-            ->seeStatusCode(400)
             ->seeJsonEquals([
                 'status_code' => 400,
                 'status' => 'Bad Request',
@@ -302,6 +303,7 @@ class StudentsTest extends TestCase
                     'id' => ['The id must be one of the following values: 2'],
                 ]
             ])
+            ->seeStatusCode(400)
             ->notSeeInDatabase('students', ['id' => 3, 'first_name' => 'Jane']);
 
         // Non existing student
@@ -316,12 +318,13 @@ class StudentsTest extends TestCase
                 'nationality' => 'NO',
             ]
         )
-            ->seeStatusCode(404)
             ->seeJsonEquals([
                 'status_code' => 404,
                 'status' => 'Not Found',
                 'message' => 'Resource(s) not found',
-            ]);
+            ])
+            ->seeStatusCode(404)
+            ->notSeeInDatabase('students', ['id' => 999]);
 
     }
 
@@ -333,22 +336,23 @@ class StudentsTest extends TestCase
 
         // Existing student
         $this->json('DELETE', '/students/2')
-            ->seeStatusCode(200)
             ->seeJsonEquals([
                 'status_code' => 200,
                 'status' => 'OK',
                 'message' => 'Resource deleted',
             ])
+            ->seeStatusCode(200)
             ->notSeeInDatabase('students', ['id' => 2, 'deleted_at' => null]);
 
         // Non existing student
         $this->json('DELETE', '/students/999')
-            ->seeStatusCode(404)
             ->seeJsonEquals([
                 'status_code' => 404,
                 'status' => 'Not Found',
                 'message' => 'Resource(s) not found',
-            ]);
+            ])
+            ->seeStatusCode(404)
+            ->notSeeInDatabase('students', ['id' => 999]);
 
     }
 

@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace App\Http\Controllers;
 
 use App\Models\Student;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
 class StudentsController extends Controller
@@ -14,7 +15,7 @@ class StudentsController extends Controller
      *
      * @return Student[]|\Illuminate\Database\Eloquent\Collection
      */
-    public function index()
+    public function index() : Collection
     {
         return Student::all();
     }
@@ -26,7 +27,7 @@ class StudentsController extends Controller
      *
      * @return Student
      */
-    public function store(Request $request)
+    public function store(Request $request) : Student
     {
         return Student::create($request->request->all());
     }
@@ -38,7 +39,7 @@ class StudentsController extends Controller
      *
      * @return Student
      */
-    public function show(int $id)
+    public function show(int $id) : Student
     {
         return Student::findOrFail($id);
     }
@@ -51,10 +52,11 @@ class StudentsController extends Controller
      *
      * @return Student
      */
-    public function update(Request $request, int $id)
+    public function update(Request $request, int $id) : Student
     {
         $student = Student::findOrFail($id);
         $student->fill($request->request->all());
+        $student->save();
         return $student;
     }
 
