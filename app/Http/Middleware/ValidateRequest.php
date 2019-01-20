@@ -54,10 +54,12 @@ class ValidateRequest
                     $request->request->all(),
                     [
                         'e_mail' => 'email',
-                        'country_code' => 'in:' . implode(',', app('country_codes')),
+                        'nationality' => 'in:' . implode(',', app('country_codes')),
                     ],
                     [
-                        'country_code.in' => 'The :attribute must be one of the following values: :values'
+                        'e_mail.email' => 'The :attribute must be a valid e-mail address',
+                        // 'nationality.in' => 'The :attribute must be one of the following values: :values'
+                        'nationality.in' => 'The :attribute must be a valid ISO 3166-1 alpha-2 country code'
                     ]
                 )->validate();
                 break;
