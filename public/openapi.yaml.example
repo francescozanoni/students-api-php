@@ -473,11 +473,21 @@ components:
             example:
               status_code: 200
               status: OK
-              message: Resource(s) found
+              message: Resource successfully retrieved/created/modified
               data:
                 id: 1
                 title: First annotation title
-                body: First annotation body
+                content: First annotation body
+                user_id: 123
+                student:
+                  id: 1
+                  first_name: John
+                  last_name: Doe
+                  e_mail: john.doe@foo.com
+                  phone: 1234-567890
+                  nationality: UK
+                created_at: '2019-01-01 01:00:00'
+                updated_at: '2019-01-01 01:00:00'
     ResourceDeletion:
       description: Response confirming deletion of a resource
       content:
@@ -550,17 +560,17 @@ components:
       properties:
         title:
           type: string
-        body:
+        content:
           type: string
         user_id:
           type: integer
       required:
         - title
-        - body
+        - content
         - user_id
       example:
         title: First annotation title
-        body: First annotation body
+        content: First annotation body
         user_id: 123
     Annotation:
       allOf:
@@ -584,7 +594,7 @@ components:
       example:
         id: 1
         title: First annotation title
-        body: First annotation body
+        content: First annotation body
         user_id: 123
         student:
           id: 1
