@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Annotation;
 use App\Models\Student;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AnnotationsController extends Controller
@@ -15,7 +17,7 @@ class AnnotationsController extends Controller
      *
      * @return Annotation[]|\Illuminate\Database\Eloquent\Collection
      */
-    public function index()
+    public function index() : Collection
     {
         return Annotation::all();
     }
@@ -27,7 +29,7 @@ class AnnotationsController extends Controller
      *
      * @return Annotation[]|\Illuminate\Database\Eloquent\Collection
      */
-    public function getRelatedToStudent(int $studentId)
+    public function getRelatedToStudent(int $studentId) : Collection
     {
         $annotations = Student::findOrFail($studentId)->annotations;
 
@@ -45,9 +47,28 @@ class AnnotationsController extends Controller
      *
      * @return Annotation
      */
-    public function show(int $id)
+    public function show(int $id) : Annotation
     {
         return Annotation::findOrFail($id);
+    }
+
+    /**
+     * Create a student's annotations.
+     *
+     * @param Request $request
+     * @param int $studentId
+     *
+     * @return Annotation
+     */
+    public function createRelatedToStudent(Request $request, int $studentId) : Annotation
+    {
+        $student = Student::findOrFail($studentId);
+
+        $annotation = new Annotation($request->request->all());
+
+        $student->annotations()->save($annotation);
+
+        return $annotation;
     }
 
 }

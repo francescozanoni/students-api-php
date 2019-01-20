@@ -36,6 +36,7 @@ $router->group(['middleware' => 'validate_request'], function () use ($router) {
     $router->delete('students/{id}', ['as' => 'deleteStudentById', 'uses' => 'StudentsController@destroy']);
 
     $router->get('students/{id}/annotations', ['as' => 'getStudentAnnotations', 'uses' => 'AnnotationsController@getRelatedToStudent']);
+    $router->post('students/{id}/annotations', ['as' => 'createStudentAnnotation', 'uses' => 'AnnotationsController@createRelatedToStudent']);
 
     $router->get('annotations', ['as' => 'getAnnotations', 'uses' => 'AnnotationsController@index']);
     $router->get('annotations/{id}', ['as' => 'getAnnotationById', 'uses' => 'AnnotationsController@show']);

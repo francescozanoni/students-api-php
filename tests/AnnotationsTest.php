@@ -20,7 +20,6 @@ class AnnotationsTest extends TestCase
     public function testGet()
     {
         $this->json('GET', '/annotations')
-            ->seeStatusCode(200)
             ->seeJsonEquals([
                 'status_code' => 200,
                 'status' => 'OK',
@@ -43,7 +42,8 @@ class AnnotationsTest extends TestCase
                         'updated_at' => '2019-01-01 01:00:00',
                     ],
                 ]
-            ]);
+            ])
+            ->seeStatusCode(200);
     }
 
     /**
@@ -54,11 +54,10 @@ class AnnotationsTest extends TestCase
 
         // Existing
         $this->json('GET', '/annotations/1')
-            ->seeStatusCode(200)
             ->seeJsonEquals([
                 'status_code' => 200,
                 'status' => 'OK',
-                'message' => 'Resource(s) found',
+                'message' => 'Resource successfully retrieved/created/modified',
                 'data' => [
                     'id' => 1,
                     'title' => 'First title',
@@ -75,20 +74,20 @@ class AnnotationsTest extends TestCase
                     'created_at' => '2019-01-01 01:00:00',
                     'updated_at' => '2019-01-01 01:00:00',
                 ],
-            ]);
+            ])
+            ->seeStatusCode(200);
 
         // Non existing
         $this->json('GET', '/annotations/9999')
-            ->seeStatusCode(404)
             ->seeJsonEquals([
                 'status_code' => 404,
                 'status' => 'Not Found',
                 'message' => 'Resource(s) not found',
-            ]);
+            ])
+            ->seeStatusCode(404);
 
         // Invalid ID
         $this->json('GET', '/annotations/abc')
-            ->seeStatusCode(400)
             ->seeJsonEquals([
                 'status_code' => 400,
                 'status' => 'Bad Request',
@@ -101,7 +100,8 @@ class AnnotationsTest extends TestCase
                         'used string',
                     ],
                 ]
-            ]);
+            ])
+            ->seeStatusCode(400);
 
     }
 
@@ -113,7 +113,6 @@ class AnnotationsTest extends TestCase
 
         // Existing
         $this->json('GET', '/students/1/annotations')
-            ->seeStatusCode(200)
             ->seeJsonEquals([
                 'status_code' => 200,
                 'status' => 'OK',
@@ -128,29 +127,29 @@ class AnnotationsTest extends TestCase
                         'updated_at' => '2019-01-01 01:00:00',
                     ]
                 ],
-            ]);
+            ])
+            ->seeStatusCode(200);
 
         // Non existing annotations
         $this->json('GET', '/students/2/annotations')
-            ->seeStatusCode(404)
             ->seeJsonEquals([
                 'status_code' => 404,
                 'status' => 'Not Found',
                 'message' => 'Resource(s) not found',
-            ]);
+            ])
+            ->seeStatusCode(404);
 
         // Non existing student
         $this->json('GET', '/students/999/annotations')
-            ->seeStatusCode(404)
             ->seeJsonEquals([
                 'status_code' => 404,
                 'status' => 'Not Found',
                 'message' => 'Resource(s) not found',
-            ]);
+            ])
+            ->seeStatusCode(404);
 
         // Invalid student ID
         $this->json('GET', '/students/abc/annotations')
-            ->seeStatusCode(400)
             ->seeJsonEquals([
                 'status_code' => 400,
                 'status' => 'Bad Request',
@@ -163,8 +162,87 @@ class AnnotationsTest extends TestCase
                         'used string',
                     ],
                 ]
-            ]);
+            ])
+            ->seeStatusCode(400);
 
     }
 
+    /**
+     * Create a student's annotation.
+     */
+    public function testCreateRelatedToStudent()
+    {
+
+        // Existing student
+        $this->json('POST',
+            '/students/1/annotations',
+            [
+                'title' => 'Second title',
+                'content' => 'Second content',
+                'user_id' => 456,
+            ]
+        )
+            ->seeJson([
+                'status_code' => 200,
+                'status' => 'OK',
+                'message' => 'Resource successfully retrieved/created/modified',
+                'data' => [
+                    'id' => 2,
+                    'title' => 'Second title',
+                    'content' => 'Second content',
+                    'user_id' => 456,
+                    // @todo CHANGE THE FOLLOWING TWO LINES, TO AVOID TEST FAILURE BECAUSE OF CROSS-SECOND EXECUTION
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s'),
+                ],
+            ])
+            ->seeStatusCode(200)
+            ->seeInDatabase('annotations', ['id' => 2, 'deleted_at' => null])
+            ->notSeeInDatabase('annotations', ['id' => 3]);
+
+        // Non existing student
+        $this->json('POST',
+            '/students/999/annotations',
+            [
+                'title' => 'Second title',
+                'content' => 'Second content',
+                'user_id' => 456,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 404,
+                'status' => 'Not Found',
+                'message' => 'Resource(s) not found',
+            ])
+            ->seeStatusCode(404)
+            ->notSeeInDatabase('annotations', ['id' => 3]);
+
+        // Invalid student ID
+        $this->json('POST',
+            '/students/abc/annotations',
+            [
+                'title' => 'Second title',
+                'content' => 'Second content',
+                'user_id' => 456,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'id' => [
+                        'code error_type',
+                        'value abc',
+                        'expected integer',
+                        'used string',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('annotations', ['id' => 3]);
+
+        // @todo test required annotation properties
+
+    }
 }

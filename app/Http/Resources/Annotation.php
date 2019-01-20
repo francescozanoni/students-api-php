@@ -12,12 +12,14 @@ class Annotation extends JsonResource
     public function toArray($request)
     {
 
+        $withStudentProperty = in_array(app('current_route_alias'), ['getStudentAnnotations', 'createStudentAnnotation']) === false;
+
         $output = [
 
             'id' => $this->id,
             'title' => $this->title,
             'content' => $this->content,
-            'student' => $this->when(app('current_route_alias') !== 'getStudentAnnotations', new StudentResource($this->student)),
+            'student' => $this->when($withStudentProperty === true, new StudentResource($this->student)),
 
             // This field is returned as string, but cannot understand why...
             'user_id' => (int)$this->user_id,
