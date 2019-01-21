@@ -68,6 +68,7 @@ $app->middleware([
     App\Http\Middleware\PrettyPrint::class,
     App\Http\Middleware\AddResponseMetadata::class,
     App\Http\Middleware\HandleNegativeResponseContent::class,
+    App\Http\Middleware\RemoveResponseEmptyItems::class,
     App\Http\Middleware\ApplyResourceTransformers::class,
 ]);
 
