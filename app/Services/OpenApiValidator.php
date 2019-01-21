@@ -150,15 +150,17 @@ class OpenApiValidator
         // @todo remove $path and $method from input (if possible)
 
         // Response object is cloned because validator methods use it by reference.
-        $_response = clone $response;
+        $_response_1 = clone $response;
+        $_response_2 = clone $response;
 
-        if (($_response instanceof ResponseInterface) === false) {
-            $_response = $this->getPsr7Response($_response);
+        if (($response instanceof ResponseInterface) === false) {
+            $_response_1 = $this->getPsr7Response($response);
+            $_response_2 = $this->getPsr7Response($response);
         }
 
         $errors = array_merge(
-            $this->validator->validateResponseBody($_response, $path, $method),
-            $this->validator->validateResponseHeaders($_response, $path, $method)
+            $this->validator->validateResponseBody($_response_1, $path, $method),
+            $this->validator->validateResponseHeaders($_response_2, $path, $method)
         );
 
         return $this->getFormattedErrors($errors);

@@ -205,7 +205,7 @@ class AnnotationsTest extends TestCase
                 ],
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('annotations', ['id' => 2, 'deleted_at' => null])
+            ->seeInDatabase('annotations', ['id' => 2, 'student_id' => 1, 'deleted_at' => null])
             ->notSeeInDatabase('annotations', ['id' => 3]);
 
     }
@@ -231,7 +231,8 @@ class AnnotationsTest extends TestCase
                 'message' => 'Resource(s) not found',
             ])
             ->seeStatusCode(404)
-            ->notSeeInDatabase('annotations', ['id' => 3]);
+            ->notSeeInDatabase('annotations', ['id' => 3])
+            ->notSeeInDatabase('annotations', ['student_id' => 999]);
 
         // Invalid student ID
         $this->json('POST',
@@ -257,7 +258,8 @@ class AnnotationsTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('annotations', ['id' => 3]);
+            ->notSeeInDatabase('annotations', ['id' => 3])
+            ->notSeeInDatabase('annotations', ['student_id' => 'abc']);
 
         // Missing required title
         $this->json('POST',
