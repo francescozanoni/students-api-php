@@ -27,32 +27,6 @@ class ValidateResponse
 
         $response = $next($request);
 
-        /* This middleware cannot be used until hkarlstrom/openapi-validation-middleware does not support
-         * allOf in any part of the schema (planned enhancement), therefore immediately return $response;,
-         * otherwise the following error occurs:
-         *
-         * {
-         *   "status_code": 500,
-         *   "status": "Internal Server Error",
-         *   "message": "An internal server error occurred",
-         *   "data": [
-         *     {
-         *       "name": "data.1",
-         *       "code": "error_allOf",
-         *       "value": {
-         *         "id": 2,
-         *         "first_name": "Jane",
-         *         "last_name": "Doe",
-         *         "e_mail": "jane.doe@bar.com",
-         *         "phone": null,
-         *         "nationality": "CA"
-         *       }
-         *     }
-         *   ]
-         * }
-         */
-        return $response;
-
         $path = (string)app('current_route_path');
         $httpMethod = strtolower($request->getMethod());
 

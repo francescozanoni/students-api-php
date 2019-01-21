@@ -15,7 +15,7 @@ class StudentsTableSeeder extends Seeder
             'last_name' => 'Doe',
             'e_mail' => 'john.doe@foo.com',
             'phone' => '1234-567890',
-            'nationality' => 'UK',
+            'nationality' => 'GB',
             'created_at' => '2019-01-01 00:00:00',
             'updated_at' => '2019-01-01 00:00:00',
         ]);

@@ -21,14 +21,13 @@ class StudentsTest extends TestCase
                         'last_name' => 'Doe',
                         'e_mail' => 'john.doe@foo.com',
                         'phone' => '1234-567890',
-                        'nationality' => 'UK',
+                        'nationality' => 'GB',
                     ],
                     [
                         'id' => 2,
                         'first_name' => 'Jane',
                         'last_name' => 'Doe',
                         'e_mail' => 'jane.doe@bar.com',
-                        'phone' => null,
                         'nationality' => 'CA',
                     ],
                 ]
@@ -54,7 +53,7 @@ class StudentsTest extends TestCase
                     'last_name' => 'Doe',
                     'e_mail' => 'john.doe@foo.com',
                     'phone' => '1234-567890',
-                    'nationality' => 'UK',
+                    'nationality' => 'GB',
                 ]
             ])
             ->seeStatusCode(200);
