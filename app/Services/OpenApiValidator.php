@@ -95,6 +95,11 @@ class OpenApiValidator
             $request = $this->getPsr7Request($request);
         }
 
+        // @todo fix situation of URL http://localhost/students/:
+        //  - considered as /students path by Laravel/Lumen routing
+        //  - considered as /students/ path by PSR-7 requests
+        // This makes Laravel/Lumen and HKarlstrom\OpenApiReader route resolving incompatible.
+
         $errors = [];
 
         $response = $this->validator->process($request, $this->requestHandler);
