@@ -77,8 +77,8 @@ class OpenApiValidator
      * @param mixed $request
      *
      * @return array validation errors, e.g. Array (
-     *                                         [0] => Array (
-     *                                           [name] => id
+     *                                         [id] => Array (
+     *                                           [in] => body
      *                                           [code] => error_type
      *                                           [value] => a
      *                                           [expected] => integer
@@ -122,7 +122,7 @@ class OpenApiValidator
 
         }
 
-        return $errors;
+        return $this->getFormattedErrors($errors);
 
     }
 
@@ -134,8 +134,8 @@ class OpenApiValidator
      * @param string $method
      *
      * @return array validation errors, e.g. Array (
-     *                                         [0] => Array (
-     *                                           [name] => id
+     *                                         [id] => Array (
+     *                                           [in] => body
      *                                           [code] => error_type
      *                                           [value] => a
      *                                           [expected] => integer
@@ -161,7 +161,7 @@ class OpenApiValidator
             $this->validator->validateResponseHeaders($_response, $path, $method)
         );
 
-        return $errors;
+        return $this->getFormattedErrors($errors);
 
     }
 
@@ -210,6 +210,48 @@ class OpenApiValidator
         );
 
         return $factory->createResponse($response);
+
+    }
+
+    /**
+     * Convert OpenApiValidation errors to Laravel/Lumen-like validation errors.
+     *
+     * @param array $originalErrors e.g. Array (
+     *                                     [0] => Array (
+     *                                       [name] => data.1.phone
+     *                                       [code] => error_type
+     *                                       [value] =>
+     *                                       [in] => body
+     *                                       [expected] => string
+     *                                       [used] => null
+     *                                     )
+     *                                   )
+     *
+     * @return array e.g. Array (
+     *                      [data.1.phone] => Array (
+     *                        [code] => error_type
+     *                        [value] =>
+     *                        [in] => body
+     *                        [expected] => string
+     *                        [used] => null
+     *                      )
+     *                    )
+     */
+    protected function getFormattedErrors(array $originalErrors) : array
+    {
+
+        $errors = [];
+
+        foreach ($originalErrors as $originalError) {
+            $name = $originalError['name'];
+            unset($originalError['name']);
+            $errors[$name] = [];
+            foreach ($originalError as $key => $value) {
+                $errors[$name][] = $key . ' ' . $value;
+            }
+        }
+
+        return $errors;
 
     }
 
