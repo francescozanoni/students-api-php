@@ -96,6 +96,7 @@ class AnnotationsTest extends TestCase
                         'value abc',
                         'expected integer',
                         'used string',
+                        'in path',
                     ],
                 ]
             ])
@@ -166,6 +167,7 @@ class AnnotationsTest extends TestCase
                         'value abc',
                         'expected integer',
                         'used string',
+                        'in path',
                     ],
                 ]
             ])
@@ -250,6 +252,7 @@ class AnnotationsTest extends TestCase
                         'value abc',
                         'expected integer',
                         'used string',
+                        'in path',
                     ],
                 ]
             ])
@@ -271,6 +274,7 @@ class AnnotationsTest extends TestCase
                 'data' => [
                     'title' => [
                         'code error_required',
+                        'in body',
                     ]
                 ]
             ])
@@ -296,6 +300,7 @@ class AnnotationsTest extends TestCase
                         'length 1',
                         'min 3',
                         'value A',
+                        'in body',
                     ]
                 ]
             ])
@@ -317,6 +322,7 @@ class AnnotationsTest extends TestCase
                 'data' => [
                     'content' => [
                         'code error_required',
+                        'in body',
                     ]
                 ]
             ])
@@ -342,6 +348,7 @@ class AnnotationsTest extends TestCase
                         'length 1',
                         'min 3',
                         'value A',
+                        'in body',
                     ]
                 ]
             ])
@@ -363,6 +370,7 @@ class AnnotationsTest extends TestCase
                 'data' => [
                     'user_id' => [
                         'code error_required',
+                        'in body',
                     ],
                 ]
             ])
@@ -388,6 +396,7 @@ class AnnotationsTest extends TestCase
                         'value abc',
                         'expected integer',
                         'used string',
+                        'in body',
                     ],
                 ]
             ])
@@ -498,11 +507,12 @@ class AnnotationsTest extends TestCase
                         'value abc',
                         'expected integer',
                         'used string',
+                        'in path',
                     ],
                 ]
             ])
             ->seeStatusCode(400);
-
+            
     }
 
 }

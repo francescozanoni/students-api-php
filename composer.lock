@@ -7,6 +7,45 @@
     "content-hash": "cca8f2e1a922b2fd8f54ef971755936c",
     "packages": [
         {
+            "name": "ckr/arraymerger",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ckressibucher/array_merger.git",
+                "reference": "ac3d3a011088df46574d33bf1fdad2f829ef6ee9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ckressibucher/array_merger/zipball/ac3d3a011088df46574d33bf1fdad2f829ef6ee9",
+                "reference": "ac3d3a011088df46574d33bf1fdad2f829ef6ee9",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.0"
+            },
+            "require-dev": {
+                "phpspec/phpspec": "~2.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Ckr\\Util\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Claudio Kressibucher",
+                    "email": "ckressibucher@graphicworks.ch"
+                }
+            ],
+            "description": "Provides functionality to merge arrays recursively",
+            "time": "2016-03-10T09:47:33+00:00"
+        },
+        {
             "name": "doctrine/inflector",
             "version": "v1.3.0",
             "source": {
@@ -163,19 +202,20 @@
         },
         {
             "name": "hkarlstrom/openapi-validation-middleware",
-            "version": "0.2.2",
+            "version": "0.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hkarlstrom/openapi-validation-middleware.git",
-                "reference": "b265ecaa4ce754f4b447ca62a11149d6ca6a9fa2"
+                "reference": "91d4e56303dd2351d3f5c3e3769db37e7d99fdc6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hkarlstrom/openapi-validation-middleware/zipball/b265ecaa4ce754f4b447ca62a11149d6ca6a9fa2",
-                "reference": "b265ecaa4ce754f4b447ca62a11149d6ca6a9fa2",
+                "url": "https://api.github.com/repos/hkarlstrom/openapi-validation-middleware/zipball/91d4e56303dd2351d3f5c3e3769db37e7d99fdc6",
+                "reference": "91d4e56303dd2351d3f5c3e3769db37e7d99fdc6",
                 "shasum": ""
             },
             "require": {
+                "ckr/arraymerger": "^2.0",
                 "hkarlstrom/openapi-reader": "^0.2.1",
                 "opis/json-schema": "^1.0",
                 "php": "^7.1",
@@ -213,7 +253,7 @@
                 "psr-7",
                 "validation"
             ],
-            "time": "2019-01-18T12:23:04+00:00"
+            "time": "2019-01-21T08:57:44+00:00"
         },
         {
             "name": "illuminate/auth",
@@ -1657,16 +1697,16 @@
         },
         {
             "name": "opis/json-schema",
-            "version": "1.0.14",
+            "version": "1.0.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/opis/json-schema.git",
-                "reference": "d79f9f4ab1dbbb88799b49cb4194d4229c4f6ef6"
+                "reference": "ff5c65a03373bf5fbf6bf14a83d282e093091c8d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/opis/json-schema/zipball/d79f9f4ab1dbbb88799b49cb4194d4229c4f6ef6",
-                "reference": "d79f9f4ab1dbbb88799b49cb4194d4229c4f6ef6",
+                "url": "https://api.github.com/repos/opis/json-schema/zipball/ff5c65a03373bf5fbf6bf14a83d282e093091c8d",
+                "reference": "ff5c65a03373bf5fbf6bf14a83d282e093091c8d",
                 "shasum": ""
             },
             "require": {
@@ -1715,7 +1755,7 @@
                 "validation",
                 "validator"
             ],
-            "time": "2019-01-16T15:54:41+00:00"
+            "time": "2019-01-18T14:11:57+00:00"
         },
         {
             "name": "psr/container",

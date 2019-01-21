@@ -88,6 +88,7 @@ class StudentsTest extends TestCase
                         'value abc',
                         'expected integer',
                         'used string',
+                        'in path',
                     ],
                 ]
             ])
@@ -154,6 +155,7 @@ class StudentsTest extends TestCase
                 'data' => [
                     'first_name' => [
                         'code error_required',
+                        'in body',
                     ]
                 ]
             ])
@@ -177,6 +179,7 @@ class StudentsTest extends TestCase
                 'data' => [
                     'last_name' => [
                         'code error_required',
+                        'in body',
                     ]
                 ]
             ])
@@ -200,6 +203,7 @@ class StudentsTest extends TestCase
                 'data' => [
                     'e_mail' => [
                         'code error_required',
+                        'in body',
                     ]
                 ]
             ])
@@ -223,6 +227,7 @@ class StudentsTest extends TestCase
                 'data' => [
                     'nationality' => [
                         'code error_required',
+                        'in body',
                     ]
                 ]
             ])
@@ -315,6 +320,7 @@ class StudentsTest extends TestCase
                         'value abc',
                         'expected integer',
                         'used string',
+                        'in path',
                     ],
                 ]
             ])
@@ -373,6 +379,7 @@ class StudentsTest extends TestCase
                         'value abc',
                         'expected integer',
                         'used string',
+                        'in path',
                     ],
                 ]
             ])
@@ -390,6 +397,7 @@ class StudentsTest extends TestCase
                         'value abc',
                         'expected integer',
                         'used string',
+                        'in path',
                     ],
                 ]
             ])
