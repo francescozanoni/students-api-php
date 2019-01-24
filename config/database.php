@@ -39,6 +39,14 @@ return [
             'prefix' => env('DB_PREFIX', ''),
         ],
 
+        /* Connection to another database
+        'other_sqlite' => [
+            'driver' => 'sqlite',
+            'database' => env('DB_OTHER_DATABASE', database_path('other_database.sqlite')),
+            'prefix' => env('DB_PREFIX', ''),
+        ],
+        */
+
     ],
 
     /*

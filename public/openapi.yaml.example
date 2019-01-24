@@ -191,7 +191,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
   /students/{id}/annotations:
     get:
-      summary: Return the list of a student's annotations
+      summary: Returns the list of a student's annotations
       operationId: getStudentAnnotations
       tags:
         - annotations
@@ -213,7 +213,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     post:
-      summary: Creates a new annotation
+      summary: Creates a student's new annotation
       operationId: createStudentAnnotation
       requestBody:
         required: true

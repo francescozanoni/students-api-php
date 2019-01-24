@@ -456,9 +456,31 @@ class AnnotationsTest extends TestCase
     public function testModifyByIdFailure()
     {
 
-        $this->assertTrue(true);
+        // Different user_id
+        $this->json('PUT',
+            '/annotations/1',
+            [
+                'title' => 'First title modified',
+                'content' => 'First content',
+                'user_id' => 456,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'user_id' => [
+                        'The user id cannot be changed',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->seeInDatabase('annotations', ['id' => 1, 'user_id' => 123])
+            ->notSeeInDatabase('annotations', ['id' => 1, 'title' => 'First title modified'])
+            ->notSeeInDatabase('annotations', ['id' => 1, 'user_id' => 456]);
 
-        // @todo add tests
+        // @todo add further tests
 
     }
 
