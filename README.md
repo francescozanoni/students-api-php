@@ -16,39 +16,33 @@ The API is documented with [OpenAPI](https://swagger.io/docs/specification/about
 
 ### Installation
 
-#### Dependency installation
-
 ```bash
+# Dependencies
 composer install
-```
 
-#### Set up
+# Static files
 
-```bash
-# To use default URL http://localhost
+#  - to use default URL http://localhost
 php scripts/setup.php
 
-# To use custom URL
+#  - to use custom URL
 # php scripts/setup.php --application_url=<APPLICATION_URL>
 
-# To add phpLiteAdmin, reachable at URL <APPLICATION_URL>/phpliteadmin/phpliteadmin.php
+#  - to add phpLiteAdmin, reachable at URL <APPLICATION_URL>/phpliteadmin/phpliteadmin.php
 # php scripts/setup.php --with_phpliteadmin
 
+# Database structure
 php artisan migrate
 ```
 
 ### Uninstallation
 
-#### Dependency uninstallation
-
 ```bash
+# Dependencies
 rm -rf vendor
 rm -rf public/docs
-```
 
-#### Set down
-
-```bash
+# Static files
 php scripts/setdown.php
 ```
 
