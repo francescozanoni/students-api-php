@@ -27,7 +27,7 @@ $router->get('/', function () use ($router) {
 
 });
 
-$router->group(['middleware' => 'validate_request'], function () use ($router) {
+$router->group(['middleware' => ['validate_request', 'validate_response']], function () use ($router) {
 
     $router->get('students', ['as' => 'getStudents', 'uses' => 'StudentsController@index']);
     $router->post('students',  ['as' => 'createStudent', 'uses' => 'StudentsController@store']);

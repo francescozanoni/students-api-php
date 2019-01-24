@@ -88,10 +88,12 @@ class OpenApiValidator
         }
 
         // @todo fix situation of URL http://localhost/students/:
-        //  - considered as /students path by Laravel/Lumen routing
-        //  - considered as /students/ path by PSR-7 requests
+        //  - considered as students path by Laravel/Lumen routing
+        //  - considered as /students/ path by PSR-7 requests <-- THE TRAILING SLASH MAKES ROUTE RESOLVING DIFFERENT
         // This makes Laravel/Lumen and HKarlstrom\OpenApiReader route resolving incompatible.
         // @see class Illuminate\Http\Request, method path()
+        // THIS IS LIKELY RELATED ONLY TO PHP BUILT-IN WEB SERVER,
+        // BECAUSE .htaccess (WHEN ENABLED) REDIRECTS students/ TO students
 
         $errors = [];
 

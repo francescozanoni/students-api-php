@@ -64,7 +64,6 @@ $app->singleton(
 */
 
 $app->middleware([
-    App\Http\Middleware\ValidateResponse::class,
     App\Http\Middleware\PrettyPrint::class,
     App\Http\Middleware\AddResponseMetadata::class,
     App\Http\Middleware\HandleNegativeResponseContent::class,
@@ -78,6 +77,10 @@ $app->routeMiddleware([
     // This middleware cannot be global because, during execution of global before-middlewares,
     // current route is not available yet and it is required to find the right validation rules.
     'validate_request' => App\Http\Middleware\ValidateRequest::class,
+
+    // This middleware cannot be global because / route (redirecting to Swagger UI)
+    // must not be validated against OpenAPI schema.
+    'validate_response' => App\Http\Middleware\ValidateResponse::class,
 ]);
 
 /*
