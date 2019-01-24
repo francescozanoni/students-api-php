@@ -344,7 +344,7 @@ class StudentsTest extends TestCase
                 'message' => 'Resource deleted',
             ])
             ->seeStatusCode(200)
-
+            // @todo CHANGE THE FOLLOWING TWO LINES, TO AVOID TEST FAILURE BECAUSE OF CROSS-SECOND EXECUTION
             ->seeInDatabase('students', ['id' => 2, 'deleted_at' => date('Y-m-d H:i:s')])
             ->notSeeInDatabase('students', ['id' => 2, 'deleted_at' => null]);
 

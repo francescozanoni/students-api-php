@@ -476,6 +476,7 @@ class AnnotationsTest extends TestCase
                 'message' => 'Resource deleted',
             ])
             ->seeStatusCode(200)
+            // @todo CHANGE THE FOLLOWING TWO LINES, TO AVOID TEST FAILURE BECAUSE OF CROSS-SECOND EXECUTION
             ->seeInDatabase('annotations', ['id' => 1, 'deleted_at' => date('Y-m-d H:i:s')])
             ->notSeeInDatabase('annotations', ['id' => 1, 'deleted_at' => null]);
 
@@ -513,7 +514,8 @@ class AnnotationsTest extends TestCase
                     ],
                 ]
             ])
-            ->seeStatusCode(400);
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('annotations', ['id' => 'abc']);
             
     }
 

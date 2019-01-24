@@ -91,6 +91,7 @@ class OpenApiValidator
         //  - considered as /students path by Laravel/Lumen routing
         //  - considered as /students/ path by PSR-7 requests
         // This makes Laravel/Lumen and HKarlstrom\OpenApiReader route resolving incompatible.
+        // @see class Illuminate\Http\Request, method path()
 
         $errors = [];
 
@@ -109,7 +110,8 @@ class OpenApiValidator
              *       "code": "error_type",
              *       "value": "a",
              *       "expected": "integer",
-             *       "used": "string"
+             *       "used": "string",
+             *       "in": "body"
              *     }
              *   ]
              * }
@@ -228,11 +230,11 @@ class OpenApiValidator
      *
      * @return array e.g. Array (
      *                      [data.1.phone] => Array (
-     *                        [code] => error_type
-     *                        [value] =>
-     *                        [in] => body
-     *                        [expected] => string
-     *                        [used] => null
+     *                        [0] => code error_type
+     *                        [1] => value
+     *                        [2] => in body
+     *                        [3] => expected string
+     *                        [4] => used null
      *                      )
      *                    )
      */
