@@ -15,7 +15,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
-use Symfony\Component\Yaml\Yaml;
 use Tuupola\Http\Factory\ResponseFactory;
 use Tuupola\Http\Factory\ServerRequestFactory;
 use Tuupola\Http\Factory\StreamFactory;
@@ -52,14 +51,7 @@ class OpenApiValidator
     public function __construct(string $openApiSchemaFilePath)
     {
 
-        $tmpSchemaFilePath = sys_get_temp_dir() . '/' . date('YmdHis') . '.json';
-
-        // @todo improve conversion of OpenAPI schema to JSON format
-        $schema = Yaml::parseFile($openApiSchemaFilePath);
-        $schema = json_encode($schema, JSON_PARTIAL_OUTPUT_ON_ERROR);
-        file_put_contents($tmpSchemaFilePath, $schema);
-        $this->validator = new OpenApiValidation($tmpSchemaFilePath, ['validateResponse' => false]);
-        unlink($tmpSchemaFilePath);
+        $this->validator = new OpenApiValidation($openApiSchemaFilePath, ['validateResponse' => false]);
 
         $this->requestHandler = new class implements RequestHandlerInterface
         {

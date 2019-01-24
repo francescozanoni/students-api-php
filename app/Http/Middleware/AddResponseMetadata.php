@@ -63,7 +63,7 @@ class AddResponseMetadata
     public function getMetadata(Request $request, $response) : array
     {
 
-        // Step 1: create the OpenAPI schema reader, which then searches the schema for the requested response.
+        // Step 1: create the OpenAPI reader, which then searches the schema for the requested response.
         $openApiReader = app('HKarlstrom\OpenApiReader\OpenApiReader');
         $path = (string)app('current_route_path');
         $httpMethod = strtolower($request->method());

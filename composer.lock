@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cca8f2e1a922b2fd8f54ef971755936c",
+    "content-hash": "62db65313fc69b780794d8ec75aab829",
     "packages": [
         {
             "name": "ckr/arraymerger",
@@ -163,20 +163,24 @@
         },
         {
             "name": "hkarlstrom/openapi-reader",
-            "version": "0.2.2",
+            "version": "0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hkarlstrom/openapi-reader.git",
-                "reference": "396b4d3dd971e119875fc9530b2594838bbbe648"
+                "reference": "4db8911aec93c69fa75993f8c8adb58d47f4728d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hkarlstrom/openapi-reader/zipball/396b4d3dd971e119875fc9530b2594838bbbe648",
-                "reference": "396b4d3dd971e119875fc9530b2594838bbbe648",
+                "url": "https://api.github.com/repos/hkarlstrom/openapi-reader/zipball/4db8911aec93c69fa75993f8c8adb58d47f4728d",
+                "reference": "4db8911aec93c69fa75993f8c8adb58d47f4728d",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.1"
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "php": "^7.1",
+                "rize/uri-template": "^0.3.2",
+                "symfony/yaml": "^4.2"
             },
             "require-dev": {
                 "phpunit/phpunit": "^7.3.5"
@@ -184,7 +188,8 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "HKarlstrom\\OpenApiReader\\": "src"
+                    "HKarlstrom\\OpenApiReader\\": "src",
+                    "HKarlstrom\\OpenApiReader\\Tests\\": "tests"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -197,26 +202,27 @@
                     "email": "henrik.karlstrom@gmail.com"
                 }
             ],
-            "description": "Library for parsing OpenAPI json documentation files.",
-            "time": "2019-01-16T18:01:54+00:00"
+            "description": "Library for parsing OpenAPI JSON/YAML documentation files.",
+            "time": "2019-01-23T08:29:53+00:00"
         },
         {
             "name": "hkarlstrom/openapi-validation-middleware",
-            "version": "0.2.3",
+            "version": "0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hkarlstrom/openapi-validation-middleware.git",
-                "reference": "91d4e56303dd2351d3f5c3e3769db37e7d99fdc6"
+                "reference": "45fc280476333e031d851635ac7ba2dac2ba04db"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hkarlstrom/openapi-validation-middleware/zipball/91d4e56303dd2351d3f5c3e3769db37e7d99fdc6",
-                "reference": "91d4e56303dd2351d3f5c3e3769db37e7d99fdc6",
+                "url": "https://api.github.com/repos/hkarlstrom/openapi-validation-middleware/zipball/45fc280476333e031d851635ac7ba2dac2ba04db",
+                "reference": "45fc280476333e031d851635ac7ba2dac2ba04db",
                 "shasum": ""
             },
             "require": {
                 "ckr/arraymerger": "^2.0",
-                "hkarlstrom/openapi-reader": "^0.2.1",
+                "ext-json": "*",
+                "hkarlstrom/openapi-reader": "^0.3",
                 "opis/json-schema": "^1.0",
                 "php": "^7.1",
                 "psr/http-message": "^1.0",
@@ -253,7 +259,7 @@
                 "psr-7",
                 "validation"
             ],
-            "time": "2019-01-21T08:57:44+00:00"
+            "time": "2019-01-24T10:41:04+00:00"
         },
         {
             "name": "illuminate/auth",
@@ -2171,6 +2177,50 @@
                 "validator"
             ],
             "time": "2018-11-04T21:58:45+00:00"
+        },
+        {
+            "name": "rize/uri-template",
+            "version": "0.3.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rize/UriTemplate.git",
+                "reference": "9e5fdd5c47147aa5adf7f760002ee591ed37b9ca"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/rize/UriTemplate/zipball/9e5fdd5c47147aa5adf7f760002ee591ed37b9ca",
+                "reference": "9e5fdd5c47147aa5adf7f760002ee591ed37b9ca",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Rize\\UriTemplate": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Marut K",
+                    "homepage": "http://twitter.com/rezigned"
+                }
+            ],
+            "description": "PHP URI Template (RFC 6570) supports both expansion & extraction",
+            "keywords": [
+                "RFC 6570",
+                "template",
+                "uri"
+            ],
+            "time": "2017-06-14T03:57:53+00:00"
         },
         {
             "name": "swagger-api/swagger-ui",

@@ -6,7 +6,6 @@ use HKarlstrom\OpenApiReader\OpenApiReader;
 use Illuminate\Support\ServiceProvider;
 use ReflectionObject;
 use Respect\Validation\Rules\CountryCode;
-use Symfony\Component\Yaml\Yaml;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,16 +18,7 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->singleton('HKarlstrom\OpenApiReader\OpenApiReader', function ($app) {
 
-            $tmpSchemaFilePath = sys_get_temp_dir() . '/' . date('YmdHis') . '.json';
-            $schema = Yaml::parseFile($app['config']['openapi']['schema_file_path']);
-            $schema = json_encode($schema, JSON_PARTIAL_OUTPUT_ON_ERROR);
-            file_put_contents($tmpSchemaFilePath, $schema);
-
-            $openApiReader = new OpenApiReader($tmpSchemaFilePath);
-
-            unlink($tmpSchemaFilePath);
-
-            return $openApiReader;
+            return new OpenApiReader($app['config']['openapi']['schema_file_path']);
 
         });
 
