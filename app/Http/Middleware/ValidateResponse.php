@@ -27,6 +27,11 @@ class ValidateResponse
 
         $response = $next($request);
 
+        // Root route is not validated, since it only redirects to Swagger UI application.
+        if (app('current_route_alias') === 'root') {
+            return $response;
+        }
+
         $path = (string)app('current_route_path');
         $httpMethod = strtolower($request->getMethod());
 
