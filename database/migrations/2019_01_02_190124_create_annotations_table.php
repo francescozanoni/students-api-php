@@ -9,8 +9,6 @@ class CreateAnnotationsTable extends Migration
 
     /**
      * Run the migrations.
-     *
-     * @return void
      */
     public function up()
     {
@@ -19,21 +17,22 @@ class CreateAnnotationsTable extends Migration
             $table->integer('student_id')->nullable(false);
             $table->char('title')->nullable(false);
             $table->char('content')->nullable(false);
-            $table->integer('user_id')->nullable(false); // annotation author
+            // annotation author, whose referential integrity is enforced by input validation rules
+            $table->integer('user_id')->nullable(false);
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('student_id')->references('id')->on('students');
         });
+
+        // @todo assess whether to create a user importer
     }
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down()
     {
-        Schema::drop('annotations');
+        Schema::dropIfExists('annotations');
     }
 
 }

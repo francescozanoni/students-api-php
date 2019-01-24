@@ -6,10 +6,9 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateStudentsTable extends Migration
 {
+
     /**
      * Run the migrations.
-     *
-     * @return void
      */
     public function up()
     {
@@ -19,7 +18,7 @@ class CreateStudentsTable extends Migration
             $table->char('last_name')->nullable(false);
             $table->char('phone')->nullable(true);
             $table->char('e_mail')->nullable(true);
-            // Nationality consists of the ISO country code.
+            // Nationality consists of the ISO country code (validity enforced by input validation rules)
             $table->char('nationality', 2)->nullable(false);
             $table->timestamps();
             $table->softDeletes();
@@ -28,11 +27,10 @@ class CreateStudentsTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down()
     {
-        Schema::drop('students');
+        Schema::dropIfExists('students');
     }
+
 }
