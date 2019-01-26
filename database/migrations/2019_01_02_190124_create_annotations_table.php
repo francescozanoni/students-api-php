@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -13,7 +14,7 @@ class CreateAnnotationsTable extends Migration
     public function up()
     {
         Schema::create('annotations', function (Blueprint $table) {
-            $table->increments('id')->autoIncrement();
+            $table->increments('id');
             $table->integer('student_id')->nullable(false);
             $table->char('title')->nullable(false);
             $table->char('content')->nullable(false);

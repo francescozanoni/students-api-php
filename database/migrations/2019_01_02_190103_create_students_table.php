@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
@@ -13,7 +14,7 @@ class CreateStudentsTable extends Migration
     public function up()
     {
         Schema::create('students', function (Blueprint $table) {
-            $table->increments('id')->autoIncrement();
+            $table->increments('id');
             $table->char('first_name')->nullable(false);
             $table->char('last_name')->nullable(false);
             $table->char('phone')->nullable(true);
@@ -23,6 +24,8 @@ class CreateStudentsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+
+        // @todo assess whether to create a country importer
     }
 
     /**

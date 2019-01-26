@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -13,7 +14,7 @@ class CreateStagesTable extends Migration
     public function up()
     {
         Schema::create('stages', function (Blueprint $table) {
-            $table->increments('id')->autoIncrement();
+            $table->increments('id');
             $table->unsignedInteger('student_id')->nullable(false);
             $table->unsignedInteger('location_id')->nullable(false); // referential integrity is enforced by input validation rules
             $table->unsignedInteger('sub_location_id')->nullable(true); // referential integrity is enforced by input validation rules
