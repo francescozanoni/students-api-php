@@ -42,6 +42,12 @@ class CountriesTableSeeder extends Seeder
             'updated_at' => '2019-01-02 00:00:00',
         ]);
         DB::table('countries')->insert([
+            'name' => 'United States of America',
+            'code' => 'US',
+            'created_at' => '2019-01-02 00:00:00',
+            'updated_at' => '2019-01-02 00:00:00',
+        ]);
+        DB::table('countries')->insert([
             'name' => 'Italy',
             'code' => 'IT',
             'created_at' => '2019-01-02 00:00:00',

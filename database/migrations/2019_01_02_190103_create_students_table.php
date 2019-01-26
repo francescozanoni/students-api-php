@@ -19,10 +19,11 @@ class CreateStudentsTable extends Migration
             $table->char('last_name')->nullable(false);
             $table->char('phone')->nullable(true);
             $table->char('e_mail')->nullable(true);
-            // Nationality consists of the ISO country code (validity enforced by input validation rules)
+            // Nationality consists of the ISO country code.
             $table->char('nationality', 2)->nullable(false);
             $table->timestamps();
             $table->softDeletes();
+            $table->foreign('nationality')->references('code')->on('countries');
         });
 
         // @todo assess whether to create a country importer

@@ -37,6 +37,9 @@ return [
             'driver' => 'sqlite',
             'database' => env('DB_DATABASE', database_path('database.sqlite')),
             'prefix' => env('DB_PREFIX', ''),
+            // SQLite foreign key constraints are disabled by default.
+            // @see https://laravel.com/docs/5.7/migrations#foreign-key-constraints
+            'foreign_key_constraints' => true,
         ],
 
         /* Connection to another database
