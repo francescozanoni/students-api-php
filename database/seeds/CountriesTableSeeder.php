@@ -17,11 +17,36 @@ class CountriesTableSeeder extends Seeder
             'created_at' => '2019-01-01 00:00:00',
             'updated_at' => '2019-01-01 00:00:00',
         ]);
-        DB::table('sub_locations')->insert([
-            'name' => 'Sub-location 2',
+        DB::table('countries')->insert([
+            'name' => 'United Kingdom',
+            'code' => 'GB',
             'created_at' => '2019-01-02 00:00:00',
             'updated_at' => '2019-01-02 00:00:00',
-            'deleted_at' => '2019-01-02 00:00:00',
+        ]);
+        DB::table('countries')->insert([
+            'name' => 'Ireland',
+            'code' => 'IE',
+            'created_at' => '2019-01-02 00:00:00',
+            'updated_at' => '2019-01-02 00:00:00',
+        ]);
+        DB::table('countries')->insert([
+            'name' => 'Australia',
+            'code' => 'AU',
+            'created_at' => '2019-01-02 00:00:00',
+            'updated_at' => '2019-01-02 00:00:00',
+        ]);
+        DB::table('countries')->insert([
+            'name' => 'Norway',
+            'code' => 'NO',
+            'created_at' => '2019-01-02 00:00:00',
+            'updated_at' => '2019-01-02 00:00:00',
+        ]);
+        DB::table('countries')->insert([
+            'name' => 'Italy',
+            'code' => 'IT',
+            'created_at' => '2019-01-02 00:00:00',
+            'updated_at' => '2019-01-02 00:00:00',
+            'deleted_at' => '2019-01-03 00:00:00',
         ]);
     }
 }

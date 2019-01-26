@@ -232,6 +232,55 @@ class StudentsTest extends TestCase
             ])
             ->seeStatusCode(400)
             ->notSeeInDatabase('students', ['id' => 5]);
+            
+        // Inexistent nationality
+        $this->json('POST',
+            '/students',
+            [
+                'first_name' => 'Jack',
+                'last_name' => 'Doe',
+                'e_mail' => 'jack.doe@faz.com',
+                'phone' => '0000-11111111',
+                'nationality' => 'XX',
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'nationality' => [
+                        'The nationality must be a valid ISO 3166-1 alpha-2 country code',
+                    ]
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('students', ['id' => 5]);
+            
+        // Deleted nationality
+        $this->json('POST',
+            '/students',
+            [
+                'first_name' => 'Jack',
+                'last_name' => 'Doe',
+                'e_mail' => 'jack.doe@faz.com',
+                'phone' => '0000-11111111',
+                'nationality' => 'IT',
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'nationality' => [
+                        'The nationality must be a valid ISO 3166-1 alpha-2 country code',
+                    ]
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('students', ['id' => 5]);
+
 
         // @todo add invalid and minLength test
 

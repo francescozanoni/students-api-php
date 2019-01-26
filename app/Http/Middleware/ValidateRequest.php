@@ -7,7 +7,7 @@ use App\Models\Annotation;
 use App\Services\OpenApiValidator;
 use Illuminate\Support\Facades\Validator;
 use Respect\Validation\Exceptions\ValidationException as OpenApiValidationException;
-
+use Illuminate\Validation\Rule;
 
 /**
  * Class ValidateRequest
@@ -57,12 +57,13 @@ class ValidateRequest
                     $request->request->all(),
                     [
                         'e_mail' => 'email',
-                        'nationality' => 'in:' . implode(',', app('country_codes')),
+                        'nationality' => Rule::exists('countries', 'code')->where(function ($query) {
+                            $query->whereNull('deleted_at');
+                        }),
                     ],
                     [
                         'e_mail.email' => 'The :attribute must be a valid e-mail address',
-                        // 'nationality.in' => 'The :attribute must be one of the following values: :values'
-                        'nationality.in' => 'The :attribute must be a valid ISO 3166-1 alpha-2 country code'
+                        'nationality.exists' => 'The :attribute must be a valid ISO 3166-1 alpha-2 country code'
                     ]
                 )->validate();
                 break;
