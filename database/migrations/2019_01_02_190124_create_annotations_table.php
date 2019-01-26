@@ -15,11 +15,11 @@ class CreateAnnotationsTable extends Migration
     {
         Schema::create('annotations', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('student_id')->nullable(false);
-            $table->char('title')->nullable(false);
-            $table->char('content')->nullable(false);
+            $table->unsignedInteger('student_id')->nullable(false);
+            $table->string('title')->nullable(false);
+            $table->string('content')->nullable(false);
             // annotation author, whose referential integrity is enforced by input validation rules
-            $table->integer('user_id')->nullable(false);
+            $table->unsignedInteger('user_id')->nullable(false);
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('student_id')->references('id')->on('students');

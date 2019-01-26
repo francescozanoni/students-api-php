@@ -18,6 +18,7 @@ class CreateCountriesTable extends Migration
             $table->char('code', 2)->nullable(false);
             $table->timestamps();
             $table->softDeletes();
+            // Columns used as foreign keys by other tables must have a UNIQUE constraint.
             $table->unique('code');
         });
     }
