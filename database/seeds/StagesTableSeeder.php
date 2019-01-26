@@ -16,7 +16,7 @@ class StagesTableSeeder extends Seeder
             'location_id' => 1,
             'sub_location_id' => 1,
             'start_date' => '2019-01-10',
-            'end_date' => '2098-01-24',
+            'end_date' => '2019-01-24',
             'hour_amount' => 123,
             'other_amount' => 5,
             'is_optional' => false,
