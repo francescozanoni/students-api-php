@@ -28,9 +28,6 @@ php scripts/setup.php
 #  - to use custom URL
 # php scripts/setup.php --application_url=<APPLICATION_URL>
 
-#  - to add phpLiteAdmin, reachable at URL <APPLICATION_URL>/phpliteadmin/phpliteadmin.php
-# php scripts/setup.php --with_phpliteadmin
-
 # Database structure
 php artisan migrate
 ```

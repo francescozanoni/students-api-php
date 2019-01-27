@@ -17,15 +17,6 @@ $filePathsToDelete = [
 
 ];
 
-$optionalFilePathsToDelete = [
-
-    BASE_PATH . '/public/phpliteadmin/phpliteadmin.config.php',
-    BASE_PATH . '/public/phpliteadmin/phpliteadmin.config.sample.php',
-    BASE_PATH . '/public/phpliteadmin/phpliteadmin.php',
-    BASE_PATH . '/public/phpliteadmin/readme.md',
-
-];
-
 // Check all mandatory file paths are correct: if not found, execution is interrupted.
 foreach ($filePathsToDelete as $filePath) {
     if (file_exists($filePath) === false) {
@@ -39,32 +30,8 @@ foreach ($filePathsToDelete as $filePath) {
     }
 }
 
-// Check optional file paths are correct: if not found, warnings are displayed.
-foreach ($optionalFilePathsToDelete as $filePath) {
-    if (file_exists($filePath) === false) {
-        echo $filePath . ' does not exist' . PHP_EOL;
-        continue;
-    }
-    if (is_writable($filePath) === false) {
-        echo $filePath . ' is not writable' . PHP_EOL;
-        continue;
-    }
-    if (is_file($filePath) === false) {
-        echo $filePath . ' is not a file' . PHP_EOL;
-        continue;
-    }
-}
-
 // Delete file paths.
 foreach ($filePathsToDelete as $filePath) {
     unlink($filePath);
 }
-foreach ($optionalFilePathsToDelete as $filePath) {
-    if (file_exists($filePath) === false ||
-        is_writable($filePath) === false ||
-        is_file($filePath) === false
-    ) {
-        continue;
-    }
-    unlink($filePath);
-}
+
