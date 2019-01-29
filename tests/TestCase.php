@@ -29,6 +29,11 @@ abstract class TestCase extends Laravel\Lumen\Testing\TestCase
      * Assert that the response contains an exact JSON array,
      * by making "created_at", "updated_at" and "deleted_at" comparison less strict (one second).
      *
+     * Example:
+     * value {"created_at": "2019-01-01 12:12:12"} is compared with both following:
+     *  - {"created_at": "2019-01-01 12:12:12"}
+     *  - {"created_at": "2019-01-01 12:12:11"}
+     *
      * @param  array $data
      * @return self
      */
@@ -57,23 +62,85 @@ abstract class TestCase extends Laravel\Lumen\Testing\TestCase
             if (in_array($key, ['created_at', 'updated_at', 'deleted_at']) === true) {
                 $dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $item);
 
-                // If the date/time field contains a very old value (static value provided by seeder),
-                // it is not considered.
-                $currentDateTime = DateTime::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s'));
+                // If the date/time field contains a very old value (typically,
+                // in case of static value provided by seeder), it is not considered.
+                $currentDateTime = new DateTime();
                 $interval = $currentDateTime->diff($dateTime);
                 if ((int)$interval->format('%s') > 10) {
                     return;
                 }
 
                 $dateTime->sub(new DateInterval('PT1S'));
-                $dateTime = $dateTime->format('Y-m-d H:i:s');
-                $item = $dateTime;
+                $item = $dateTime->format('Y-m-d H:i:s');
             }
         });
 
         $dataMinusOneSecond = json_encode($dataMinusOneSecond);
 
         PHPUnit::assertTrue(in_array($actual, [$data, $dataMinusOneSecond]));
+
+        return $this;
+
+    }
+
+    /**
+     * Assert that a given where condition exists in the database,
+     * by making "created_at", "updated_at" and "deleted_at" comparison less strict (one second).
+     *
+     * Example:
+     * value {"created_at": "2019-01-01 12:12:12"} is compared with both following:
+     *  - {"created_at": "2019-01-01 12:12:12"}
+     *  - {"created_at": "2019-01-01 12:12:11"}
+     *
+     * @param  string $table
+     * @param  array $data
+     * @param  string|null $onConnection
+     *
+     * @return self
+     */
+    public function seeInDatabase($table, array $data, $onConnection = null) : self
+    {
+
+        // If no date/time field is part of $data, standard assertion is applied.
+        if (array_key_exists('created_at', $data) === false &&
+            array_key_exists('updated_at', $data) === false &&
+            array_key_exists('deleted_at', $data) === false) {
+
+            $count = $this->app->make('db')->connection($onConnection)->table($table)->where($data)->count();
+
+            $this->assertGreaterThan(0, $count, sprintf(
+                'Unable to find row in database table [%s] that matched attributes [%s].', $table, json_encode($data)
+            ));
+
+            return $this;
+
+        }
+
+        $dataMinusOneSecond = $data;
+
+        array_walk_recursive($dataMinusOneSecond, function (&$item, $key) {
+            if (in_array($key, ['created_at', 'updated_at', 'deleted_at']) === true &&
+                is_string($item) === true) {
+                $dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $item);
+
+                // If the date/time field contains a very old value (typically,
+                // in case of static value provided by seeder), it is not considered.
+                $currentDateTime = new DateTime();
+                $interval = $currentDateTime->diff($dateTime);
+                if ((int)$interval->format('%s') > 10) {
+                    return;
+                }
+
+                $dateTime->sub(new DateInterval('PT1S'));
+                $item = $dateTime->format('Y-m-d H:i:s');
+            }
+        });
+
+        $count = $this->app->make('db')->connection($onConnection)->table($table)->where($data)->orWhere($dataMinusOneSecond)->count();
+
+        $this->assertGreaterThan(0, $count, sprintf(
+            'Unable to find row in database table [%s] that matched attributes [%s].', $table, json_encode($data)
+        ));
 
         return $this;
 

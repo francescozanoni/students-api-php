@@ -199,7 +199,6 @@ class AnnotationsTest extends TestCase
                     'title' => 'Second title',
                     'content' => 'Second content',
                     'user_id' => 456,
-                    // @todo CHANGE THE FOLLOWING TWO LINES, TO AVOID TEST FAILURE BECAUSE OF CROSS-SECOND EXECUTION
                     'created_at' => date('Y-m-d H:i:s'),
                     'updated_at' => date('Y-m-d H:i:s'),
                 ],
@@ -440,7 +439,6 @@ class AnnotationsTest extends TestCase
                     ],
                     'user_id' => 123,
                     'created_at' => '2019-01-01 01:00:00',
-                    // @todo CHANGE THE FOLLOWING TWO LINES, TO AVOID TEST FAILURE BECAUSE OF CROSS-SECOND EXECUTION
                     'updated_at' => date('Y-m-d H:i:s'),
                 ]
             ])
@@ -498,7 +496,6 @@ class AnnotationsTest extends TestCase
                 'message' => 'Resource deleted',
             ])
             ->seeStatusCode(200)
-            // @todo CHANGE THE FOLLOWING TWO LINES, TO AVOID TEST FAILURE BECAUSE OF CROSS-SECOND EXECUTION
             ->seeInDatabase('annotations', ['id' => 1, 'deleted_at' => date('Y-m-d H:i:s')])
             ->notSeeInDatabase('annotations', ['id' => 1, 'deleted_at' => null]);
 
