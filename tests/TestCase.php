@@ -27,12 +27,12 @@ abstract class TestCase extends Laravel\Lumen\Testing\TestCase
 
     /**
      * Assert that the response contains an exact JSON array,
-     * by making "created_at", "updated_at" and "deleted_at" comparison less strict.
+     * by making "created_at", "updated_at" and "deleted_at" comparison less strict (one second).
      *
      * @param  array $data
      * @return self
      */
-    public function _seeJsonEquals(array $data) : self
+    public function seeJsonEquals(array $data) : self
     {
 
         $actual = json_encode(array_sort_recursive(
@@ -44,53 +44,36 @@ abstract class TestCase extends Laravel\Lumen\Testing\TestCase
         ));
 
         // If no date/time field is part of $data, standard assertion is applied.
-        if (strpos('created_at', $actual) === false &&
-            strpos('updated_at', $actual) === false &&
-            strpos('deleted_at', $actual) === false) {
+        if (strpos($actual, 'created_at') === false &&
+            strpos($actual, 'updated_at') === false &&
+            strpos($actual, 'deleted_at') === false) {
             PHPUnit::assertEquals($data, $actual);
             return $this;
         }
 
-        $actualMinusOneSecond = $actual;
+        $dataMinusOneSecond = json_decode($data, true);
 
-        if (strpos('created_at', $actualMinusOneSecond) !== false) {
-            $actualMinusOneSecond = json_decode($actualMinusOneSecond, true);
-            array_walk_recursive($actualMinusOneSecond, function (&$item, $key) {
-                if ($key === 'created_at') {
-                    $dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $item);
-                    $dateTime->sub(new DateInterval('PT1S'));
-                    $dateTime = $dateTime->format('Y-m-d H:i:s');
-                    $item = $dateTime;
-                }
-            });
-            $actualMinusOneSecond = json_encode($actualMinusOneSecond);
-        }
-        if (strpos('updated_at', $actualMinusOneSecond) !== false) {
-            $actualMinusOneSecond = json_decode($actualMinusOneSecond, true);
-            array_walk_recursive($actualMinusOneSecond, function (&$item, $key) {
-                if ($key === 'updated_at') {
-                    $dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $item);
-                    $dateTime->sub(new DateInterval('PT1S'));
-                    $dateTime = $dateTime->format('Y-m-d H:i:s');
-                    $item = $dateTime;
-                }
-            });
-            $actualMinusOneSecond = json_encode($actualMinusOneSecond);
-        }
-        if (strpos('deleted_at', $actualMinusOneSecond) !== false) {
-            $actualMinusOneSecond = json_decode($actualMinusOneSecond, true);
-            array_walk_recursive($actualMinusOneSecond, function (&$item, $key) {
-                if ($key === 'deleted_at') {
-                    $dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $item);
-                    $dateTime->sub(new DateInterval('PT1S'));
-                    $dateTime = $dateTime->format('Y-m-d H:i:s');
-                    $item = $dateTime;
-                }
-            });
-            $actualMinusOneSecond = json_encode($actualMinusOneSecond);
-        }
+        array_walk_recursive($dataMinusOneSecond, function (&$item, $key) {
+            if (in_array($key, ['created_at', 'updated_at', 'deleted_at']) === true) {
+                $dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $item);
 
-        PHPUnit::assertTrue(in_array($data, [$actual, $actualMinusOneSecond]));
+                // If the date/time field contains a very old value (static value provided by seeder),
+                // it is not considered.
+                $currentDateTime = DateTime::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s'));
+                $interval = $currentDateTime->diff($dateTime);
+                if ((int)$interval->format('%s') > 10) {
+                    return;
+                }
+
+                $dateTime->sub(new DateInterval('PT1S'));
+                $dateTime = $dateTime->format('Y-m-d H:i:s');
+                $item = $dateTime;
+            }
+        });
+
+        $dataMinusOneSecond = json_encode($dataMinusOneSecond);
+
+        PHPUnit::assertTrue(in_array($actual, [$data, $dataMinusOneSecond]));
 
         return $this;
 
