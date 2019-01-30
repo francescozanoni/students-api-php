@@ -27,7 +27,16 @@ class RemoveResponseEmptyItems
             empty($response->getContent()) === false) {
 
             $data = json_decode($response->getContent(), true);
-            $data = $this->array_filter_recursive($data);
+            $data = $this->array_filter_recursive(
+                $data,
+                // @todo improve this logic
+                function ($value) {
+                    return
+                        $value !== null &&
+                        $value !== [] &&
+                        $value !== '';
+                }
+            );
             $response->setContent($data);
 
         }
