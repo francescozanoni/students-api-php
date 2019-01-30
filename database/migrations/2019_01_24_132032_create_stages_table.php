@@ -20,7 +20,7 @@ class CreateStagesTable extends Migration
             $table->unsignedInteger('sub_location_id')->nullable(true);
             $table->date('start_date')->nullable(false);
             $table->date('end_date')->nullable(false);
-            $table->unsignedInteger('hour_amount')->nullable(false);
+            $table->unsignedInteger('hour_amount')->nullable(true);
             $table->unsignedInteger('other_amount')->nullable(true); // another amount, e.g. night shift amount
             $table->boolean('is_optional')->nullable(false);
             $table->boolean('is_interrupted')->nullable(false);
