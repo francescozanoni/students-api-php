@@ -478,6 +478,32 @@ class AnnotationsTest extends TestCase
             ->notSeeInDatabase('annotations', ['id' => 1, 'title' => 'First title modified'])
             ->notSeeInDatabase('annotations', ['id' => 1, 'user_id' => 456]);
 
+        // Invalid ID
+        $this->json('PUT',
+            '/annotations/abc',
+            [
+                'title' => 'Second title',
+                'content' => 'Second content',
+                'user_id' => 123,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'id' => [
+                        'code error_type',
+                        'value abc',
+                        'expected integer',
+                        'used string',
+                        'in path',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('annotations', ['id' => 3]);
+
         // @todo add further tests
 
     }
@@ -535,6 +561,8 @@ class AnnotationsTest extends TestCase
             ])
             ->seeStatusCode(400)
             ->notSeeInDatabase('annotations', ['id' => 'abc']);
+
+        // @todo assess whether to add check of user_id
             
     }
 
