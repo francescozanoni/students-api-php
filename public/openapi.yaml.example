@@ -253,6 +253,28 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /stages/{id}:
+    get:
+      summary: Returns a stage
+      operationId: getStageById
+      tags:
+        - stages
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the stage to retrieve
+          schema:
+            type: integer
+      responses:
+        '200':
+          $ref: '#/components/responses/Stage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 components:
   responses:
     BadRequest:
@@ -544,6 +566,49 @@ components:
                     e_mail: joan.doe@bar.com
                     phone: null
                     nationality: CA
+    Stage:
+      description: Response returning a stage
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                description: HTTP status code
+              status:
+                type: string
+                description: HTTP status description
+              message:
+                type: string
+              data:
+                $ref: '#/components/schemas/Stage'
+            required:
+              - status_code
+              - status
+              - message
+              - data
+            example:
+              status_code: 200
+              status: OK
+              message: Resource successfully retrieved/created/modified
+              data:
+                id: 1
+                location: Location 1
+                sub_location: Sub-location 1
+                start_date: '2019-01-01'
+                end_date: '2019-01-20'
+                hour_amount: 200
+                other_amount: 23
+                is_optional: false
+                is_interrupted: false
+                student:
+                  id: 1
+                  first_name: John
+                  last_name: Doe
+                  e_mail: john.doe@foo.com
+                  phone: 1234-567890
+                  nationality: GB
     ResourceDeletion:
       description: Response confirming deletion of a resource
       content:
