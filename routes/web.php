@@ -44,5 +44,6 @@ $router->group(['middleware' => 'validate_request'], function () use ($router) {
     $router->delete('annotations/{id}', ['as' => 'deleteAnnotationById', 'uses' => 'AnnotationsController@destroy']);
 
     $router->get('stages', ['as' => 'getStages', 'uses' => 'StagesController@index']);
+    $router->get('stages/{id}', ['as' => 'getStageById', 'uses' => 'StagesController@show']);
 
 });

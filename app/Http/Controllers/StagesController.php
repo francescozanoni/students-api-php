@@ -19,4 +19,16 @@ class StagesController extends Controller
         return Stage::all();
     }
 
+    /**
+     * Retrieve a stage.
+     *
+     * @param int $id
+     *
+     * @return Stage
+     */
+    public function show(int $id) : Stage
+    {
+        return Stage::findOrFail($id);
+    }
+
 }

@@ -59,6 +59,10 @@ class ApplyResourceTransformers
                 $response->setContent(StageResource::collection($response->original));
                 break;
 
+            case 'getStageById':
+                $response->setContent(new StageResource($response->original));
+                break;
+
             default:
 
         }

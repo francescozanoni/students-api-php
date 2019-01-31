@@ -9,6 +9,7 @@ class StagesTest extends TestCase
      */
     public function testGet()
     {
+
         $this->json('GET', '/stages')
             ->seeJsonEquals([
                 'status_code' => 200,
@@ -37,6 +38,78 @@ class StagesTest extends TestCase
                 ]
             ])
             ->seeStatusCode(200);
+
+    }
+
+    /**
+     * Get stage by ID.
+     */
+    public function testGetById()
+    {
+
+        // Existing
+        $this->json('GET', '/stages/1')
+            ->seeJsonEquals([
+                'status_code' => 200,
+                'status' => 'OK',
+                'message' => 'Resource successfully retrieved/created/modified',
+                'data' => [
+                    'id' => 1,
+                    'location' => 'Location 1',
+                    'sub_location' => 'Sub-location 1',
+                    'student' => [
+                        'id' => 1,
+                        'first_name' => 'John',
+                        'last_name' => 'Doe',
+                        'e_mail' => 'john.doe@foo.com',
+                        'phone' => '1234-567890',
+                        'nationality' => 'GB',
+                    ],
+                    'start_date' => '2019-01-10',
+                    'end_date' => '2019-01-24',
+                    'hour_amount' => 123,
+                    'other_amount' => 5,
+                    'is_optional' => false,
+                    'is_interrupted' => false
+                ],
+            ])
+            ->seeStatusCode(200);
+
+    }
+
+    /**
+     * Get stage by ID: failure.
+     */
+    public function testGetByIdFailure()
+    {
+
+        // Non existing
+        $this->json('GET', '/stages/9999')
+            ->seeJsonEquals([
+                'status_code' => 404,
+                'status' => 'Not Found',
+                'message' => 'Resource(s) not found',
+            ])
+            ->seeStatusCode(404);
+
+        // Invalid ID
+        $this->json('GET', '/stages/abc')
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'id' => [
+                        'code error_type',
+                        'value abc',
+                        'expected integer',
+                        'used string',
+                        'in path',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400);
+
     }
 
 }
