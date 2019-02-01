@@ -38,7 +38,7 @@ class ValidateRequest
             throw new OpenApiValidationException($errors);
         }
 
-        // @todo add validation of keys: keys not described by schema are not not accepted
+        // @todo add validation of keys: keys not described by schema must not be accepted
 
         // -------------------------------------------------------------------------------------------------------------
 

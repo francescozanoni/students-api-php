@@ -112,4 +112,60 @@ class StagesTest extends TestCase
 
     }
 
+    /**
+     * Delete a stage: success.
+     */
+    public function testDeleteById()
+    {
+
+        // Existing stage
+        $this->json('DELETE', '/stages/1')
+            ->seeJsonEquals([
+                'status_code' => 200,
+                'status' => 'OK',
+                'message' => 'Resource deleted',
+            ])
+            ->seeStatusCode(200)
+            ->seeInDatabase('stages', ['id' => 1, 'deleted_at' => date('Y-m-d H:i:s')])
+            ->notSeeInDatabase('stages', ['id' => 1, 'deleted_at' => null]);
+
+    }
+
+    /**
+     * Delete a stage: failure.
+     */
+    public function testDeleteByIdFailure()
+    {
+
+        // Non existing stage
+        $this->json('DELETE', '/stages/999')
+            ->seeJsonEquals([
+                'status_code' => 404,
+                'status' => 'Not Found',
+                'message' => 'Resource(s) not found',
+            ])
+            ->seeStatusCode(404)
+            ->notSeeInDatabase('stages', ['id' => 999]);
+
+        // Invalid ID
+        $this->json('DELETE', '/stages/abc')
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'id' => [
+                        'code error_type',
+                        'value abc',
+                        'expected integer',
+                        'used string',
+                        'in path',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('stages', ['id' => 'abc']);
+
+    }
+
 }

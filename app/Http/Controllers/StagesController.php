@@ -31,4 +31,15 @@ class StagesController extends Controller
         return Stage::findOrFail($id);
     }
 
+    /**
+     * Delete a stage.
+     *
+     * @param int $id
+     */
+    public function destroy(int $id)
+    {
+        $annotation = Stage::findOrFail($id);
+        $annotation->delete();
+    }
+
 }
