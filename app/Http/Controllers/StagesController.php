@@ -4,7 +4,9 @@ declare(strict_types = 1);
 namespace App\Http\Controllers;
 
 use App\Models\Stage;
+use App\Models\Student;
 use Illuminate\Database\Eloquent\Collection;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class StagesController extends Controller
 {
@@ -17,6 +19,24 @@ class StagesController extends Controller
     public function index() : Collection
     {
         return Stage::all();
+    }
+
+    /**
+     * Retrieve all stages of a student.
+     *
+     * @param int $studentId
+     *
+     * @return Stage[]|\Illuminate\Database\Eloquent\Collection
+     */
+    public function getRelatedToStudent(int $studentId) : Collection
+    {
+        $stages = Student::findOrFail($studentId)->stages;
+
+        if (count($stages) === 0) {
+            throw new NotFoundHttpException();
+        }
+
+        return $stages;
     }
 
     /**

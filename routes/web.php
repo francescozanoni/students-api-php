@@ -43,6 +43,8 @@ $router->group(['middleware' => 'validate_request'], function () use ($router) {
     $router->put('annotations/{id}', ['as' => 'updateAnnotationById', 'uses' => 'AnnotationsController@update']);
     $router->delete('annotations/{id}', ['as' => 'deleteAnnotationById', 'uses' => 'AnnotationsController@destroy']);
 
+    $router->get('students/{id}/stages', ['as' => 'getStudentStages', 'uses' => 'StagesController@getRelatedToStudent']);
+
     $router->get('stages', ['as' => 'getStages', 'uses' => 'StagesController@index']);
     $router->get('stages/{id}', ['as' => 'getStageById', 'uses' => 'StagesController@show']);
     $router->delete('stages/{id}', ['as' => 'deleteStageById', 'uses' => 'StagesController@destroy']);

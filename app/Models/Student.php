@@ -36,4 +36,12 @@ class Student extends Model
         return $this->hasMany('App\Models\Annotation');
     }
 
+    /**
+     * @return HasMany
+     */
+    public function stages() : HasMany
+    {
+        return $this->hasMany('App\Models\Stage');
+    }
+
 }

@@ -113,6 +113,80 @@ class StagesTest extends TestCase
     }
 
     /**
+     * Get student's stages: success.
+     */
+    public function testGetRelatedToStudent()
+    {
+
+        // Existing
+        $this->json('GET', '/students/1/stages')
+            ->seeJsonEquals([
+                'status_code' => 200,
+                'status' => 'OK',
+                'message' => 'Resource(s) found',
+                'data' => [
+                    [
+                        'id' => 1,
+                        'location' => 'Location 1',
+                        'sub_location' => 'Sub-location 1',
+                        'start_date' => '2019-01-10',
+                        'end_date' => '2019-01-24',
+                        'hour_amount' => 123,
+                        'other_amount' => 5,
+                        'is_optional' => false,
+                        'is_interrupted' => false
+                    ]
+                ],
+            ])
+            ->seeStatusCode(200);
+
+    }
+
+    /**
+     * Get student's stages: failure.
+     */
+    public function testGetRelatedToStudentFailure()
+    {
+
+        // Non existing stages
+        $this->json('GET', '/students/2/stages')
+            ->seeJsonEquals([
+                'status_code' => 404,
+                'status' => 'Not Found',
+                'message' => 'Resource(s) not found',
+            ])
+            ->seeStatusCode(404);
+
+        // Non existing student
+        $this->json('GET', '/students/999/stages')
+            ->seeJsonEquals([
+                'status_code' => 404,
+                'status' => 'Not Found',
+                'message' => 'Resource(s) not found',
+            ])
+            ->seeStatusCode(404);
+
+        // Invalid student ID
+        $this->json('GET', '/students/abc/stages')
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'id' => [
+                        'code error_type',
+                        'value abc',
+                        'expected integer',
+                        'used string',
+                        'in path',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400);
+
+    }
+
+    /**
      * Delete a stage: success.
      */
     public function testDeleteById()
