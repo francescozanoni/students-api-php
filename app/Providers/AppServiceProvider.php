@@ -19,10 +19,12 @@ class AppServiceProvider extends ServiceProvider
         Validator::extend(
             'not_overlapping_time_range',
             /**
-             * @param string @attribute name of the attribute being validated
+             * Validate a time range does not overlap time ranges on database table.
+             *
+             * @param string $attribute name of the attribute being validated
              * @param mixed $value value of the attribute
              * @param array $parameters array of parameters passed to the rule
-             * @param Validator @validator the Validator instance
+             * @param Validator $validator the Validator instance
              *
              * @return @bool
              */
@@ -30,6 +32,7 @@ class AppServiceProvider extends ServiceProvider
             
                 // $parameters: other time attribute, database table name, filter 1 field, filter 1 value
                 $otherTimeAttribute = $parameters[0];
+                $otherTimeAttributeValue = $validator->getData()[$otherTimeAttribute];
                 $tableName = $parameters[1];
                 $filters = [];
                 if (isset($parameters[2]) === true &&
@@ -37,8 +40,10 @@ class AppServiceProvider extends ServiceProvider
                     $filters[$parameters[2]] = $parameters[3];
                 }
                 
-                // @todo get other time atribute value
-                // @todo sort time attributes
+                $timeRange = [
+                    'start' => min($value, $otherTimeAttributeValue),
+                    'end' => max($value, $otherTimeAttributeValue),
+                ];
                 
                 $query = DB::table($tableName);
                 if (empty($filters) === false) {
@@ -46,8 +51,20 @@ class AppServiceProvider extends ServiceProvider
                         $query->where($k, $v);
                     }
                 }
+                $query->where(function ($query) use ($timeRange) {
+                    $query->whereRaw('? BETWEEN start_date AND end_date', [$timeRange['start']])
+                        ->orWhereRaw('? BETWEEN start_date AND end_date', [$timeRange['end']])
+                        ->orWhereRaw('start_date < ? AND end_date > ?', [$timeRange['start'], $timeRange['end']]);
+                });
                 
-                // @todo add real time range search logic
+                // @todo make database field names dynamic
+                
+                // https://stackoverflow.com/questions/7581861/mysql-time-overlapping
+                // SELECT *
+                // FROM activities
+                // WHERE (.$start. BETWEEN startTime AND endTime)
+                //    OR (.$end. BETWEEN startTime AND endTime)
+                //    OR (startTime < .$start. AND endTime > .$end.);
                 
                 return $query->doesntExist();
                 
