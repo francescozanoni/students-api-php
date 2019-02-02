@@ -3,9 +3,12 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers;
 
+use App\Models\Location;
+use App\Models\SubLocation;
 use App\Models\Stage;
 use App\Models\Student;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class StagesController extends Controller
@@ -49,6 +52,39 @@ class StagesController extends Controller
     public function show(int $id) : Stage
     {
         return Stage::findOrFail($id);
+    }
+    
+    /**
+     * Create a student's stage.
+     *
+     * @param Request $request
+     * @param int $studentId
+     *
+     * @return Stage
+     */
+    public function createRelatedToStudent(Request $request, int $studentId) : Stage
+    {
+        $student = Student::findOrFail($studentId);
+        
+        $input = $request->request->all();
+        unset($input['location']);
+        if (isset($input['sub_location']) === true) {
+            unset($input['sub_location']);
+        }
+
+        $stage = new Stage($input);
+        
+        $location = Location::where('name', $request->request->get('location'))->first();
+        $stage->location()->associate($location);
+        
+        if ($request->request->has('sub_location') === true) {
+            $subLocation = SubLocation::where('name', $request->request->get('sub_location'))->first();
+            $stage->subLocation()->associate($subLocation);
+        }
+
+        $student->stages()->save($stage);
+
+        return $stage;
     }
 
     /**

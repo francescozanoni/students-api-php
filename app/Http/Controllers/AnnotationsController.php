@@ -53,7 +53,7 @@ class AnnotationsController extends Controller
     }
 
     /**
-     * Create a student's annotations.
+     * Create a student's annotation.
      *
      * @param Request $request
      * @param int $studentId

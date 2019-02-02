@@ -60,6 +60,7 @@ class ApplyResourceTransformers
                 break;
 
             case 'getStageById':
+            case 'createStudentStage':
                 $response->setContent(new StageResource($response->original));
                 break;
 

@@ -185,6 +185,48 @@ class StagesTest extends TestCase
             ->seeStatusCode(400);
 
     }
+    
+    /**
+     * Create a student's stage: success.
+     */
+    public function testCreateRelatedToStudent()
+    {
+
+        // Existing student
+        $this->json('POST',
+            '/students/1/stages',
+            [
+                'location' => 'Location 1',
+                'sub_location' => 'Sub-location 1',
+                'start_date' => '2019-01-25',
+                'end_date' => '2019-01-31',
+                'hour_amount' => 0,
+                'other_amount' => 0,
+                'is_optional' => true,
+                'is_interrupted' => false
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 200,
+                'status' => 'OK',
+                'message' => 'Resource successfully retrieved/created/modified',
+                'data' => [
+                    'id' => 2,
+                    'location' => 'Location 1',
+                    'sub_location' => 'Sub-location 1',
+                    'start_date' => '2019-01-25',
+                    'end_date' => '2019-01-31',
+                    'hour_amount' => 0,
+                    'other_amount' => 0,
+                    'is_optional' => true,
+                    'is_interrupted' => false
+                ],
+            ])
+            ->seeStatusCode(200)
+            ->seeInDatabase('stages', ['id' => 2, 'student_id' => 1, 'location_id' => 1, 'sub_location_id' => 1, 'deleted_at' => null])
+            ->notSeeInDatabase('stages', ['id' => 3]);
+
+    }
 
     /**
      * Delete a stage: success.

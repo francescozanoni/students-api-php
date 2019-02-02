@@ -299,7 +299,7 @@ paths:
       summary: Returns the list of a student's stages
       operationId: getStudentStages
       tags:
-        - annotations
+        - stages
       parameters:
         - name: id
           in: path
@@ -310,6 +310,33 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/Stages'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      summary: Creates a student's new stage
+      operationId: createStudentStage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewStage'
+      tags:
+        - stages
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the stage's student
+          schema:
+            type: integer
+      responses:
+        '200':
+          $ref: '#/components/responses/Stage'
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
