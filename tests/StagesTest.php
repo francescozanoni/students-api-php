@@ -227,6 +227,182 @@ class StagesTest extends TestCase
             ->notSeeInDatabase('stages', ['id' => 3]);
 
     }
+    
+    /**
+     * Create a student's stage: failure.
+     */
+    public function testCreateRelatedToStudentFailure()
+    {
+
+        // Non existing student
+        $this->json('POST',
+            '/students/999/stages',
+            [
+                'location' => 'Location 1',
+                'sub_location' => 'Sub-location 1',
+                'start_date' => '2019-01-25',
+                'end_date' => '2019-01-31',
+                'hour_amount' => 0,
+                'other_amount' => 0,
+                'is_optional' => true,
+                'is_interrupted' => false
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 404,
+                'status' => 'Not Found',
+                'message' => 'Resource(s) not found',
+            ])
+            ->seeStatusCode(404)
+            ->notSeeInDatabase('stages', ['id' => 2])
+            ->notSeeInDatabase('stages', ['student_id' => 999]);
+
+        // Invalid student ID
+        $this->json('POST',
+            '/students/abc/stages',
+            [
+                'location' => 'Location 1',
+                'sub_location' => 'Sub-location 1',
+                'start_date' => '2019-01-25',
+                'end_date' => '2019-01-31',
+                'hour_amount' => 0,
+                'other_amount' => 0,
+                'is_optional' => true,
+                'is_interrupted' => false
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'id' => [
+                        'code error_type',
+                        'value abc',
+                        'expected integer',
+                        'used string',
+                        'in path',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('stages', ['id' => 2])
+            ->notSeeInDatabase('stages', ['student_id' => 'abc']);
+            
+        // Non existing location
+        $this->json('POST',
+            '/students/1/stages',
+            [
+                'location' => 'Location 999',
+                'sub_location' => 'Sub-location 1',
+                'start_date' => '2019-01-25',
+                'end_date' => '2019-01-31',
+                'hour_amount' => 0,
+                'other_amount' => 0,
+                'is_optional' => true,
+                'is_interrupted' => false
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'location' => [
+                        'The location must be a valid location',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('stages', ['id' => 2]);
+            
+        // Non existing sub-location
+        $this->json('POST',
+            '/students/1/stages',
+            [
+                'location' => 'Location 1',
+                'sub_location' => 'Sub-location 999',
+                'start_date' => '2019-01-25',
+                'end_date' => '2019-01-31',
+                'hour_amount' => 0,
+                'other_amount' => 0,
+                'is_optional' => true,
+                'is_interrupted' => false
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'sub_location' => [
+                        'The sub location must be a valid sub-location',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('stages', ['id' => 2]);
+        
+        // Switched dates
+        $this->json('POST',
+            '/students/1/stages',
+            [
+                'location' => 'Location 1',
+                'sub_location' => 'Sub-location 1',
+                'start_date' => '2019-01-31',
+                'end_date' => '2019-01-25',
+                'hour_amount' => 0,
+                'other_amount' => 0,
+                'is_optional' => true,
+                'is_interrupted' => false
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'end_date' => [
+                        'The end date must be a date after start date',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('stages', ['id' => 2])
+            ->notSeeInDatabase('stages', ['start_date' => '2019-01-31', 'end_date' => '2019-01-25']);
+        
+        // Identical dates
+        $this->json('POST',
+            '/students/1/stages',
+            [
+                'location' => 'Location 1',
+                'sub_location' => 'Sub-location 1',
+                'start_date' => '2019-01-25',
+                'end_date' => '2019-01-25',
+                'hour_amount' => 0,
+                'other_amount' => 0,
+                'is_optional' => true,
+                'is_interrupted' => false
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'end_date' => [
+                        'The end date must be a date after start date',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('stages', ['id' => 2])
+            ->notSeeInDatabase('stages', ['start_date' => '2019-01-25', 'end_date' => '2019-01-25']);
+            
+        // @todo added missing required attributes test
+        // @todo add test of date ranges overlapping existing student's stages
+
+    }
 
     /**
      * Delete a stage: success.

@@ -63,7 +63,7 @@ class ValidateRequest
                     ],
                     [
                         'e_mail.email' => 'The :attribute must be a valid e-mail address',
-                        'nationality.exists' => 'The :attribute must be a valid ISO 3166-1 alpha-2 country code'
+                        'nationality.exists' => 'The :attribute must be a valid ISO 3166-1 alpha-2 country code',
                     ]
                 )->validate();
                 break;
@@ -100,6 +100,27 @@ class ValidateRequest
 
             case 'deleteAnnotationById':
                 // @todo add user_id validation, that must be provided and match the current value
+                break;
+
+            case 'createStudentStage':
+                Validator::make(
+                    $request->request->all(),
+                    [
+                        'location' => Rule::exists('locations', 'name')->where(function ($query) {
+                            $query->whereNull('deleted_at');
+                        }),
+                        'sub_location' => Rule::exists('sub_locations', 'name')->where(function ($query) {
+                            $query->whereNull('deleted_at');
+                        }),
+                        'end_date' => 'after:start_date',
+                    ],
+                    [
+                        'location.exists' => 'The :attribute must be a valid location',
+                        'sub_location.exists' => 'The :attribute must be a valid sub-location',
+                        'end_date.after' => 'The :attribute must be a date after start date',
+                    ]
+                )->validate();
+                // @todo add date validation against existing student's stages (not overlapping)
                 break;
 
             default:
