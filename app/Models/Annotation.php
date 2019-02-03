@@ -26,7 +26,7 @@ class Annotation extends Model
      *
      * @var array
      */
-    protected $guarded = ['id', 'created_at', 'updated_at', 'deleted_at'];
+    protected $guarded = ['id', 'student_id', 'created_at', 'updated_at', 'deleted_at'];
 
     /**
      * @return BelongsTo
