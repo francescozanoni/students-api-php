@@ -19,8 +19,11 @@ class AppServiceProvider extends ServiceProvider
         Validator::extend(
             'not_overlapping_time_range',
             /**
-             * Validate a time range does not overlap time ranges on database table.
-             * Be aware: attribute names must match database field names.
+             * Ensure input time range does not overlap time ranges on database table.
+             *
+             * Be aware:
+             *  - attribute names must match database field names,
+             *  - start and end times must not match (constraint to be relaxed).
              *
              * @param string $attribute name of the attribute being validated, e.g. start_date
              * @param mixed $value value of the attribute, e.g. 2019-01-01
@@ -40,42 +43,29 @@ class AppServiceProvider extends ServiceProvider
                     isset($parameters[3]) === true) {
                     $filters[$parameters[2]] = $parameters[3];
                 }
+                // @todo make filter list dynamic
                 
                 // Time values are sorted.
-                $timeRange = [
-                    'start' => min($value, $otherTimeAttributeValue),
-                    'end' => max($value, $otherTimeAttributeValue),
-                ];
+                $startTime = min($value, $otherTimeAttributeValue);
+                $endTime = max($value, $otherTimeAttributeValue);
                 
                 // Time attribute names are sorted and sanitized, in order to correctly populate SQL query.
-                $startField = preg_replace('/\W/', '', $attribute);
-                $endField = preg_replace('/\W/', '', $otherTimeAttribute);
-                if ($value === $timeRange['end']) {
-                    $startField = preg_replace('/\W/', '', $otherTimeAttribute);
-                    $endField = preg_replace('/\W/', '', $attribute);
-                }
+                $startField = preg_replace('/\W/', '', ($value === $startTime ? $attribute : $otherTimeAttribute));
+                $endField = preg_replace('/\W/', '', ($value === $endTime ? $attribute : $otherTimeAttribute));
                 
                 $query = DB::table($tableName);
                 if (empty($filters) === false) {
-                    foreach ($filters as $k => $v) {
-                        $query->where($k, $v);
+                    foreach ($filters as $filterField => $filterValue) {
+                        $query->where($filterField, $filterValue);
                     }
                 }
-                $query->where(function ($query) use ($timeRange, $startField, $endField) {
-                    $query->whereRaw('? BETWEEN ' . $startField . ' AND ' . $endField, [$timeRange['start']])
-                        ->orWhereRaw('? BETWEEN ' . $startField . ' AND ' . $endField, [$timeRange['end']])
-                        ->orWhereRaw($startField . ' <= ? AND ' . $endField . ' >= ?', [$timeRange['start'], $timeRange['end']]);
+                $query->where(function ($query) use ($startTime, $endTime, $startField, $endField) {
+                    // https://stackoverflow.com/questions/7581861/mysql-time-overlapping
+                    $query->whereRaw('? BETWEEN ' . $startField . ' AND ' . $endField, [$startTime])
+                        ->orWhereRaw('? BETWEEN ' . $startField . ' AND ' . $endField, [$endTime])
+                        ->orWhereRaw($startField . ' <= ? AND ' . $endField . ' >= ?', [$startTime, $endTime]);
                 });
-                
-                // @todo make database field names dynamic
-                
-                // https://stackoverflow.com/questions/7581861/mysql-time-overlapping
-                // SELECT *
-                // FROM activities
-                // WHERE (.$start. BETWEEN startTime AND endTime)
-                //    OR (.$end. BETWEEN startTime AND endTime)
-                //    OR (startTime < .$start. AND endTime > .$end.);
-                
+          
                 return $query->doesntExist();
                 
             }
