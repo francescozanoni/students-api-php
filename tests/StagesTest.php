@@ -516,6 +516,16 @@ class StagesTest extends TestCase
         // @todo add missing required attributes test
 
     }
+    
+    /**
+     * Modify a stage: success.
+     */
+    public function modifyById()
+    {
+
+        // 
+
+    }
 
     /**
      * Delete a stage: success.

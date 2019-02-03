@@ -86,6 +86,41 @@ class StagesController extends Controller
 
         return $stage;
     }
+    
+    /**
+     * Modify a stage.
+     *
+     * @param Request $request
+     * @param int $id
+     *
+     * @return Stage
+     */
+    public function update(Request $request, int $id) : Stage
+    {
+        $stage = Stage::findOrFail($id);
+        
+        $input = $request->request->all();
+        unset($input['location']);
+        if (isset($input['sub_location']) === true) {
+            unset($input['sub_location']);
+        }
+        
+        $stage->fill($input);
+        
+        $location = Location::where('name', $request->request->get('location'))->first();
+        $stage->location()->associate($location);
+        
+        if ($request->request->has('sub_location') === true) {
+            $subLocation = SubLocation::where('name', $request->request->get('sub_location'))->first();
+            $stage->subLocation()->associate($subLocation);
+        } else {
+            $stage->subLocation()->dissociate();
+        }
+        
+        $stage->save();
+        
+        return $stage;
+    }
 
     /**
      * Delete a stage.
