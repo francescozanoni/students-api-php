@@ -399,8 +399,121 @@ class StagesTest extends TestCase
             ->notSeeInDatabase('stages', ['id' => 2])
             ->notSeeInDatabase('stages', ['start_date' => '2019-01-25', 'end_date' => '2019-01-25']);
             
-        // @todo added missing required attributes test
-        // @todo add test of date ranges overlapping existing student's stages
+        // Overlapping time range
+        $this->json('POST',
+            '/students/1/stages',
+            [
+                'location' => 'Location 1',
+                'sub_location' => 'Sub-location 1',
+                'start_date' => '2019-01-05',
+                'end_date' => '2019-01-20',
+                'hour_amount' => 0,
+                'other_amount' => 0,
+                'is_optional' => true,
+                'is_interrupted' => false
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'start_date' => [
+                        'Unavailable time range',
+                    ],
+                    'end_date' => [
+                        'Unavailable time range',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('stages', ['id' => 2]);
+        $this->json('POST',
+            '/students/1/stages',
+            [
+                'location' => 'Location 1',
+                'sub_location' => 'Sub-location 1',
+                'start_date' => '2019-01-15',
+                'end_date' => '2019-01-30',
+                'hour_amount' => 0,
+                'other_amount' => 0,
+                'is_optional' => true,
+                'is_interrupted' => false
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'start_date' => [
+                        'Unavailable time range',
+                    ],
+                    'end_date' => [
+                        'Unavailable time range',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('stages', ['id' => 2]);
+        $this->json('POST',
+            '/students/1/stages',
+            [
+                'location' => 'Location 1',
+                'sub_location' => 'Sub-location 1',
+                'start_date' => '2019-01-05',
+                'end_date' => '2019-01-10',
+                'hour_amount' => 0,
+                'other_amount' => 0,
+                'is_optional' => true,
+                'is_interrupted' => false
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'start_date' => [
+                        'Unavailable time range',
+                    ],
+                    'end_date' => [
+                        'Unavailable time range',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('stages', ['id' => 2]);
+        $this->json('POST',
+            '/students/1/stages',
+            [
+                'location' => 'Location 1',
+                'sub_location' => 'Sub-location 1',
+                'start_date' => '2019-01-24',
+                'end_date' => '2019-01-30',
+                'hour_amount' => 0,
+                'other_amount' => 0,
+                'is_optional' => true,
+                'is_interrupted' => false
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'start_date' => [
+                        'Unavailable time range',
+                    ],
+                    'end_date' => [
+                        'Unavailable time range',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('stages', ['id' => 2]);
+            
+        // @todo add missing required attributes test
 
     }
 

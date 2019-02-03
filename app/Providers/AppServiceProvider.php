@@ -20,10 +20,11 @@ class AppServiceProvider extends ServiceProvider
             'not_overlapping_time_range',
             /**
              * Validate a time range does not overlap time ranges on database table.
+             * Be aware: attribute names must match database field names.
              *
-             * @param string $attribute name of the attribute being validated
-             * @param mixed $value value of the attribute
-             * @param array $parameters array of parameters passed to the rule
+             * @param string $attribute name of the attribute being validated, e.g. start_date
+             * @param mixed $value value of the attribute, e.g. 2019-01-01
+             * @param array $parameters array of parameters passed to the rule, e.g. end_date, stages, student_id, 1
              * @param Validator $validator the Validator instance
              *
              * @return @bool
@@ -40,10 +41,19 @@ class AppServiceProvider extends ServiceProvider
                     $filters[$parameters[2]] = $parameters[3];
                 }
                 
+                // Time values are sorted.
                 $timeRange = [
                     'start' => min($value, $otherTimeAttributeValue),
                     'end' => max($value, $otherTimeAttributeValue),
                 ];
+                
+                // Time attribute names are sorted and sanitized, in order to correctly populate SQL query.
+                $startField = preg_replace('/\W/', '', $attribute);
+                $endField = preg_replace('/\W/', '', $otherTimeAttribute);
+                if ($value === $timeRange['end']) {
+                    $startField = preg_replace('/\W/', '', $otherTimeAttribute);
+                    $endField = preg_replace('/\W/', '', $attribute);
+                }
                 
                 $query = DB::table($tableName);
                 if (empty($filters) === false) {
@@ -51,10 +61,10 @@ class AppServiceProvider extends ServiceProvider
                         $query->where($k, $v);
                     }
                 }
-                $query->where(function ($query) use ($timeRange) {
-                    $query->whereRaw('? BETWEEN start_date AND end_date', [$timeRange['start']])
-                        ->orWhereRaw('? BETWEEN start_date AND end_date', [$timeRange['end']])
-                        ->orWhereRaw('start_date < ? AND end_date > ?', [$timeRange['start'], $timeRange['end']]);
+                $query->where(function ($query) use ($timeRange, $startField, $endField) {
+                    $query->whereRaw('? BETWEEN ' . $startField . ' AND ' . $endField, [$timeRange['start']])
+                        ->orWhereRaw('? BETWEEN ' . $startField . ' AND ' . $endField, [$timeRange['end']])
+                        ->orWhereRaw($startField . ' <= ? AND ' . $endField . ' >= ?', [$timeRange['start'], $timeRange['end']]);
                 });
                 
                 // @todo make database field names dynamic

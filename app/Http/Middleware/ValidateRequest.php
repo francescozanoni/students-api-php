@@ -112,12 +112,20 @@ class ValidateRequest
                         'sub_location' => Rule::exists('sub_locations', 'name')->where(function ($query) {
                             $query->whereNull('deleted_at');
                         }),
-                        'end_date' => 'after:start_date',
+                        'start_date' => [
+                            'not_overlapping_time_range:end_date,stages,student_id,' . app('current_route_path_parameters')['id'],
+                        ],
+                        'end_date' => [
+                            'after:start_date',
+                            'not_overlapping_time_range:start_date,stages,student_id,' . app('current_route_path_parameters')['id'],
+                        ],
                     ],
                     [
                         'location.exists' => 'The :attribute must be a valid location',
                         'sub_location.exists' => 'The :attribute must be a valid sub-location',
                         'end_date.after' => 'The :attribute must be a date after start date',
+                        'start_date.not_overlapping_time_range' => 'Unavailable time range',
+                        'end_date.not_overlapping_time_range' => 'Unavailable time range',
                     ]
                 )->validate();
                 // @todo add date validation against existing student's stages (not overlapping)
