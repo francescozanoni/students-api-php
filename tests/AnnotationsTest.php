@@ -502,9 +502,28 @@ class AnnotationsTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
+            ->notSeeInDatabase('annotations', ['id' => 'abc'])
             ->notSeeInDatabase('annotations', ['id' => 3]);
 
-        // @todo add further tests
+        // Non existing ID
+        $this->json('PUT',
+            '/annotations/999',
+            [
+                'title' => 'Second title',
+                'content' => 'Second content',
+                'user_id' => 123,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 404,
+                'status' => 'Not Found',
+                'message' => 'Resource(s) not found',
+            ])
+            ->seeStatusCode(404)
+            ->notSeeInDatabase('annotations', ['id' => 999])
+            ->notSeeInDatabase('annotations', ['id' => 3]);
+
+        // @todo add further tests related to missing required fields
 
     }
 
@@ -563,7 +582,7 @@ class AnnotationsTest extends TestCase
             ->notSeeInDatabase('annotations', ['id' => 'abc']);
 
         // @todo assess whether to add check of user_id
-            
+
     }
 
 }

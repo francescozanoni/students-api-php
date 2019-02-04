@@ -513,7 +513,8 @@ class StagesTest extends TestCase
             ->seeStatusCode(400)
             ->notSeeInDatabase('stages', ['id' => 2]);
 
-        // @todo add missing required attributes test
+        // @todo add further tests related to missing required fields
+        // @todo add further tests related to invalid attribute format
 
     }
 
@@ -562,6 +563,7 @@ class StagesTest extends TestCase
             ])
             ->seeStatusCode(200)
             ->seeInDatabase('stages', ['id' => 1, 'hour_amount' => 456, 'other_amount' => 7])
+            ->notSeeInDatabase('stages', ['id' => 1, 'hour_amount' => 123, 'other_amount' => 5])
             ->notSeeInDatabase('stages', ['id' => 2]);
 
         // Remove sub-location
@@ -602,7 +604,75 @@ class StagesTest extends TestCase
             ])
             ->seeStatusCode(200)
             ->seeInDatabase('stages', ['id' => 1, 'hour_amount' => 456, 'other_amount' => 7, 'sub_location_id' => null])
+            ->notSeeInDatabase('stages', ['id' => 1, 'hour_amount' => 456, 'other_amount' => 7, 'sub_location_id' => 1])
             ->notSeeInDatabase('stages', ['id' => 2]);
+
+    }
+
+    /**
+     * Modify a stage: failure.
+     */
+    public function testModifyByIdFailure()
+    {
+
+        // Non existing ID
+        $this->json('PUT',
+            '/stages/999',
+            [
+                'location' => 'Location 1',
+                'sub_location' => 'Sub-location 1',
+                'start_date' => '2019-01-10',
+                'end_date' => '2019-01-24',
+                'hour_amount' => 456, // --> modified
+                'other_amount' => 7,  // --> modified
+                'is_optional' => false,
+                'is_interrupted' => false
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 404,
+                'status' => 'Not Found',
+                'message' => 'Resource(s) not found',
+            ])
+            ->seeStatusCode(404)
+            ->notSeeInDatabase('stages', ['id' => 999])
+            ->notSeeInDatabase('stages', ['id' => 2]);
+
+        // Invalid ID
+        $this->json('PUT',
+            '/stages/abc',
+            [
+                'location' => 'Location 1',
+                'sub_location' => 'Sub-location 1',
+                'start_date' => '2019-01-10',
+                'end_date' => '2019-01-24',
+                'hour_amount' => 456, // --> modified
+                'other_amount' => 7,  // --> modified
+                'is_optional' => false,
+                'is_interrupted' => false
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'id' => [
+                        'code error_type',
+                        'value abc',
+                        'expected integer',
+                        'used string',
+                        'in path',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('stages', ['id' => 'abc'])
+            ->notSeeInDatabase('stages', ['id' => 2]);
+
+        // @todo add further tests related to missing required fields
+        // @todo add further tests related to invalid attribute format
+        // @todo add further tests related to invalid time range
 
     }
 

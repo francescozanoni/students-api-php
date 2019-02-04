@@ -56,10 +56,6 @@ foreach ($filePathsToCheck as $filePath) {
 
 # #####################################################
 
-# SCRIPT REQUIREMENT CHECK
-
-# #####################################################
-
 echo 'Setting up directories...' . PHP_EOL;
 
 # Directories writable by the web user

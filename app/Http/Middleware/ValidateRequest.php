@@ -46,11 +46,6 @@ class ValidateRequest
 
         switch (app('current_route_alias')) {
 
-            case 'getStudents':
-            case 'getStudentById':
-            case 'deleteStudentById':
-                break;
-
             case 'createStudent':
             case 'updateStudentById':
                 Validator::make(
