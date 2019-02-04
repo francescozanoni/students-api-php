@@ -4,22 +4,23 @@ declare(strict_types = 1);
 namespace App\Http\Resources;
 
 use App\Http\Resources\Student as StudentResource;
+use App\Http\Resources\Traits\OptionalStudentAttribute;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class Stage extends JsonResource
 {
 
+    use OptionalStudentAttribute;
+
     public function toArray($request)
     {
-
-        $withStudentProperty = in_array(app('current_route_alias'), ['getStudentStages', 'createStudentStage']) === false;
 
         $output = [
 
             'id' => $this->id,
             'location' => $this->location->name,
             'sub_location' => $this->subLocation ? $this->subLocation->name : null,
-            'student' => $this->when($withStudentProperty === true, new StudentResource($this->student)),
+            'student' => $this->when($this->withStudentAttribute($request) === true, new StudentResource($this->student)),
 
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,

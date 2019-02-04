@@ -3,23 +3,24 @@ declare(strict_types = 1);
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\Student as StudentResource;
+use App\Http\Resources\Traits\OptionalStudentAttribute;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class Annotation extends JsonResource
 {
 
+    use OptionalStudentAttribute;
+
     public function toArray($request)
     {
-
-        $withStudentProperty = in_array(app('current_route_alias'), ['getStudentAnnotations', 'createStudentAnnotation']) === false;
 
         $output = [
 
             'id' => $this->id,
             'title' => $this->title,
             'content' => $this->content,
-            'student' => $this->when($withStudentProperty === true, new StudentResource($this->student)),
+            'student' => $this->when($this->withStudentAttribute($request) === true, new StudentResource($this->student)),
 
             // This field is returned as string, but cannot understand why...
             'user_id' => (int)$this->user_id,
