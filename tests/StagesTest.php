@@ -185,7 +185,7 @@ class StagesTest extends TestCase
             ->seeStatusCode(400);
 
     }
-    
+
     /**
      * Create a student's stage: success.
      */
@@ -227,7 +227,7 @@ class StagesTest extends TestCase
             ->notSeeInDatabase('stages', ['id' => 3]);
 
     }
-    
+
     /**
      * Create a student's stage: failure.
      */
@@ -288,7 +288,7 @@ class StagesTest extends TestCase
             ->seeStatusCode(400)
             ->notSeeInDatabase('stages', ['id' => 2])
             ->notSeeInDatabase('stages', ['student_id' => 'abc']);
-            
+
         // Non existing location
         $this->json('POST',
             '/students/1/stages',
@@ -315,7 +315,7 @@ class StagesTest extends TestCase
             ])
             ->seeStatusCode(400)
             ->notSeeInDatabase('stages', ['id' => 2]);
-            
+
         // Non existing sub-location
         $this->json('POST',
             '/students/1/stages',
@@ -342,7 +342,7 @@ class StagesTest extends TestCase
             ])
             ->seeStatusCode(400)
             ->notSeeInDatabase('stages', ['id' => 2]);
-        
+
         // Switched dates
         $this->json('POST',
             '/students/1/stages',
@@ -370,7 +370,7 @@ class StagesTest extends TestCase
             ->seeStatusCode(400)
             ->notSeeInDatabase('stages', ['id' => 2])
             ->notSeeInDatabase('stages', ['start_date' => '2019-01-31', 'end_date' => '2019-01-25']);
-        
+
         // Identical dates
         $this->json('POST',
             '/students/1/stages',
@@ -398,7 +398,7 @@ class StagesTest extends TestCase
             ->seeStatusCode(400)
             ->notSeeInDatabase('stages', ['id' => 2])
             ->notSeeInDatabase('stages', ['start_date' => '2019-01-25', 'end_date' => '2019-01-25']);
-            
+
         // Overlapping time range
         $this->json('POST',
             '/students/1/stages',
@@ -512,18 +512,97 @@ class StagesTest extends TestCase
             ])
             ->seeStatusCode(400)
             ->notSeeInDatabase('stages', ['id' => 2]);
-            
+
         // @todo add missing required attributes test
 
     }
-    
+
     /**
      * Modify a stage: success.
      */
-    public function modifyById()
+    public function testModifyById()
     {
 
-        // 
+        $this->json('PUT',
+            '/stages/1',
+            [
+                'location' => 'Location 1',
+                'sub_location' => 'Sub-location 1',
+                'start_date' => '2019-01-10',
+                'end_date' => '2019-01-24',
+                'hour_amount' => 456, // --> modified
+                'other_amount' => 7,  // --> modified
+                'is_optional' => false,
+                'is_interrupted' => false
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 200,
+                'status' => 'OK',
+                'message' => 'Resource successfully retrieved/created/modified',
+                'data' => [
+                    'id' => 1,
+                    'location' => 'Location 1',
+                    'sub_location' => 'Sub-location 1',
+                    'student' => [
+                        'id' => 1,
+                        'first_name' => 'John',
+                        'last_name' => 'Doe',
+                        'e_mail' => 'john.doe@foo.com',
+                        'phone' => '1234-567890',
+                        'nationality' => 'GB',
+                    ],
+                    'start_date' => '2019-01-10',
+                    'end_date' => '2019-01-24',
+                    'hour_amount' => 456,
+                    'other_amount' => 7,
+                    'is_optional' => false,
+                    'is_interrupted' => false,
+                ],
+            ])
+            ->seeStatusCode(200)
+            ->seeInDatabase('stages', ['id' => 1, 'hour_amount' => 456, 'other_amount' => 7])
+            ->notSeeInDatabase('stages', ['id' => 2]);
+
+        // Remove sub-location
+        $this->json('PUT',
+            '/stages/1',
+            [
+                'location' => 'Location 1',
+                'start_date' => '2019-01-10',
+                'end_date' => '2019-01-24',
+                'hour_amount' => 456,
+                'other_amount' => 7,
+                'is_optional' => false,
+                'is_interrupted' => false
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 200,
+                'status' => 'OK',
+                'message' => 'Resource successfully retrieved/created/modified',
+                'data' => [
+                    'id' => 1,
+                    'location' => 'Location 1',
+                    'student' => [
+                        'id' => 1,
+                        'first_name' => 'John',
+                        'last_name' => 'Doe',
+                        'e_mail' => 'john.doe@foo.com',
+                        'phone' => '1234-567890',
+                        'nationality' => 'GB',
+                    ],
+                    'start_date' => '2019-01-10',
+                    'end_date' => '2019-01-24',
+                    'hour_amount' => 456,
+                    'other_amount' => 7,
+                    'is_optional' => false,
+                    'is_interrupted' => false,
+                ],
+            ])
+            ->seeStatusCode(200)
+            ->seeInDatabase('stages', ['id' => 1, 'hour_amount' => 456, 'other_amount' => 7, 'sub_location_id' => null])
+            ->notSeeInDatabase('stages', ['id' => 2]);
 
     }
 

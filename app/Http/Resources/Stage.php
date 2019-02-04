@@ -18,7 +18,7 @@ class Stage extends JsonResource
 
             'id' => $this->id,
             'location' => $this->location->name,
-            'sub_location' => $this->subLocation->name,
+            'sub_location' => $this->subLocation ? $this->subLocation->name : null,
             'student' => $this->when($withStudentProperty === true, new StudentResource($this->student)),
 
             'start_date' => $this->start_date,

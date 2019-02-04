@@ -232,7 +232,7 @@ class StudentsTest extends TestCase
             ])
             ->seeStatusCode(400)
             ->notSeeInDatabase('students', ['id' => 5]);
-            
+
         // Inexistent nationality
         $this->json('POST',
             '/students',
@@ -256,7 +256,7 @@ class StudentsTest extends TestCase
             ])
             ->seeStatusCode(400)
             ->notSeeInDatabase('students', ['id' => 5]);
-            
+
         // Deleted nationality
         $this->json('POST',
             '/students',
