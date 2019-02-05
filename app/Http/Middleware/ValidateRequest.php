@@ -4,10 +4,11 @@ declare(strict_types = 1);
 namespace App\Http\Middleware;
 
 use App\Models\Annotation;
+use App\Models\Stage;
 use App\Services\OpenApiValidator;
 use Illuminate\Support\Facades\Validator;
-use Respect\Validation\Exceptions\ValidationException as OpenApiValidationException;
 use Illuminate\Validation\Rule;
+use Respect\Validation\Exceptions\ValidationException as OpenApiValidationException;
 
 /**
  * Class ValidateRequest
@@ -65,16 +66,16 @@ class ValidateRequest
 
             case 'createStudentAnnotation':
                 /* @todo validate user_id against users table of another database/application
-                Validator::make(
-                    $request->request->all(),
-                    [
-                        'user_id' => 'exists:other_sqlite.users,id',
-                    ],
-                    [
-                        'user_id.exists' => 'The :attribute must exist',
-                    ]
-                )->validate();
-                */
+                 * Validator::make(
+                 * $request->request->all(),
+                 * [
+                 * 'user_id' => 'exists:other_sqlite.users,id',
+                 * ],
+                 * [
+                 * 'user_id.exists' => 'The :attribute must exist',
+                 * ]
+                 * )->validate();
+                 */
                 break;
 
             case 'updateAnnotationById':
@@ -108,52 +109,60 @@ class ValidateRequest
                             $query->whereNull('deleted_at');
                         }),
                         'start_date' => [
-                            'not_overlapping_time_range:end_date,stages,student_id,' . app('current_route_path_parameters')['id'],
+                            'bail',
+                            'before:end_date',
+                            'not_overlapping_time_range:end_date,stages,student_id,=,' . app('current_route_path_parameters')['id'],
                         ],
                         'end_date' => [
+                            'bail',
                             'after:start_date',
-                            'not_overlapping_time_range:start_date,stages,student_id,' . app('current_route_path_parameters')['id'],
+                            'not_overlapping_time_range:start_date,stages,student_id,=,' . app('current_route_path_parameters')['id'],
                         ],
                     ],
                     [
                         'location.exists' => 'The :attribute must be a valid location',
                         'sub_location.exists' => 'The :attribute must be a valid sub-location',
+                        'start_date.before' => 'The :attribute must be a date before end date',
                         'end_date.after' => 'The :attribute must be a date after start date',
                         'start_date.not_overlapping_time_range' => 'Unavailable time range',
                         'end_date.not_overlapping_time_range' => 'Unavailable time range',
                     ]
                 )->validate();
                 break;
-                
+
             case 'updateStageById':
-                Validator::make(
-                    $request->request->all(),
-                    [
-                        'location' => Rule::exists('locations', 'name')->where(function ($query) {
-                            $query->whereNull('deleted_at');
-                        }),
-                        'sub_location' => Rule::exists('sub_locations', 'name')->where(function ($query) {
-                            $query->whereNull('deleted_at');
-                        }),
-                        /*
-                        'start_date' => [
-                            'not_overlapping_time_range:end_date,stages,student_id,' . app('current_route_path_parameters')['id'],
+                $stage = Stage::find(app('current_route_path_parameters')['id']);
+                if ($stage) {
+                    Validator::make(
+                        $request->request->all(),
+                        [
+                            'location' => Rule::exists('locations', 'name')->where(function ($query) {
+                                $query->whereNull('deleted_at');
+                            }),
+                            'sub_location' => Rule::exists('sub_locations', 'name')->where(function ($query) {
+                                $query->whereNull('deleted_at');
+                            }),
+                            'start_date' => [
+                                'bail',
+                                'before:end_date',
+                                'not_overlapping_time_range:end_date,stages,student_id,=,' . $stage->student->id . ',id,!=,' . $stage->id,
+                            ],
+                            'end_date' => [
+                                'bail',
+                                'after:start_date',
+                                'not_overlapping_time_range:start_date,stages,student_id,=,' . $stage->student->id . ',id,!=,' . $stage->id,
+                            ],
                         ],
-                        */
-                        'end_date' => [
-                            'after:start_date',
-                            // 'not_overlapping_time_range:start_date,stages,student_id,' . app('current_route_path_parameters')['id'],
-                        ],
-                    ],
-                    [
-                        'location.exists' => 'The :attribute must be a valid location',
-                        'sub_location.exists' => 'The :attribute must be a valid sub-location',
-                        'end_date.after' => 'The :attribute must be a date after start date',
-                        // 'start_date.not_overlapping_time_range' => 'Unavailable time range',
-                        // 'end_date.not_overlapping_time_range' => 'Unavailable time range',
-                    ]
-                )->validate();
-                // @todo apply not_overlapping_time_range rule by excluding the current stage
+                        [
+                            'location.exists' => 'The :attribute must be a valid location',
+                            'sub_location.exists' => 'The :attribute must be a valid sub-location',
+                            'start_date.before' => 'The :attribute must be a date before end date',
+                            'end_date.after' => 'The :attribute must be a date after start date',
+                            'start_date.not_overlapping_time_range' => 'Unavailable time range',
+                            'end_date.not_overlapping_time_range' => 'Unavailable time range',
+                        ]
+                    )->validate();
+                }
                 break;
 
             default:

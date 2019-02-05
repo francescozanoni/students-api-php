@@ -362,6 +362,9 @@ class StagesTest extends TestCase
                 'status' => 'Bad Request',
                 'message' => 'Request is not valid',
                 'data' => [
+                    'start_date' => [
+                        'The start date must be a date before end date',
+                    ],
                     'end_date' => [
                         'The end date must be a date after start date',
                     ],
@@ -390,6 +393,9 @@ class StagesTest extends TestCase
                 'status' => 'Bad Request',
                 'message' => 'Request is not valid',
                 'data' => [
+                    'start_date' => [
+                        'The start date must be a date before end date',
+                    ],
                     'end_date' => [
                         'The end date must be a date after start date',
                     ],
@@ -670,9 +676,73 @@ class StagesTest extends TestCase
             ->notSeeInDatabase('stages', ['id' => 'abc'])
             ->notSeeInDatabase('stages', ['id' => 2]);
 
+        // The record created by this method is used by below tests.
+        $this->testCreateRelatedToStudent();
+
+        // Overlapping time range
+        $this->json('PUT',
+            '/stages/2',
+            [
+                'location' => 'Location 1',
+                'sub_location' => 'Sub-location 1',
+                'start_date' => '2019-01-20',
+                'end_date' => '2019-01-31',
+                'hour_amount' => 0,
+                'other_amount' => 0,
+                'is_optional' => true,
+                'is_interrupted' => false
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'start_date' => [
+                        'Unavailable time range',
+                    ],
+                    'end_date' => [
+                        'Unavailable time range',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->seeInDatabase('stages', ['id' => 2, 'start_date' => '2019-01-25'])
+            ->notSeeInDatabase('stages', ['id' => 2, 'start_date' => '2019-01-20']);
+
+        // Switched dates
+        $this->json('PUT',
+            '/stages/2',
+            [
+                'location' => 'Location 1',
+                'sub_location' => 'Sub-location 1',
+                'start_date' => '2019-01-25',
+                'end_date' => '2019-01-21',
+                'hour_amount' => 0,
+                'other_amount' => 0,
+                'is_optional' => true,
+                'is_interrupted' => false
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'start_date' => [
+                        'The start date must be a date before end date',
+                    ],
+                    'end_date' => [
+                        'The end date must be a date after start date',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->seeInDatabase('stages', ['id' => 2, 'start_date' => '2019-01-25', 'end_date' => '2019-01-31'])
+            ->notSeeInDatabase('stages', ['id' => 2, 'start_date' => '2019-01-25', 'end_date' => '2019-01-21']);
+
         // @todo add further tests related to missing required fields
         // @todo add further tests related to invalid attribute format
-        // @todo add further tests related to invalid time range
 
     }
 

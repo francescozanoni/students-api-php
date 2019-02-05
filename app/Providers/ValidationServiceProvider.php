@@ -29,23 +29,36 @@ class ValidationServiceProvider extends ServiceProvider
              *
              * @param string $attribute name of the attribute being validated, e.g. start_date
              * @param mixed $value value of the attribute, e.g. 2019-01-01
-             * @param array $parameters array of parameters passed to the rule, e.g. end_date, stages, student_id, 1
+             * @param array $parameters array of parameters passed to the rule, e.g. end_date, stages, student_id, =, 1
              * @param Validator $validator the Validator instance
              *
              * @return bool
              */
             function ($attribute, $value, $parameters, $validator) {
 
-                // $parameters: other time attribute, database table name, filter 1 field, filter 1 value
-                $otherTimeAttribute = $parameters[0];
+                // $parameters:
+                //  - other time attribute,
+                //  - database table name,
+                //  - (optional) filter 1 field,
+                //  - (optional) filter 1 operator,
+                //  - (optional) filter 1 value (no comma allowed),
+                //  - (optional) filter 2 field,
+                //  - (optional) filter 2 operator,
+                //  - (optional) filter 2 value (no comma allowed).
+                $otherTimeAttribute = array_shift($parameters);
                 $otherTimeAttributeValue = $validator->getData()[$otherTimeAttribute];
-                $tableName = $parameters[1];
-                $filters = [];
-                if (isset($parameters[2]) === true &&
-                    isset($parameters[3]) === true) {
-                    $filters[$parameters[2]] = $parameters[3];
+                $tableName = array_shift($parameters);
+                if ((count($parameters) % 3) !== 0) {
+                    throw new \InvalidArgumentException('Filters must be passed as groups of three elements');
                 }
-                // @todo make filter list dynamic
+                $filters = [];
+                while (empty($parameters) === false) {
+                    $filters[] = [
+                        'field' => array_shift($parameters),
+                        'operator' => array_shift($parameters),
+                        'value' => array_shift($parameters),
+                    ];
+                }
 
                 // Time values are sorted.
                 $startTime = min($value, $otherTimeAttributeValue);
@@ -57,8 +70,8 @@ class ValidationServiceProvider extends ServiceProvider
 
                 $query = DB::table($tableName);
                 if (empty($filters) === false) {
-                    foreach ($filters as $filterField => $filterValue) {
-                        $query->where($filterField, $filterValue);
+                    foreach ($filters as $filter) {
+                        $query->where($filter['field'], $filter['operator'], $filter['value']);
                     }
                 }
                 $query->where(function ($query) use ($startTime, $endTime, $startField, $endField) {
