@@ -8,7 +8,7 @@ use App\Models\Stage;
 use App\Services\OpenApiValidator;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use Respect\Validation\Exceptions\ValidationException as OpenApiValidationException;
+use Illuminate\Validation\ValidationException;
 
 /**
  * Class ValidateRequest
@@ -35,8 +35,7 @@ class ValidateRequest
         $validator = new OpenApiValidator(config('openapi.schema_file_path'));
         $errors = $validator->validateRequest($request);
         if (empty($errors) === false) {
-            $errors = json_encode($errors, JSON_PARTIAL_OUTPUT_ON_ERROR | JSON_UNESCAPED_SLASHES);
-            throw new OpenApiValidationException($errors);
+            throw ValidationException::withMessages($errors);
         }
 
         // @todo add validation of keys: keys not described by schema must not be accepted
