@@ -3,7 +3,11 @@ php:
   - '7.1'
   - '7.2'
   # PHP 7.3 does not work yet, the following error occurs:
-  # ErrorException(code: 0): "continue" targeting switch is equivalent to "break". Did you mean to use "continue 2"?
+  #   ErrorException: Invalid argument supplied for foreach()
+  #   /home/travis/build/francescozanoni/students-api-php/vendor/illuminate/support/Arr.php:582
+  #   /home/travis/build/francescozanoni/students-api-php/vendor/illuminate/support/helpers.php:302
+  #   /home/travis/build/francescozanoni/students-api-php/tests/TestCase.php:44
+  #   /home/travis/build/francescozanoni/students-api-php/tests/AnnotationsTest.php:539
   #  - '7.3'
 install:
   - composer install
