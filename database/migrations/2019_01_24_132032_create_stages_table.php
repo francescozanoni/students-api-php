@@ -31,7 +31,6 @@ class CreateStagesTable extends Migration
             $table->foreign('sub_location_id')->references('id')->on('sub_locations');
         });
 
-        // @todo find how to enforce UNIQUE (student_id, location_id, sub_location_id, start_date)
         // @todo assess whether to create a location and sub location importer
     }
 
