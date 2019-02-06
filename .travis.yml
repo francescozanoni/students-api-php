@@ -2,9 +2,7 @@ language: php
 php:
   - '7.1'
   - '7.2'
-  # PHP 7.3 does not work yet, the following error occurs:
-  # ErrorException(code: 0): "continue" targeting switch is equivalent to "break". Did you mean to use "continue 2"?
-  #  - '7.3'
+  - '7.3'
 install:
   - composer install
   - php scripts/setup.php
