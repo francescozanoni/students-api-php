@@ -1125,7 +1125,10 @@ components:
           type: string
           format: date
         ects_credits:
-          type: float
+          type: number
+          # format: float
+          # HKarlstrom\Middleware\OpenApiValidation\Exception\MissingFormatException
+          # Missing validator for type=number, format=float
           minimum: 0.1
       required:
         - seminar
