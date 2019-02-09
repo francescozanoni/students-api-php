@@ -31,7 +31,7 @@ class SeminarAttendancesController extends Controller
      */
     public function getRelatedToStudent(int $studentId) : Collection
     {
-        $seminarAttendances = Student::findOrFail($studentId)->annotations;
+        $seminarAttendances = Student::findOrFail($studentId)->seminarAttendances;
 
         if (count($seminarAttendances) === 0) {
             throw new NotFoundHttpException();

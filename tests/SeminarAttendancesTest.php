@@ -104,4 +104,74 @@ class SeminarAttendancesTest extends TestCase
 
     }
     
+     /**
+     * Get student's seminar attendances: success.
+     */
+    public function testGetRelatedToStudent()
+    {
+
+        // Existing
+        $this->json('GET', '/students/1/seminar_attendances')
+            ->seeJsonEquals([
+                'status_code' => 200,
+                'status' => 'OK',
+                'message' => 'Resource(s) found',
+                'data' => [
+                    [
+                        'id' => 1,
+                        'seminar' => 'First seminar',
+                        'start_date' => '2019-01-08',
+                        'end_date' => '2019-01-09',
+                        'ects_credits' => 1.2,
+                    ]
+                ],
+            ])
+            ->seeStatusCode(200);
+
+    }
+
+    /**
+     * Get student's seminar attendances: failure.
+     */
+    public function testGetRelatedToStudentFailure()
+    {
+
+        // Non existing seminar attendances
+        $this->json('GET', '/students/2/seminar_attendances')
+            ->seeJsonEquals([
+                'status_code' => 404,
+                'status' => 'Not Found',
+                'message' => 'Resource(s) not found',
+            ])
+            ->seeStatusCode(404);
+
+        // Non existing student
+        $this->json('GET', '/students/999/seminar_attendances')
+            ->seeJsonEquals([
+                'status_code' => 404,
+                'status' => 'Not Found',
+                'message' => 'Resource(s) not found',
+            ])
+            ->seeStatusCode(404);
+
+        // Invalid student ID
+        $this->json('GET', '/students/abc/seminar_attendances')
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'id' => [
+                        'code error_type',
+                        'value abc',
+                        'expected integer',
+                        'used string',
+                        'in path',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400);
+
+    }
+    
 }
