@@ -7,7 +7,7 @@ This is a [RESTful](https://en.wikipedia.org/wiki/Representational_state_transfe
 - stages
   - evaluations
   - interruption reports
-- seminars
+- seminar attendances
 - additional educational activities
 
 The API is documented with [OpenAPI](https://swagger.io/docs/specification/about/) specification (version 3.0) and can be accessed via [Swagger UI](https://swagger.io/tools/swagger-ui) interface at URL **/docs**.
