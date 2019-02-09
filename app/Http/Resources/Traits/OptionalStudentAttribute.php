@@ -22,7 +22,14 @@ trait OptionalStudentAttribute
         // @todo switch logic by reading URL first part to be "students/{id}/(something)"
         return in_array(
                 app('current_route_alias'),
-                ['getStudentStages', 'createStudentStage', 'getStudentAnnotations', 'createStudentAnnotation']
+                [
+                    'getStudentStages',
+                    'createStudentStage',
+                    'getStudentAnnotations',
+                    'createStudentAnnotation',
+                    'getStudentSeminarAttendances',
+                    'createStudentSeminarAttendance',
+                ]
             ) === false;
     }
 

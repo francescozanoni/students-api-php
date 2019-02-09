@@ -12,19 +12,19 @@ class SeminarAttendancesTableSeeder extends Seeder
     public function run()
     {
         DB::table('seminar_attendances')->insert([
-            'name' => 'First seminar',
+            'seminar' => 'First seminar',
             'start_date' => '2019-01-08',
             'end_date' => '2019-01-09',
-            'etcs_amount' => 1.2,
+            'ects_credits' => 1.2,
             'student_id' => 1,
             'created_at' => '2019-01-10 01:00:00',
             'updated_at' => '2019-01-10 01:00:00',
         ]);
         DB::table('seminar_attendances')->insert([
-            'name' => 'Second seminar',
+            'seminar' => 'Second seminar',
             'start_date' => '2019-01-03',
             'end_date' => null,
-            'etcs_amount' => 1.0,
+            'ects_credits' => 1.0,
             'student_id' => 1,
             'created_at' => '2019-01-05 01:00:00',
             'updated_at' => '2019-01-05 01:00:00',

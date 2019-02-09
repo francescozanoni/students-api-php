@@ -18,13 +18,13 @@ class SeminarAttendance extends JsonResource
         $output = [
 
             'id' => $this->id,
-            'name' => $this->name,
+            'seminar' => $this->seminar,
             'student' => $this->when($this->withStudentAttribute($request) === true, new StudentResource($this->student)),
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
 
             // These field is returned as string, but cannot understand why...
-            'etcs_amount' => (float)$this->etcs_amount,
+            'ects_credits' => (float)$this->ects_credits,
         ];
 
         return $output;

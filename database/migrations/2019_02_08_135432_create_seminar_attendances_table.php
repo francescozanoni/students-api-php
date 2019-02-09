@@ -15,10 +15,10 @@ class CreateSeminarAttendancesTable extends Migration
     {
         Schema::create('seminar_attendances', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name')->nullable(false);
+            $table->string('seminar')->nullable(false);
             $table->date('start_date')->nullable(false);
             $table->date('end_date')->nullable(true);
-            $table->float('etcs_amount')->nullable(false);
+            $table->float('ects_credits')->nullable(false);
             $table->unsignedInteger('student_id')->nullable(false);
             $table->timestamps();
             $table->softDeletes();
