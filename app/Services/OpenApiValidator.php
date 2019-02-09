@@ -52,6 +52,14 @@ class OpenApiValidator
     {
 
         $this->validator = new OpenApiValidation($openApiSchemaFilePath, ['validateResponse' => false]);
+        
+        // Type "number" with format "float" is not natively supported.
+        $this->validator->addFormat('number', 'float', new class implements \Opis\JsonSchema\IFormat {
+            public function validate($data) : bool
+            {
+                return preg_match('/^\d+\.\d+$/', (string)$data) === 1;
+            }
+        });
 
         $this->requestHandler = new class implements RequestHandlerInterface
         {
