@@ -370,6 +370,138 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /seminar_attendances:
+    get:
+      summary: Returns a list of seminar attendances
+      operationId: getSeminarAttendances
+      tags:
+        - seminar_attendances
+      responses:
+        '200':
+          $ref: '#/components/responses/SeminarAttendances'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /seminar_attendances/{id}:
+    get:
+      summary: Returns a seminar attendance
+      operationId: getSeminarAttendanceById
+      tags:
+        - seminar_attendances
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the seminar attendance to retrieve
+          schema:
+            type: integer
+      responses:
+        '200':
+          $ref: '#/components/responses/SeminarAttendance'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      summary: Updates a seminar attendance
+      operationId: updateSeminarAttendanceById
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewSeminarAttendance'
+      tags:
+        - seminar_attendances
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the seminar attendance to update
+          schema:
+            type: integer
+      responses:
+        '200':
+          $ref: '#/components/responses/SeminarAttendance'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      summary: Deletes a seminar attendance
+      operationId: deleteSeminarAttendanceById
+      tags:
+        - seminar_attendances
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the seminar attendance to delete
+          schema:
+            type: integer
+      responses:
+        '200':
+          $ref: '#/components/responses/ResourceDeletion'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /students/{id}/seminar_attendances:
+    get:
+      summary: Returns the list of a student's seminar attendances
+      operationId: getStudentSeminarAttendances
+      tags:
+        - seminar_attendances
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the student
+          schema:
+            type: integer
+      responses:
+        '200':
+          $ref: '#/components/responses/SeminarAttendances'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      summary: Creates a student's new seminar attendance
+      operationId: createStudentSeminarAttendance
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewSeminarAttendance'
+      tags:
+        - seminar_attendances
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the seminar attendance's student
+          schema:
+            type: integer
+      responses:
+        '200':
+          $ref: '#/components/responses/SeminarAttendance'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 components:
   responses:
     BadRequest:
@@ -785,14 +917,10 @@ components:
               message: Resource successfully retrieved/created/modified
               data:
                 id: 1
-                location: Location 1
-                sub_location: Sub-location 1
-                start_date: '2019-01-01'
+                seminar: 'First seminar'
+                start_date: '2019-01-19'
                 end_date: '2019-01-20'
-                hour_amount: 200
-                other_amount: 23
-                is_optional: false
-                is_interrupted: false
+                ects_credits: 1.2
                 student:
                   id: 1
                   first_name: John
