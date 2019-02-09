@@ -7,7 +7,7 @@ use App\Http\Resources\Student as StudentResource;
 use App\Http\Resources\Traits\OptionalStudentAttribute;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class Stage extends JsonResource
+class SeminarAttendance extends JsonResource
 {
 
     use OptionalStudentAttribute;
@@ -18,19 +18,13 @@ class Stage extends JsonResource
         $output = [
 
             'id' => $this->id,
-            'location' => $this->location->name,
-            'sub_location' => $this->subLocation ? $this->subLocation->name : null,
+            'name' => $this->name,
             'student' => $this->when($this->withStudentAttribute($request) === true, new StudentResource($this->student)),
-
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
 
-            // These fields are returned as string, but cannot understand why...
-            'hour_amount' => (int)$this->hour_amount,
-            'other_amount' => (int)$this->other_amount,
-            'is_optional' => (bool)$this->is_optional,
-            'is_interrupted' => (bool)$this->is_interrupted,
-
+            // These field is returned as string, but cannot understand why...
+            'etcs_amount' => (float)$this->etcs_amount,
         ];
 
         return $output;

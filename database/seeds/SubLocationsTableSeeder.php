@@ -17,7 +17,7 @@ class SubLocationsTableSeeder extends Seeder
             'updated_at' => '2019-01-01 00:00:00',
         ]);
         DB::table('sub_locations')->insert([
-            'name' => 'Sub-location 2',
+            'name' => 'Deleted sub-location',
             'created_at' => '2019-01-02 00:00:00',
             'updated_at' => '2019-01-02 00:00:00',
             'deleted_at' => '2019-01-03 00:00:00',

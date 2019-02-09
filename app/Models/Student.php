@@ -44,4 +44,12 @@ class Student extends Model
         return $this->hasMany('App\Models\Stage');
     }
 
+    /**
+     * @return HasMany
+     */
+    public function seminarAttendances() : HasMany
+    {
+        return $this->hasMany('App\Models\SeminarAttendance');
+    }
+
 }
