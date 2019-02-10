@@ -163,6 +163,51 @@ class ValidateRequest
                     )->validate();
                 }
                 break;
+                
+                case 'createStudentSeminarAttendance':
+                Validator::make(
+                    $request->request->all(),
+                    [
+                        'start_date' => [
+                            'bail',
+                            'before:end_date',
+                        ],
+                        'end_date' => [
+                            'bail',
+                            'after:start_date',
+                        ],
+                    ],
+                    [
+                        'start_date.before' => 'The :attribute must be a date before end date',
+                        'end_date.after' => 'The :attribute must be a date after start date',
+                    ]
+                )->validate();
+                // @todo add seminar/student/start date uniqueness check
+                break;
+                
+                case 'updateSeminarAttendanceById':
+                $seminarAttendance = Stage::find(app('current_route_path_parameters')['id']);
+                if ($seminarAttendance) {
+                    Validator::make(
+                        $request->request->all(),
+                    [
+                        'start_date' => [
+                            'bail',
+                            'before:end_date',
+                        ],
+                        'end_date' => [
+                            'bail',
+                            'after:start_date',
+                        ],
+                    ],
+                    [
+                        'start_date.before' => 'The :attribute must be a date before end date',
+                        'end_date.after' => 'The :attribute must be a date after start date',
+                    ]
+                    )->validate();
+                // @todo add seminar/student/start date uniqueness check
+                }
+                break;
 
             default:
 

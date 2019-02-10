@@ -395,6 +395,8 @@ class StudentsTest extends TestCase
             ->seeStatusCode(200)
             ->seeInDatabase('students', ['id' => 2, 'deleted_at' => date('Y-m-d H:i:s')])
             ->notSeeInDatabase('students', ['id' => 2, 'deleted_at' => null]);
+            
+        // @todo add tests of cascade deletion of related models
 
     }
 

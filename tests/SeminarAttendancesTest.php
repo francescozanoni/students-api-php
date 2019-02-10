@@ -175,6 +175,66 @@ class SeminarAttendancesTest extends TestCase
     }
     
     /**
+     * Create a student's seminar attendance: success.
+     */
+    public function testCreateRelatedToStudent()
+    {
+
+        // Existing student, full data
+        $this->json('POST',
+            '/students/1/seminar_attendances',
+            [
+                'seminar' => 'Another seminar',
+                'start_date' => '2019-01-30',
+                'end_date' => '2019-01-31',
+                'ects_credits' => 0.4,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 200,
+                'status' => 'OK',
+                'message' => 'Resource successfully retrieved/created/modified',
+                'data' => [
+                    'id' => 3,
+                    'seminar' => 'Another seminar',
+                'start_date' => '2019-01-30',
+                'end_date' => '2019-01-31',
+                'ects_credits' => 0.4,
+                ],
+            ])
+            ->seeStatusCode(200)
+            ->seeInDatabase('stages', ['id' => 3, 'student_id' => 1, 'deleted_at' => null])
+            ->notSeeInDatabase('stages', ['id' => 4]);
+            
+            /*
+        // Existing student, no end date
+        $this->json('POST',
+            '/students/2/seminar_attendances',
+            [
+                'seminar' => 'Another seminar',
+                'start_date' => '2019-01-30',
+                'ects_credits' => 0.4,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 200,
+                'status' => 'OK',
+                'message' => 'Resource successfully retrieved/created/modified',
+                'data' => [
+                    'id' => 4,
+                    'seminar' => 'Another seminar',
+                'start_date' => '2019-01-30',
+                'ects_credits' => 0.4,
+                ],
+            ])
+            ->seeStatusCode(200)
+            ->seeInDatabase('stages', ['id' => 4, 'student_id' => 2, 'deleted_at' => null])
+            ->notSeeInDatabase('stages', ['id' => 5]);
+            */
+
+    }
+    
+    /**
      * Delete a seminar attendance: success.
      */
     public function testDeleteById()
