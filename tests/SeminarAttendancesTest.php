@@ -174,4 +174,60 @@ class SeminarAttendancesTest extends TestCase
 
     }
     
+    /**
+     * Delete a seminar attendance: success.
+     */
+    public function testDeleteById()
+    {
+
+        // Existing annotation
+        $this->json('DELETE', '/seminar_attendances/1')
+            ->seeJsonEquals([
+                'status_code' => 200,
+                'status' => 'OK',
+                'message' => 'Resource deleted',
+            ])
+            ->seeStatusCode(200)
+            ->seeInDatabase('seminar_attendances', ['id' => 1, 'deleted_at' => date('Y-m-d H:i:s')])
+            ->notSeeInDatabase('seminar_attendances', ['id' => 1, 'deleted_at' => null]);
+
+    }
+
+    /**
+     * Delete a seminar attendance: failure.
+     */
+    public function testDeleteByIdFailure()
+    {
+
+        // Non existing annotation
+        $this->json('DELETE', '/seminar_attendances/999')
+            ->seeJsonEquals([
+                'status_code' => 404,
+                'status' => 'Not Found',
+                'message' => 'Resource(s) not found',
+            ])
+            ->seeStatusCode(404)
+            ->notSeeInDatabase('seminar_attendances', ['id' => 999]);
+
+        // Invalid ID
+        $this->json('DELETE', '/seminar_attendances/abc')
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'id' => [
+                        'code error_type',
+                        'value abc',
+                        'expected integer',
+                        'used string',
+                        'in path',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('seminar_attendances', ['id' => 'abc']);
+
+    }
+    
 }
