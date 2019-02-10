@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Exceptions;
 
@@ -11,6 +12,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Handler extends ExceptionHandler
 {
+
     /**
      * A list of the exception types that should not be reported.
      *
@@ -41,10 +43,38 @@ class Handler extends ExceptionHandler
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Exception  $exception
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function render($request, Exception $exception)
     {
-        return parent::render($request, $exception);
+    
+        foreach ($this->dontReport as $exceptionClassNotToReport) {
+            if ($exception instanceof $exceptionClassNotToReport) {
+                return parent::render($request, $exception);
+            }
+        }
+        
+        $content = 
+                    [
+                        'class' => get_class($exception),
+                        'message' => $exception->getMessage(),
+                        'file' => $exception->getFile(),
+                        'line' => $exception->getLine(),
+                        //'trace' => $exception->getTrace(),
+                    ];
+            
+        $response = new \Illuminate\Http\JsonResponse(null, 500);
+
+        // Since AddResponseMetadata and PrettyPrint middlewares are not executed,
+        // their logic is here re-applied manually on the error response.
+        // @todo improve design of this
+        $metadata = app('App\Http\Middleware\AddResponseMetadata')->getMetadata($request, $response);
+        $fullData = array_merge($metadata, ['data' => $content]);
+        $response->setContent(json_encode($fullData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+         
+        $response->exception = $exception;
+        
+        return $response;
     }
+    
 }
