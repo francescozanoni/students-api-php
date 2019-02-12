@@ -66,13 +66,9 @@ class ValidateRequest
             case 'createStudentAnnotation':
                 /* @todo validate user_id against users table of another database/application
                  * Validator::make(
-                 * $request->request->all(),
-                 * [
-                 * 'user_id' => 'exists:other_sqlite.users,id',
-                 * ],
-                 * [
-                 * 'user_id.exists' => 'The :attribute must exist',
-                 * ]
+                 *   $request->request->all(),
+                 *   ['user_id' => 'exists:other_sqlite.users,id'],
+                 *   ['user_id.exists' => 'The :attribute must exist']
                  * )->validate();
                  */
                 break;
@@ -163,14 +159,14 @@ class ValidateRequest
                     )->validate();
                 }
                 break;
-                
-                case 'createStudentSeminarAttendance':
+
+            case 'createStudentSeminarAttendance':
                 Validator::make(
                     $request->request->all(),
                     [
                         'start_date' => [
                             'bail',
-                            'before:end_date',
+                            'before_optional:end_date',
                         ],
                         'end_date' => [
                             'bail',
@@ -178,34 +174,34 @@ class ValidateRequest
                         ],
                     ],
                     [
-                        'start_date.before' => 'The :attribute must be a date before end date',
+                        'start_date.before_optional' => 'The :attribute must be a date before end date',
                         'end_date.after' => 'The :attribute must be a date after start date',
                     ]
                 )->validate();
                 // @todo add seminar/student/start date uniqueness check
                 break;
-                
-                case 'updateSeminarAttendanceById':
+
+            case 'updateSeminarAttendanceById':
                 $seminarAttendance = Stage::find(app('current_route_path_parameters')['id']);
                 if ($seminarAttendance) {
                     Validator::make(
                         $request->request->all(),
-                    [
-                        'start_date' => [
-                            'bail',
-                            'before:end_date',
+                        [
+                            'start_date' => [
+                                'bail',
+                                'before_optional:end_date',
+                            ],
+                            'end_date' => [
+                                'bail',
+                                'after:start_date',
+                            ],
                         ],
-                        'end_date' => [
-                            'bail',
-                            'after:start_date',
-                        ],
-                    ],
-                    [
-                        'start_date.before' => 'The :attribute must be a date before end date',
-                        'end_date.after' => 'The :attribute must be a date after start date',
-                    ]
+                        [
+                            'start_date.before_optional' => 'The :attribute must be a date before end date',
+                            'end_date.after' => 'The :attribute must be a date after start date',
+                        ]
                     )->validate();
-                // @todo add seminar/student/start date uniqueness check
+                    // @todo add seminar/student/start date uniqueness check
                 }
                 break;
 

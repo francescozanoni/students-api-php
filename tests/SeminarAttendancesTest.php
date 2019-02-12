@@ -36,7 +36,7 @@ class SeminarAttendancesTest extends TestCase
             ->seeStatusCode(200);
 
     }
-    
+
     /**
      * Get seminar attendance by ID.
      */
@@ -68,7 +68,7 @@ class SeminarAttendancesTest extends TestCase
             ->seeStatusCode(200);
 
     }
-    
+
     /**
      * Get seminar attendance by ID: failure.
      */
@@ -103,8 +103,8 @@ class SeminarAttendancesTest extends TestCase
             ->seeStatusCode(400);
 
     }
-    
-     /**
+
+    /**
      * Get student's seminar attendances: success.
      */
     public function testGetRelatedToStudent()
@@ -173,7 +173,7 @@ class SeminarAttendancesTest extends TestCase
             ->seeStatusCode(400);
 
     }
-    
+
     /**
      * Create a student's seminar attendance: success.
      */
@@ -197,16 +197,16 @@ class SeminarAttendancesTest extends TestCase
                 'data' => [
                     'id' => 3,
                     'seminar' => 'Another seminar',
-                'start_date' => '2019-01-30',
-                'end_date' => '2019-01-31',
-                'ects_credits' => 0.4,
+                    'start_date' => '2019-01-30',
+                    'end_date' => '2019-01-31',
+                    'ects_credits' => 0.4,
                 ],
             ])
             ->seeStatusCode(200)
             ->seeInDatabase('stages', ['id' => 3, 'student_id' => 1, 'deleted_at' => null])
             ->notSeeInDatabase('stages', ['id' => 4]);
-            
-            /*
+
+
         // Existing student, no end date
         $this->json('POST',
             '/students/2/seminar_attendances',
@@ -223,17 +223,16 @@ class SeminarAttendancesTest extends TestCase
                 'data' => [
                     'id' => 4,
                     'seminar' => 'Another seminar',
-                'start_date' => '2019-01-30',
-                'ects_credits' => 0.4,
+                    'start_date' => '2019-01-30',
+                    'ects_credits' => 0.4,
                 ],
             ])
             ->seeStatusCode(200)
             ->seeInDatabase('stages', ['id' => 4, 'student_id' => 2, 'deleted_at' => null])
             ->notSeeInDatabase('stages', ['id' => 5]);
-            */
 
     }
-    
+
     /**
      * Delete a seminar attendance: success.
      */
@@ -289,5 +288,5 @@ class SeminarAttendancesTest extends TestCase
             ->notSeeInDatabase('seminar_attendances', ['id' => 'abc']);
 
     }
-    
+
 }

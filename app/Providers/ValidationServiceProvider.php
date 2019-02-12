@@ -87,6 +87,29 @@ class ValidationServiceProvider extends ServiceProvider
 
         );
 
+        Validator::extend(
+            'before_optional',
+            /**
+             * Validate a date (so far) to be before another date (so far), only if the latter is provided.
+             *
+             * @param string $attribute name of the attribute being validated, e.g. start_date
+             * @param mixed $value value of the attribute, e.g. 2019-01-01
+             * @param array $parameters array of parameters passed to the rule, e.g. end_date
+             * @param Validator $validator the Validator instance
+             *
+             * @return bool
+             */
+            function ($attribute, $value, $parameters, $validator) {
+                // @todo improve logic detecting date/time or field name
+                if (preg_match('/^\d{4}\-\d{2}\-\d{2}$/', $parameters[0]) !== 1) {
+                    if (isset($validator->getData()[$parameters[0]]) === false) {
+                        return true;
+                    }
+                }
+                return $validator->validateBefore($attribute, $value, $parameters);
+            }
+        );
+
     }
 
     /**
