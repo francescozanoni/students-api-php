@@ -33,7 +33,10 @@ class ValidateRequest
         // STEP 1: validation against OpenAPI schema
 
         $validator = new OpenApiValidator(config('openapi.schema_file_path'));
-        $errors = $validator->validateRequest($request);
+        $path = (string)app('current_route_path');
+        $httpMethod = strtolower($request->getMethod());
+        $pathParameters = app('current_route_path_parameters');
+        $errors = $validator->validateRequest($request, $path, $httpMethod, $pathParameters);
         if (empty($errors) === false) {
             throw ValidationException::withMessages($errors);
         }

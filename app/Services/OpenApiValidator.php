@@ -52,9 +52,10 @@ class OpenApiValidator
     {
 
         $this->validator = new OpenApiValidation($openApiSchemaFilePath, ['validateResponse' => false]);
-        
+
         // Type "number" with format "float" is not natively supported.
-        $this->validator->addFormat('number', 'float', new class implements \Opis\JsonSchema\IFormat {
+        $this->validator->addFormat('number', 'float', new class implements \Opis\JsonSchema\IFormat
+        {
             public function validate($data) : bool
             {
                 return preg_match('/^\d+\.\d+$/', (string)$data) === 1;
@@ -75,6 +76,9 @@ class OpenApiValidator
      * Validate a request against OpenAPI schema.
      *
      * @param mixed $request
+     * @param string $path
+     * @param string $method
+     * @param array $pathParameters
      *
      * @return array validation errors, e.g. Array (
      *                                         [id] => Array (
@@ -86,10 +90,11 @@ class OpenApiValidator
      *                                         )
      *                                       )
      *
-     * @throws \Exception if a combination of HTTP method and path is not found within OpenAPI schema
      */
-    public function validateRequest($request) : array
+    public function validateRequest($request, string $path, string $method, array $pathParameters) : array
     {
+
+        // @todo remove $path, $method and $pathParameters from input (if possible)
 
         if (($request instanceof ServerRequestInterface) === false) {
             $request = $this->getPsr7Request($request);
@@ -103,33 +108,7 @@ class OpenApiValidator
         // THIS IS LIKELY RELATED ONLY TO PHP BUILT-IN WEB SERVER,
         // BECAUSE .htaccess (WHEN ENABLED) REDIRECTS students/ TO students
 
-        $errors = [];
-
-        $response = $this->validator->process($request, $this->requestHandler);
-
-        if ($response->getStatusCode() === 400) {
-
-            /* Example of $response->getBody()->__toString() content,
-             * related to request with URL http://localhost/students/a:
-             *
-             * {
-             *   "message": "Request validation failed",
-             *   "errors": [
-             *     {
-             *       "name": "id",
-             *       "code": "error_type",
-             *       "value": "a",
-             *       "expected": "integer",
-             *       "used": "string",
-             *       "in": "body"
-             *     }
-             *   ]
-             * }
-             */
-
-            $errors = json_decode($response->getBody()->__toString(), true)['errors'];
-
-        }
+        $errors = $this->validator->validateRequest($request, $path, $method, $pathParameters);
 
         return $this->getFormattedErrors($errors);
 
