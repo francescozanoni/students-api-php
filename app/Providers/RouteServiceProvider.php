@@ -10,8 +10,6 @@ class RouteServiceProvider extends ServiceProvider
 
     /**
      * Register any application services.
-     *
-     * @return void
      */
     public function register()
     {
@@ -53,27 +51,26 @@ class RouteServiceProvider extends ServiceProvider
 
             $route = $app->request->route();
 
-            if (isset($route[1]) === true &&
-                isset($route[1]['as']) === true) {
-
-                $routeAlias = $route[1]['as'];
-                $routes = $app['router']->getRoutes();
-                $route = array_filter(
-                    $routes,
-                    function ($singleRoute) use ($routeAlias) {
-                        return
-                            isset($singleRoute['action']) === true &&
-                            isset($singleRoute['action']['as']) === true &&
-                            $singleRoute['action']['as'] === $routeAlias;
-                    }
-                );
-
-                if (empty($route) === false) {
-                    return reset($route)['uri'];
-                }
-
+            if (isset($route[1]) === false ||
+                isset($route[1]['as']) === false) {
+                return null;
             }
 
+            $routeAlias = $route[1]['as'];
+            $routes = $app['router']->getRoutes();
+            $route = array_filter(
+                $routes,
+                function ($singleRoute) use ($routeAlias) {
+                    return
+                        isset($singleRoute['action']) === true &&
+                        isset($singleRoute['action']['as']) === true &&
+                        $singleRoute['action']['as'] === $routeAlias;
+                }
+            );
+
+            if (empty($route) === false) {
+                return reset($route)['uri'];
+            }
 
             return null;
 
