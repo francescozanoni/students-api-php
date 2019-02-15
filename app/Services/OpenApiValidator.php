@@ -109,7 +109,7 @@ class OpenApiValidator
 
         if ($response->getStatusCode() === 400) {
 
-            /* Example of $r->getBody()->__toString() content,
+            /* Example of $response->getBody()->__toString() content,
              * related to request with URL http://localhost/students/a:
              *
              * {
