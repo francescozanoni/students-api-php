@@ -203,8 +203,8 @@ class SeminarAttendancesTest extends TestCase
                 ],
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('stages', ['id' => 3, 'student_id' => 1, 'deleted_at' => null])
-            ->notSeeInDatabase('stages', ['id' => 4]);
+            ->seeInDatabase('seminar_attendances', ['id' => 3, 'student_id' => 1, 'deleted_at' => null])
+            ->notSeeInDatabase('seminar_attendances', ['id' => 4]);
 
 
         // Existing student, no end date
@@ -228,10 +228,168 @@ class SeminarAttendancesTest extends TestCase
                 ],
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('stages', ['id' => 4, 'student_id' => 2, 'deleted_at' => null])
-            ->notSeeInDatabase('stages', ['id' => 5]);
+            ->seeInDatabase('seminar_attendances', ['id' => 4, 'student_id' => 2, 'deleted_at' => null])
+            ->notSeeInDatabase('seminar_attendances', ['id' => 5]);
 
     }
+
+    /**
+     * Create a student's seminar attendance: failure.
+     */
+    public function testCreateRelatedToStudentFailure()
+    {
+
+        // Non existing student
+        $this->json('POST',
+            '/students/999/seminar_attendances',
+            [
+                'seminar' => 'Another seminar',
+                'start_date' => '2019-01-30',
+                'end_date' => '2019-01-31',
+                'ects_credits' => 0.4,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 404,
+                'status' => 'Not Found',
+                'message' => 'Resource(s) not found',
+            ])
+            ->seeStatusCode(404)
+            ->notSeeInDatabase('seminar_attendances', ['id' => 3])
+            ->notSeeInDatabase('seminar_attendances', ['student_id' => 999]);
+
+        // Invalid student ID
+        $this->json('POST',
+            '/students/abc/seminar_attendances',
+            [
+                'seminar' => 'Another seminar',
+                'start_date' => '2019-01-30',
+                'end_date' => '2019-01-31',
+                'ects_credits' => 0.4,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'id' => [
+                        'code error_type',
+                        'value abc',
+                        'expected integer',
+                        'used string',
+                        'in path',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('seminar_attendances', ['id' => 3])
+            ->notSeeInDatabase('seminar_attendances', ['student_id' => 'abc']);
+
+        // Switched dates
+        $this->json('POST',
+            '/students/1/seminar_attendances',
+            [
+                'seminar' => 'Another seminar',
+                'start_date' => '2019-01-31',
+                'end_date' => '2019-01-30',
+                'ects_credits' => 0.4,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'start_date' => [
+                        'The start date must be a date before end date',
+                    ],
+                    'end_date' => [
+                        'The end date must be a date after start date',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('seminar_attendances', ['id' => 3])
+            ->notSeeInDatabase('seminar_attendances', ['start_date' => '2019-01-31', 'end_date' => '2019-01-30']);
+
+        // Identical dates
+        $this->json('POST',
+            '/students/1/seminar_attendances',
+            [
+                'seminar' => 'Another seminar',
+                'start_date' => '2019-01-30',
+                'end_date' => '2019-01-30',
+                'ects_credits' => 0.4,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'start_date' => [
+                        'The start date must be a date before end date',
+                    ],
+                    'end_date' => [
+                        'The end date must be a date after start date',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('seminar_attendances', ['id' => 3])
+            ->notSeeInDatabase('seminar_attendances', ['start_date' => '2019-01-30', 'end_date' => '2019-01-30']);
+
+
+        // @todo add further tests related to missing required fields
+        // @todo add further tests related to invalid attribute format
+        // @todo add further tests related to seminar/student/start date uniqueness
+
+    }
+
+    /**
+     * Modify a seminar attendance: success.
+     *
+    public function testModifyById()
+    {
+
+        $this->json('PUT',
+            '/seminar_attendances/1',
+            [
+                'seminar' => 'First seminar',
+                'start_date' => '2019-01-09', // --> modified
+                'end_date' => '2019-01-10',   // --> modified
+                'ects_credits' => 1.0,        // --> modified
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 200,
+                'status' => 'OK',
+                'message' => 'Resource successfully retrieved/created/modified',
+                'data' => [
+                    'id' => 1,
+                    'seminar' => 'First seminar',
+                    'start_date' => '2019-01-09',
+                    'end_date' => '2019-01-10',
+                    'ects_credits' => 1.0,
+                    'student' => [
+                        'id' => 1,
+                        'first_name' => 'John',
+                        'last_name' => 'Doe',
+                        'e_mail' => 'john.doe@foo.com',
+                        'phone' => '1234-567890',
+                        'nationality' => 'GB',
+                    ],
+                ],
+            ])
+            ->seeStatusCode(200)
+            ->seeInDatabase('seminar_attendances', ['id' => 1, 'start_date' => '2019-01-09', 'end_date' => '2019-01-10', 'ects_credits' => 1.0])
+            ->notSeeInDatabase('seminar_attendances', ['id' => 1, 'start_date' => '2019-01-08'])
+            ->notSeeInDatabase('seminar_attendances', ['id' => 1, 'end_date' => '2019-01-09'])
+            ->notSeeInDatabase('seminar_attendances', ['id' => 1, 'ects_credits' => 1.2])
+            ->notSeeInDatabase('seminar_attendances', ['id' => 3]);
+
+    }*/
 
     /**
      * Delete a seminar attendance: success.
