@@ -349,7 +349,7 @@ class SeminarAttendancesTest extends TestCase
 
     /**
      * Modify a seminar attendance: success.
-     *
+     */
     public function testModifyById()
     {
 
@@ -389,7 +389,7 @@ class SeminarAttendancesTest extends TestCase
             ->notSeeInDatabase('seminar_attendances', ['id' => 1, 'ects_credits' => 1.2])
             ->notSeeInDatabase('seminar_attendances', ['id' => 3]);
 
-    }*/
+    }
 
     /**
      * Delete a seminar attendance: success.

@@ -58,7 +58,8 @@ class OpenApiValidator
         {
             public function validate($data) : bool
             {
-                return preg_match('/^\d+\.\d+$/', (string)$data) === 1;
+                return (is_int($data) || is_float($data) || is_double($data)) &&
+                    preg_match('/^\d+(\.\d+)?$/', (string)$data) === 1;
             }
         });
 
