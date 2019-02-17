@@ -8,7 +8,6 @@ use App\Models\Stage;
 use App\Services\OpenApiValidator;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\ValidationException;
 
 /**
  * Class ValidateRequest
@@ -25,7 +24,7 @@ class ValidateRequest
      *
      * @return mixed
      *
-     * @throws \Exception
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function handle($request, \Closure $next)
     {
@@ -36,10 +35,7 @@ class ValidateRequest
         $path = (string)app('current_route_path');
         $httpMethod = strtolower($request->getMethod());
         $pathParameters = app('current_route_path_parameters');
-        $errors = $validator->validateRequest($request, $path, $httpMethod, $pathParameters);
-        if (empty($errors) === false) {
-            throw ValidationException::withMessages($errors);
-        }
+        $validator->validateRequest($request, $path, $httpMethod, $pathParameters);
 
         // @todo add validation of keys: keys not described by schema must not be accepted
 

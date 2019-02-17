@@ -5,6 +5,7 @@ namespace App\Services;
 
 use HKarlstrom\Middleware\OpenApiValidation;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -39,9 +40,7 @@ class OpenApiValidator
      */
     public function __construct(string $openApiSchemaFilePath)
     {
-
         $this->validator = new OpenApiValidation($openApiSchemaFilePath);
-
     }
 
     /**
@@ -52,18 +51,9 @@ class OpenApiValidator
      * @param string $method
      * @param array $pathParameters
      *
-     * @return array validation errors, e.g. Array (
-     *                                         [id] => Array (
-     *                                           [in] => body
-     *                                           [code] => error_type
-     *                                           [value] => a
-     *                                           [expected] => integer
-     *                                           [used] => string
-     *                                         )
-     *                                       )
-     *
+     * @throws ValidationException
      */
-    public function validateRequest($request, string $path, string $method, array $pathParameters) : array
+    public function validateRequest($request, string $path, string $method, array $pathParameters)
     {
 
         // @todo remove $path, $method and $pathParameters from input (if possible)
@@ -81,8 +71,10 @@ class OpenApiValidator
         // BECAUSE .htaccess (WHEN ENABLED) REDIRECTS students/ TO students
 
         $errors = $this->validator->validateRequest($request, $path, $method, $pathParameters);
-
-        return $this->getFormattedErrors($errors);
+        
+        if (empty($errors) === false) {
+            throw ValidationException::withMessages($this->getFormattedErrors($errors));
+        }
 
     }
 
@@ -93,18 +85,9 @@ class OpenApiValidator
      * @param string $path
      * @param string $method
      *
-     * @return array validation errors, e.g. Array (
-     *                                         [id] => Array (
-     *                                           [in] => body
-     *                                           [code] => error_type
-     *                                           [value] => a
-     *                                           [expected] => integer
-     *                                           [used] => string
-     *                                         )
-     *                                       )
-     *
+     * @throws ValidationException
      */
-    public function validateResponse($response, string $path, string $method) : array
+    public function validateResponse($response, string $path, string $method)
     {
 
         // @todo remove $path and $method from input (if possible)
@@ -123,7 +106,9 @@ class OpenApiValidator
             $this->validator->validateResponseHeaders($_response_2, $path, $method)
         );
 
-        return $this->getFormattedErrors($errors);
+        if (empty($errors) === false) {
+            throw ValidationException::withMessages($this->getFormattedErrors($errors));
+        }
 
     }
 

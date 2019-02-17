@@ -20,7 +20,7 @@ class ValidateResponse
      *
      * @return mixed
      *
-     * @throws \Exception
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function handle($request, \Closure $next)
     {
@@ -36,17 +36,7 @@ class ValidateResponse
         $httpMethod = strtolower($request->getMethod());
 
         $validator = new OpenApiValidator(config('openapi.schema_file_path'));
-        $errors = $validator->validateResponse($response, $path, $httpMethod);
-
-        if (empty($errors) === false) {
-            // Since AddResponseMetadata and PrettyPrint middlewares have already been executed,
-            // their logic is here re-applied manually on the error response.
-            // @todo improve design of this
-            $response->setStatusCode(500);
-            $metadata = app('App\Http\Middleware\AddResponseMetadata')->getMetadata($request, $response);
-            $fullData = array_merge($metadata, ['data' => $errors]);
-            $response->setContent(json_encode($fullData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
-        }
+        $validator->validateResponse($response, $path, $httpMethod);
 
         return $response;
 

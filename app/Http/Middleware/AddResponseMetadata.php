@@ -38,7 +38,15 @@ class AddResponseMetadata
             if (empty($data) === false) {
                 $fullData['data'] = $data;
             }
-            $response->setContent($fullData);
+            if ($response instanceof Illuminate\Http\JsonResponse) {
+                $response->setData($fullData);
+            } else {
+                if (is_string($fullData) === false &&
+                    (is_object($fullData) === true && method_exists($fullData, '__toString') === true) === false) {
+                    json_encode($fullData);
+                }
+                $response->setContent($fullData);
+            }
         }
 
         return $response;
