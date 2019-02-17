@@ -1126,7 +1126,6 @@ components:
           format: date
         ects_credits:
           type: number
-          format: float
           minimum: 0.1
       required:
         - seminar

@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Francesco.Zanoni
- * Date: 17/01/2019
- * Time: 10:46
- */
 declare(strict_types = 1);
 
 namespace App\Services;
@@ -37,11 +31,6 @@ class OpenApiValidator
     private $validator;
 
     /**
-     * @var RequestHandlerInterface anonymous class used by OpenApiValidation->process()
-     */
-    private $requestHandler;
-
-    /**
      * OpenApiValidator constructor.
      *
      * @param string $openApiSchemaFilePath
@@ -51,25 +40,7 @@ class OpenApiValidator
     public function __construct(string $openApiSchemaFilePath)
     {
 
-        $this->validator = new OpenApiValidation($openApiSchemaFilePath, ['validateResponse' => false]);
-
-        // Type "number" with format "float" is not natively supported.
-        $this->validator->addFormat('number', 'float', new class implements \Opis\JsonSchema\IFormat
-        {
-            public function validate($data) : bool
-            {
-                return (is_int($data) || is_float($data) || is_double($data)) &&
-                    preg_match('/^\d+(\.\d+)?$/', (string)$data) === 1;
-            }
-        });
-
-        $this->requestHandler = new class implements RequestHandlerInterface
-        {
-            public function handle(ServerRequestInterface $request) : ResponseInterface
-            {
-                return new Response();
-            }
-        };
+        $this->validator = new OpenApiValidation($openApiSchemaFilePath);
 
     }
 
