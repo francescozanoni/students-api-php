@@ -43,7 +43,7 @@ class AddResponseMetadata
             } else {
                 if (is_string($fullData) === false &&
                     (is_object($fullData) === true && method_exists($fullData, '__toString') === true) === false) {
-                    json_encode($fullData);
+                    $fullData = json_encode($fullData);
                 }
                 $response->setContent($fullData);
             }
@@ -65,7 +65,7 @@ class AddResponseMetadata
      *                      [message] => Resource(s) found
      *                    )
      *
-     * Currently this method is public because App\Http\Middleware\ValidateResponse uses it.
+     * Currently this method is public because App\Exceptions\Handler uses it.
      * @todo find a better way to share this logic
      */
     public function getMetadata(Request $request, $response) : array

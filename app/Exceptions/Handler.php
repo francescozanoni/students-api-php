@@ -61,17 +61,17 @@ class Handler extends ExceptionHandler
                 'message' => $exception->getMessage(),
                 'file' => $exception->getFile(),
                 'line' => $exception->getLine(),
-                //'trace' => $exception->getTrace(),
+                // 'trace' => array_slice($exception->getTrace(), 0, 3),
             ];
 
         $response = new \Illuminate\Http\JsonResponse(null, 500);
 
-        // Since AddResponseMetadata and PrettyPrint middlewares are not executed,
-        // their logic is here re-applied manually on the error response.
+        // Since AddResponseMetadata middleware is not executed,
+        // its logic is here re-applied manually on the error response.
         // @todo improve design of this
         $metadata = app('App\Http\Middleware\AddResponseMetadata')->getMetadata($request, $response);
         $fullData = array_merge($metadata, ['data' => $content]);
-        $response->setContent(json_encode($fullData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        $response->setData($fullData);
 
         $response->exception = $exception;
 
