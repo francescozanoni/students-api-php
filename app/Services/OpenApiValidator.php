@@ -6,15 +6,8 @@ namespace App\Services;
 use HKarlstrom\Middleware\OpenApiValidation;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\RequestHandlerInterface;
-use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
-use Tuupola\Http\Factory\ResponseFactory;
-use Tuupola\Http\Factory\ServerRequestFactory;
-use Tuupola\Http\Factory\StreamFactory;
-use Tuupola\Http\Factory\UploadedFileFactory;
-use Zend\Diactoros\Response;
 
 /**
  * Class OpenApiValidator
@@ -29,37 +22,45 @@ class OpenApiValidator
     /**
      * @var OpenApiValidation
      */
-    private $validator;
+    private $realValidator;
+
+    /**
+     * @var Psr7Service
+     */
+    private $psr7Service;
 
     /**
      * OpenApiValidator constructor.
      *
      * @param string $openApiSchemaFilePath
-     *
-     * @throws \Exception if OpenAPI schema file path does not exist
+     * @param Psr7Service $psr7Service class that converts Laravel/Lumen requests/responses to PSR-7 requests/responses
      */
-    public function __construct(string $openApiSchemaFilePath)
+    public function __construct(string $openApiSchemaFilePath, Psr7Service $psr7Service)
     {
-        $this->validator = new OpenApiValidation($openApiSchemaFilePath);
+        $this->realValidator = new OpenApiValidation($openApiSchemaFilePath);
+        $this->psr7Service = $psr7Service;
     }
 
     /**
      * Validate a request against OpenAPI schema.
      *
-     * @param mixed $request
+     * @param Request|RequestInterface $request
      * @param string $path
      * @param string $method
      * @param array $pathParameters
      *
-     * @throws ValidationException
+     * @ throws ValidationException --> "@ throws" is disabled because ValidationException::withMessages() method's
+     *                                  return type is not explicit within source code, therefore IDEs could complain
+     *                                  with the following warning:
+     *                                  "Exception 'ValidationException' is never thrown in the function"
      */
     public function validateRequest($request, string $path, string $method, array $pathParameters)
     {
 
         // @todo remove $path, $method and $pathParameters from input (if possible)
 
-        if (($request instanceof ServerRequestInterface) === false) {
-            $request = $this->getPsr7Request($request);
+        if (($request instanceof RequestInterface) === false) {
+            $request = $this->psr7Service->getRequest($request);
         }
 
         // @todo fix situation of URL http://localhost/students/:
@@ -70,8 +71,8 @@ class OpenApiValidator
         // THIS IS LIKELY RELATED ONLY TO PHP BUILT-IN WEB SERVER,
         // BECAUSE .htaccess (WHEN ENABLED) REDIRECTS students/ TO students
 
-        $errors = $this->validator->validateRequest($request, $path, $method, $pathParameters);
-        
+        $errors = $this->realValidator->validateRequest($request, $path, $method, $pathParameters);
+
         if (empty($errors) === false) {
             throw ValidationException::withMessages($this->getFormattedErrors($errors));
         }
@@ -85,7 +86,10 @@ class OpenApiValidator
      * @param string $path
      * @param string $method
      *
-     * @throws ValidationException
+     * @ throws ValidationException --> "@ throws" is disabled because ValidationException::withMessages() method's
+     *                                  return type is not explicit within source code, therefore IDEs could complain
+     *                                  with the following warning:
+     *                                  "Exception 'ValidationException' is never thrown in the function"
      */
     public function validateResponse($response, string $path, string $method)
     {
@@ -97,66 +101,18 @@ class OpenApiValidator
         $_response_2 = clone $response;
 
         if (($response instanceof ResponseInterface) === false) {
-            $_response_1 = $this->getPsr7Response($response);
-            $_response_2 = $this->getPsr7Response($response);
+            $_response_1 = $this->psr7Service->getResponse($response);
+            $_response_2 = $this->psr7Service->getResponse($response);
         }
 
         $errors = array_merge(
-            $this->validator->validateResponseBody($_response_1, $path, $method),
-            $this->validator->validateResponseHeaders($_response_2, $path, $method)
+            $this->realValidator->validateResponseBody($_response_1, $path, $method),
+            $this->realValidator->validateResponseHeaders($_response_2, $path, $method)
         );
 
         if (empty($errors) === false) {
             throw ValidationException::withMessages($this->getFormattedErrors($errors));
         }
-
-    }
-
-    /**
-     * Convert Lumen request to PSR-7 request.
-     *
-     * @param Request $request
-     *
-     * @return ServerRequestInterface
-     */
-    protected function getPsr7Request(Request $request) : ServerRequestInterface
-    {
-
-        // Shamelessly taken from
-        // https://github.com/symfony/psr-http-message-bridge/blob/master/Tests/Factory/PsrHttpFactoryTest.php
-
-        $factory = new PsrHttpFactory (
-            new ServerRequestFactory(),
-            new StreamFactory(),
-            new UploadedFileFactory(),
-            new ResponseFactory()
-        );
-
-        return $factory->createRequest($request);
-
-    }
-
-    /**
-     * Convert Lumen response to PSR-7 response.
-     *
-     * @param $response
-     *
-     * @return ResponseInterface
-     */
-    protected function getPsr7Response($response) : ResponseInterface
-    {
-
-        // Shamelessly taken from
-        // https://github.com/symfony/psr-http-message-bridge/blob/master/Tests/Factory/PsrHttpFactoryTest.php
-
-        $factory = new PsrHttpFactory (
-            new ServerRequestFactory(),
-            new StreamFactory(),
-            new UploadedFileFactory(),
-            new ResponseFactory()
-        );
-
-        return $factory->createResponse($response);
 
     }
 

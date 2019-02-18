@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Http\Middleware;
 
-use App\Services\OpenApiValidator;
+use App\Http\Middleware\Traits\UsesOpenApiValidator;
 
 /**
  * Class ValidateResponse
@@ -11,6 +11,8 @@ use App\Services\OpenApiValidator;
  */
 class ValidateResponse
 {
+
+    use UsesOpenApiValidator;
 
     /**
      * Validate response
@@ -20,7 +22,11 @@ class ValidateResponse
      *
      * @return mixed
      *
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws \Exception
+     * @ throws ValidationException --> "@ throws" is disabled because ValidationException::withMessages() method's
+     *                                  return type is not explicit within source code, therefore IDEs could complain
+     *                                  with the following warning:
+     *                                  "Exception 'ValidationException' is never thrown in the function"
      */
     public function handle($request, \Closure $next)
     {
@@ -34,9 +40,7 @@ class ValidateResponse
 
         $path = (string)app('current_route_path');
         $httpMethod = strtolower($request->getMethod());
-
-        $validator = new OpenApiValidator(config('openapi.schema_file_path'));
-        $validator->validateResponse($response, $path, $httpMethod);
+        $this->openApiValidator->validateResponse($response, $path, $httpMethod);
 
         return $response;
 

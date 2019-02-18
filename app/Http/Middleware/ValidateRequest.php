@@ -3,9 +3,9 @@ declare(strict_types = 1);
 
 namespace App\Http\Middleware;
 
+use App\Http\Middleware\Traits\UsesOpenApiValidator;
 use App\Models\Annotation;
 use App\Models\Stage;
-use App\Services\OpenApiValidator;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -16,6 +16,8 @@ use Illuminate\Validation\Rule;
 class ValidateRequest
 {
 
+    use UsesOpenApiValidator;
+
     /**
      * Validate request
      *
@@ -24,18 +26,21 @@ class ValidateRequest
      *
      * @return mixed
      *
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws \Exception
+     * @ throws ValidationException --> "@ throws" is disabled because ValidationException::withMessages() method's
+     *                                  return type is not explicit within source code, therefore IDEs could complain
+     *                                  with the following warning:
+     *                                  "Exception 'ValidationException' is never thrown in the function"
      */
     public function handle($request, \Closure $next)
     {
 
         // STEP 1: validation against OpenAPI schema
 
-        $validator = new OpenApiValidator(config('openapi.schema_file_path'));
         $path = (string)app('current_route_path');
         $httpMethod = strtolower($request->getMethod());
         $pathParameters = app('current_route_path_parameters');
-        $validator->validateRequest($request, $path, $httpMethod, $pathParameters);
+        $this->openApiValidator->validateRequest($request, $path, $httpMethod, $pathParameters);
 
         // @todo add validation of keys: keys not described by schema must not be accepted
 
