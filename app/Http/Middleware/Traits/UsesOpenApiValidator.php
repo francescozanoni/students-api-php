@@ -18,6 +18,11 @@ trait UsesOpenApiValidator
      */
     protected $openApiValidator;
 
+    /**
+     * UsesOpenApiValidator constructor.
+     *
+     * @param OpenApiValidator $openApiValidator
+     */
     public function __construct(OpenApiValidator $openApiValidator)
     {
         $this->openApiValidator = $openApiValidator;

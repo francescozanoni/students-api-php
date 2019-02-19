@@ -3,8 +3,8 @@ declare(strict_types = 1);
 
 namespace App\Providers;
 
-use App\Services\OpenApiValidator;
 use App\Services\Psr7Service;
+use App\Services\OpenApiValidator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;

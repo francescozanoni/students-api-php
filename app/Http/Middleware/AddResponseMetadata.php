@@ -3,6 +3,8 @@ declare(strict_types = 1);
 
 namespace App\Http\Middleware;
 
+use HKarlstrom\OpenApiReader\OpenApiReader;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 /**
@@ -16,6 +18,21 @@ class AddResponseMetadata
      * @var array
      */
     private $metadataKeys = ['status_code', 'status', 'message'];
+
+    /**
+     * @var OpenApiReader
+     */
+    private $openApiReader;
+
+    /**
+     * AddResponseMetadata constructor.
+     *
+     * @param OpenApiReader $openApiReader
+     */
+    public function __construct(OpenApiReader $openApiReader)
+    {
+        $this->openApiReader = $openApiReader;
+    }
 
     /**
      * Add response metadata
@@ -38,7 +55,7 @@ class AddResponseMetadata
             if (empty($data) === false) {
                 $fullData['data'] = $data;
             }
-            if ($response instanceof Illuminate\Http\JsonResponse) {
+            if ($response instanceof JsonResponse) {
                 $response->setData($fullData);
             } else {
                 if (is_string($fullData) === false &&
@@ -72,13 +89,12 @@ class AddResponseMetadata
     {
 
         // Step 1: create the OpenAPI reader, which then searches the schema for the requested response.
-        $openApiReader = app('HKarlstrom\OpenApiReader\OpenApiReader');
         $path = (string)app('current_route_path');
         $httpMethod = strtolower($request->method());
         $httpCode = $response->getStatusCode();
 
         // Step 2: search for the requested response.
-        $responseSchema = $openApiReader->getOperationResponse($path, $httpMethod, $httpCode);
+        $responseSchema = $this->openApiReader->getOperationResponse($path, $httpMethod, $httpCode);
 
         if (empty($responseSchema) === true) {
             return [];

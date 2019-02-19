@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Services;
 
+use App\Services\Interfaces\Psr7Service;
 use HKarlstrom\Middleware\OpenApiValidation;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;

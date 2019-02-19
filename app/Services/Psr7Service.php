@@ -3,11 +3,11 @@ declare(strict_types = 1);
 
 namespace App\Services;
 
-use Illuminate\Http\Request;
+use App\Services\Interfaces\Psr7Service as Psr7ServiceInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Bridge\PsrHttpMessage\HttpMessageFactoryInterface;
 use Tuupola\Http\Factory\ResponseFactory;
 use Tuupola\Http\Factory\ServerRequestFactory;
 use Tuupola\Http\Factory\StreamFactory;
@@ -19,14 +19,17 @@ use Tuupola\Http\Factory\UploadedFileFactory;
  *
  * This class transforms Laravel/Lumen requests/responses to PSR-7 requests/responses.
  */
-class Psr7Service
+class Psr7Service implements Psr7ServiceInterface
 {
 
     /**
-     * @var PsrHttpFactory
+     * @var HttpMessageFactoryInterface
      */
     protected $factory;
 
+    /**
+     * Psr7Service constructor.
+     */
     public function __construct()
     {
 
@@ -45,11 +48,11 @@ class Psr7Service
     /**
      * Convert Laravel/Lumen request to PSR-7 request.
      *
-     * @param Request $request
+     * @param $request
      *
      * @return ServerRequestInterface
      */
-    public function getRequest(Request $request) : ServerRequestInterface
+    public function getRequest($request) : ServerRequestInterface
     {
         return $this->factory->createRequest($request);
     }
@@ -57,11 +60,11 @@ class Psr7Service
     /**
      * Convert Laravel/Lumen response to PSR-7 response.
      *
-     * @param Response $response
+     * @param $response
      *
      * @return ResponseInterface
      */
-    public function getResponse(Response $response) : ResponseInterface
+    public function getResponse($response) : ResponseInterface
     {
         return $this->factory->createResponse($response);
     }

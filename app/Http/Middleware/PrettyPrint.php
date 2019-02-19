@@ -25,7 +25,7 @@ class PrettyPrint
 
         $response = $next($request);
 
-        if (in_array(env('APP_ENV'), ['local', 'testing']) === true) {
+        if (in_array(app('env'), ['local', 'testing']) === true) {
 
             // https://www.aaronsaray.com/2017/laravel-pretty-print-middleware
             if ($response instanceof JsonResponse) {
