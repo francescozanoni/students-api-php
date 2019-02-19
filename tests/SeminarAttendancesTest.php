@@ -392,6 +392,65 @@ class SeminarAttendancesTest extends TestCase
     }
 
     /**
+     * Modify a seminar attendance: failure.
+     */
+    public function testModifyByIdFailure()
+    {
+
+        // Non existing ID
+        $this->json('PUT',
+            '/seminar_attendances/999',
+            [
+                'seminar' => 'First seminar',
+                'start_date' => '2019-01-09',
+                'end_date' => '2019-01-10',
+                'ects_credits' => 1.0,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 404,
+                'status' => 'Not Found',
+                'message' => 'Resource(s) not found',
+            ])
+            ->seeStatusCode(404)
+            ->notSeeInDatabase('stages', ['id' => 999])
+            ->notSeeInDatabase('stages', ['id' => 3]);
+
+        // Invalid ID
+        $this->json('PUT',
+            '/seminar_attendances/abc',
+            [
+                'seminar' => 'First seminar',
+                'start_date' => '2019-01-09',
+                'end_date' => '2019-01-10',
+                'ects_credits' => 1.0,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'id' => [
+                        'code error_type',
+                        'value abc',
+                        'expected integer',
+                        'used string',
+                        'in path',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('stages', ['id' => 999])
+            ->notSeeInDatabase('stages', ['id' => 3]);
+
+        // @todo add further tests related to missing required fields
+        // @todo add further tests related to invalid attribute format
+        // @todo add further tests related to seminar/student/start date uniqueness
+
+    }
+
+    /**
      * Delete a seminar attendance: success.
      */
     public function testDeleteById()
