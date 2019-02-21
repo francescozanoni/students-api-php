@@ -151,11 +151,13 @@ class OpenApiValidator
             unset($originalError['name']);
             $errors[$name] = [];
             foreach ($originalError as $key => $value) {
+                /*
                 // In case error value is not a string, it is converted to JSON.
                 // It should not happen, anyway.
                 if (is_string($value) === false) {
-                    $value = json_encode($value, JSON_PRETTY_PRINT | JSON_PARTIAL_OUTPUT_ON_ERROR);
+                    $value = json_encode($value, config('app.json_encode_options'));
                 }
+                */
                 $errors[$name][] = $key . ' ' . $value;
             }
         }

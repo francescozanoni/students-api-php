@@ -50,7 +50,7 @@ class HandleNegativeResponseContent
                         'line' => $response->exception->getLine(),
                         //'trace' => $response->exception->getTrace(),
                     ],
-                    JSON_PARTIAL_OUTPUT_ON_ERROR | JSON_UNESCAPED_SLASHES
+                    config('app.json_encode_options')
                 )
             );
         }

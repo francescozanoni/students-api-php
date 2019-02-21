@@ -69,10 +69,10 @@ class ValidateRequest
                 break;
 
             case 'createStudentAnnotation':
-                /* @todo validate user_id against users table of another database/application
+                /* @todo validate user_id against users table
                  * Validator::make(
                  *   $request->request->all(),
-                 *   ['user_id' => 'exists:other_sqlite.users,id'],
+                 *   ['user_id' => 'exists:users,id'],
                  *   ['user_id.exists' => 'The :attribute must exist']
                  * )->validate();
                  */
