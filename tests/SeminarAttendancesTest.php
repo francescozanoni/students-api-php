@@ -340,10 +340,36 @@ class SeminarAttendancesTest extends TestCase
             ->notSeeInDatabase('seminar_attendances', ['id' => 3])
             ->notSeeInDatabase('seminar_attendances', ['start_date' => '2019-01-30', 'end_date' => '2019-01-30']);
 
+        // Non unique student/seminar/start date
+        $this->json('POST',
+            '/students/1/seminar_attendances',
+            [
+                'seminar' => 'First seminar',
+                'start_date' => '2019-01-08',
+                'end_date' => '2019-01-10',
+                'ects_credits' => 0.4,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'seminar' => [
+                        'Combination of student, seminar and start date already used',
+                    ],
+                    'start_date' => [
+                        'Combination of student, seminar and start date already used',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('seminar_attendances', ['id' => 3])
+            ->notSeeInDatabase('seminar_attendances', ['seminar' => 'First seminar', 'start_date' => '2019-01-08', 'end_date' => '2019-01-10']);
+
 
         // @todo add further tests related to missing required fields
         // @todo add further tests related to invalid attribute format
-        // @todo add further tests related to seminar/student/start date uniqueness
 
     }
 
@@ -444,9 +470,37 @@ class SeminarAttendancesTest extends TestCase
             ->notSeeInDatabase('stages', ['id' => 999])
             ->notSeeInDatabase('stages', ['id' => 3]);
 
+        // The record created by this method is used by below tests.
+        $this->testCreateRelatedToStudent();
+
+        // Non unique student/seminar/start date
+        $this->json('PUT',
+            '/seminar_attendances/3',
+            [
+                'seminar' => 'First seminar', // --> same as record #1
+                'start_date' => '2019-01-08', // --> same as record #1
+                'end_date' => '2019-01-10',
+                'ects_credits' => 1.4,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'seminar' => [
+                        'Combination of student, seminar and start date already used',
+                    ],
+                    'start_date' => [
+                        'Combination of student, seminar and start date already used',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('seminar_attendances', ['id' => 3, 'seminar' => 'First seminar', 'start_date' => '2019-01-08', 'end_date' => '2019-01-10']);
+
         // @todo add further tests related to missing required fields
         // @todo add further tests related to invalid attribute format
-        // @todo add further tests related to seminar/student/start date uniqueness
 
     }
 

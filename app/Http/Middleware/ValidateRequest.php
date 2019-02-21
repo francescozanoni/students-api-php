@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 
 use App\Http\Middleware\Traits\UsesOpenApiValidator;
 use App\Models\Annotation;
+use App\Models\SeminarAttendance;
 use App\Models\Stage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -168,9 +169,25 @@ class ValidateRequest
                 Validator::make(
                     $request->request->all(),
                     [
+                        'seminar' => [
+                            // Student/seminar/start date uniqueness
+                            Rule::unique('seminar_attendances')
+                                ->where(function ($query) use ($request) {
+                                    return $query
+                                        ->where('student_id', app('current_route_path_parameters')['id'])
+                                        ->where('start_date', $request->request->get('start_date'));
+                                }),
+                        ],
                         'start_date' => [
                             'bail',
                             'before_optional:end_date',
+                            // Student/seminar/start date uniqueness
+                            Rule::unique('seminar_attendances')
+                                ->where(function ($query) use ($request) {
+                                    return $query
+                                        ->where('student_id', app('current_route_path_parameters')['id'])
+                                        ->where('seminar', $request->request->get('seminar'));
+                                }),
                         ],
                         'end_date' => [
                             'bail',
@@ -178,22 +195,39 @@ class ValidateRequest
                         ],
                     ],
                     [
+                        'seminar.unique' => 'Combination of student, seminar and start date already used',
+                        'start_date.unique' => 'Combination of student, seminar and start date already used',
                         'start_date.before_optional' => 'The :attribute must be a date before end date',
                         'end_date.after' => 'The :attribute must be a date after start date',
                     ]
                 )->validate();
-                // @todo add seminar/student/start date uniqueness check
                 break;
 
             case 'updateSeminarAttendanceById':
-                $seminarAttendance = Stage::find(app('current_route_path_parameters')['id']);
+                $seminarAttendance = SeminarAttendance::find(app('current_route_path_parameters')['id']);
                 if ($seminarAttendance) {
                     Validator::make(
                         $request->request->all(),
                         [
+                            'seminar' => [
+                                // Student/seminar/start date uniqueness
+                                Rule::unique('seminar_attendances')
+                                    ->where(function ($query) use ($request, $seminarAttendance) {
+                                        return $query
+                                            ->where('student_id', $seminarAttendance->student->id)
+                                            ->where('start_date', $request->request->get('start_date'));
+                                    }),
+                            ],
                             'start_date' => [
                                 'bail',
                                 'before_optional:end_date',
+                                // Student/seminar/start date uniqueness
+                                Rule::unique('seminar_attendances')
+                                    ->where(function ($query) use ($request, $seminarAttendance) {
+                                        return $query
+                                            ->where('student_id', $seminarAttendance->student->id)
+                                            ->where('seminar', $request->request->get('seminar'));
+                                    }),
                             ],
                             'end_date' => [
                                 'bail',
@@ -201,11 +235,12 @@ class ValidateRequest
                             ],
                         ],
                         [
+                            'seminar.unique' => 'Combination of student, seminar and start date already used',
+                            'start_date.unique' => 'Combination of student, seminar and start date already used',
                             'start_date.before_optional' => 'The :attribute must be a date before end date',
                             'end_date.after' => 'The :attribute must be a date after start date',
                         ]
                     )->validate();
-                    // @todo add seminar/student/start date uniqueness check
                 }
                 break;
 
