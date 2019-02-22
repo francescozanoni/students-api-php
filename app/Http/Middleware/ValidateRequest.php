@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 
 use App\Http\Middleware\Traits\UsesOpenApiValidator;
 use App\Models\Annotation;
+use App\Models\EducationalActivityAttendance;
 use App\Models\SeminarAttendance;
 use App\Models\Stage;
 use Illuminate\Support\Facades\Validator;
@@ -204,17 +205,17 @@ class ValidateRequest
                 break;
 
             case 'updateSeminarAttendanceById':
-                $seminarAttendance = SeminarAttendance::find(app('current_route_path_parameters')['id']);
-                if ($seminarAttendance) {
+                $educationalActivityAttendance = SeminarAttendance::find(app('current_route_path_parameters')['id']);
+                if ($educationalActivityAttendance) {
                     Validator::make(
                         $request->request->all(),
                         [
                             'seminar' => [
                                 // Student/seminar/start date uniqueness
                                 Rule::unique('seminar_attendances')
-                                    ->where(function ($query) use ($request, $seminarAttendance) {
+                                    ->where(function ($query) use ($request, $educationalActivityAttendance) {
                                         return $query
-                                            ->where('student_id', $seminarAttendance->student->id)
+                                            ->where('student_id', $educationalActivityAttendance->student->id)
                                             ->where('start_date', $request->request->get('start_date'));
                                     }),
                             ],
@@ -223,9 +224,9 @@ class ValidateRequest
                                 'before_optional:end_date',
                                 // Student/seminar/start date uniqueness
                                 Rule::unique('seminar_attendances')
-                                    ->where(function ($query) use ($request, $seminarAttendance) {
+                                    ->where(function ($query) use ($request, $educationalActivityAttendance) {
                                         return $query
-                                            ->where('student_id', $seminarAttendance->student->id)
+                                            ->where('student_id', $educationalActivityAttendance->student->id)
                                             ->where('seminar', $request->request->get('seminar'));
                                     }),
                             ],
@@ -237,6 +238,85 @@ class ValidateRequest
                         [
                             'seminar.unique' => 'Combination of student, seminar and start date already used',
                             'start_date.unique' => 'Combination of student, seminar and start date already used',
+                            'start_date.before_optional' => 'The :attribute must be a date before end date',
+                            'end_date.after' => 'The :attribute must be a date after start date',
+                        ]
+                    )->validate();
+                }
+                break;
+
+            case 'createStudentEducationalActivityAttendance':
+                Validator::make(
+                    $request->request->all(),
+                    [
+                        'educational_activity' => [
+                            // Student/educational activity/start date uniqueness
+                            Rule::unique('educational_activity_attendances')
+                                ->where(function ($query) use ($request) {
+                                    return $query
+                                        ->where('student_id', app('current_route_path_parameters')['id'])
+                                        ->where('start_date', $request->request->get('start_date'));
+                                }),
+                        ],
+                        'start_date' => [
+                            'bail',
+                            'before_optional:end_date',
+                            // Student/educational activity/start date uniqueness
+                            Rule::unique('educational_activity_attendances')
+                                ->where(function ($query) use ($request) {
+                                    return $query
+                                        ->where('student_id', app('current_route_path_parameters')['id'])
+                                        ->where('educational_activity', $request->request->get('educational_activity'));
+                                }),
+                        ],
+                        'end_date' => [
+                            'bail',
+                            'after:start_date',
+                        ],
+                    ],
+                    [
+                        'educational_activity.unique' => 'Combination of student, educational activity and start date already used',
+                        'start_date.unique' => 'Combination of student, educational activity and start date already used',
+                        'start_date.before_optional' => 'The :attribute must be a date before end date',
+                        'end_date.after' => 'The :attribute must be a date after start date',
+                    ]
+                )->validate();
+                break;
+
+            case 'updateEducationalActivityAttendanceById':
+                $educationalActivityAttendance = EducationalActivityAttendance::find(app('current_route_path_parameters')['id']);
+                if ($educationalActivityAttendance) {
+                    Validator::make(
+                        $request->request->all(),
+                        [
+                            'educational_activity' => [
+                                // Student/educational activity/start date uniqueness
+                                Rule::unique('educational_activity_attendances')
+                                    ->where(function ($query) use ($request, $educationalActivityAttendance) {
+                                        return $query
+                                            ->where('student_id', $educationalActivityAttendance->student->id)
+                                            ->where('start_date', $request->request->get('start_date'));
+                                    }),
+                            ],
+                            'start_date' => [
+                                'bail',
+                                'before_optional:end_date',
+                                // Student/educational activity/start date uniqueness
+                                Rule::unique('educational_activity_attendances')
+                                    ->where(function ($query) use ($request, $educationalActivityAttendance) {
+                                        return $query
+                                            ->where('student_id', $educationalActivityAttendance->student->id)
+                                            ->where('educational_activity', $request->request->get('educational_activity'));
+                                    }),
+                            ],
+                            'end_date' => [
+                                'bail',
+                                'after:start_date',
+                            ],
+                        ],
+                        [
+                            'educational_activity.unique' => 'Combination of student, educational activity and start date already used',
+                            'start_date.unique' => 'Combination of student, educational activity and start date already used',
                             'start_date.before_optional' => 'The :attribute must be a date before end date',
                             'end_date.after' => 'The :attribute must be a date after start date',
                         ]

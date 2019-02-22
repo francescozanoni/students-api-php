@@ -59,4 +59,12 @@ $router->group(['middleware' => 'validate_request'], function () use ($router) {
     $router->put('seminar_attendances/{id}', ['as' => 'updateSeminarAttendanceById', 'uses' => 'SeminarAttendancesController@update']);
     $router->delete('seminar_attendances/{id}', ['as' => 'deleteSeminarAttendanceById', 'uses' => 'SeminarAttendancesController@destroy']);
 
+    $router->get('students/{id}/educational_activity_attendances', ['as' => 'getStudentEducationalActivityAttendances', 'uses' => 'EducationalActivityAttendancesController@getRelatedToStudent']);
+    $router->post('students/{id}/educational_activity_attendances', ['as' => 'createStudentEducationalActivityAttendance', 'uses' => 'EducationalActivityAttendancesController@createRelatedToStudent']);
+
+    $router->get('educational_activity_attendances', ['as' => 'getEducationalActivityAttendances', 'uses' => 'EducationalActivityAttendancesController@index']);
+    $router->get('educational_activity_attendances/{id}', ['as' => 'getEducationalActivityAttendanceById', 'uses' => 'EducationalActivityAttendancesController@show']);
+    $router->put('educational_activity_attendances/{id}', ['as' => 'updateEducationalActivityAttendanceById', 'uses' => 'EducationalActivityAttendancesController@update']);
+    $router->delete('educational_activity_attendances/{id}', ['as' => 'deleteEducationalActivityAttendanceById', 'uses' => 'EducationalActivityAttendancesController@destroy']);
+
 });

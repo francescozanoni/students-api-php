@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace App\Http\Middleware;
 
 use App\Http\Resources\Annotation as AnnotationResource;
+use App\Http\Resources\EducationalActivityAttendance as EducationalActivityAttendanceResource;
 use App\Http\Resources\SeminarAttendance as SeminarAttendanceResource;
 use App\Http\Resources\Stage as StageResource;
 use App\Http\Resources\Student as StudentResource;
@@ -75,6 +76,17 @@ class ApplyResourceTransformers
             case 'createStudentSeminarAttendance':
             case 'updateSeminarAttendanceById':
                 $response->setContent(new SeminarAttendanceResource($response->original));
+                break;
+
+            case 'getEducationalActivityAttendances':
+            case 'getStudentEducationalActivityAttendances':
+                $response->setContent(EducationalActivityAttendanceResource::collection($response->original));
+                break;
+
+            case 'getEducationalActivityAttendanceById':
+            case 'createStudentEducationalActivityAttendance':
+            case 'updateEducationalActivityAttendanceById':
+                $response->setContent(new EducationalActivityAttendanceResource($response->original));
                 break;
 
             default:
