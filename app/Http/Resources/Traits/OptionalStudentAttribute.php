@@ -18,21 +18,7 @@ trait OptionalStudentAttribute
      */
     protected function withStudentAttribute($request) : bool
     {
-
-        // @todo switch logic by reading URL first part to be "students/{id}/(something)"
-        return in_array(
-                app('current_route_alias'),
-                [
-                    'getStudentStages',
-                    'createStudentStage',
-                    'getStudentAnnotations',
-                    'createStudentAnnotation',
-                    'getStudentSeminarAttendances',
-                    'createStudentSeminarAttendance',
-                    'getStudentEducationalActivityAttendances',
-                    'createStudentEducationalActivityAttendance',
-                ]
-            ) === false;
+        return preg_match('/^(get|create)Student[A-Z][a-zA-Z]+$/', app('current_route_alias')) !== 1;
     }
 
 }
