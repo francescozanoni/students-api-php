@@ -1,16 +1,16 @@
 <?php
 declare(strict_types = 1);
 
-class SeminarAttendancesTest extends TestCase
+class EducationalActivityAttendancesTest extends TestCase
 {
 
     /**
-     * Get all seminar attendances.
+     * Get all educational activity attendances.
      */
     public function testGet()
     {
 
-        $this->json('GET', '/seminar_attendances')
+        $this->json('GET', '/educational_activity_attendances')
             ->seeJsonEquals([
                 'status_code' => 200,
                 'status' => 'OK',
@@ -18,7 +18,7 @@ class SeminarAttendancesTest extends TestCase
                 'data' => [
                     [
                         'id' => 1,
-                        'seminar' => 'First seminar',
+                        'educational_activity' => 'First educational activity',
                         'start_date' => '2019-01-08',
                         'end_date' => '2019-01-09',
                         'ects_credits' => 1.2,
@@ -38,20 +38,20 @@ class SeminarAttendancesTest extends TestCase
     }
 
     /**
-     * Get seminar attendance by ID.
+     * Get educational activity attendance by ID.
      */
     public function testGetById()
     {
 
         // Existing
-        $this->json('GET', '/seminar_attendances/1')
+        $this->json('GET', '/educational_activity_attendances/1')
             ->seeJsonEquals([
                 'status_code' => 200,
                 'status' => 'OK',
                 'message' => 'Resource successfully retrieved/created/modified',
                 'data' => [
                     'id' => 1,
-                    'seminar' => 'First seminar',
+                    'educational_activity' => 'First educational activity',
                     'start_date' => '2019-01-08',
                     'end_date' => '2019-01-09',
                     'ects_credits' => 1.2,
@@ -70,13 +70,13 @@ class SeminarAttendancesTest extends TestCase
     }
 
     /**
-     * Get seminar attendance by ID: failure.
+     * Get educational activity attendance by ID: failure.
      */
     public function testGetByIdFailure()
     {
 
-        // Non existing seminar attendance
-        $this->json('GET', '/seminar_attendances/9999')
+        // Non existing
+        $this->json('GET', '/educational_activity_attendances/9999')
             ->seeJsonEquals([
                 'status_code' => 404,
                 'status' => 'Not Found',
@@ -85,7 +85,7 @@ class SeminarAttendancesTest extends TestCase
             ->seeStatusCode(404);
 
         // Invalid ID
-        $this->json('GET', '/seminar_attendances/abc')
+        $this->json('GET', '/educational_activity_attendances/abc')
             ->seeJsonEquals([
                 'status_code' => 400,
                 'status' => 'Bad Request',
@@ -105,13 +105,13 @@ class SeminarAttendancesTest extends TestCase
     }
 
     /**
-     * Get student's seminar attendances: success.
+     * Get student's educational activity attendances: success.
      */
     public function testGetRelatedToStudent()
     {
 
         // Existing
-        $this->json('GET', '/students/1/seminar_attendances')
+        $this->json('GET', '/students/1/educational_activity_attendances')
             ->seeJsonEquals([
                 'status_code' => 200,
                 'status' => 'OK',
@@ -119,7 +119,7 @@ class SeminarAttendancesTest extends TestCase
                 'data' => [
                     [
                         'id' => 1,
-                        'seminar' => 'First seminar',
+                        'educational_activity' => 'First educational activity',
                         'start_date' => '2019-01-08',
                         'end_date' => '2019-01-09',
                         'ects_credits' => 1.2,
@@ -131,13 +131,13 @@ class SeminarAttendancesTest extends TestCase
     }
 
     /**
-     * Get student's seminar attendances: failure.
+     * Get student's educational activity attendances: failure.
      */
     public function testGetRelatedToStudentFailure()
     {
 
-        // Non existing seminar attendances
-        $this->json('GET', '/students/2/seminar_attendances')
+        // Non existing educational activity attendances
+        $this->json('GET', '/students/2/educational_activity_attendances')
             ->seeJsonEquals([
                 'status_code' => 404,
                 'status' => 'Not Found',
@@ -146,7 +146,7 @@ class SeminarAttendancesTest extends TestCase
             ->seeStatusCode(404);
 
         // Non existing student
-        $this->json('GET', '/students/999/seminar_attendances')
+        $this->json('GET', '/students/999/educational_activity_attendances')
             ->seeJsonEquals([
                 'status_code' => 404,
                 'status' => 'Not Found',
@@ -155,7 +155,7 @@ class SeminarAttendancesTest extends TestCase
             ->seeStatusCode(404);
 
         // Invalid student ID
-        $this->json('GET', '/students/abc/seminar_attendances')
+        $this->json('GET', '/students/abc/educational_activity_attendances')
             ->seeJsonEquals([
                 'status_code' => 400,
                 'status' => 'Bad Request',
@@ -175,16 +175,16 @@ class SeminarAttendancesTest extends TestCase
     }
 
     /**
-     * Create a student's seminar attendance: success.
+     * Create a student's educational activity attendance: success.
      */
     public function testCreateRelatedToStudent()
     {
 
         // Existing student, full data
         $this->json('POST',
-            '/students/1/seminar_attendances',
+            '/students/1/educational_activity_attendances',
             [
-                'seminar' => 'Another seminar',
+                'educational_activity' => 'Another educational activity',
                 'start_date' => '2019-01-30',
                 'end_date' => '2019-01-31',
                 'ects_credits' => 0.4,
@@ -196,22 +196,22 @@ class SeminarAttendancesTest extends TestCase
                 'message' => 'Resource successfully retrieved/created/modified',
                 'data' => [
                     'id' => 3,
-                    'seminar' => 'Another seminar',
+                    'educational_activity' => 'Another educational activity',
                     'start_date' => '2019-01-30',
                     'end_date' => '2019-01-31',
                     'ects_credits' => 0.4,
                 ],
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('seminar_attendances', ['id' => 3, 'student_id' => 1, 'deleted_at' => null])
-            ->notSeeInDatabase('seminar_attendances', ['id' => 4]);
+            ->seeInDatabase('educational_activity_attendances', ['id' => 3, 'student_id' => 1, 'deleted_at' => null])
+            ->notSeeInDatabase('educational_activity_attendances', ['id' => 4]);
 
 
         // Existing student, no end date
         $this->json('POST',
-            '/students/2/seminar_attendances',
+            '/students/2/educational_activity_attendances',
             [
-                'seminar' => 'Another seminar',
+                'educational_activity' => 'Another educational activity',
                 'start_date' => '2019-01-30',
                 'ects_credits' => 0.4,
             ]
@@ -222,28 +222,28 @@ class SeminarAttendancesTest extends TestCase
                 'message' => 'Resource successfully retrieved/created/modified',
                 'data' => [
                     'id' => 4,
-                    'seminar' => 'Another seminar',
+                    'educational_activity' => 'Another educational activity',
                     'start_date' => '2019-01-30',
                     'ects_credits' => 0.4,
                 ],
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('seminar_attendances', ['id' => 4, 'student_id' => 2, 'deleted_at' => null])
-            ->notSeeInDatabase('seminar_attendances', ['id' => 5]);
+            ->seeInDatabase('educational_activity_attendances', ['id' => 4, 'student_id' => 2, 'deleted_at' => null])
+            ->notSeeInDatabase('educational_activity_attendances', ['id' => 5]);
 
     }
 
     /**
-     * Create a student's seminar attendance: failure.
+     * Create a student's educational activity attendance: failure.
      */
     public function testCreateRelatedToStudentFailure()
     {
 
         // Non existing student
         $this->json('POST',
-            '/students/999/seminar_attendances',
+            '/students/999/educational_activity_attendances',
             [
-                'seminar' => 'Another seminar',
+                'educational_activity' => 'Another educational activity',
                 'start_date' => '2019-01-30',
                 'end_date' => '2019-01-31',
                 'ects_credits' => 0.4,
@@ -255,14 +255,14 @@ class SeminarAttendancesTest extends TestCase
                 'message' => 'Resource(s) not found',
             ])
             ->seeStatusCode(404)
-            ->notSeeInDatabase('seminar_attendances', ['id' => 3])
-            ->notSeeInDatabase('seminar_attendances', ['student_id' => 999]);
+            ->notSeeInDatabase('educational_activity_attendances', ['id' => 3])
+            ->notSeeInDatabase('educational_activity_attendances', ['student_id' => 999]);
 
         // Invalid student ID
         $this->json('POST',
-            '/students/abc/seminar_attendances',
+            '/students/abc/educational_activity_attendances',
             [
-                'seminar' => 'Another seminar',
+                'educational_activity' => 'Another educational activity',
                 'start_date' => '2019-01-30',
                 'end_date' => '2019-01-31',
                 'ects_credits' => 0.4,
@@ -283,14 +283,14 @@ class SeminarAttendancesTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('seminar_attendances', ['id' => 3])
-            ->notSeeInDatabase('seminar_attendances', ['student_id' => 'abc']);
+            ->notSeeInDatabase('educational_activity_attendances', ['id' => 3])
+            ->notSeeInDatabase('educational_activity_attendances', ['student_id' => 'abc']);
 
         // Switched dates
         $this->json('POST',
-            '/students/1/seminar_attendances',
+            '/students/1/educational_activity_attendances',
             [
-                'seminar' => 'Another seminar',
+                'educational_activity' => 'Another educational activity',
                 'start_date' => '2019-01-31',
                 'end_date' => '2019-01-30',
                 'ects_credits' => 0.4,
@@ -310,14 +310,14 @@ class SeminarAttendancesTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('seminar_attendances', ['id' => 3])
-            ->notSeeInDatabase('seminar_attendances', ['start_date' => '2019-01-31', 'end_date' => '2019-01-30']);
+            ->notSeeInDatabase('educational_activity_attendances', ['id' => 3])
+            ->notSeeInDatabase('educational_activity_attendances', ['start_date' => '2019-01-31', 'end_date' => '2019-01-30']);
 
         // Identical dates
         $this->json('POST',
-            '/students/1/seminar_attendances',
+            '/students/1/educational_activity_attendances',
             [
-                'seminar' => 'Another seminar',
+                'educational_activity' => 'Another educational activity',
                 'start_date' => '2019-01-30',
                 'end_date' => '2019-01-30',
                 'ects_credits' => 0.4,
@@ -337,14 +337,14 @@ class SeminarAttendancesTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('seminar_attendances', ['id' => 3])
-            ->notSeeInDatabase('seminar_attendances', ['start_date' => '2019-01-30', 'end_date' => '2019-01-30']);
+            ->notSeeInDatabase('educational_activity_attendances', ['id' => 3])
+            ->notSeeInDatabase('educational_activity_attendances', ['start_date' => '2019-01-30', 'end_date' => '2019-01-30']);
 
-        // Non unique student/seminar/start date
+        // Non unique student/educational activity/start date
         $this->json('POST',
-            '/students/1/seminar_attendances',
+            '/students/1/educational_activity_attendances',
             [
-                'seminar' => 'First seminar',
+                'educational_activity' => 'First educational activity',
                 'start_date' => '2019-01-08',
                 'end_date' => '2019-01-10',
                 'ects_credits' => 0.4,
@@ -355,17 +355,17 @@ class SeminarAttendancesTest extends TestCase
                 'status' => 'Bad Request',
                 'message' => 'Request is not valid',
                 'data' => [
-                    'seminar' => [
-                        'Combination of student, seminar and start date already used',
+                    'educational_activity' => [
+                        'Combination of student, educational activity and start date already used',
                     ],
                     'start_date' => [
-                        'Combination of student, seminar and start date already used',
+                        'Combination of student, educational activity and start date already used',
                     ],
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('seminar_attendances', ['id' => 3])
-            ->notSeeInDatabase('seminar_attendances', ['seminar' => 'First seminar', 'start_date' => '2019-01-08', 'end_date' => '2019-01-10']);
+            ->notSeeInDatabase('educational_activity_attendances', ['id' => 3])
+            ->notSeeInDatabase('educational_activity_attendances', ['educational_activity' => 'First educational activity', 'start_date' => '2019-01-08', 'end_date' => '2019-01-10']);
 
 
         // @todo add further tests related to missing required fields
@@ -374,15 +374,15 @@ class SeminarAttendancesTest extends TestCase
     }
 
     /**
-     * Modify a seminar attendance: success.
+     * Modify a educational activity attendance: success.
      */
     public function testModifyById()
     {
 
         $this->json('PUT',
-            '/seminar_attendances/1',
+            '/educational_activity_attendances/1',
             [
-                'seminar' => 'First seminar',
+                'educational_activity' => 'First educational activity',
                 'start_date' => '2019-01-09', // --> modified
                 'end_date' => '2019-01-10',   // --> modified
                 'ects_credits' => 1.0,        // --> modified
@@ -394,7 +394,7 @@ class SeminarAttendancesTest extends TestCase
                 'message' => 'Resource successfully retrieved/created/modified',
                 'data' => [
                     'id' => 1,
-                    'seminar' => 'First seminar',
+                    'educational_activity' => 'First educational activity',
                     'start_date' => '2019-01-09',
                     'end_date' => '2019-01-10',
                     'ects_credits' => 1.0,
@@ -409,25 +409,25 @@ class SeminarAttendancesTest extends TestCase
                 ],
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('seminar_attendances', ['id' => 1, 'start_date' => '2019-01-09', 'end_date' => '2019-01-10', 'ects_credits' => 1.0])
-            ->notSeeInDatabase('seminar_attendances', ['id' => 1, 'start_date' => '2019-01-08'])
-            ->notSeeInDatabase('seminar_attendances', ['id' => 1, 'end_date' => '2019-01-09'])
-            ->notSeeInDatabase('seminar_attendances', ['id' => 1, 'ects_credits' => 1.2])
-            ->notSeeInDatabase('seminar_attendances', ['id' => 3]);
+            ->seeInDatabase('educational_activity_attendances', ['id' => 1, 'start_date' => '2019-01-09', 'end_date' => '2019-01-10', 'ects_credits' => 1.0])
+            ->notSeeInDatabase('educational_activity_attendances', ['id' => 1, 'start_date' => '2019-01-08'])
+            ->notSeeInDatabase('educational_activity_attendances', ['id' => 1, 'end_date' => '2019-01-09'])
+            ->notSeeInDatabase('educational_activity_attendances', ['id' => 1, 'ects_credits' => 1.2])
+            ->notSeeInDatabase('educational_activity_attendances', ['id' => 3]);
 
     }
 
     /**
-     * Modify a seminar attendance: failure.
+     * Modify a educational activity attendance: failure.
      */
     public function testModifyByIdFailure()
     {
 
         // Non existing ID
         $this->json('PUT',
-            '/seminar_attendances/999',
+            '/educational_activity_attendances/999',
             [
-                'seminar' => 'First seminar',
+                'educational_activity' => 'First educational activity',
                 'start_date' => '2019-01-09',
                 'end_date' => '2019-01-10',
                 'ects_credits' => 1.0,
@@ -444,9 +444,9 @@ class SeminarAttendancesTest extends TestCase
 
         // Invalid ID
         $this->json('PUT',
-            '/seminar_attendances/abc',
+            '/educational_activity_attendances/abc',
             [
-                'seminar' => 'First seminar',
+                'educational_activity' => 'First educational activity',
                 'start_date' => '2019-01-09',
                 'end_date' => '2019-01-10',
                 'ects_credits' => 1.0,
@@ -473,11 +473,11 @@ class SeminarAttendancesTest extends TestCase
         // The record created by this method is used by below tests.
         $this->testCreateRelatedToStudent();
 
-        // Non unique student/seminar/start date
+        // Non unique student/educational activity/start date
         $this->json('PUT',
-            '/seminar_attendances/3',
+            '/educational_activity_attendances/3',
             [
-                'seminar' => 'First seminar', // --> same as record #1
+                'educational_activity' => 'First educational activity', // --> same as record #1
                 'start_date' => '2019-01-08', // --> same as record #1
                 'end_date' => '2019-01-10',
                 'ects_credits' => 1.4,
@@ -488,16 +488,16 @@ class SeminarAttendancesTest extends TestCase
                 'status' => 'Bad Request',
                 'message' => 'Request is not valid',
                 'data' => [
-                    'seminar' => [
-                        'Combination of student, seminar and start date already used',
+                    'educational_activity' => [
+                        'Combination of student, educational activity and start date already used',
                     ],
                     'start_date' => [
-                        'Combination of student, seminar and start date already used',
+                        'Combination of student, educational activity and start date already used',
                     ],
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('seminar_attendances', ['id' => 3, 'seminar' => 'First seminar', 'start_date' => '2019-01-08', 'end_date' => '2019-01-10']);
+            ->notSeeInDatabase('educational_activity_attendances', ['id' => 3, 'educational_activity' => 'First educational activity', 'start_date' => '2019-01-08', 'end_date' => '2019-01-10']);
 
         // @todo add further tests related to missing required fields
         // @todo add further tests related to invalid attribute format
@@ -505,42 +505,42 @@ class SeminarAttendancesTest extends TestCase
     }
 
     /**
-     * Delete a seminar attendance: success.
+     * Delete a educational activity attendance: success.
      */
     public function testDeleteById()
     {
 
-        // Existing seminar attendance
-        $this->json('DELETE', '/seminar_attendances/1')
+        // Existing educational activity
+        $this->json('DELETE', '/educational_activity_attendances/1')
             ->seeJsonEquals([
                 'status_code' => 200,
                 'status' => 'OK',
                 'message' => 'Resource deleted',
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('seminar_attendances', ['id' => 1, 'deleted_at' => date('Y-m-d H:i:s')])
-            ->notSeeInDatabase('seminar_attendances', ['id' => 1, 'deleted_at' => null]);
+            ->seeInDatabase('educational_activity_attendances', ['id' => 1, 'deleted_at' => date('Y-m-d H:i:s')])
+            ->notSeeInDatabase('educational_activity_attendances', ['id' => 1, 'deleted_at' => null]);
 
     }
 
     /**
-     * Delete a seminar attendance: failure.
+     * Delete a educational activity attendance: failure.
      */
     public function testDeleteByIdFailure()
     {
 
-        // Non existing seminar attendance
-        $this->json('DELETE', '/seminar_attendances/999')
+        // Non existing educational activity
+        $this->json('DELETE', '/educational_activity_attendances/999')
             ->seeJsonEquals([
                 'status_code' => 404,
                 'status' => 'Not Found',
                 'message' => 'Resource(s) not found',
             ])
             ->seeStatusCode(404)
-            ->notSeeInDatabase('seminar_attendances', ['id' => 999]);
+            ->notSeeInDatabase('educational_activity_attendances', ['id' => 999]);
 
         // Invalid ID
-        $this->json('DELETE', '/seminar_attendances/abc')
+        $this->json('DELETE', '/educational_activity_attendances/abc')
             ->seeJsonEquals([
                 'status_code' => 400,
                 'status' => 'Bad Request',
@@ -556,7 +556,7 @@ class SeminarAttendancesTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('seminar_attendances', ['id' => 'abc']);
+            ->notSeeInDatabase('educational_activity_attendances', ['id' => 'abc']);
 
     }
 

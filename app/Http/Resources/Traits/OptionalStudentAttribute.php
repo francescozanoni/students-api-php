@@ -29,6 +29,8 @@ trait OptionalStudentAttribute
                     'createStudentAnnotation',
                     'getStudentSeminarAttendances',
                     'createStudentSeminarAttendance',
+                    'getStudentEducationalActivityAttendances',
+                    'createStudentEducationalActivityAttendance',
                 ]
             ) === false;
     }

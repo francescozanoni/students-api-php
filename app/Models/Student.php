@@ -51,5 +51,13 @@ class Student extends Model
     {
         return $this->hasMany('App\Models\SeminarAttendance');
     }
+    
+    /**
+     * @return HasMany
+     */
+    public function educationalActivityAttendances() : HasMany
+    {
+        return $this->hasMany('App\Models\EducationalActivityAttendance');
+    }
 
 }

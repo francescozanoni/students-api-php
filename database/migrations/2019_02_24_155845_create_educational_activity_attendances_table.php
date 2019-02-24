@@ -5,7 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSeminarAttendancesTable extends Migration
+class CreateEducationalActivityAttendancesTable extends Migration
 {
 
     /**
@@ -13,9 +13,9 @@ class CreateSeminarAttendancesTable extends Migration
      */
     public function up()
     {
-        Schema::create('seminar_attendances', function (Blueprint $table) {
+        Schema::create('educational_activity_attendances', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('seminar')->nullable(false);
+            $table->string('educational_activity')->nullable(false);
             $table->date('start_date')->nullable(false);
             $table->date('end_date')->nullable(true);
             $table->float('ects_credits')->nullable(false);
@@ -25,7 +25,7 @@ class CreateSeminarAttendancesTable extends Migration
             $table->foreign('student_id')->references('id')->on('students');
         });
 
-        // @todo find how to enforce UNIQUE (student_id, seminar, start_date)
+        // @todo find how to enforce UNIQUE (student_id, educational_activity, start_date)
     }
 
     /**
@@ -33,7 +33,7 @@ class CreateSeminarAttendancesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('seminar_attendances');
+        Schema::dropIfExists('educational_activity_attendances');
     }
 
 }
