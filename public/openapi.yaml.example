@@ -1001,7 +1001,7 @@ components:
                   seminar: 'First seminar'
                   start_date: '2019-01-19'
                   end_date: '2019-01-20'
-                  ects_credits: 1.2
+                  credits: 1.2
                   student:
                     id: 1
                     first_name: John
@@ -1013,7 +1013,7 @@ components:
                   seminar: 'First seminar'
                   start_date: '2019-01-21'
                   end_date: '2019-01-22'
-                  ects_credits: 1.2
+                  credits: 1.2
                   student:
                     id: 2
                     first_name: Joan
@@ -1052,7 +1052,7 @@ components:
                 seminar: 'First seminar'
                 start_date: '2019-01-19'
                 end_date: '2019-01-20'
-                ects_credits: 1.2
+                credits: 1.2
                 student:
                   id: 1
                   first_name: John
@@ -1093,7 +1093,7 @@ components:
                   educational_activity: 'First educational activity'
                   start_date: '2019-01-19'
                   end_date: '2019-01-20'
-                  ects_credits: 1.2
+                  credits: 1.2
                   student:
                     id: 1
                     first_name: John
@@ -1105,7 +1105,7 @@ components:
                   educational_activity: 'First educational activity'
                   start_date: '2019-01-21'
                   end_date: '2019-01-22'
-                  ects_credits: 1.2
+                  credits: 1.2
                   student:
                     id: 2
                     first_name: Joan
@@ -1144,7 +1144,7 @@ components:
                 educational_activity: 'First educational activity'
                 start_date: '2019-01-19'
                 end_date: '2019-01-20'
-                ects_credits: 1.2
+                credits: 1.2
                 student:
                   id: 1
                   first_name: John
@@ -1354,19 +1354,19 @@ components:
         end_date:
           type: string
           format: date
-        ects_credits:
+        credits:
           type: number
           minimum: 0.1
       required:
         - seminar
         - start_date
-        - ects_credits
+        - credits
       additionalProperties: false
       example:
         seminar: 'First seminar'
         start_date: '2019-01-19'
         end_date: '2019-01-20'
-        ects_credits: 1.2
+        credits: 1.2
     SeminarAttendance:
       allOf:
         - $ref: '#/components/schemas/NewSeminarAttendance'
@@ -1385,7 +1385,7 @@ components:
         seminar: 'First seminar'
         start_date: '2019-01-19'
         end_date: '2019-01-20'
-        ects_credits: 1.2
+        credits: 1.2
         student:
           id: 1
           first_name: John
@@ -1405,19 +1405,19 @@ components:
         end_date:
           type: string
           format: date
-        ects_credits:
+        credits:
           type: number
           minimum: 0.1
       required:
         - educational_activity
         - start_date
-        - ects_credits
+        - credits
       additionalProperties: false
       example:
         educational_activity: 'First educational activity'
         start_date: '2019-01-19'
         end_date: '2019-01-20'
-        ects_credits: 1.2
+        credits: 1.2
     EducationalActivityAttendance:
       allOf:
         - $ref: '#/components/schemas/NewEducationalActivityAttendance'
@@ -1436,7 +1436,7 @@ components:
         educational_activity: 'First educational activity'
         start_date: '2019-01-19'
         end_date: '2019-01-20'
-        ects_credits: 1.2
+        credits: 1.2
         student:
           id: 1
           first_name: John

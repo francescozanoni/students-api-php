@@ -21,7 +21,7 @@ class EducationalActivityAttendancesTest extends TestCase
                         'educational_activity' => 'First educational activity',
                         'start_date' => '2019-01-08',
                         'end_date' => '2019-01-09',
-                        'ects_credits' => 1.2,
+                        'credits' => 1.2,
                         'student' => [
                             'id' => 1,
                             'first_name' => 'John',
@@ -54,7 +54,7 @@ class EducationalActivityAttendancesTest extends TestCase
                     'educational_activity' => 'First educational activity',
                     'start_date' => '2019-01-08',
                     'end_date' => '2019-01-09',
-                    'ects_credits' => 1.2,
+                    'credits' => 1.2,
                     'student' => [
                         'id' => 1,
                         'first_name' => 'John',
@@ -122,7 +122,7 @@ class EducationalActivityAttendancesTest extends TestCase
                         'educational_activity' => 'First educational activity',
                         'start_date' => '2019-01-08',
                         'end_date' => '2019-01-09',
-                        'ects_credits' => 1.2,
+                        'credits' => 1.2,
                     ]
                 ],
             ])
@@ -187,7 +187,7 @@ class EducationalActivityAttendancesTest extends TestCase
                 'educational_activity' => 'Another educational activity',
                 'start_date' => '2019-01-30',
                 'end_date' => '2019-01-31',
-                'ects_credits' => 0.4,
+                'credits' => 0.4,
             ]
         )
             ->seeJsonEquals([
@@ -199,7 +199,7 @@ class EducationalActivityAttendancesTest extends TestCase
                     'educational_activity' => 'Another educational activity',
                     'start_date' => '2019-01-30',
                     'end_date' => '2019-01-31',
-                    'ects_credits' => 0.4,
+                    'credits' => 0.4,
                 ],
             ])
             ->seeStatusCode(200)
@@ -213,7 +213,7 @@ class EducationalActivityAttendancesTest extends TestCase
             [
                 'educational_activity' => 'Another educational activity',
                 'start_date' => '2019-01-30',
-                'ects_credits' => 0.4,
+                'credits' => 0.4,
             ]
         )
             ->seeJsonEquals([
@@ -224,7 +224,7 @@ class EducationalActivityAttendancesTest extends TestCase
                     'id' => 4,
                     'educational_activity' => 'Another educational activity',
                     'start_date' => '2019-01-30',
-                    'ects_credits' => 0.4,
+                    'credits' => 0.4,
                 ],
             ])
             ->seeStatusCode(200)
@@ -246,7 +246,7 @@ class EducationalActivityAttendancesTest extends TestCase
                 'educational_activity' => 'Another educational activity',
                 'start_date' => '2019-01-30',
                 'end_date' => '2019-01-31',
-                'ects_credits' => 0.4,
+                'credits' => 0.4,
             ]
         )
             ->seeJsonEquals([
@@ -265,7 +265,7 @@ class EducationalActivityAttendancesTest extends TestCase
                 'educational_activity' => 'Another educational activity',
                 'start_date' => '2019-01-30',
                 'end_date' => '2019-01-31',
-                'ects_credits' => 0.4,
+                'credits' => 0.4,
             ]
         )
             ->seeJsonEquals([
@@ -293,7 +293,7 @@ class EducationalActivityAttendancesTest extends TestCase
                 'educational_activity' => 'Another educational activity',
                 'start_date' => '2019-01-31',
                 'end_date' => '2019-01-30',
-                'ects_credits' => 0.4,
+                'credits' => 0.4,
             ]
         )
             ->seeJsonEquals([
@@ -320,7 +320,7 @@ class EducationalActivityAttendancesTest extends TestCase
                 'educational_activity' => 'Another educational activity',
                 'start_date' => '2019-01-30',
                 'end_date' => '2019-01-30',
-                'ects_credits' => 0.4,
+                'credits' => 0.4,
             ]
         )
             ->seeJsonEquals([
@@ -347,7 +347,7 @@ class EducationalActivityAttendancesTest extends TestCase
                 'educational_activity' => 'First educational activity',
                 'start_date' => '2019-01-08',
                 'end_date' => '2019-01-10',
-                'ects_credits' => 0.4,
+                'credits' => 0.4,
             ]
         )
             ->seeJsonEquals([
@@ -374,7 +374,7 @@ class EducationalActivityAttendancesTest extends TestCase
                 'educational_activity' => 'Another educational activity',
                 'start_date' => '2019-01-30',
                 'end_date' => '2019-01-31',
-                'ects_credits' => 0.4,
+                'credits' => 0.4,
                 'an_additional_property' => 'an additional value',
             ]
         )
@@ -411,7 +411,7 @@ class EducationalActivityAttendancesTest extends TestCase
                 'educational_activity' => 'First educational activity',
                 'start_date' => '2019-01-09', // --> modified
                 'end_date' => '2019-01-10',   // --> modified
-                'ects_credits' => 1.0,        // --> modified
+                'credits' => 1.0,        // --> modified
             ]
         )
             ->seeJsonEquals([
@@ -423,7 +423,7 @@ class EducationalActivityAttendancesTest extends TestCase
                     'educational_activity' => 'First educational activity',
                     'start_date' => '2019-01-09',
                     'end_date' => '2019-01-10',
-                    'ects_credits' => 1.0,
+                    'credits' => 1.0,
                     'student' => [
                         'id' => 1,
                         'first_name' => 'John',
@@ -435,10 +435,10 @@ class EducationalActivityAttendancesTest extends TestCase
                 ],
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('educational_activity_attendances', ['id' => 1, 'start_date' => '2019-01-09', 'end_date' => '2019-01-10', 'ects_credits' => 1.0])
+            ->seeInDatabase('educational_activity_attendances', ['id' => 1, 'start_date' => '2019-01-09', 'end_date' => '2019-01-10', 'credits' => 1.0])
             ->notSeeInDatabase('educational_activity_attendances', ['id' => 1, 'start_date' => '2019-01-08'])
             ->notSeeInDatabase('educational_activity_attendances', ['id' => 1, 'end_date' => '2019-01-09'])
-            ->notSeeInDatabase('educational_activity_attendances', ['id' => 1, 'ects_credits' => 1.2])
+            ->notSeeInDatabase('educational_activity_attendances', ['id' => 1, 'credits' => 1.2])
             ->notSeeInDatabase('educational_activity_attendances', ['id' => 3]);
 
     }
@@ -456,7 +456,7 @@ class EducationalActivityAttendancesTest extends TestCase
                 'educational_activity' => 'First educational activity',
                 'start_date' => '2019-01-09',
                 'end_date' => '2019-01-10',
-                'ects_credits' => 1.0,
+                'credits' => 1.0,
             ]
         )
             ->seeJsonEquals([
@@ -475,7 +475,7 @@ class EducationalActivityAttendancesTest extends TestCase
                 'educational_activity' => 'First educational activity',
                 'start_date' => '2019-01-09',
                 'end_date' => '2019-01-10',
-                'ects_credits' => 1.0,
+                'credits' => 1.0,
             ]
         )
             ->seeJsonEquals([
@@ -506,7 +506,7 @@ class EducationalActivityAttendancesTest extends TestCase
                 'educational_activity' => 'First educational activity', // --> same as record #1
                 'start_date' => '2019-01-08', // --> same as record #1
                 'end_date' => '2019-01-10',
-                'ects_credits' => 1.4,
+                'credits' => 1.4,
             ]
         )
             ->seeJsonEquals([
@@ -532,7 +532,7 @@ class EducationalActivityAttendancesTest extends TestCase
                 'educational_activity' => 'First educational activity 1', // --> modified
                 'start_date' => '2019-01-08',
                 'end_date' => '2019-01-09',
-                'ects_credits' => 1.2,
+                'credits' => 1.2,
                 'an_additional_property' => 'an additional value',
             ]
         )

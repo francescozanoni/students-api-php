@@ -24,7 +24,7 @@ class EducationalActivityAttendance extends JsonResource
             'end_date' => $this->end_date,
 
             // These field is returned as string, but cannot understand why...
-            'ects_credits' => (float)$this->ects_credits,
+            'credits' => (float)$this->credits,
         ];
 
         return $output;

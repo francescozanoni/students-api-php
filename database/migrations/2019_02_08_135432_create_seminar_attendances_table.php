@@ -18,7 +18,7 @@ class CreateSeminarAttendancesTable extends Migration
             $table->string('seminar')->nullable(false);
             $table->date('start_date')->nullable(false);
             $table->date('end_date')->nullable(true);
-            $table->float('ects_credits')->nullable(false);
+            $table->float('credits')->nullable(false);
             $table->unsignedInteger('student_id')->nullable(false);
             $table->timestamps();
             $table->softDeletes();
