@@ -1197,6 +1197,7 @@ components:
         - last_name
         - e_mail
         - nationality
+      additionalProperties: false
       example:
         first_name: John
         last_name: Doe
@@ -1212,6 +1213,7 @@ components:
               type: integer
           required:
             - id
+          additionalProperties: false
       example:
         id: 1
         first_name: John
@@ -1234,6 +1236,7 @@ components:
         - title
         - content
         - user_id
+      additionalProperties: false
       example:
         title: First annotation title
         content: First annotation body
@@ -1246,7 +1249,7 @@ components:
             id:
               type: integer
             student:
-              $ref: '#/components/schemas/NewStudent'
+              $ref: '#/components/schemas/Student'
             created_at:
               type: string
               pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$'
@@ -1257,6 +1260,7 @@ components:
             - id
             # student is not required because it is omitted in case student ID is a path parameter
             - created_at
+          additionalProperties: false
       example:
         id: 1
         title: First annotation title
@@ -1298,6 +1302,7 @@ components:
         - end_date
         - is_optional
         - is_interrupted
+      additionalProperties: false
       example:
         location: 'Location 1'
         sub_location: 'Sub-location 1'
@@ -1315,10 +1320,11 @@ components:
             id:
               type: integer
             student:
-              $ref: '#/components/schemas/NewStudent'
+              $ref: '#/components/schemas/Student'
           required:
             - id
             # student is not required because it is omitted in case student ID is a path parameter
+          additionalProperties: false
       example:
         id: 1
         location: Location 1
@@ -1355,6 +1361,7 @@ components:
         - seminar
         - start_date
         - ects_credits
+      additionalProperties: false
       example:
         seminar: 'First seminar'
         start_date: '2019-01-19'
@@ -1368,10 +1375,11 @@ components:
             id:
               type: integer
             student:
-              $ref: '#/components/schemas/NewStudent'
+              $ref: '#/components/schemas/Student'
           required:
             - id
             # student is not required because it is omitted in case student ID is a path parameter
+          additionalProperties: false
       example:
         id: 1
         seminar: 'First seminar'
@@ -1404,6 +1412,7 @@ components:
         - educational_activity
         - start_date
         - ects_credits
+      additionalProperties: false
       example:
         educational_activity: 'First educational activity'
         start_date: '2019-01-19'
@@ -1417,10 +1426,11 @@ components:
             id:
               type: integer
             student:
-              $ref: '#/components/schemas/NewStudent'
+              $ref: '#/components/schemas/Student'
           required:
             - id
             # student is not required because it is omitted in case student ID is a path parameter
+          additionalProperties: false
       example:
         id: 1
         educational_activity: 'First educational activity'

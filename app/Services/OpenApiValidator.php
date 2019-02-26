@@ -23,7 +23,7 @@ class OpenApiValidator
     /**
      * @var OpenApiValidation
      */
-    private $realValidator;
+    private $validator;
 
     /**
      * @var Psr7Service
@@ -38,7 +38,7 @@ class OpenApiValidator
      */
     public function __construct(string $openApiSchemaFilePath, Psr7Service $psr7Service)
     {
-        $this->realValidator = new OpenApiValidation($openApiSchemaFilePath);
+        $this->validator = new OpenApiValidation($openApiSchemaFilePath);
         $this->psr7Service = $psr7Service;
     }
 
@@ -72,7 +72,7 @@ class OpenApiValidator
         // THIS IS LIKELY RELATED ONLY TO PHP BUILT-IN WEB SERVER,
         // BECAUSE .htaccess (WHEN ENABLED) REDIRECTS students/ TO students
 
-        $errors = $this->realValidator->validateRequest($request, $path, $method, $pathParameters);
+        $errors = $this->validator->validateRequest($request, $path, $method, $pathParameters);
 
         if (empty($errors) === false) {
             throw ValidationException::withMessages($this->getFormattedErrors($errors));
@@ -107,8 +107,8 @@ class OpenApiValidator
         }
 
         $errors = array_merge(
-            $this->realValidator->validateResponseBody($_response_1, $path, $method),
-            $this->realValidator->validateResponseHeaders($_response_2, $path, $method)
+            $this->validator->validateResponseBody($_response_1, $path, $method),
+            $this->validator->validateResponseHeaders($_response_2, $path, $method)
         );
 
         if (empty($errors) === false) {

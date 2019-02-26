@@ -44,8 +44,6 @@ class ValidateRequest
         $pathParameters = app('current_route_path_parameters');
         $this->openApiValidator->validateRequest($request, $path, $httpMethod, $pathParameters);
 
-        // @todo add validation of keys: keys not described by schema must not be accepted
-
         // -------------------------------------------------------------------------------------------------------------
 
         // STEP 2: validations not achievable by OpenAPI schema
