@@ -66,6 +66,7 @@ class CreateEvaluationsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('stage_id')->references('id')->on('stages');
+            $table->unique('stage_id');
         });
 
         // @todo assess whether to create a clinical tutor importer
