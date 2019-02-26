@@ -367,6 +367,32 @@ class SeminarAttendancesTest extends TestCase
             ->notSeeInDatabase('seminar_attendances', ['id' => 3])
             ->notSeeInDatabase('seminar_attendances', ['seminar' => 'First seminar', 'start_date' => '2019-01-08', 'end_date' => '2019-01-10']);
 
+        // Unallowed additional property.
+        $this->json('POST',
+            '/students/1/seminar_attendances',
+            [
+                'seminar' => 'Another seminar',
+                'start_date' => '2019-01-30',
+                'end_date' => '2019-01-31',
+                'ects_credits' => 0.4,
+                'an_additional_property' => 'an additional value',
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'an_additional_property' => [
+                        'code error_$schema',
+                        'value an additional value',
+                        'in body',
+                        'schema ',
+                    ]
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('seminar_attendances', ['id' => 3]);
 
         // @todo add further tests related to missing required fields
         // @todo add further tests related to invalid attribute format
@@ -501,6 +527,7 @@ class SeminarAttendancesTest extends TestCase
 
         // @todo add further tests related to missing required fields
         // @todo add further tests related to invalid attribute format
+        // @todo add unallowed additional property test
 
     }
 

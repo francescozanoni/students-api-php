@@ -519,6 +519,37 @@ class StagesTest extends TestCase
             ->seeStatusCode(400)
             ->notSeeInDatabase('stages', ['id' => 2]);
 
+        // Unallowed additional property.
+        $this->json('POST',
+            '/students/1/stages',
+            [
+                'location' => 'Location 1',
+                'sub_location' => 'Sub-location 1',
+                'start_date' => '2019-01-25',
+                'end_date' => '2019-01-31',
+                'hour_amount' => 0,
+                'other_amount' => 0,
+                'is_optional' => true,
+                'is_interrupted' => false,
+                'an_additional_property' => 'an additional value',
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'an_additional_property' => [
+                        'code error_$schema',
+                        'value an additional value',
+                        'in body',
+                        'schema ',
+                    ]
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('stages', ['id' => 2]);
+
         // @todo add further tests related to missing required fields
         // @todo add further tests related to invalid attribute format
 
@@ -743,6 +774,7 @@ class StagesTest extends TestCase
 
         // @todo add further tests related to missing required fields
         // @todo add further tests related to invalid attribute format
+        // @todo add unallowed additional property test
 
     }
 

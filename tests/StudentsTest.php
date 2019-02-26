@@ -281,6 +281,33 @@ class StudentsTest extends TestCase
             ->seeStatusCode(400)
             ->notSeeInDatabase('students', ['id' => 5]);
 
+        // Unallowed additional property.
+        $this->json('POST',
+            '/students',
+            [
+                'first_name' => 'Jack',
+                'last_name' => 'Doe',
+                'e_mail' => 'jack.doe@faz.com',
+                'phone' => '0000-11111111',
+                'nationality' => 'AU',
+                'an_additional_property' => 'an additional value',
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'an_additional_property' => [
+                        'code error_$schema',
+                        'value an additional value',
+                        'in body',
+                        'schema ',
+                    ]
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('students', ['id' => 5]);
 
         // @todo add invalid and minLength test
 
@@ -376,6 +403,7 @@ class StudentsTest extends TestCase
             ->notSeeInDatabase('students', ['id' => 999]);
 
         // @todo add required and minLength tests
+        // @todo add unallowed additional property test
 
     }
 

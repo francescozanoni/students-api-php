@@ -367,6 +367,32 @@ class EducationalActivityAttendancesTest extends TestCase
             ->notSeeInDatabase('educational_activity_attendances', ['id' => 3])
             ->notSeeInDatabase('educational_activity_attendances', ['educational_activity' => 'First educational activity', 'start_date' => '2019-01-08', 'end_date' => '2019-01-10']);
 
+        // Unallowed additional property.
+        $this->json('POST',
+            '/students/1/educational_activity_attendances',
+            [
+                'educational_activity' => 'Another educational activity',
+                'start_date' => '2019-01-30',
+                'end_date' => '2019-01-31',
+                'ects_credits' => 0.4,
+                'an_additional_property' => 'an additional value',
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'an_additional_property' => [
+                        'code error_$schema',
+                        'value an additional value',
+                        'in body',
+                        'schema ',
+                    ]
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('educational_activity_attendances', ['id' => 3]);
 
         // @todo add further tests related to missing required fields
         // @todo add further tests related to invalid attribute format
@@ -374,7 +400,7 @@ class EducationalActivityAttendancesTest extends TestCase
     }
 
     /**
-     * Modify a educational activity attendance: success.
+     * Modify an educational activity attendance: success.
      */
     public function testModifyById()
     {
@@ -418,7 +444,7 @@ class EducationalActivityAttendancesTest extends TestCase
     }
 
     /**
-     * Modify a educational activity attendance: failure.
+     * Modify an educational activity attendance: failure.
      */
     public function testModifyByIdFailure()
     {
@@ -501,11 +527,12 @@ class EducationalActivityAttendancesTest extends TestCase
 
         // @todo add further tests related to missing required fields
         // @todo add further tests related to invalid attribute format
+        // @todo add unallowed additional property test
 
     }
 
     /**
-     * Delete a educational activity attendance: success.
+     * Delete an educational activity attendance: success.
      */
     public function testDeleteById()
     {
@@ -524,7 +551,7 @@ class EducationalActivityAttendancesTest extends TestCase
     }
 
     /**
-     * Delete a educational activity attendance: failure.
+     * Delete an educational activity attendance: failure.
      */
     public function testDeleteByIdFailure()
     {
