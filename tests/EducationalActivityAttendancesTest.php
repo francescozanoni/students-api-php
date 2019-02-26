@@ -525,9 +525,35 @@ class EducationalActivityAttendancesTest extends TestCase
             ->seeStatusCode(400)
             ->notSeeInDatabase('educational_activity_attendances', ['id' => 3, 'educational_activity' => 'First educational activity', 'start_date' => '2019-01-08', 'end_date' => '2019-01-10']);
 
+        // Unallowed additional property.
+        $this->json('PUT',
+            '/educational_activity_attendances/1',
+            [
+                'educational_activity' => 'First educational activity 1', // --> modified
+                'start_date' => '2019-01-08',
+                'end_date' => '2019-01-09',
+                'ects_credits' => 1.2,
+                'an_additional_property' => 'an additional value',
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'an_additional_property' => [
+                        'code error_$schema',
+                        'value an additional value',
+                        'in body',
+                        'schema ',
+                    ]
+                ]
+            ])
+            ->seeInDatabase('educational_activity_attendances', ['id' => 1])
+            ->notSeeInDatabase('educational_activity_attendances', ['id' => 1, 'educational_activity' => 'First educational activity 1']);
+
         // @todo add further tests related to missing required fields
         // @todo add further tests related to invalid attribute format
-        // @todo add unallowed additional property test
 
     }
 

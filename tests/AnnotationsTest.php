@@ -549,8 +549,33 @@ class AnnotationsTest extends TestCase
             ->notSeeInDatabase('annotations', ['id' => 999])
             ->notSeeInDatabase('annotations', ['id' => 3]);
 
+        // Unallowed additional property.
+        $this->json('PUT',
+            '/annotations/1',
+            [
+                'title' => 'First title 1', // --> modified
+                'content' => 'First content 1', // --> modified
+                'user_id' => 123,
+                'an_additional_property' => 'an additional value',
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'an_additional_property' => [
+                        'code error_$schema',
+                        'value an additional value',
+                        'in body',
+                        'schema ',
+                    ]
+                ]
+            ])
+            ->seeInDatabase('annotations', ['id' => 1])
+            ->notSeeInDatabase('annotations', ['id' => 1, 'title' => 'First title 1', 'content' => 'First content 1']);
+
         // @todo add further tests related to missing required fields
-        // @todo add unallowed additional property test
 
     }
 

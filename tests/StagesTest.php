@@ -772,9 +772,39 @@ class StagesTest extends TestCase
             ->seeInDatabase('stages', ['id' => 2, 'start_date' => '2019-01-25', 'end_date' => '2019-01-31'])
             ->notSeeInDatabase('stages', ['id' => 2, 'start_date' => '2019-01-25', 'end_date' => '2019-01-21']);
 
+        // Unallowed additional property.
+        $this->json('PUT',
+            '/stages/1',
+            [
+                'location' => 'Location 1',
+                'sub_location' => 'Sub-location 1',
+                'start_date' => '2019-01-10',
+                'end_date' => '2019-01-24',
+                'hour_amount' => 111, // --> modified
+                'other_amount' => 5,
+                'is_optional' => true, // --> modified
+                'is_interrupted' => false,
+                'an_additional_property' => 'an additional value',
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'an_additional_property' => [
+                        'code error_$schema',
+                        'value an additional value',
+                        'in body',
+                        'schema ',
+                    ]
+                ]
+            ])
+            ->seeInDatabase('stages', ['id' => 1])
+            ->notSeeInDatabase('stages', ['id' => 1, 'hour_amount' => 111, 'is_optional' => true]);
+
         // @todo add further tests related to missing required fields
         // @todo add further tests related to invalid attribute format
-        // @todo add unallowed additional property test
 
     }
 

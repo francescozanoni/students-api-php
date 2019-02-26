@@ -400,10 +400,38 @@ class StudentsTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('students', ['id' => 999]);
+            ->notSeeInDatabase('students', ['id' => 'abc']);
+
+
+        // Unallowed additional property.
+        $this->json('PUT',
+            '/students/1',
+            [
+                'first_name' => 'John 1', // --> modified
+                'last_name' => 'Doe 1', // --> modified
+                'e_mail' => 'john.doe@foo.com',
+                'phone' => '1234-567890',
+                'nationality' => 'GB',
+                'an_additional_property' => 'an additional value',
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'an_additional_property' => [
+                        'code error_$schema',
+                        'value an additional value',
+                        'in body',
+                        'schema ',
+                    ]
+                ]
+            ])
+            ->seeInDatabase('students', ['id' => 1])
+            ->notSeeInDatabase('students', ['id' => 1, 'first_name' => 'John 1', 'last_name' => 'Doe 1']);
 
         // @todo add required and minLength tests
-        // @todo add unallowed additional property test
 
     }
 
@@ -423,7 +451,7 @@ class StudentsTest extends TestCase
             ->seeStatusCode(200)
             ->seeInDatabase('students', ['id' => 2, 'deleted_at' => date('Y-m-d H:i:s')])
             ->notSeeInDatabase('students', ['id' => 2, 'deleted_at' => null]);
-            
+
         // @todo add tests of cascade deletion of related models
 
     }
