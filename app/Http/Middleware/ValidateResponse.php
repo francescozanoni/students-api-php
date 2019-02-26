@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace App\Http\Middleware;
 
 use App\Http\Middleware\Traits\UsesOpenApiValidator;
+use Illuminate\Validation\ValidationException;
 
 /**
  * Class ValidateResponse
@@ -40,7 +41,21 @@ class ValidateResponse
 
         $path = (string)app('current_route_path');
         $httpMethod = strtolower($request->getMethod());
-        $this->openApiValidator->validateResponse($response, $path, $httpMethod);
+
+        try {
+            $this->openApiValidator->validateResponse($response, $path, $httpMethod);
+        } catch (ValidationException $e) {
+
+            $response = new \Illuminate\Http\JsonResponse(null, 500);
+
+            // Since AddResponseMetadata middleware is not executed,
+            // its logic is here re-applied manually on the error response.
+            // @todo improve design of this
+            $metadata = app('App\Http\Middleware\AddResponseMetadata')->getMetadata($request, $response);
+            $fullData = array_merge($metadata, ['data' => $e->validator->errors()->toArray()]);
+            $response->setData($fullData);
+
+        }
 
         return $response;
 
