@@ -15,9 +15,9 @@ class CreateInterruptionReportsTable extends Migration
     {
         Schema::create('interruption_reports', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('content')->nullable(false);
+            $table->string('annotations')->nullable(false);
             $table->unsignedInteger('stage_id')->nullable(false);
-            // annotation author, whose referential integrity is enforced by input validation rules
+            // report author, whose referential integrity is enforced by input validation rules
             $table->unsignedInteger('clinical_tutor_id')->nullable(false);
             $table->timestamps();
             $table->softDeletes();
