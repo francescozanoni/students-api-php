@@ -825,6 +825,8 @@ class StagesTest extends TestCase
             ->seeInDatabase('stages', ['id' => 1, 'deleted_at' => date('Y-m-d H:i:s')])
             ->notSeeInDatabase('stages', ['id' => 1, 'deleted_at' => null]);
 
+        // @todo add tests of cascade deletion of related models (evaluations and interruption reports)
+
     }
 
     /**

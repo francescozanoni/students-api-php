@@ -452,7 +452,24 @@ class StudentsTest extends TestCase
             ->seeInDatabase('students', ['id' => 2, 'deleted_at' => date('Y-m-d H:i:s')])
             ->notSeeInDatabase('students', ['id' => 2, 'deleted_at' => null]);
 
-        // @todo add tests of cascade deletion of related models
+        // Existing student with annotation, stage, seminar attendance and educational activity attendance
+        $this->json('DELETE', '/students/1')
+            ->seeJsonEquals([
+                'status_code' => 200,
+                'status' => 'OK',
+                'message' => 'Resource deleted',
+            ])
+            ->seeStatusCode(200)
+            ->seeInDatabase('students', ['id' => 1, 'deleted_at' => date('Y-m-d H:i:s')])
+            ->notSeeInDatabase('students', ['id' => 1, 'deleted_at' => null])
+            ->seeInDatabase('annotations', ['id' => 1, 'student_id' => 1, 'deleted_at' => date('Y-m-d H:i:s')])
+            ->notSeeInDatabase('annotations', ['id' => 1, 'student_id' => 1, 'deleted_at' => null])
+            ->seeInDatabase('stages', ['id' => 1, 'student_id' => 1, 'deleted_at' => date('Y-m-d H:i:s')])
+            ->notSeeInDatabase('stages', ['id' => 1, 'student_id' => 1, 'deleted_at' => null])
+            ->seeInDatabase('seminar_attendances', ['id' => 1, 'student_id' => 1, 'deleted_at' => date('Y-m-d H:i:s')])
+            ->notSeeInDatabase('seminar_attendances', ['id' => 1, 'student_id' => 1, 'deleted_at' => null])
+            ->seeInDatabase('educational_activity_attendances', ['id' => 1, 'student_id' => 1, 'deleted_at' => date('Y-m-d H:i:s')])
+            ->notSeeInDatabase('educational_activity_attendances', ['id' => 1, 'student_id' => 1, 'deleted_at' => null]);
 
     }
 
