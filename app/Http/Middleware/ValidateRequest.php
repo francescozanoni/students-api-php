@@ -6,6 +6,8 @@ namespace App\Http\Middleware;
 use App\Http\Middleware\Traits\UsesOpenApiValidator;
 use App\Models\Annotation;
 use App\Models\EducationalActivityAttendance;
+use App\Models\Evaluation;
+use App\Models\InterruptionReport;
 use App\Models\SeminarAttendance;
 use App\Models\Stage;
 use Illuminate\Support\Facades\Validator;
@@ -319,6 +321,54 @@ class ValidateRequest
                             'end_date.after' => 'The :attribute must be a date after start date',
                         ]
                     )->validate();
+                }
+                break;
+
+            case 'createStageEvaluation':
+                Validator::make(
+                    $request->request->all(),
+                    [
+                    ],
+                    [
+                    ]
+                )->validate();
+                break;
+
+            case 'updateEvaluationById':
+                $evaluation = Evaluation::find(app('current_route_path_parameters')['id']);
+                if ($evaluation) {
+                    Validator::make(
+                        $request->request->all(),
+                        [
+                        ],
+                        [
+                        ]
+                    )->validate();
+                }
+                break;
+
+            case 'createStageInterruptionReport':
+                Validator::make(
+                    $request->request->all(),
+                    [
+                    ],
+                    [
+                    ]
+                )->validate();
+                // @todo stage must be interrupted
+                break;
+
+            case 'updateInterruptionReportById':
+                $interruptionReport = InterruptionReport::find(app('current_route_path_parameters')['id']);
+                if ($interruptionReport) {
+                    Validator::make(
+                        $request->request->all(),
+                        [
+                        ],
+                        [
+                        ]
+                    )->validate();
+                    // @todo stage must be interrupted
                 }
                 break;
 
