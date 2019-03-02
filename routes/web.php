@@ -67,4 +67,20 @@ $router->group(['middleware' => 'validate_request'], function () use ($router) {
     $router->put('educational_activity_attendances/{id}', ['as' => 'updateEducationalActivityAttendanceById', 'uses' => 'EducationalActivityAttendancesController@update']);
     $router->delete('educational_activity_attendances/{id}', ['as' => 'deleteEducationalActivityAttendanceById', 'uses' => 'EducationalActivityAttendancesController@destroy']);
 
+    $router->get('stages/{id}/evaluation', ['as' => 'getStageEvaluation', 'uses' => 'EvaluationsController@getRelatedToStage']);
+    $router->post('stages/{id}/evaluation', ['as' => 'createStageEvaluation', 'uses' => 'EvaluationsController@createRelatedToStage']);
+
+    $router->get('evaluations', ['as' => 'getEvaluations', 'uses' => 'EvaluationsController@index']);
+    $router->get('evaluations/{id}', ['as' => 'getEvaluationById', 'uses' => 'EvaluationsController@show']);
+    $router->put('evaluations/{id}', ['as' => 'updateEvaluationById', 'uses' => 'EvaluationsController@update']);
+    $router->delete('evaluations/{id}', ['as' => 'deleteEvaluationById', 'uses' => 'EvaluationsController@destroy']);
+
+    $router->get('stages/{id}/interruption_report', ['as' => 'getStageInterruptionReport', 'uses' => 'InterruptionReportsController@getRelatedToStage']);
+    $router->post('stages/{id}/interruption_report', ['as' => 'createStageInterruptionReport', 'uses' => 'InterruptionReportsController@createRelatedToStage']);
+
+    $router->get('interruption_reports', ['as' => 'getInterruptionReports', 'uses' => 'InterruptionReportsController@index']);
+    $router->get('interruption_reports/{id}', ['as' => 'getInterruptionReportById', 'uses' => 'InterruptionReportsController@show']);
+    $router->put('interruption_reports/{id}', ['as' => 'updateInterruptionReportById', 'uses' => 'InterruptionReportsController@update']);
+    $router->delete('interruption_reports/{id}', ['as' => 'deleteInterruptionReportById', 'uses' => 'InterruptionReportsController@destroy']);
+
 });
