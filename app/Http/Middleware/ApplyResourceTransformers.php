@@ -5,6 +5,8 @@ namespace App\Http\Middleware;
 
 use App\Http\Resources\Annotation as AnnotationResource;
 use App\Http\Resources\EducationalActivityAttendance as EducationalActivityAttendanceResource;
+use App\Http\Resources\Evaluation as EvaluationResource;
+use App\Http\Resources\InterruptionReport as InterruptionReportResource;
 use App\Http\Resources\SeminarAttendance as SeminarAttendanceResource;
 use App\Http\Resources\Stage as StageResource;
 use App\Http\Resources\Student as StudentResource;
@@ -87,6 +89,28 @@ class ApplyResourceTransformers
             case 'createStudentEducationalActivityAttendance':
             case 'updateEducationalActivityAttendanceById':
                 $response->setContent(new EducationalActivityAttendanceResource($response->original));
+                break;
+
+            case 'getEvaluations':
+            case 'getStageEvaluations':
+                $response->setContent(EvaluationResource::collection($response->original));
+                break;
+
+            case 'getEvaluationById':
+            case 'createStageEvaluation':
+            case 'updateEvaluationById':
+                $response->setContent(new EvaluationResource($response->original));
+                break;
+
+            case 'getInterruptionReports':
+            case 'getStageInterruptionReports':
+                $response->setContent(InterruptionReportResource::collection($response->original));
+                break;
+
+            case 'getInterruptionReportsById':
+            case 'createStageInterruptionReports':
+            case 'updateInterruptionReportsById':
+                $response->setContent(new InterruptionReportResource($response->original));
                 break;
 
             default:
