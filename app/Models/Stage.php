@@ -6,6 +6,7 @@ namespace App\Models;
 use App\Models\Traits\EloquentGetTableName;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Stage extends Model
@@ -50,6 +51,22 @@ class Stage extends Model
     public function subLocation() : BelongsTo
     {
         return $this->belongsTo('App\Models\SubLocation');
+    }
+
+    /**
+     * @return HasOne
+     */
+    public function evaluation() : HasOne
+    {
+        return $this->hasOne('App\Models\Evaluation');
+    }
+
+    /**
+     * @return HasOne
+     */
+    public function interruptionReport() : HasOne
+    {
+        return $this->hasOne('App\Models\InterruptionReport');
     }
 
 }

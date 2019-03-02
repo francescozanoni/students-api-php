@@ -107,8 +107,8 @@ class ApplyResourceTransformers
                 $response->setContent(InterruptionReportResource::collection($response->original));
                 break;
 
-            case 'getInterruptionReportsById':
-            case 'createStageInterruptionReports':
+            case 'getInterruptionReportById':
+            case 'createStageInterruptionReport':
             case 'updateInterruptionReportsById':
                 $response->setContent(new InterruptionReportResource($response->original));
                 break;
