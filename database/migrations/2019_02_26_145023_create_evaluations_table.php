@@ -18,7 +18,7 @@ class CreateEvaluationsTable extends Migration
             foreach (config('app.evaluations.items') as $item) {
                 $table->enum($item['name'], $item['values'])->nullable($item['nullable']);
             }
-            $table->string('annotations')->nullable(false);
+            $table->string('notes')->nullable(false);
             $table->unsignedInteger('stage_id')->nullable(false);
             // evaluation author, whose referential integrity is enforced by input validation rules
             $table->unsignedInteger('clinical_tutor_id')->nullable(false);
