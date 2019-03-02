@@ -517,7 +517,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
   /educational_activity_attendances/{id}:
     get:
-      summary: Returns a educational activity attendance
+      summary: Returns an educational activity attendance
       operationId: getEducationalActivityAttendanceById
       tags:
         - educational_activity_attendances
@@ -538,7 +538,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     put:
-      summary: Updates a educational activity attendance
+      summary: Updates an educational activity attendance
       operationId: updateEducationalActivityAttendanceById
       requestBody:
         required: true
@@ -565,7 +565,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     delete:
-      summary: Deletes a educational activity attendance
+      summary: Deletes an educational activity attendance
       operationId: deleteEducationalActivityAttendanceById
       tags:
         - educational_activity_attendances
@@ -628,6 +628,138 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/EducationalActivityAttendance'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /stages/{id}/evaluation:
+    get:
+      summary: Returns the stage's evaluation
+      operationId: getStageEvaluation
+      tags:
+        - evaluations
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the stage
+          schema:
+            type: integer
+      responses:
+        '200':
+          $ref: '#/components/responses/Evaluation'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      summary: Creates the stage's evaluation
+      operationId: createStageEvaluation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewEvaluation'
+      tags:
+        - evaluations
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the evaluation's stage
+          schema:
+            type: integer
+      responses:
+        '200':
+          $ref: '#/components/responses/Evaluation'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /evaluations:
+    get:
+      summary: Returns a list of stage evaluations
+      operationId: getEvaluations
+      tags:
+        - evaluations
+      responses:
+        '200':
+          $ref: '#/components/responses/Evaluations'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /evaluations/{id}:
+    get:
+      summary: Returns a stage evaluation
+      operationId: getEvaluationById
+      tags:
+        - evaluations
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the stage evaluation to retrieve
+          schema:
+            type: integer
+      responses:
+        '200':
+          $ref: '#/components/responses/Evaluation'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      summary: Updates a stage evaluation
+      operationId: updateEvaluationById
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewEvaluation'
+      tags:
+        - evaluations
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the stage evaluation to update
+          schema:
+            type: integer
+      responses:
+        '200':
+          $ref: '#/components/responses/Evaluation'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      summary: Deletes a stage evaluation
+      operationId: deleteEvaluationById
+      tags:
+        - evaluations
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the stage evaluation to delete
+          schema:
+            type: integer
+      responses:
+        '200':
+          $ref: '#/components/responses/ResourceDeletion'
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
@@ -1114,7 +1246,7 @@ components:
                     phone: null
                     nationality: CA
     EducationalActivityAttendance:
-      description: Response returning a educational activity attendance
+      description: Response returning an educational activity attendance
       content:
         application/json:
           schema:
