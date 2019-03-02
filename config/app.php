@@ -20,7 +20,7 @@ return [
                     $items[] = [
                         'name' => env('EVALUATION_ITEM_' . $index . '_NAME'),
                         'values' => explode(',', env('EVALUATION_ITEM_' . $index . '_VALUES')),
-                        'nullable' => env('EVALUATION_ITEM_' . $index . '_NULLABLE'),
+                        'required' => env('EVALUATION_ITEM_' . $index . '_REQUIRED'),
                     ];
                 }
             }
