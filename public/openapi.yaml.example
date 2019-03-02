@@ -2013,6 +2013,7 @@ components:
       properties:
         notes:
           type: string
+          minLength: 20
         clinical_tutor_id:
           type: integer
       required:
