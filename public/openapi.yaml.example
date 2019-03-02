@@ -766,6 +766,138 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /stages/{id}/interruption_report:
+    get:
+      summary: Returns the stage's interruption report
+      operationId: getStageInterruptionReport
+      tags:
+        - interruption_reports
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the stage
+          schema:
+            type: integer
+      responses:
+        '200':
+          $ref: '#/components/responses/InterruptionReport'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      summary: Creates the stage's interruption report
+      operationId: createStageInterruptionReport
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewInterruptionReport'
+      tags:
+        - interruption_reports
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the interruption report's stage
+          schema:
+            type: integer
+      responses:
+        '200':
+          $ref: '#/components/responses/InterruptionReport'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /interruption_reports:
+    get:
+      summary: Returns a list of stage interruption reports
+      operationId: getInterruptionReports
+      tags:
+        - interruption_reports
+      responses:
+        '200':
+          $ref: '#/components/responses/InterruptionReports'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /interruption_reports/{id}:
+    get:
+      summary: Returns a stage interruption report
+      operationId: getInterruptionReportById
+      tags:
+        - interruption_reports
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the stage interruption report to retrieve
+          schema:
+            type: integer
+      responses:
+        '200':
+          $ref: '#/components/responses/InterruptionReport'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      summary: Updates a stage interruption report
+      operationId: updateInterruptionReportById
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewInterruptionReport'
+      tags:
+        - interruption_reports
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the stage interruption report to update
+          schema:
+            type: integer
+      responses:
+        '200':
+          $ref: '#/components/responses/InterruptionReport'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      summary: Deletes a stage interruption report
+      operationId: deleteInterruptionReportById
+      tags:
+        - interruption_reports
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the stage interruption report to delete
+          schema:
+            type: integer
+      responses:
+        '200':
+          $ref: '#/components/responses/ResourceDeletion'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 components:
   responses:
     BadRequest:
@@ -1406,6 +1538,128 @@ components:
                     nationality: GB
                 created_at: '2019-01-21 01:00:00'
                 updated_at: '2019-01-21 01:00:00'
+    InterruptionReports:
+      description: Response returning a list of stage interruption reports
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                description: HTTP status code
+              status:
+                type: string
+                description: HTTP status description
+              message:
+                type: string
+              data:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InterruptionReport'
+            required:
+              - status_code
+              - status
+              - message
+              - data
+            example:
+              status_code: 200
+              status: OK
+              message: Resource(s) found
+              data:
+                - id: 1
+                  notes: First interruption report notes
+                  clinical_tutor_id: 456
+                  stage:
+                    id: 1
+                    location: Location 1
+                    sub_location: Sub-location 1
+                    start_date: '2019-01-01'
+                    end_date: '2019-01-20'
+                    hour_amount: 200
+                    other_amount: 23
+                    is_optional: false
+                    is_interrupted: true
+                    student:
+                      id: 1
+                      first_name: John
+                      last_name: Doe
+                      e_mail: john.doe@foo.com
+                      phone: 1234-567890
+                      nationality: GB
+                  created_at: '2019-01-21 01:00:00'
+                  updated_at: '2019-01-21 01:00:00'
+                - id: 2
+                  notes: Second interruption report notes
+                  clinical_tutor_id: 789
+                  stage:
+                    id: 2
+                    location: Location 2
+                    sub_location: Sub-location 2
+                    start_date: '2019-01-10'
+                    end_date: '2019-01-18'
+                    hour_amount: 34
+                    other_amount: 23
+                    is_optional: true
+                    is_interrupted: true
+                    student:
+                      id: 2
+                      first_name: Joan
+                      last_name: Doe
+                      e_mail: joan.doe@bar.com
+                      phone: null
+                      nationality: CA
+                  created_at: '2019-01-19 01:00:00'
+                  updated_at: '2019-01-19 01:00:00'
+    InterruptionReport:
+      description: Response returning a stage interruption report
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                description: HTTP status code
+              status:
+                type: string
+                description: HTTP status description
+              message:
+                type: string
+              data:
+                $ref: '#/components/schemas/InterruptionReport'
+            required:
+              - status_code
+              - status
+              - message
+              - data
+            example:
+              status_code: 200
+              status: OK
+              message: Resource successfully retrieved/created/modified
+              data:
+                id: 1
+                notes: First interruption report notes
+                clinical_tutor_id: 456
+                stage:
+                  id: 1
+                  location: Location 1
+                  sub_location: Sub-location 1
+                  start_date: '2019-01-01'
+                  end_date: '2019-01-20'
+                  hour_amount: 200
+                  other_amount: 23
+                  is_optional: false
+                  is_interrupted: true
+                  student:
+                    id: 1
+                    first_name: John
+                    last_name: Doe
+                    e_mail: john.doe@foo.com
+                    phone: 1234-567890
+                    nationality: GB
+                created_at: '2019-01-21 01:00:00'
+                updated_at: '2019-01-21 01:00:00'
     ResourceDeletion:
       description: Response confirming deletion of a resource
       content:
@@ -1728,12 +1982,12 @@ components:
               pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$'
           required:
             - id
-            # stage is not required because it is omitted in case student ID is a path parameter
+            # stage is not required because it is omitted in case stage ID is a path parameter
             - created_at
           additionalProperties: false
       example:
         id: 1
-        content: First evaluation notes
+        notes: First evaluation notes
         clinical_tutor_id: 456
         stage:
           id: 1
@@ -1745,6 +1999,62 @@ components:
           other_amount: 23
           is_optional: false
           is_interrupted: false
+          student:
+            id: 1
+            first_name: John
+            last_name: Doe
+            e_mail: john.doe@foo.com
+            phone: 1234-567890
+            nationality: GB
+        created_at: '2019-01-21 01:00:00'
+        updated_at: '2019-01-21 01:00:00'
+    NewInterruptionReport:
+      type: object
+      properties:
+        notes:
+          type: string
+        clinical_tutor_id:
+          type: integer
+      required:
+        - clinical_tutor_id
+      additionalProperties: false
+      example:
+        notes: First interruption report notes
+        clinical_tutor_id: 456
+    InterruptionReport:
+      allOf:
+        - $ref: '#/components/schemas/NewInterruptionReport'
+        - type: object
+          properties:
+            id:
+              type: integer
+            stage:
+              $ref: '#/components/schemas/Stage'
+            created_at:
+              type: string
+              pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$'
+            updated_at:
+              type: string
+              pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$'
+          required:
+            - id
+            # stage is not required because it is omitted in case stage ID is a path parameter
+            - created_at
+          additionalProperties: false
+      example:
+        id: 1
+        notes: First interruption report notes
+        clinical_tutor_id: 456
+        stage:
+          id: 1
+          location: Location 1
+          sub_location: Sub-location 1
+          start_date: '2019-01-01'
+          end_date: '2019-01-20'
+          hour_amount: 200
+          other_amount: 23
+          is_optional: false
+          is_interrupted: true
           student:
             id: 1
             first_name: John
