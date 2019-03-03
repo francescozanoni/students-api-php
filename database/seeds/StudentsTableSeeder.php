@@ -37,5 +37,13 @@ class StudentsTableSeeder extends Seeder
             'updated_at' => '2019-01-03 00:00:00',
             'deleted_at' => '2019-01-04 00:00:00',
         ]);
+        DB::table('students')->insert([
+            'first_name' => 'Joan',
+            'last_name' => 'Doe',
+            'e_mail' => 'joan.doe@foo.com',
+            'nationality' => 'IE',
+            'created_at' => '2019-01-05 00:00:00',
+            'updated_at' => '2019-01-05 00:00:00',
+        ]);
     }
 }

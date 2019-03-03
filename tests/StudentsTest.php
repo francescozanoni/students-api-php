@@ -30,6 +30,13 @@ class StudentsTest extends TestCase
                         'e_mail' => 'jane.doe@bar.com',
                         'nationality' => 'CA',
                     ],
+                    [
+                    'id' => 4,
+            'first_name' => 'Joan',
+            'last_name' => 'Doe',
+            'e_mail' => 'joan.doe@foo.com',
+            'nationality' => 'IE',
+        ]
                 ]
             ])
             ->seeStatusCode(200);
@@ -117,7 +124,7 @@ class StudentsTest extends TestCase
                 'status' => 'OK',
                 'message' => 'Resource successfully retrieved/created/modified',
                 'data' => [
-                    'id' => 4,
+                    'id' => 5,
                     'first_name' => 'Jack',
                     'last_name' => 'Doe',
                     'e_mail' => 'jack.doe@faz.com',
@@ -126,8 +133,8 @@ class StudentsTest extends TestCase
                 ]
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('students', ['id' => 4, 'deleted_at' => null])
-            ->notSeeInDatabase('students', ['id' => 5]);
+            ->seeInDatabase('students', ['id' => 5, 'deleted_at' => null])
+            ->notSeeInDatabase('students', ['id' => 6]);
 
     }
 
@@ -159,7 +166,7 @@ class StudentsTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('students', ['id' => 5]);
+            ->notSeeInDatabase('students', ['id' => 6]);
 
         // Missing required last_name
         $this->json('POST',
@@ -183,7 +190,7 @@ class StudentsTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('students', ['id' => 5]);
+            ->notSeeInDatabase('students', ['id' => 6]);
 
         // Missing required e_mail
         $this->json('POST',
@@ -207,7 +214,7 @@ class StudentsTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('students', ['id' => 5]);
+            ->notSeeInDatabase('students', ['id' => 6]);
 
         // Missing required nationality
         $this->json('POST',
@@ -231,7 +238,7 @@ class StudentsTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('students', ['id' => 5]);
+            ->notSeeInDatabase('students', ['id' => 6]);
 
         // Inexistent nationality
         $this->json('POST',
@@ -255,7 +262,7 @@ class StudentsTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('students', ['id' => 5]);
+            ->notSeeInDatabase('students', ['id' => 6]);
 
         // Deleted nationality
         $this->json('POST',
@@ -279,7 +286,7 @@ class StudentsTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('students', ['id' => 5]);
+            ->notSeeInDatabase('students', ['id' => 6]);
 
         // Unallowed additional property.
         $this->json('POST',
@@ -306,7 +313,7 @@ class StudentsTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('students', ['id' => 5]);
+            ->notSeeInDatabase('students', ['id' => 6]);
 
         // @todo add invalid and minLength test
 
