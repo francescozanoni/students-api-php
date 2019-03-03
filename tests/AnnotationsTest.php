@@ -420,10 +420,9 @@ class AnnotationsTest extends TestCase
                 'message' => 'Request is not valid',
                 'data' => [
                     'an_additional_property' => [
-                        'code error_$schema',
+                        'code error_additional',
                         'value an additional value',
                         'in body',
-                        'schema ',
                     ]
                 ]
             ])
@@ -565,10 +564,9 @@ class AnnotationsTest extends TestCase
                 'message' => 'Request is not valid',
                 'data' => [
                     'an_additional_property' => [
-                        'code error_$schema',
+                        'code error_additional',
                         'value an additional value',
                         'in body',
-                        'schema ',
                     ]
                 ]
             ])
