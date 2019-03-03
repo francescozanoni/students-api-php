@@ -92,10 +92,10 @@ class ApplyResourceTransformers
                 break;
 
             case 'getEvaluations':
-            case 'getStageEvaluations':
                 $response->setContent(EvaluationResource::collection($response->original));
                 break;
 
+            case 'getStageEvaluation':
             case 'getEvaluationById':
             case 'createStageEvaluation':
             case 'updateEvaluationById':
@@ -103,13 +103,13 @@ class ApplyResourceTransformers
                 break;
 
             case 'getInterruptionReports':
-            case 'getStageInterruptionReports':
                 $response->setContent(InterruptionReportResource::collection($response->original));
                 break;
 
+            case 'getStageInterruptionReport':
             case 'getInterruptionReportById':
             case 'createStageInterruptionReport':
-            case 'updateInterruptionReportsById':
+            case 'updateInterruptionReportById':
                 $response->setContent(new InterruptionReportResource($response->original));
                 break;
 
