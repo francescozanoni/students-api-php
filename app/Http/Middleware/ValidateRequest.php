@@ -163,6 +163,14 @@ class ValidateRequest
                             'end_date.not_overlapping_time_range' => 'Unavailable time range',
                         ]
                     )->validate();
+                    // @todo if "is_interrupted" is switched from true to false, there must not be an interruption report
+                }
+                break;
+                
+            case 'deleteStageById':
+                $stage = Stage::find(app('current_route_path_parameters')['id']);
+                if ($stage) {
+                    // @todo block deletion in case of evaluation or interruption report available
                 }
                 break;
 
@@ -332,6 +340,7 @@ class ValidateRequest
                     [
                     ]
                 )->validate();
+                // @todo current date must be after stage's start date
                 break;
 
             case 'updateEvaluationById':
@@ -356,6 +365,7 @@ class ValidateRequest
                     ]
                 )->validate();
                 // @todo stage must be interrupted
+                // @todo current date must be after stage's start date
                 break;
 
             case 'updateInterruptionReportById':

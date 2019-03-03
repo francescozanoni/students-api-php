@@ -172,7 +172,7 @@ class InterruptionReportsTest extends TestCase
             ])
             ->seeStatusCode(404);
 
-        // Non existing stages
+        // Non existing stage
         $this->json('GET', '/stages/999/interruption_report')
             ->seeJsonEquals([
                 'status_code' => 404,
@@ -181,7 +181,7 @@ class InterruptionReportsTest extends TestCase
             ])
             ->seeStatusCode(404);
 
-        // Invalid stages ID
+        // Invalid stage ID
         $this->json('GET', '/stages/abc/interruption_report')
             ->seeJsonEquals([
                 'status_code' => 400,
@@ -201,4 +201,11 @@ class InterruptionReportsTest extends TestCase
 
     }
     
+    /**
+     * Create a stage's interruption report: success.
+     */
+    public function testCreateRelatedToStage()
+    {
+        $this->assertTrue(true);
+    }
 }
