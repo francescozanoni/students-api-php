@@ -48,10 +48,11 @@ abstract class TestCase extends Laravel\Lumen\Testing\TestCase
             json_decode(json_encode($data), true)
         ));
 
-        // If no date/time field is part of $data, standard assertion is applied.
-        if (strpos($actual, 'created_at') === false &&
+        // If GET request (from seeded data) or no date/time field is part of $data, standard assertion is applied.
+        if ($this->app['request']->method() === 'GET' ||
+            (strpos($actual, 'created_at') === false &&
             strpos($actual, 'updated_at') === false &&
-            strpos($actual, 'deleted_at') === false) {
+            strpos($actual, 'deleted_at') === false)) {
             PHPUnit::assertEquals($data, $actual);
             return $this;
         }
@@ -101,10 +102,11 @@ abstract class TestCase extends Laravel\Lumen\Testing\TestCase
     public function seeInDatabase($table, array $data, $onConnection = null) : self
     {
 
-        // If no date/time field is part of $data, standard assertion is applied.
-        if (array_key_exists('created_at', $data) === false &&
+        // If GET request (from seeded data) or no date/time field is part of $data, standard assertion is applied.
+        if ($this->app['request']->method() === 'GET' ||
+            (array_key_exists('created_at', $data) === false &&
             array_key_exists('updated_at', $data) === false &&
-            array_key_exists('deleted_at', $data) === false) {
+            array_key_exists('deleted_at', $data) === false)) {
 
             $count = $this->app->make('db')->connection($onConnection)->table($table)->where($data)->count();
 
