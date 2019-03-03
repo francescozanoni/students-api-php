@@ -35,6 +35,25 @@ class StagesTest extends TestCase
                         'is_optional' => false,
                         'is_interrupted' => false
                     ],
+                    [
+                        'id' => 2,
+                        'location' => 'Location 1',
+                        'sub_location' => 'Sub-location 1',
+                        'student' => [
+                            'id' => 1,
+                            'first_name' => 'John',
+                            'last_name' => 'Doe',
+                            'e_mail' => 'john.doe@foo.com',
+                            'phone' => '1234-567890',
+                            'nationality' => 'GB',
+                        ],
+                        'start_date' => '2019-01-26',
+                        'end_date' => '2019-01-31',
+                        'hour_amount' => 34,
+                        'other_amount' => 0,
+                        'is_optional' => true,
+                        'is_interrupted' => true
+                    ]
                 ]
             ])
             ->seeStatusCode(200);
@@ -135,6 +154,17 @@ class StagesTest extends TestCase
                         'other_amount' => 5,
                         'is_optional' => false,
                         'is_interrupted' => false
+                    ],
+                    [
+                        'id' => 2,
+                        'location' => 'Location 1',
+                        'sub_location' => 'Sub-location 1',
+                        'start_date' => '2019-01-26',
+                        'end_date' => '2019-01-31',
+                        'hour_amount' => 34,
+                        'other_amount' => 0,
+                        'is_optional' => true,
+                        'is_interrupted' => true
                     ]
                 ],
             ])
@@ -198,8 +228,8 @@ class StagesTest extends TestCase
             [
                 'location' => 'Location 1',
                 'sub_location' => 'Sub-location 1',
-                'start_date' => '2019-01-25',
-                'end_date' => '2019-01-31',
+                'start_date' => '2019-02-01',
+                'end_date' => '2019-02-11',
                 'hour_amount' => 0,
                 'other_amount' => 0,
                 'is_optional' => true,
@@ -211,11 +241,11 @@ class StagesTest extends TestCase
                 'status' => 'OK',
                 'message' => 'Resource successfully retrieved/created/modified',
                 'data' => [
-                    'id' => 2,
+                    'id' => 3,
                     'location' => 'Location 1',
                     'sub_location' => 'Sub-location 1',
-                    'start_date' => '2019-01-25',
-                    'end_date' => '2019-01-31',
+                    'start_date' => '2019-02-01',
+                    'end_date' => '2019-02-11',
                     'hour_amount' => 0,
                     'other_amount' => 0,
                     'is_optional' => true,
@@ -223,8 +253,8 @@ class StagesTest extends TestCase
                 ],
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('stages', ['id' => 2, 'student_id' => 1, 'location_id' => 1, 'sub_location_id' => 1, 'deleted_at' => null])
-            ->notSeeInDatabase('stages', ['id' => 3]);
+            ->seeInDatabase('stages', ['id' => 3, 'student_id' => 1, 'location_id' => 1, 'sub_location_id' => 1, 'deleted_at' => null])
+            ->notSeeInDatabase('stages', ['id' => 4]);
 
     }
 
@@ -254,7 +284,7 @@ class StagesTest extends TestCase
                 'message' => 'Resource(s) not found',
             ])
             ->seeStatusCode(404)
-            ->notSeeInDatabase('stages', ['id' => 2])
+            ->notSeeInDatabase('stages', ['id' => 3])
             ->notSeeInDatabase('stages', ['student_id' => 999]);
 
         // Invalid student ID
@@ -286,7 +316,7 @@ class StagesTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('stages', ['id' => 2])
+            ->notSeeInDatabase('stages', ['id' => 3])
             ->notSeeInDatabase('stages', ['student_id' => 'abc']);
 
         // Non existing location
@@ -295,8 +325,8 @@ class StagesTest extends TestCase
             [
                 'location' => 'Location 999',
                 'sub_location' => 'Sub-location 1',
-                'start_date' => '2019-01-25',
-                'end_date' => '2019-01-31',
+                'start_date' => '2019-02-25',
+                'end_date' => '2019-02-28',
                 'hour_amount' => 0,
                 'other_amount' => 0,
                 'is_optional' => true,
@@ -314,7 +344,7 @@ class StagesTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('stages', ['id' => 2]);
+            ->notSeeInDatabase('stages', ['id' => 3]);
 
         // Non existing sub-location
         $this->json('POST',
@@ -322,8 +352,8 @@ class StagesTest extends TestCase
             [
                 'location' => 'Location 1',
                 'sub_location' => 'Sub-location 999',
-                'start_date' => '2019-01-25',
-                'end_date' => '2019-01-31',
+                'start_date' => '2019-02-25',
+                'end_date' => '2019-02-28',
                 'hour_amount' => 0,
                 'other_amount' => 0,
                 'is_optional' => true,
@@ -341,7 +371,7 @@ class StagesTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('stages', ['id' => 2]);
+            ->notSeeInDatabase('stages', ['id' => 3]);
 
         // Switched dates
         $this->json('POST',
@@ -349,8 +379,8 @@ class StagesTest extends TestCase
             [
                 'location' => 'Location 1',
                 'sub_location' => 'Sub-location 1',
-                'start_date' => '2019-01-31',
-                'end_date' => '2019-01-25',
+                'start_date' => '2019-02-28',
+                'end_date' => '2019-02-25',
                 'hour_amount' => 0,
                 'other_amount' => 0,
                 'is_optional' => true,
@@ -371,7 +401,7 @@ class StagesTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('stages', ['id' => 2])
+            ->notSeeInDatabase('stages', ['id' => 3])
             ->notSeeInDatabase('stages', ['start_date' => '2019-01-31', 'end_date' => '2019-01-25']);
 
         // Identical dates
@@ -380,8 +410,8 @@ class StagesTest extends TestCase
             [
                 'location' => 'Location 1',
                 'sub_location' => 'Sub-location 1',
-                'start_date' => '2019-01-25',
-                'end_date' => '2019-01-25',
+                'start_date' => '2019-02-25',
+                'end_date' => '2019-02-25',
                 'hour_amount' => 0,
                 'other_amount' => 0,
                 'is_optional' => true,
@@ -402,7 +432,7 @@ class StagesTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('stages', ['id' => 2])
+            ->notSeeInDatabase('stages', ['id' => 3])
             ->notSeeInDatabase('stages', ['start_date' => '2019-01-25', 'end_date' => '2019-01-25']);
 
         // Overlapping time range
@@ -433,7 +463,7 @@ class StagesTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('stages', ['id' => 2]);
+            ->notSeeInDatabase('stages', ['id' => 3]);
         $this->json('POST',
             '/students/1/stages',
             [
@@ -461,7 +491,7 @@ class StagesTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('stages', ['id' => 2]);
+            ->notSeeInDatabase('stages', ['id' => 3]);
         $this->json('POST',
             '/students/1/stages',
             [
@@ -489,7 +519,7 @@ class StagesTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('stages', ['id' => 2]);
+            ->notSeeInDatabase('stages', ['id' => 3]);
         $this->json('POST',
             '/students/1/stages',
             [
@@ -517,7 +547,7 @@ class StagesTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('stages', ['id' => 2]);
+            ->notSeeInDatabase('stages', ['id' => 3]);
 
         // Unallowed additional property.
         $this->json('POST',
@@ -525,8 +555,8 @@ class StagesTest extends TestCase
             [
                 'location' => 'Location 1',
                 'sub_location' => 'Sub-location 1',
-                'start_date' => '2019-01-25',
-                'end_date' => '2019-01-31',
+                'start_date' => '2019-02-25',
+                'end_date' => '2019-02-28',
                 'hour_amount' => 0,
                 'other_amount' => 0,
                 'is_optional' => true,
@@ -548,7 +578,7 @@ class StagesTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('stages', ['id' => 2]);
+            ->notSeeInDatabase('stages', ['id' => 3]);
 
         // @todo add further tests related to missing required fields
         // @todo add further tests related to invalid attribute format
@@ -601,7 +631,7 @@ class StagesTest extends TestCase
             ->seeStatusCode(200)
             ->seeInDatabase('stages', ['id' => 1, 'hour_amount' => 456, 'other_amount' => 7])
             ->notSeeInDatabase('stages', ['id' => 1, 'hour_amount' => 123, 'other_amount' => 5])
-            ->notSeeInDatabase('stages', ['id' => 2]);
+            ->notSeeInDatabase('stages', ['id' => 3]);
 
         // Remove sub-location
         $this->json('PUT',
@@ -642,7 +672,7 @@ class StagesTest extends TestCase
             ->seeStatusCode(200)
             ->seeInDatabase('stages', ['id' => 1, 'hour_amount' => 456, 'other_amount' => 7, 'sub_location_id' => null])
             ->notSeeInDatabase('stages', ['id' => 1, 'hour_amount' => 456, 'other_amount' => 7, 'sub_location_id' => 1])
-            ->notSeeInDatabase('stages', ['id' => 2]);
+            ->notSeeInDatabase('stages', ['id' => 3]);
 
     }
 
@@ -673,7 +703,7 @@ class StagesTest extends TestCase
             ])
             ->seeStatusCode(404)
             ->notSeeInDatabase('stages', ['id' => 999])
-            ->notSeeInDatabase('stages', ['id' => 2]);
+            ->notSeeInDatabase('stages', ['id' => 3]);
 
         // Invalid ID
         $this->json('PUT',
@@ -705,14 +735,14 @@ class StagesTest extends TestCase
             ])
             ->seeStatusCode(400)
             ->notSeeInDatabase('stages', ['id' => 'abc'])
-            ->notSeeInDatabase('stages', ['id' => 2]);
+            ->notSeeInDatabase('stages', ['id' => 3]);
 
         // The record created by this method is used by below tests.
         $this->testCreateRelatedToStudent();
 
         // Overlapping time range
         $this->json('PUT',
-            '/stages/2',
+            '/stages/3',
             [
                 'location' => 'Location 1',
                 'sub_location' => 'Sub-location 1',
@@ -738,12 +768,12 @@ class StagesTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->seeInDatabase('stages', ['id' => 2, 'start_date' => '2019-01-25'])
-            ->notSeeInDatabase('stages', ['id' => 2, 'start_date' => '2019-01-20']);
+            ->seeInDatabase('stages', ['id' => 3, 'start_date' => '2019-02-01'])
+            ->notSeeInDatabase('stages', ['id' => 3, 'start_date' => '2019-01-20']);
 
         // Switched dates
         $this->json('PUT',
-            '/stages/2',
+            '/stages/3',
             [
                 'location' => 'Location 1',
                 'sub_location' => 'Sub-location 1',
@@ -769,8 +799,8 @@ class StagesTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->seeInDatabase('stages', ['id' => 2, 'start_date' => '2019-01-25', 'end_date' => '2019-01-31'])
-            ->notSeeInDatabase('stages', ['id' => 2, 'start_date' => '2019-01-25', 'end_date' => '2019-01-21']);
+            ->seeInDatabase('stages', ['id' => 3, 'start_date' => '2019-02-01', 'end_date' => '2019-02-11'])
+            ->notSeeInDatabase('stages', ['id' => 3, 'start_date' => '2019-01-25', 'end_date' => '2019-01-21']);
 
         // Unallowed additional property.
         $this->json('PUT',

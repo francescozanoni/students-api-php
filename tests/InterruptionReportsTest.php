@@ -16,9 +16,9 @@ class InterruptionReportsTest extends TestCase
                 'message' => 'Resource(s) found',
                 'data' => [
                     [
-                        'id' => 1,
+                        'id' => 2,
                         'stage' => [
-                        'id' => 1,
+                        'id' => 2,
                         'location' => 'Location 1',
                         'sub_location' => 'Sub-location 1',
                         'student' => [
@@ -29,17 +29,17 @@ class InterruptionReportsTest extends TestCase
                             'phone' => '1234-567890',
                             'nationality' => 'GB',
                         ],
-                        'start_date' => '2019-01-10',
-                        'end_date' => '2019-01-24',
-                        'hour_amount' => 123,
-                        'other_amount' => 5,
-                        'is_optional' => false,
-                        'is_interrupted' => false,
+                        'start_date' => '2019-01-26',
+                        'end_date' => '2019-01-31',
+                        'hour_amount' => 34,
+                        'other_amount' => 0,
+                        'is_optional' => true,
+                        'is_interrupted' => true
                         ],
-                        'clinical_tutor_id' => 456,
-                        'notes' => 'First interruption report notes',
-                        'created_at' => '2019-01-25 02:00:00',
-                        'updated_at' => '2019-01-25 02:00:00',
+                        'clinical_tutor_id' => 789,
+                        'notes' => 'Second interruption report notes',
+                        'created_at' => '2019-01-31 02:00:00',
+                        'updated_at' => '2019-01-31 02:00:00',
                     ],
                 ]
             ])
@@ -53,15 +53,15 @@ class InterruptionReportsTest extends TestCase
     {
 
         // Existing
-        $this->json('GET', '/interruption_reports/1')
+        $this->json('GET', '/interruption_reports/2')
             ->seeJsonEquals([
                 'status_code' => 200,
                 'status' => 'OK',
                 'message' => 'Resource successfully retrieved/created/modified',
                 'data' => [
-                    'id' => 1,
+                    'id' => 2,
                         'stage' => [
-                        'id' => 1,
+                        'id' => 2,
                         'location' => 'Location 1',
                         'sub_location' => 'Sub-location 1',
                         'student' => [
@@ -72,17 +72,17 @@ class InterruptionReportsTest extends TestCase
                             'phone' => '1234-567890',
                             'nationality' => 'GB',
                         ],
-                        'start_date' => '2019-01-10',
-                        'end_date' => '2019-01-24',
-                        'hour_amount' => 123,
-                        'other_amount' => 5,
-                        'is_optional' => false,
-                        'is_interrupted' => false,
+                        'start_date' => '2019-01-26',
+                        'end_date' => '2019-01-31',
+                        'hour_amount' => 34,
+                        'other_amount' => 0,
+                        'is_optional' => true,
+                        'is_interrupted' => true,
                         ],
-                        'clinical_tutor_id' => 456,
-                        'notes' => 'First interruption report notes',
-                        'created_at' => '2019-01-25 02:00:00',
-                        'updated_at' => '2019-01-25 02:00:00',
+                        'clinical_tutor_id' => 789,
+                        'notes' => 'Second interruption report notes',
+                        'created_at' => '2019-01-31 02:00:00',
+                        'updated_at' => '2019-01-31 02:00:00',
                 ],
             ])
             ->seeStatusCode(200);
@@ -94,6 +94,15 @@ class InterruptionReportsTest extends TestCase
      */
     public function testGetByIdFailure()
     {
+    
+    // Deleted
+        $this->json('GET', '/interruption_reports/1')
+            ->seeJsonEquals([
+                'status_code' => 404,
+                'status' => 'Not Found',
+                'message' => 'Resource(s) not found',
+            ])
+            ->seeStatusCode(404);
 
         // Non existing
         $this->json('GET', '/interruption_reports/9999')
@@ -131,20 +140,64 @@ class InterruptionReportsTest extends TestCase
     {
 
         // Existing
-        $this->json('GET', '/stages/1/interruption_report')
+        $this->json('GET', '/stages/2/interruption_report')
             ->seeJsonEquals([
                 'status_code' => 200,
                 'status' => 'OK',
                 'message' => 'Resource successfully retrieved/created/modified',
                 'data' => [
-                    'id' => 1,
-                    'clinical_tutor_id' => 456,
-                    'notes' => 'First interruption report notes',
-                    'created_at' => '2019-01-25 02:00:00',
-                    'updated_at' => '2019-01-25 02:00:00',
+                    'id' => 2,
+                    'clinical_tutor_id' => 789,
+                        'notes' => 'Second interruption report notes',
+                        'created_at' => '2019-01-31 02:00:00',
+                        'updated_at' => '2019-01-31 02:00:00',
                 ],
             ])
             ->seeStatusCode(200);
+
+    }
+    
+    /**
+     * Get stage's interruption report: failure.
+     */
+    public function testGetRelatedToStageFailure()
+    {
+
+        // Non existing stage interruption report
+        $this->json('GET', '/stages/1/interruption_report')
+            ->seeJsonEquals([
+                'status_code' => 404,
+                'status' => 'Not Found',
+                'message' => 'Resource(s) not found',
+            ])
+            ->seeStatusCode(404);
+
+        // Non existing stages
+        $this->json('GET', '/stages/999/interruption_report')
+            ->seeJsonEquals([
+                'status_code' => 404,
+                'status' => 'Not Found',
+                'message' => 'Resource(s) not found',
+            ])
+            ->seeStatusCode(404);
+
+        // Invalid stages ID
+        $this->json('GET', '/stages/abc/interruption_report')
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'id' => [
+                        'code error_type',
+                        'value abc',
+                        'expected integer',
+                        'used string',
+                        'in path',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400);
 
     }
     

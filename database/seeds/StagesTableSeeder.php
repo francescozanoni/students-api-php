@@ -24,5 +24,18 @@ class StagesTableSeeder extends Seeder
             'created_at' => '2019-01-09 02:00:00',
             'updated_at' => '2019-01-09 02:00:00',
         ]);
+        DB::table('stages')->insert([
+            'student_id' => 1,
+            'location_id' => 1,
+            'sub_location_id' => 1,
+            'start_date' => '2019-01-26',
+            'end_date' => '2019-01-31',
+            'hour_amount' => 34,
+            'other_amount' => 0,
+            'is_optional' => true,
+            'is_interrupted' => true,
+            'created_at' => '2019-01-25 02:00:00',
+            'updated_at' => '2019-01-25 02:00:00',
+        ]);
     }
 }
