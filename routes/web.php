@@ -51,14 +51,6 @@ $router->group(['middleware' => 'validate_request'], function () use ($router) {
     $router->put('stages/{id}', ['as' => 'updateStageById', 'uses' => 'StagesController@update']);
     $router->delete('stages/{id}', ['as' => 'deleteStageById', 'uses' => 'StagesController@destroy']);
 
-    $router->get('students/{id}/seminar_attendances', ['as' => 'getStudentSeminarAttendances', 'uses' => 'SeminarAttendancesController@getRelatedToStudent']);
-    $router->post('students/{id}/seminar_attendances', ['as' => 'createStudentSeminarAttendance', 'uses' => 'SeminarAttendancesController@createRelatedToStudent']);
-
-    $router->get('seminar_attendances', ['as' => 'getSeminarAttendances', 'uses' => 'SeminarAttendancesController@index']);
-    $router->get('seminar_attendances/{id}', ['as' => 'getSeminarAttendanceById', 'uses' => 'SeminarAttendancesController@show']);
-    $router->put('seminar_attendances/{id}', ['as' => 'updateSeminarAttendanceById', 'uses' => 'SeminarAttendancesController@update']);
-    $router->delete('seminar_attendances/{id}', ['as' => 'deleteSeminarAttendanceById', 'uses' => 'SeminarAttendancesController@destroy']);
-
     $router->get('students/{id}/educational_activity_attendances', ['as' => 'getStudentEducationalActivityAttendances', 'uses' => 'EducationalActivityAttendancesController@getRelatedToStudent']);
     $router->post('students/{id}/educational_activity_attendances', ['as' => 'createStudentEducationalActivityAttendance', 'uses' => 'EducationalActivityAttendancesController@createRelatedToStudent']);
 

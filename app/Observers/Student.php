@@ -17,7 +17,6 @@ class Student
     {
         $student->annotations()->delete();
         $student->stages()->delete();
-        $student->seminarAttendances()->delete();
         $student->educationalActivityAttendances()->delete();
     }
 

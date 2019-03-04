@@ -8,7 +8,6 @@ use App\Models\Annotation;
 use App\Models\EducationalActivityAttendance;
 use App\Models\Evaluation;
 use App\Models\InterruptionReport;
-use App\Models\SeminarAttendance;
 use App\Models\Stage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -166,90 +165,11 @@ class ValidateRequest
                     // @todo if "is_interrupted" is switched from true to false, there must not be an interruption report
                 }
                 break;
-                
+
             case 'deleteStageById':
                 $stage = Stage::find(app('current_route_path_parameters')['id']);
                 if ($stage) {
                     // @todo block deletion in case of evaluation or interruption report available
-                }
-                break;
-
-            case 'createStudentSeminarAttendance':
-                Validator::make(
-                    $request->request->all(),
-                    [
-                        'seminar' => [
-                            // Student/seminar/start date uniqueness
-                            Rule::unique('seminar_attendances')
-                                ->where(function ($query) use ($request) {
-                                    return $query
-                                        ->where('student_id', app('current_route_path_parameters')['id'])
-                                        ->where('start_date', $request->request->get('start_date'));
-                                }),
-                        ],
-                        'start_date' => [
-                            'bail',
-                            'before_optional:end_date',
-                            // Student/seminar/start date uniqueness
-                            Rule::unique('seminar_attendances')
-                                ->where(function ($query) use ($request) {
-                                    return $query
-                                        ->where('student_id', app('current_route_path_parameters')['id'])
-                                        ->where('seminar', $request->request->get('seminar'));
-                                }),
-                        ],
-                        'end_date' => [
-                            'bail',
-                            'after:start_date',
-                        ],
-                    ],
-                    [
-                        'seminar.unique' => 'Combination of student, seminar and start date already used',
-                        'start_date.unique' => 'Combination of student, seminar and start date already used',
-                        'start_date.before_optional' => 'The :attribute must be a date before end date',
-                        'end_date.after' => 'The :attribute must be a date after start date',
-                    ]
-                )->validate();
-                break;
-
-            case 'updateSeminarAttendanceById':
-                $educationalActivityAttendance = SeminarAttendance::find(app('current_route_path_parameters')['id']);
-                if ($educationalActivityAttendance) {
-                    Validator::make(
-                        $request->request->all(),
-                        [
-                            'seminar' => [
-                                // Student/seminar/start date uniqueness
-                                Rule::unique('seminar_attendances')
-                                    ->where(function ($query) use ($request, $educationalActivityAttendance) {
-                                        return $query
-                                            ->where('student_id', $educationalActivityAttendance->student->id)
-                                            ->where('start_date', $request->request->get('start_date'));
-                                    }),
-                            ],
-                            'start_date' => [
-                                'bail',
-                                'before_optional:end_date',
-                                // Student/seminar/start date uniqueness
-                                Rule::unique('seminar_attendances')
-                                    ->where(function ($query) use ($request, $educationalActivityAttendance) {
-                                        return $query
-                                            ->where('student_id', $educationalActivityAttendance->student->id)
-                                            ->where('seminar', $request->request->get('seminar'));
-                                    }),
-                            ],
-                            'end_date' => [
-                                'bail',
-                                'after:start_date',
-                            ],
-                        ],
-                        [
-                            'seminar.unique' => 'Combination of student, seminar and start date already used',
-                            'start_date.unique' => 'Combination of student, seminar and start date already used',
-                            'start_date.before_optional' => 'The :attribute must be a date before end date',
-                            'end_date.after' => 'The :attribute must be a date after start date',
-                        ]
-                    )->validate();
                 }
                 break;
 

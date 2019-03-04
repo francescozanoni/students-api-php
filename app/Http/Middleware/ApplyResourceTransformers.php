@@ -7,7 +7,6 @@ use App\Http\Resources\Annotation as AnnotationResource;
 use App\Http\Resources\EducationalActivityAttendance as EducationalActivityAttendanceResource;
 use App\Http\Resources\Evaluation as EvaluationResource;
 use App\Http\Resources\InterruptionReport as InterruptionReportResource;
-use App\Http\Resources\SeminarAttendance as SeminarAttendanceResource;
 use App\Http\Resources\Stage as StageResource;
 use App\Http\Resources\Student as StudentResource;
 
@@ -67,17 +66,6 @@ class ApplyResourceTransformers
             case 'createStudentStage':
             case 'updateStageById':
                 $response->setContent(new StageResource($response->original));
-                break;
-
-            case 'getSeminarAttendances':
-            case 'getStudentSeminarAttendances':
-                $response->setContent(SeminarAttendanceResource::collection($response->original));
-                break;
-
-            case 'getSeminarAttendanceById':
-            case 'createStudentSeminarAttendance':
-            case 'updateSeminarAttendanceById':
-                $response->setContent(new SeminarAttendanceResource($response->original));
                 break;
 
             case 'getEducationalActivityAttendances':
