@@ -464,8 +464,8 @@ class EducationalActivityAttendancesTest extends TestCase
                 'message' => 'Resource(s) not found',
             ])
             ->seeStatusCode(404)
-            ->notSeeInDatabase('stages', ['id' => 999])
-            ->notSeeInDatabase('stages', ['id' => 3]);
+            ->notSeeInDatabase('educational_activity_attendances', ['id' => 999])
+            ->notSeeInDatabase('educational_activity_attendances', ['id' => 3]);
 
         // Invalid ID
         $this->json('PUT',
@@ -492,8 +492,8 @@ class EducationalActivityAttendancesTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('stages', ['id' => 999])
-            ->notSeeInDatabase('stages', ['id' => 3]);
+            ->notSeeInDatabase('educational_activity_attendances', ['id' => 999])
+            ->notSeeInDatabase('educational_activity_attendances', ['id' => 3]);
 
         // The record created by this method is used by below tests.
         $this->testCreateRelatedToStudent();

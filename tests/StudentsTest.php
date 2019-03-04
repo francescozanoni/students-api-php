@@ -31,12 +31,12 @@ class StudentsTest extends TestCase
                         'nationality' => 'CA',
                     ],
                     [
-                    'id' => 4,
-            'first_name' => 'Joan',
-            'last_name' => 'Doe',
-            'e_mail' => 'joan.doe@foo.com',
-            'nationality' => 'IE',
-        ]
+                        'id' => 4,
+                        'first_name' => 'Joan',
+                        'last_name' => 'Doe',
+                        'e_mail' => 'joan.doe@foo.com',
+                        'nationality' => 'IE',
+                    ]
                 ]
             ])
             ->seeStatusCode(200);

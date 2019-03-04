@@ -18,23 +18,23 @@ class InterruptionReportsTest extends TestCase
                     [
                         'id' => 2,
                         'stage' => [
-                        'id' => 2,
-                        'location' => 'Location 1',
-                        'sub_location' => 'Sub-location 1',
-                        'student' => [
-                            'id' => 1,
-                            'first_name' => 'John',
-                            'last_name' => 'Doe',
-                            'e_mail' => 'john.doe@foo.com',
-                            'phone' => '1234-567890',
-                            'nationality' => 'GB',
-                        ],
-                        'start_date' => '2019-01-26',
-                        'end_date' => '2019-01-31',
-                        'hour_amount' => 34,
-                        'other_amount' => 0,
-                        'is_optional' => true,
-                        'is_interrupted' => true
+                            'id' => 2,
+                            'location' => 'Location 1',
+                            'sub_location' => 'Sub-location 1',
+                            'student' => [
+                                'id' => 1,
+                                'first_name' => 'John',
+                                'last_name' => 'Doe',
+                                'e_mail' => 'john.doe@foo.com',
+                                'phone' => '1234-567890',
+                                'nationality' => 'GB',
+                            ],
+                            'start_date' => '2019-01-26',
+                            'end_date' => '2019-01-31',
+                            'hour_amount' => 34,
+                            'other_amount' => 0,
+                            'is_optional' => true,
+                            'is_interrupted' => true
                         ],
                         'clinical_tutor_id' => 789,
                         'notes' => 'Second interruption report notes',
@@ -45,7 +45,7 @@ class InterruptionReportsTest extends TestCase
             ])
             ->seeStatusCode(200);
     }
-    
+
     /**
      * Get interruption report by ID.
      */
@@ -60,7 +60,7 @@ class InterruptionReportsTest extends TestCase
                 'message' => 'Resource successfully retrieved/created/modified',
                 'data' => [
                     'id' => 2,
-                        'stage' => [
+                    'stage' => [
                         'id' => 2,
                         'location' => 'Location 1',
                         'sub_location' => 'Sub-location 1',
@@ -78,24 +78,24 @@ class InterruptionReportsTest extends TestCase
                         'other_amount' => 0,
                         'is_optional' => true,
                         'is_interrupted' => true,
-                        ],
-                        'clinical_tutor_id' => 789,
-                        'notes' => 'Second interruption report notes',
-                        'created_at' => '2019-01-31 02:00:00',
-                        'updated_at' => '2019-01-31 02:00:00',
+                    ],
+                    'clinical_tutor_id' => 789,
+                    'notes' => 'Second interruption report notes',
+                    'created_at' => '2019-01-31 02:00:00',
+                    'updated_at' => '2019-01-31 02:00:00',
                 ],
             ])
             ->seeStatusCode(200);
 
     }
-    
+
     /**
      * Get interruption report by ID: failure.
      */
     public function testGetByIdFailure()
     {
-    
-    // Deleted
+
+        // Deleted
         $this->json('GET', '/interruption_reports/1')
             ->seeJsonEquals([
                 'status_code' => 404,
@@ -132,7 +132,7 @@ class InterruptionReportsTest extends TestCase
             ->seeStatusCode(400);
 
     }
-    
+
     /**
      * Get stage's interruption report: success.
      */
@@ -148,15 +148,15 @@ class InterruptionReportsTest extends TestCase
                 'data' => [
                     'id' => 2,
                     'clinical_tutor_id' => 789,
-                        'notes' => 'Second interruption report notes',
-                        'created_at' => '2019-01-31 02:00:00',
-                        'updated_at' => '2019-01-31 02:00:00',
+                    'notes' => 'Second interruption report notes',
+                    'created_at' => '2019-01-31 02:00:00',
+                    'updated_at' => '2019-01-31 02:00:00',
                 ],
             ])
             ->seeStatusCode(200);
 
     }
-    
+
     /**
      * Get stage's interruption report: failure.
      */
@@ -200,7 +200,7 @@ class InterruptionReportsTest extends TestCase
             ->seeStatusCode(400);
 
     }
-    
+
     /**
      * Create a stage's interruption report: success.
      */
