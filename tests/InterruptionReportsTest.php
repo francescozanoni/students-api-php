@@ -206,6 +206,84 @@ class InterruptionReportsTest extends TestCase
      */
     public function testCreateRelatedToStage()
     {
-        $this->assertTrue(true);
+
+        // Existing stage
+        $this->json('POST',
+            '/stages/3/interruption_report',
+            [
+                'clinical_tutor_id' => 123,
+                'notes' => 'Another interruption report notes',
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 200,
+                'status' => 'OK',
+                'message' => 'Resource successfully retrieved/created/modified',
+                'data' => [
+                    'id' => 3,
+                    'clinical_tutor_id' => 123,
+                    'notes' => 'Another interruption report notes',
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s'),
+                ],
+            ])
+            ->seeStatusCode(200)
+            ->seeInDatabase('interruption_reports', ['id' => 3, 'stage_id' => 3, 'clinical_tutor_id' => 123, 'deleted_at' => null])
+            ->notSeeInDatabase('interruption_reports', ['id' => 4]);
+
     }
+
+    /**
+     * Create a stage's interruption report: failure.
+     */
+    public function testCreateRelatedToStageFailure()
+    {
+
+        // Non existing stage
+        $this->json('POST',
+            '/stages/999/interruption_report',
+            [
+                'clinical_tutor_id' => 123,
+                'notes' => 'Another interruption report notes',
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 404,
+                'status' => 'Not Found',
+                'message' => 'Resource(s) not found',
+            ])
+            ->seeStatusCode(404)
+            ->notSeeInDatabase('interruption_reports', ['id' => 3])
+            ->notSeeInDatabase('interruption_reports', ['stage_id' => 999]);
+
+        // Invalid stage ID
+        $this->json('POST',
+            '/stages/abc/interruption_report',
+            [
+                'clinical_tutor_id' => 123,
+                'notes' => 'Another interruption report notes',
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'id' => [
+                        'code error_type',
+                        'value abc',
+                        'expected integer',
+                        'used string',
+                        'in path',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('interruption_reports', ['id' => 3])
+            ->notSeeInDatabase('interruption_reports', ['stage_id' => 'abc']);
+
+        // @todo add test of stage not interrupted
+
+    }
+
 }
