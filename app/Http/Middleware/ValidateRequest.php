@@ -9,8 +9,10 @@ use App\Models\EducationalActivityAttendance;
 use App\Models\Evaluation;
 use App\Models\InterruptionReport;
 use App\Models\Stage;
+use App\Http\Resources\Stage as StageResource;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 /**
  * Class ValidateRequest
@@ -277,6 +279,15 @@ class ValidateRequest
                 break;
 
             case 'createStageInterruptionReport':
+                $stage = Stage::find(app('current_route_path_parameters')['id']);
+                if ($stage) {
+                    if ((new StageResource($stage))->toArray($request)['is_interrupted'] !== true) {
+                        throw ValidationException::withMessages(['stage_id' => ['Stage is not interrupted']]);
+                    }
+                    if ($stage->interruption_report !== null) {
+                        throw ValidationException::withMessages(['stage_id' => ['Stage already has interruption report']]);
+                    }
+                }
                 Validator::make(
                     $request->request->all(),
                     [
@@ -284,12 +295,15 @@ class ValidateRequest
                     [
                     ]
                 )->validate();
-                // @todo stage must be interrupted
+                // @todo stage must not have another interruption report
                 // @todo current date must be after stage's start date
                 break;
 
             case 'updateInterruptionReportById':
                 $interruptionReport = InterruptionReport::find(app('current_route_path_parameters')['id']);
+                if ($interruptionReport->stage->is_interrupted !== true) {
+                    throw ValidationException::withMessages(['stage_id' => ['Stage is not interrupted']]);
+                }
                 if ($interruptionReport) {
                     Validator::make(
                         $request->request->all(),

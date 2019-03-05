@@ -11,6 +11,8 @@ class StagesTableSeeder extends Seeder
      */
     public function run()
     {
+
+        // Standard stage.
         DB::table('stages')->insert([
             'student_id' => 1,
             'location_id' => 1,
@@ -24,6 +26,8 @@ class StagesTableSeeder extends Seeder
             'created_at' => '2019-01-09 02:00:00',
             'updated_at' => '2019-01-09 02:00:00',
         ]);
+
+        // Optional interrupted stage.
         DB::table('stages')->insert([
             'student_id' => 1,
             'location_id' => 1,
@@ -37,6 +41,8 @@ class StagesTableSeeder extends Seeder
             'created_at' => '2019-01-25 02:00:00',
             'updated_at' => '2019-01-25 02:00:00',
         ]);
+
+        // Interrupted stage.
         DB::table('stages')->insert([
             'student_id' => 4,
             'location_id' => 1,
@@ -50,5 +56,6 @@ class StagesTableSeeder extends Seeder
             'created_at' => '2019-01-25 02:00:00',
             'updated_at' => '2019-01-28 02:00:00',
         ]);
+
     }
 }

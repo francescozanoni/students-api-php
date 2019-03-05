@@ -282,7 +282,51 @@ class InterruptionReportsTest extends TestCase
             ->notSeeInDatabase('interruption_reports', ['id' => 3])
             ->notSeeInDatabase('interruption_reports', ['stage_id' => 'abc']);
 
-        // @todo add test of stage not interrupted
+        // Non interrupted stage
+        $this->json('POST',
+            '/stages/1/interruption_report',
+            [
+                'clinical_tutor_id' => 123,
+                'notes' => 'Another interruption report notes',
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'stage_id' => [
+                        'Stage is not interrupted',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('interruption_reports', ['id' => 3])
+            ->notSeeInDatabase('interruption_reports', ['stage_id' => 1]);
+
+        // Stage already with interruption report
+        /*
+        $this->json('POST',
+            '/stages/2/interruption_report',
+            [
+                'clinical_tutor_id' => 123,
+                'notes' => 'Another interruption report notes',
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'stage_id' => [
+                        'Stage already has interruption report',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('interruption_reports', ['id' => 3]);
+*/
+        // @todo add test of stage with already another interruption report
 
     }
 
