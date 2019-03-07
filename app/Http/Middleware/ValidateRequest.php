@@ -281,11 +281,19 @@ class ValidateRequest
             case 'createStageInterruptionReport':
                 $stage = Stage::find(app('current_route_path_parameters')['id']);
                 if ($stage) {
+                    // Stage must be interrupted.
                     if ((new StageResource($stage))->toArray($request)['is_interrupted'] !== true) {
                         throw ValidationException::withMessages(['stage_id' => ['Stage is not interrupted']]);
                     }
-                    if ($stage->interruption_report !== null) {
+                    // Stage must not have any interruption reports yet.
+                    if ($stage->interruptionReport !== null) {
                         throw ValidationException::withMessages(['stage_id' => ['Stage already has interruption report']]);
+                    }
+                    // Stage must be already started.
+                    $currentDate = new \DateTime();
+                    $stageStartDate = \DateTime::createFromFormat('Y-m-d', $stage->start_date);
+                    if ((int)($currentDate->diff($stageStartDate))->format('%r%d') > 1) {
+                        throw ValidationException::withMessages(['stage_id' => ['Stage not started yet']]);
                     }
                 }
                 Validator::make(
@@ -295,7 +303,6 @@ class ValidateRequest
                     [
                     ]
                 )->validate();
-                // @todo stage must not have another interruption report
                 // @todo current date must be after stage's start date
                 break;
 
