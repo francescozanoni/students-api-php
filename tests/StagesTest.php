@@ -262,7 +262,7 @@ class StagesTest extends TestCase
     public function testCreateRelatedToStudent()
     {
 
-        // Existing student
+        // Existing student, with sub-location
         $this->json('POST',
             '/students/1/stages',
             [
@@ -293,8 +293,40 @@ class StagesTest extends TestCase
                 ],
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('stages', ['id' => 5, 'student_id' => 4, 'location_id' => 1, 'sub_location_id' => 1, 'deleted_at' => null])
+            ->seeInDatabase('stages', ['id' => 5, 'student_id' => 1, 'location_id' => 1, 'sub_location_id' => 1, 'deleted_at' => null])
             ->notSeeInDatabase('stages', ['id' => 6]);
+            
+        // Existing student, without sub-location
+        $this->json('POST',
+            '/students/1/stages',
+            [
+                'location' => 'Location 1',
+                'start_date' => '2019-04-01',
+                'end_date' => '2019-04-11',
+                'hour_amount' => 0,
+                'other_amount' => 0,
+                'is_optional' => true,
+                'is_interrupted' => false
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 200,
+                'status' => 'OK',
+                'message' => 'Resource successfully retrieved/created/modified',
+                'data' => [
+                    'id' => 6,
+                    'location' => 'Location 1',
+                    'start_date' => '2019-04-01',
+                    'end_date' => '2019-04-11',
+                    'hour_amount' => 0,
+                    'other_amount' => 0,
+                    'is_optional' => true,
+                    'is_interrupted' => false
+                ],
+            ])
+            ->seeStatusCode(200)
+            ->seeInDatabase('stages', ['id' => 6, 'student_id' => 1, 'location_id' => null, 'sub_location_id' => 1, 'deleted_at' => null])
+            ->notSeeInDatabase('stages', ['id' => 7]);
 
     }
 
@@ -618,8 +650,99 @@ class StagesTest extends TestCase
             ])
             ->seeStatusCode(400)
             ->notSeeInDatabase('stages', ['id' => 5]);
-
-        // @todo add further tests related to missing required fields
+            
+        // Missing required location
+        $this->json('POST',
+            '/students/1/stages',
+            [
+                'start_date' => '2019-02-25',
+                'end_date' => '2019-02-28',
+                'is_optional' => true,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'location' => [
+                        'code error_required',
+                        'in body',
+                    ]
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('stages', ['id' => 5]);
+            
+        // Missing required start_date
+        $this->json('POST',
+            '/students/1/stages',
+            [
+                'location' => 'Location 1',
+                'end_date' => '2019-02-28',
+                'is_optional' => true,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'start_date' => [
+                        'code error_required',
+                        'in body',
+                    ]
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('stages', ['id' => 5]);
+            
+        // Missing required end_date
+        $this->json('POST',
+            '/students/1/stages',
+            [
+                'location' => 'Location 1',
+                'start_date' => '2019-02-25',
+                'is_optional' => true,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'end_date' => [
+                        'code error_required',
+                        'in body',
+                    ]
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('stages', ['id' => 5]);
+            
+        // Missing required is_optional
+        $this->json('POST',
+            '/students/1/stages',
+            [
+                'location' => 'Location 1',
+                'start_date' => '2019-02-25',
+                'end_date' => '2019-02-28',
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'is_optional' => [
+                        'code error_required',
+                        'in body',
+                    ]
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('stages', ['id' => 5]);
+            
         // @todo add further tests related to invalid attribute format
 
     }
@@ -671,18 +794,15 @@ class StagesTest extends TestCase
             ->seeInDatabase('stages', ['id' => 1, 'hour_amount' => 456, 'other_amount' => 7])
             ->notSeeInDatabase('stages', ['id' => 1, 'hour_amount' => 123, 'other_amount' => 5])
             ->notSeeInDatabase('stages', ['id' => 5]);
-
-        // Remove sub-location
+/* @todo check
+        // Remove sub-location, amounts and is_interrupted
         $this->json('PUT',
             '/stages/1',
             [
                 'location' => 'Location 1',
                 'start_date' => '2019-01-10',
                 'end_date' => '2019-01-24',
-                'hour_amount' => 456,
-                'other_amount' => 7,
                 'is_optional' => false,
-                'is_interrupted' => false
             ]
         )
             ->seeJsonEquals([
@@ -702,6 +822,46 @@ class StagesTest extends TestCase
                     ],
                     'start_date' => '2019-01-10',
                     'end_date' => '2019-01-24',
+                    'is_optional' => false,
+                ],
+            ])
+            ->seeStatusCode(200)
+            ->seeInDatabase('stages', ['id' => 1, 'hour_amount' => null, 'other_amount' => null, 'is_interrupted' => null, 'sub_location_id' => null])
+            ->notSeeInDatabase('stages', ['id' => 1, 'hour_amount' => 456, 'other_amount' => 7,  'is_interrupted' => 0, 'sub_location_id' => 1])
+            ->notSeeInDatabase('stages', ['id' => 5]);
+            
+        // Add sub-location, amounts and is_interrupted
+        $this->json('PUT',
+            '/stages/1',
+            [
+                'location' => 'Location 1',
+                'sub_location' => 'Sub-location 1',
+                'start_date' => '2019-01-10',
+                'end_date' => '2019-01-24',
+                'hour_amount' => 456,
+                'other_amount' => 7,
+                'is_optional' => false,
+                'is_interrupted' => false
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 200,
+                'status' => 'OK',
+                'message' => 'Resource successfully retrieved/created/modified',
+                'data' => [
+                    'id' => 1,
+                    'location' => 'Location 1',
+                    'sub_location' => 'Sub-location 1',
+                    'student' => [
+                        'id' => 1,
+                        'first_name' => 'John',
+                        'last_name' => 'Doe',
+                        'e_mail' => 'john.doe@foo.com',
+                        'phone' => '1234-567890',
+                        'nationality' => 'GB',
+                    ],
+                    'start_date' => '2019-01-10',
+                    'end_date' => '2019-01-24',
                     'hour_amount' => 456,
                     'other_amount' => 7,
                     'is_optional' => false,
@@ -709,10 +869,10 @@ class StagesTest extends TestCase
                 ],
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('stages', ['id' => 1, 'hour_amount' => 456, 'other_amount' => 7, 'sub_location_id' => null])
-            ->notSeeInDatabase('stages', ['id' => 1, 'hour_amount' => 456, 'other_amount' => 7, 'sub_location_id' => 1])
+            ->notSeeInDatabase('stages', ['id' => 1, 'hour_amount' => null, 'other_amount' => null, 'is_interrupted' => null, 'sub_location_id' => null])
+            ->seeInDatabase('stages', ['id' => 1, 'hour_amount' => 456, 'other_amount' => 7,  'is_interrupted' => 0, 'sub_location_id' => 1])
             ->notSeeInDatabase('stages', ['id' => 5]);
-
+*/
     }
 
     /**
