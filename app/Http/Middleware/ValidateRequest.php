@@ -135,6 +135,13 @@ class ValidateRequest
             case 'updateStageById':
                 $stage = Stage::find(app('current_route_path_parameters')['id']);
                 if ($stage) {
+                    // If attribute "is_interrupted" is switched from true to false,
+                    // there must not be any interruption reports.
+                    if ((new StageResource($stage))->toArray($request)['is_interrupted'] === true &&
+                        $request->request->get('is_interrupted') === false &&
+                        $stage->interruptionReport !== null) {
+                        throw ValidationException::withMessages(['is_interrupted' => ['Stage actually has interruption report']]);
+                    }
                     Validator::make(
                         $request->request->all(),
                         [
@@ -164,7 +171,6 @@ class ValidateRequest
                             'end_date.not_overlapping_time_range' => 'Unavailable time range',
                         ]
                     )->validate();
-                    // @todo if "is_interrupted" is switched from true to false, there must not be an interruption report
                 }
                 break;
 

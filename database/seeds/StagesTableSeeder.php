@@ -27,7 +27,7 @@ class StagesTableSeeder extends Seeder
             'updated_at' => '2019-01-09 02:00:00',
         ]);
 
-        // Optional interrupted stage.
+        // Optional interrupted stage, with interruption report.
         DB::table('stages')->insert([
             'student_id' => 1,
             'location_id' => 1,

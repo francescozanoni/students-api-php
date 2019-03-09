@@ -849,6 +849,33 @@ class StagesTest extends TestCase
             ->seeInDatabase('stages', ['id' => 1])
             ->notSeeInDatabase('stages', ['id' => 1, 'hour_amount' => 111, 'is_optional' => true]);
 
+        // "is_interrupted" cannot be switched from true to false, if interruption report is available.
+        $this->json('PUT',
+            '/stages/2',
+            [
+                'location' => 'Location 1',
+                'sub_location' => 'Sub-location 1',
+                'start_date' => '2019-01-26',
+                'end_date' => '2019-01-31',
+                'hour_amount' => 34,
+                'other_amount' => 0,
+                'is_optional' => true,
+                'is_interrupted' => false, // --> modified
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'is_interrupted' => [
+                        'Stage actually has interruption report',
+                    ]
+                ]
+            ])
+            ->seeInDatabase('stages', ['id' => 2])
+            ->notSeeInDatabase('stages', ['id' => 2, 'is_interrupted' => false]);
+
         // @todo add further tests related to missing required fields
         // @todo add further tests related to invalid attribute format
 
@@ -870,8 +897,6 @@ class StagesTest extends TestCase
             ->seeStatusCode(200)
             ->seeInDatabase('stages', ['id' => 1, 'deleted_at' => date('Y-m-d H:i:s')])
             ->notSeeInDatabase('stages', ['id' => 1, 'deleted_at' => null]);
-
-        // @todo add tests of cascade deletion of related models (evaluations and interruption reports)
 
     }
 
@@ -909,6 +934,8 @@ class StagesTest extends TestCase
             ])
             ->seeStatusCode(400)
             ->notSeeInDatabase('stages', ['id' => 'abc']);
+
+        // @todo in caase of evaluations and/or interruption reports, stage cannot be deleted
 
     }
 
