@@ -325,11 +325,9 @@ class InterruptionReportsTest extends TestCase
             ->seeStatusCode(400)
             ->notSeeInDatabase('interruption_reports', ['id' => 3]);
 
-        // @todo
-        // Stage with start date after today
-        /*
+        // Stage with start date in the future
         $this->json('POST',
-            '/stages/<to_be_found>/interruption_report',
+            '/stages/4/interruption_report',
             [
                 'clinical_tutor_id' => 123,
                 'notes' => 'Another interruption report notes',
@@ -347,7 +345,6 @@ class InterruptionReportsTest extends TestCase
             ])
             ->seeStatusCode(400)
             ->notSeeInDatabase('interruption_reports', ['id' => 3]);
-        */
 
     }
 
