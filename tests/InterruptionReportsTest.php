@@ -477,5 +477,61 @@ class InterruptionReportsTest extends TestCase
         // @todo add further tests related to invalid attribute format
 
     }
+    
+    /**
+     * Delete a stage interruption report: success.
+     */
+    public function testDeleteById()
+    {
+
+        // Existing stage
+        $this->json('DELETE', '/interruption_reports/2')
+            ->seeJsonEquals([
+                'status_code' => 200,
+                'status' => 'OK',
+                'message' => 'Resource deleted',
+            ])
+            ->seeStatusCode(200)
+            ->seeInDatabase('interruption_reports', ['id' => 2, 'deleted_at' => date('Y-m-d H:i:s')])
+            ->notSeeInDatabase('interruption_reports', ['id' => 2, 'deleted_at' => null]);
+
+    }
+
+    /**
+     * Delete a stage interruption report: failure.
+     */
+    public function testDeleteByIdFailure()
+    {
+
+        // Non existing interruption report
+        $this->json('DELETE', '/interruption_reports/999')
+            ->seeJsonEquals([
+                'status_code' => 404,
+                'status' => 'Not Found',
+                'message' => 'Resource(s) not found',
+            ])
+            ->seeStatusCode(404)
+            ->notSeeInDatabase('interruption_reports', ['id' => 999]);
+
+        // Invalid ID
+        $this->json('DELETE', '/interruption_reports/abc')
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'id' => [
+                        'code error_type',
+                        'value abc',
+                        'expected integer',
+                        'used string',
+                        'in path',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('interruption_reports', ['id' => 'abc']);
+
+    }
 
 }
