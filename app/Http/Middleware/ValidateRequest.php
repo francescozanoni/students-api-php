@@ -86,20 +86,22 @@ class ValidateRequest
                 // An annotation cannot be changed by a different user.
                 $annotation = Annotation::find(app('current_route_path_parameters')['id']);
                 if ($annotation) {
+                    // @todo validate user_id against users table
                     Validator::make(
                         $request->request->all(),
                         [
-                            'user_id' => 'in:' . $annotation->user_id,
+                            'user_id' => 'in:' . $annotation->user_id, // 'exists:users,id'
                         ],
                         [
                             'user_id.in' => 'The :attribute cannot be changed',
+                            // 'user_id.exists' => 'The :attribute must exist']
                         ]
                     )->validate();
                 }
                 break;
 
             case 'deleteAnnotationById':
-                // @todo add user_id validation, that must be provided and match the current value
+                // @todo add user_id validation, that must be provided, exist and match the current value
                 break;
 
             case 'createStudentStage':
@@ -281,10 +283,13 @@ class ValidateRequest
                     }
                 }
                 Validator::make(
+                    // @todo validate clinical_tutor_id against users table
                     $request->request->all(),
                     [
+                        // 'clinical_tutor_id' => 'exists:clinical_tutors,id'
                     ],
                     [
+                        // 'clinical_tutor_id.exists' => 'The :attribute must exist'
                     ]
                 )->validate();
                 break;
@@ -292,13 +297,18 @@ class ValidateRequest
             case 'updateEvaluationById':
                 $evaluation = Evaluation::find(app('current_route_path_parameters')['id']);
                 if ($evaluation) {
-                    Validator::make(
-                        $request->request->all(),
-                        [
-                        ],
-                        [
-                        ]
-                    )->validate();
+                Validator::make(
+                    // @todo validate clinical_tutor_id against users table
+                    $request->request->all(),
+                    [
+                        // 'clinical_tutor_id' => 'exists:clinical_tutors,id'
+                        'clinical_tutor_id' => 'in:' . $evaluation->clinical_tutor_id,
+                    ],
+                    [
+                        // 'clinical_tutor_id.exists' => 'The :attribute must exist'
+                        'clinical_tutor_id.in' => 'The :attribute cannot be changed',
+                    ]
+                )->validate();
                 }
                 break;
 
@@ -321,28 +331,36 @@ class ValidateRequest
                     }
                 }
                 Validator::make(
+                    // @todo validate clinical_tutor_id against users table
                     $request->request->all(),
                     [
+                        // 'clinical_tutor_id' => 'exists:clinical_tutors,id'
                     ],
                     [
+                        // 'clinical_tutor_id.exists' => 'The :attribute must exist'
                     ]
                 )->validate();
                 break;
 
             case 'updateInterruptionReportById':
                 $interruptionReport = InterruptionReport::find(app('current_route_path_parameters')['id']);
-                if ($interruptionReport->stage->is_interrupted !== true) {
-                    throw ValidationException::withMessages(['stage_id' => ['Stage is not interrupted']]);
-                }
                 if ($interruptionReport) {
+                    // Stage must be interrupted.
+                    if ((new StageResource($interruptionReport->stage))->toArray($request)['is_interrupted'] !== true) {
+                        throw ValidationException::withMessages(['stage_id' => ['Stage is not interrupted']]);
+                    }
                     Validator::make(
-                        $request->request->all(),
-                        [
-                        ],
-                        [
-                        ]
-                    )->validate();
-                    // @todo stage must be interrupted
+                    // @todo validate clinical_tutor_id against users table
+                    $request->request->all(),
+                    [
+                        // 'clinical_tutor_id' => 'exists:clinical_tutors,id'
+                        'clinical_tutor_id' => 'in:' . $interruptionReport->clinical_tutor_id,
+                    ],
+                    [
+                        // 'clinical_tutor_id.exists' => 'The :attribute must exist'
+                        'clinical_tutor_id.in' => 'The :attribute cannot be changed',
+                    ]
+                )->validate();
                 }
                 break;
 
