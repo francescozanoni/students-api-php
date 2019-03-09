@@ -1585,7 +1585,6 @@ components:
         - start_date
         - end_date
         - is_optional
-        - is_interrupted
       additionalProperties: false
       example:
         location: 'Location 1'
