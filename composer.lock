@@ -207,16 +207,16 @@
         },
         {
             "name": "hkarlstrom/openapi-validation-middleware",
-            "version": "0.3.5",
+            "version": "0.3.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hkarlstrom/openapi-validation-middleware.git",
-                "reference": "8a05085fa2c6f2a4e8cc8f137ae865fa55fdfb56"
+                "reference": "7a385132c55bdfa31aaeb4bef88460ed1efa92f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hkarlstrom/openapi-validation-middleware/zipball/8a05085fa2c6f2a4e8cc8f137ae865fa55fdfb56",
-                "reference": "8a05085fa2c6f2a4e8cc8f137ae865fa55fdfb56",
+                "url": "https://api.github.com/repos/hkarlstrom/openapi-validation-middleware/zipball/7a385132c55bdfa31aaeb4bef88460ed1efa92f3",
+                "reference": "7a385132c55bdfa31aaeb4bef88460ed1efa92f3",
                 "shasum": ""
             },
             "require": {
@@ -259,7 +259,7 @@
                 "psr-7",
                 "validation"
             ],
-            "time": "2019-03-03T05:52:07+00:00"
+            "time": "2019-03-05T09:06:22+00:00"
         },
         {
             "name": "illuminate/auth",
