@@ -198,10 +198,7 @@ class InterruptionReportsTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400);
-            
-        // @todo add further tests related to missing required fields
-        // @todo add further tests related to invalid attribute format
-
+           
     }
 
     /**
@@ -348,6 +345,50 @@ class InterruptionReportsTest extends TestCase
             ])
             ->seeStatusCode(400)
             ->notSeeInDatabase('interruption_reports', ['id' => 3]);
+            
+        // Missing required clinical_tutor_id
+        $this->json('POST',
+            '/stages/3/interruption_report',
+            [
+                'notes' => 'Another interruption report notes',
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'clinical_tutor_id' => [
+                        'code error_required',
+                        'in body',
+                    ]
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('interruption_reports', ['id' => 3]);
+            
+        // Missing required notes
+        $this->json('POST',
+            '/stages/3/interruption_report',
+            [
+                'clinical_tutor_id' => 123,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'notes' => [
+                        'code error_required',
+                        'in body',
+                    ]
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('interruption_reports', ['id' => 3]);
+            
+        // @todo add further tests related to invalid attribute format
 
     }
     
@@ -472,8 +513,51 @@ class InterruptionReportsTest extends TestCase
             ->seeStatusCode(400)
             ->seeInDatabase('interruption_reports', ['id' => 2, 'clinical_tutor_id' => 789])
             ->notSeeInDatabase('interruption_reports', ['id' => 2, 'clinical_tutor_id' => 123]);
+            
+        // Missing required clinical_tutor_id
+        $this->json('PUT',
+            '/interruption_reports/2',
+            [
+                'notes' => 'Another interruption report notes', // --> modified
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'clinical_tutor_id' => [
+                        'code error_required',
+                        'in body',
+                    ]
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->seeInDatabase('interruption_reports', ['id' => 2, 'notes' => 'Second interruption report notes'])
+            ->notSeeInDatabase('interruption_reports', ['id' => 2, 'notes' => 'Another interruption report notes']);
+            
+        // Missing required notes
+        $this->json('PUT',
+            '/interruption_reports/2',
+            [
+                'clinical_tutor_id' => 123, // --> modified
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'notes' => [
+                        'code error_required',
+                        'in body',
+                    ]
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->seeInDatabase('interruption_reports', ['id' => 2, 'clinical_tutor_id' => 789])
+            ->notSeeInDatabase('interruption_reports', ['id' => 2, 'clinical_tutor_id' => 123]);
         
-        // @todo add further tests related to missing required fields
         // @todo add further tests related to invalid attribute format
 
     }
