@@ -12,7 +12,7 @@ class StagesTableSeeder extends Seeder
     public function run()
     {
 
-        // Standard stage.
+        // Standard stage, with evaluation
         DB::table('stages')->insert([
             'student_id' => 1,
             'location_id' => 1,

@@ -888,15 +888,15 @@ class StagesTest extends TestCase
     {
 
         // Existing stage
-        $this->json('DELETE', '/stages/1')
+        $this->json('DELETE', '/stages/3')
             ->seeJsonEquals([
                 'status_code' => 200,
                 'status' => 'OK',
                 'message' => 'Resource deleted',
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('stages', ['id' => 1, 'deleted_at' => date('Y-m-d H:i:s')])
-            ->notSeeInDatabase('stages', ['id' => 1, 'deleted_at' => null]);
+            ->seeInDatabase('stages', ['id' => 3, 'deleted_at' => date('Y-m-d H:i:s')])
+            ->notSeeInDatabase('stages', ['id' => 3, 'deleted_at' => null]);
 
     }
 
@@ -935,7 +935,35 @@ class StagesTest extends TestCase
             ->seeStatusCode(400)
             ->notSeeInDatabase('stages', ['id' => 'abc']);
 
-        // @todo in caase of evaluations and/or interruption reports, stage cannot be deleted
+        // Stage with evaluation
+        $this->json('DELETE', '/stages/1')
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'stage_id' => [
+                        'Stage actually has evaluation and/or interruption report',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->seeInDatabase('stages', ['id' => 1, 'deleted_at' => null]);
+
+        // Stage with interruption report
+        $this->json('DELETE', '/stages/2')
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'stage_id' => [
+                        'Stage actually has evaluation and/or interruption report',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->seeInDatabase('stages', ['id' => 2, 'deleted_at' => null]);
 
     }
 

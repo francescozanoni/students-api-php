@@ -177,7 +177,11 @@ class ValidateRequest
             case 'deleteStageById':
                 $stage = Stage::find(app('current_route_path_parameters')['id']);
                 if ($stage) {
-                    // @todo block deletion in case of evaluation or interruption report available
+                    // In case of evaluation or interruption report available, stage cannot be deleted.
+                    if ($stage->evaluation !== null ||
+                        $stage->interruptionReport !== null) {
+                        throw ValidationException::withMessages(['stage_id' => ['Stage actually has evaluation and/or interruption report']]);
+                    }
                 }
                 break;
 
