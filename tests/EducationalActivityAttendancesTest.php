@@ -392,8 +392,73 @@ class EducationalActivityAttendancesTest extends TestCase
             ])
             ->seeStatusCode(400)
             ->notSeeInDatabase('educational_activity_attendances', ['id' => 3]);
+            
+        // Missing required educational_activity
+        $this->json('POST',
+            '/students/1/educational_activity_attendances',
+            [
+                'start_date' => '2019-01-30',
+                'credits' => 0.4,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'educational_activity' => [
+                        'code error_required',
+                        'in body',
+                    ]
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('educational_activity_attendances', ['id' => 3]);
+            
+        // Missing required start_date
+        $this->json('POST',
+            '/students/1/educational_activity_attendances',
+            [
+                'educational_activity' => 'Another educational activity',
+                'credits' => 0.4,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'start_date' => [
+                        'code error_required',
+                        'in body',
+                    ]
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('educational_activity_attendances', ['id' => 3]);
+            
+        // Missing required credits
+        $this->json('POST',
+            '/students/1/educational_activity_attendances',
+            [
+                'educational_activity' => 'Another educational activity',
+                'start_date' => '2019-01-30',
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'credits' => [
+                        'code error_required',
+                        'in body',
+                    ]
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('educational_activity_attendances', ['id' => 3]);
 
-        // @todo add further tests related to missing required fields
         // @todo add further tests related to invalid attribute format
 
     }
