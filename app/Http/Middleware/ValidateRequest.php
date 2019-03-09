@@ -4,12 +4,12 @@ declare(strict_types = 1);
 namespace App\Http\Middleware;
 
 use App\Http\Middleware\Traits\UsesOpenApiValidator;
+use App\Http\Resources\Stage as StageResource;
 use App\Models\Annotation;
 use App\Models\EducationalActivityAttendance;
 use App\Models\Evaluation;
 use App\Models\InterruptionReport;
 use App\Models\Stage;
-use App\Http\Resources\Stage as StageResource;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
@@ -36,6 +36,8 @@ class ValidateRequest
      *                                  return type is not explicit within source code, therefore IDEs could complain
      *                                  with the following warning:
      *                                  "Exception 'ValidationException' is never thrown in the function"
+     *
+     * @todo find a way to refactor this VERY LONG method
      */
     public function handle($request, \Closure $next)
     {
@@ -265,6 +267,19 @@ class ValidateRequest
                 break;
 
             case 'createStageEvaluation':
+                $stage = Stage::find(app('current_route_path_parameters')['id']);
+                if ($stage) {
+                    // Stage must not have any evaluations yet.
+                    if ($stage->evaluation !== null) {
+                        throw ValidationException::withMessages(['stage_id' => ['Stage already has evaluation']]);
+                    }
+                    // Stage must be already started.
+                    $currentDate = new \DateTime();
+                    $stageStartDate = \DateTime::createFromFormat('Y-m-d', $stage->start_date);
+                    if ((int)($currentDate->diff($stageStartDate))->format('%r%d') > 1) {
+                        throw ValidationException::withMessages(['stage_id' => ['Stage not started yet']]);
+                    }
+                }
                 Validator::make(
                     $request->request->all(),
                     [
@@ -272,7 +287,6 @@ class ValidateRequest
                     [
                     ]
                 )->validate();
-                // @todo current date must be after stage's start date
                 break;
 
             case 'updateEvaluationById':
@@ -313,7 +327,6 @@ class ValidateRequest
                     [
                     ]
                 )->validate();
-                // @todo current date must be after stage's start date
                 break;
 
             case 'updateInterruptionReportById':

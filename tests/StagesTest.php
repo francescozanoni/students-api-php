@@ -849,7 +849,7 @@ class StagesTest extends TestCase
             ->seeInDatabase('stages', ['id' => 1])
             ->notSeeInDatabase('stages', ['id' => 1, 'hour_amount' => 111, 'is_optional' => true]);
 
-        // "is_interrupted" cannot be switched from true to false, if interruption report is available.
+        // If interruption report is available, "is_interrupted" cannot be switched from true to false.
         $this->json('PUT',
             '/stages/2',
             [
