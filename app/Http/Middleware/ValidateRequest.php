@@ -283,7 +283,7 @@ class ValidateRequest
                     }
                 }
                 Validator::make(
-                    // @todo validate clinical_tutor_id against users table
+                    // @todo validate clinical_tutor_id against clinical_tutors table
                     $request->request->all(),
                     [
                         // 'clinical_tutor_id' => 'exists:clinical_tutors,id'
@@ -298,7 +298,7 @@ class ValidateRequest
                 $evaluation = Evaluation::find(app('current_route_path_parameters')['id']);
                 if ($evaluation) {
                 Validator::make(
-                    // @todo validate clinical_tutor_id against users table
+                    // @todo validate clinical_tutor_id against clinical_tutors table
                     $request->request->all(),
                     [
                         // 'clinical_tutor_id' => 'exists:clinical_tutors,id'
@@ -331,7 +331,7 @@ class ValidateRequest
                     }
                 }
                 Validator::make(
-                    // @todo validate clinical_tutor_id against users table
+                    // @todo validate clinical_tutor_id against clinical_tutors table
                     $request->request->all(),
                     [
                         // 'clinical_tutor_id' => 'exists:clinical_tutors,id'
@@ -350,7 +350,7 @@ class ValidateRequest
                         throw ValidationException::withMessages(['stage_id' => ['Stage is not interrupted']]);
                     }
                     Validator::make(
-                    // @todo validate clinical_tutor_id against users table
+                    // @todo validate clinical_tutor_id against clinical_tutors table
                     $request->request->all(),
                     [
                         // 'clinical_tutor_id' => 'exists:clinical_tutors,id'

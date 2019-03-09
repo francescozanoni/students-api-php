@@ -198,6 +198,9 @@ class InterruptionReportsTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400);
+            
+        // @todo add further tests related to missing required fields
+        // @todo add further tests related to invalid attribute format
 
     }
 
@@ -399,5 +402,80 @@ class InterruptionReportsTest extends TestCase
 
     }
 
+    /**
+     * Modify a stage interruption report: failure.
+     */
+    public function testModifyByIdFailure()
+    {
+
+        // Non existing ID
+        $this->json('PUT',
+            '/interruption_reports/999',
+            [
+                'clinical_tutor_id' => 789,
+                'notes' => 'Second interruption report notes modified', // --> modified
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 404,
+                'status' => 'Not Found',
+                'message' => 'Resource(s) not found',
+            ])
+            ->seeStatusCode(404)
+            ->notSeeInDatabase('interruption_reports', ['id' => 999])
+            ->notSeeInDatabase('interruption_reports', ['id' => 3]);
+
+        // Invalid ID
+        $this->json('PUT',
+            '/interruption_reports/abc',
+            [
+                'clinical_tutor_id' => 789,
+                'notes' => 'Second interruption report notes modified', // --> modified
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'id' => [
+                        'code error_type',
+                        'value abc',
+                        'expected integer',
+                        'used string',
+                        'in path',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('interruption_reports', ['id' => 'abc'])
+            ->notSeeInDatabase('interruption_reports', ['id' => 3]);
+            
+        // Different clinical tutor
+        $this->json('PUT',
+            '/interruption_reports/2',
+            [
+                'clinical_tutor_id' => 123,  // --> modified
+                'notes' => 'Second interruption report notes',
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'clinical_tutor_id' => [
+                        'The clinical tutor id cannot be changed',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->seeInDatabase('interruption_reports', ['id' => 2, 'clinical_tutor_id' => 789])
+            ->notSeeInDatabase('interruption_reports', ['id' => 2, 'clinical_tutor_id' => 123]);
+        
+        // @todo add further tests related to missing required fields
+        // @todo add further tests related to invalid attribute format
+
+    }
 
 }
