@@ -471,6 +471,8 @@ class StudentsTest extends TestCase
             ->notSeeInDatabase('annotations', ['id' => 1, 'student_id' => 1, 'deleted_at' => null])
             ->seeInDatabase('stages', ['id' => 1, 'student_id' => 1, 'deleted_at' => date('Y-m-d H:i:s')])
             ->notSeeInDatabase('stages', ['id' => 1, 'student_id' => 1, 'deleted_at' => null])
+            ->seeInDatabase('evaluations', ['id' => 1, 'student_id' => 1, 'deleted_at' => date('Y-m-d H:i:s')])
+            ->notSeeInDatabase('evaluations', ['id' => 1, 'student_id' => 1, 'deleted_at' => null])
             ->seeInDatabase('educational_activity_attendances', ['id' => 1, 'student_id' => 1, 'deleted_at' => date('Y-m-d H:i:s')])
             ->notSeeInDatabase('educational_activity_attendances', ['id' => 1, 'student_id' => 1, 'deleted_at' => null]);
 
