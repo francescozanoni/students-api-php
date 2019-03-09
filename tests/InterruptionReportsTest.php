@@ -347,5 +347,57 @@ class InterruptionReportsTest extends TestCase
             ->notSeeInDatabase('interruption_reports', ['id' => 3]);
 
     }
+    
+    /**
+     * Modify a stage interruption report: success.
+     */
+    public function testModifyById()
+    {
+
+        $this->json('PUT',
+            '/interruption_reports/2',
+            [
+                'clinical_tutor_id' => 789,
+                'notes' => 'Second interruption report notes modified', // --> modified
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 200,
+                'status' => 'OK',
+                'message' => 'Resource successfully retrieved/created/modified',
+                'data' => [
+                        'id' => 2,
+                        'stage' => [
+                            'id' => 2,
+                            'location' => 'Location 1',
+                            'sub_location' => 'Sub-location 1',
+                            'student' => [
+                                'id' => 1,
+                                'first_name' => 'John',
+                                'last_name' => 'Doe',
+                                'e_mail' => 'john.doe@foo.com',
+                                'phone' => '1234-567890',
+                                'nationality' => 'GB',
+                            ],
+                            'start_date' => '2019-01-26',
+                            'end_date' => '2019-01-31',
+                            'hour_amount' => 34,
+                            'other_amount' => 0,
+                            'is_optional' => true,
+                            'is_interrupted' => true
+                        ],
+                        'clinical_tutor_id' => 789,
+                        'notes' => 'Second interruption report notes modified',
+                        'created_at' => '2019-01-31 02:00:00',
+                        'updated_at' => date('Y-m-d H:i:s'),
+                ],
+            ])
+            ->seeStatusCode(200)
+            ->seeInDatabase('interruption_reports', ['id' => 2, 'notes' => 'Second interruption report notes modified'])
+            ->notSeeInDatabase('interruption_reports', ['id' => 2, 'notes' => 'Second interruption report notes'])
+            ->notSeeInDatabase('interruption_reports', ['id' => 3]);
+
+    }
+
 
 }
