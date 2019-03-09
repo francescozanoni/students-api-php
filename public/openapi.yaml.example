@@ -1743,6 +1743,7 @@ components:
           type: integer
       required:
         - clinical_tutor_id
+        - notes
       additionalProperties: false
       example:
         notes: First interruption report notes
