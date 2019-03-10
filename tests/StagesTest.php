@@ -295,7 +295,7 @@ class StagesTest extends TestCase
             ->seeStatusCode(200)
             ->seeInDatabase('stages', ['id' => 5, 'student_id' => 1, 'location_id' => 1, 'sub_location_id' => 1, 'deleted_at' => null])
             ->notSeeInDatabase('stages', ['id' => 6]);
-            
+
         // Existing student, without sub-location
         $this->json('POST',
             '/students/1/stages',
@@ -650,7 +650,7 @@ class StagesTest extends TestCase
             ])
             ->seeStatusCode(400)
             ->notSeeInDatabase('stages', ['id' => 5]);
-            
+
         // Missing required location
         $this->json('POST',
             '/students/1/stages',
@@ -676,7 +676,7 @@ class StagesTest extends TestCase
             ])
             ->seeStatusCode(400)
             ->notSeeInDatabase('stages', ['id' => 5]);
-            
+
         // Missing required start_date
         $this->json('POST',
             '/students/1/stages',
@@ -702,7 +702,7 @@ class StagesTest extends TestCase
             ])
             ->seeStatusCode(400)
             ->notSeeInDatabase('stages', ['id' => 5]);
-            
+
         // Missing required end_date
         $this->json('POST',
             '/students/1/stages',
@@ -806,7 +806,7 @@ class StagesTest extends TestCase
             ])
             ->seeStatusCode(400)
             ->notSeeInDatabase('stages', ['id' => 5]);
-            
+
         // @todo add further tests related to invalid attribute format
 
     }
@@ -858,15 +858,18 @@ class StagesTest extends TestCase
             ->seeInDatabase('stages', ['id' => 1, 'hour_amount' => 456, 'other_amount' => 7])
             ->notSeeInDatabase('stages', ['id' => 1, 'hour_amount' => 123, 'other_amount' => 5])
             ->notSeeInDatabase('stages', ['id' => 5]);
-/* @todo check
-        // Remove sub-location, amounts and is_interrupted
+
+        // Remove sub-location
         $this->json('PUT',
             '/stages/1',
             [
                 'location' => 'Location 1',
                 'start_date' => '2019-01-10',
                 'end_date' => '2019-01-24',
+                'hour_amount' => 456,
+                'other_amount' => 7,
                 'is_optional' => false,
+                'is_interrupted' => false,
             ]
         )
             ->seeJsonEquals([
@@ -886,15 +889,18 @@ class StagesTest extends TestCase
                     ],
                     'start_date' => '2019-01-10',
                     'end_date' => '2019-01-24',
+                    'hour_amount' => 456,
+                    'other_amount' => 7,
                     'is_optional' => false,
+                    'is_interrupted' => false,
                 ],
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('stages', ['id' => 1, 'hour_amount' => null, 'other_amount' => null, 'is_interrupted' => null, 'sub_location_id' => null])
-            ->notSeeInDatabase('stages', ['id' => 1, 'hour_amount' => 456, 'other_amount' => 7,  'is_interrupted' => 0, 'sub_location_id' => 1])
+            ->seeInDatabase('stages', ['id' => 1, 'sub_location_id' => null])
+            ->notSeeInDatabase('stages', ['id' => 1, 'sub_location_id' => 1])
             ->notSeeInDatabase('stages', ['id' => 5]);
-            
-        // Add sub-location, amounts and is_interrupted
+
+        // Re-add sub-location
         $this->json('PUT',
             '/stages/1',
             [
@@ -933,10 +939,10 @@ class StagesTest extends TestCase
                 ],
             ])
             ->seeStatusCode(200)
-            ->notSeeInDatabase('stages', ['id' => 1, 'hour_amount' => null, 'other_amount' => null, 'is_interrupted' => null, 'sub_location_id' => null])
-            ->seeInDatabase('stages', ['id' => 1, 'hour_amount' => 456, 'other_amount' => 7,  'is_interrupted' => 0, 'sub_location_id' => 1])
+            ->seeInDatabase('stages', ['id' => 1, 'sub_location_id' => 1])
+            ->notSeeInDatabase('stages', ['id' => 1, 'sub_location_id' => null])
             ->notSeeInDatabase('stages', ['id' => 5]);
-*/
+
     }
 
     /**
