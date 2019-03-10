@@ -97,13 +97,12 @@ copy(OPENAPI_EXAMPLE_FILE_PATH, OPENAPI_FILE_PATH);
 # Base URL and database file path setting
 $file = file_get_contents(DOT_ENV_FILE_PATH);
 $file = preg_replace('#http://localhost#', $options['application_url'], $file);
-$file = preg_replace('#/absolute/path/to/database#', realpath(dirname(DATABASE_FILE_PATH)), $file);
-$file = preg_replace('#APP_KEY=#', 'APP_KEY=01234567890123456789012345678901', $file);
+$file = preg_replace('#/absolute/path/to/database/database.sqlite#', realpath(DATABASE_FILE_PATH), $file);
+$file = preg_replace('#APP_KEY=#', 'APP_KEY=' . md5(date('now')), $file);
 file_put_contents(DOT_ENV_FILE_PATH, $file);
 
 $file = file_get_contents(PHPUNIT_XML_FILE_PATH);
 $file = preg_replace('#http://localhost#', $options['application_url'], $file);
-$file = preg_replace('#/absolute/path/to/database#', realpath(dirname(DATABASE_FILE_PATH)), $file);
 file_put_contents(PHPUNIT_XML_FILE_PATH, $file);
 
 $file = file_get_contents(OPENAPI_FILE_PATH);
