@@ -1125,10 +1125,190 @@ class StagesTest extends TestCase
                     ]
                 ]
             ])
-            ->seeInDatabase('stages', ['id' => 2])
-            ->notSeeInDatabase('stages', ['id' => 2, 'is_interrupted' => false]);
+            ->seeInDatabase('stages', ['id' => 2, 'is_interrupted' => true]);
 
-        // @todo add further tests related to missing required fields
+        // Missing required location
+        $this->json('PUT',
+            '/stages/3',
+            [
+                'sub_location' => 'Sub-location 1',
+                'start_date' => '2019-01-26',
+                'end_date' => '2019-01-31',
+                'hour_amount' => 34,
+                'other_amount' => 0,
+                'is_optional' => false,
+                'is_interrupted' => true
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'location' => [
+                        'code error_required',
+                        'in body',
+                    ]
+                ]
+            ])
+            ->seeStatusCode(400);
+
+        // Missing required start_date
+        $this->json('PUT',
+            '/stages/3',
+            [
+                'location' => 'Location 1',
+                'sub_location' => 'Sub-location 1',
+                'end_date' => '2019-01-31',
+                'hour_amount' => 34,
+                'other_amount' => 0,
+                'is_optional' => false,
+                'is_interrupted' => true
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'start_date' => [
+                        'code error_required',
+                        'in body',
+                    ]
+                ]
+            ])
+            ->seeStatusCode(400);
+
+        // Missing required end_date
+        $this->json('PUT',
+            '/stages/3',
+            [
+                'location' => 'Location 1',
+                'sub_location' => 'Sub-location 1',
+                'start_date' => '2019-01-26',
+                'hour_amount' => 34,
+                'other_amount' => 0,
+                'is_optional' => false,
+                'is_interrupted' => true
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'end_date' => [
+                        'code error_required',
+                        'in body',
+                    ]
+                ]
+            ])
+            ->seeStatusCode(400);
+
+        // Missing required hour_amount
+        $this->json('PUT',
+            '/stages/3',
+            [
+                'location' => 'Location 1',
+                'sub_location' => 'Sub-location 1',
+                'start_date' => '2019-01-26',
+                'end_date' => '2019-01-31',
+                'other_amount' => 0,
+                'is_optional' => false,
+                'is_interrupted' => true
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'hour_amount' => [
+                        'code error_required',
+                        'in body',
+                    ]
+                ]
+            ])
+            ->seeStatusCode(400);
+
+        // Missing required other_amount
+        $this->json('PUT',
+            '/stages/3',
+            [
+                'location' => 'Location 1',
+                'sub_location' => 'Sub-location 1',
+                'start_date' => '2019-01-26',
+                'end_date' => '2019-01-31',
+                'hour_amount' => 34,
+                'is_optional' => false,
+                'is_interrupted' => true
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'other_amount' => [
+                        'code error_required',
+                        'in body',
+                    ]
+                ]
+            ])
+            ->seeStatusCode(400);
+
+        // Missing required is_optional
+        $this->json('PUT',
+            '/stages/3',
+            [
+                'location' => 'Location 1',
+                'sub_location' => 'Sub-location 1',
+                'start_date' => '2019-01-26',
+                'end_date' => '2019-01-31',
+                'hour_amount' => 34,
+                'other_amount' => 0,
+                'is_interrupted' => true
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'is_optional' => [
+                        'code error_required',
+                        'in body',
+                    ]
+                ]
+            ])
+            ->seeStatusCode(400);
+
+        // Missing required is_interrupted
+        $this->json('PUT',
+            '/stages/3',
+            [
+                'location' => 'Location 1',
+                'sub_location' => 'Sub-location 1',
+                'start_date' => '2019-01-26',
+                'end_date' => '2019-01-31',
+                'hour_amount' => 34,
+                'other_amount' => 0,
+                'is_optional' => false,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'is_interrupted' => [
+                        'code error_required',
+                        'in body',
+                    ]
+                ]
+            ])
+            ->seeStatusCode(400);
+
         // @todo add further tests related to invalid attribute format
 
     }
