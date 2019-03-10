@@ -657,7 +657,10 @@ class StagesTest extends TestCase
             [
                 'start_date' => '2019-02-25',
                 'end_date' => '2019-02-28',
+                'hour_amount' => 0,
+                'other_amount' => 0,
                 'is_optional' => true,
+                'is_interrupted' => false,
             ]
         )
             ->seeJsonEquals([
@@ -680,7 +683,10 @@ class StagesTest extends TestCase
             [
                 'location' => 'Location 1',
                 'end_date' => '2019-02-28',
+                'hour_amount' => 0,
+                'other_amount' => 0,
                 'is_optional' => true,
+                'is_interrupted' => false,
             ]
         )
             ->seeJsonEquals([
@@ -703,7 +709,10 @@ class StagesTest extends TestCase
             [
                 'location' => 'Location 1',
                 'start_date' => '2019-02-25',
+                'hour_amount' => 0,
+                'other_amount' => 0,
                 'is_optional' => true,
+                'is_interrupted' => false,
             ]
         )
             ->seeJsonEquals([
@@ -719,7 +728,59 @@ class StagesTest extends TestCase
             ])
             ->seeStatusCode(400)
             ->notSeeInDatabase('stages', ['id' => 5]);
-            
+
+        // Missing required hour_amount
+        $this->json('POST',
+            '/students/1/stages',
+            [
+                'location' => 'Location 1',
+                'start_date' => '2019-02-25',
+                'end_date' => '2019-02-28',
+                'other_amount' => 0,
+                'is_optional' => true,
+                'is_interrupted' => false,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'hour_amount' => [
+                        'code error_required',
+                        'in body',
+                    ]
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('stages', ['id' => 5]);
+
+        // Missing required other_amount
+        $this->json('POST',
+            '/students/1/stages',
+            [
+                'location' => 'Location 1',
+                'start_date' => '2019-02-25',
+                'end_date' => '2019-02-28',
+                'hour_amount' => 0,
+                'is_optional' => true,
+                'is_interrupted' => false,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'other_amount' => [
+                        'code error_required',
+                        'in body',
+                    ]
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('stages', ['id' => 5]);
+
         // Missing required is_optional
         $this->json('POST',
             '/students/1/stages',
@@ -727,6 +788,9 @@ class StagesTest extends TestCase
                 'location' => 'Location 1',
                 'start_date' => '2019-02-25',
                 'end_date' => '2019-02-28',
+                'hour_amount' => 0,
+                'other_amount' => 0,
+                'is_interrupted' => false,
             ]
         )
             ->seeJsonEquals([
