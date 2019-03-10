@@ -1584,7 +1584,10 @@ components:
         - location
         - start_date
         - end_date
+        - hour_amount
+        - other_amount
         - is_optional
+        - is_interrupted
       additionalProperties: false
       example:
         location: 'Location 1'
