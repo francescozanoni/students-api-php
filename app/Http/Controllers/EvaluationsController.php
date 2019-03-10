@@ -87,6 +87,12 @@ class EvaluationsController extends Controller
 
         $input = $request->request->all();
 
+        // "notes" is an optional field: in case it's removed (not available within input), it must be set to null,
+        // otherwise the change is ignored by $evaluation->fill($input).
+        if (array_key_exists('notes', $input) === false) {
+            $input['notes'] = null;
+        }
+
         $evaluation->fill($input);
 
         $evaluation->save();
