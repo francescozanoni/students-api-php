@@ -573,7 +573,70 @@ class AnnotationsTest extends TestCase
             ->seeInDatabase('annotations', ['id' => 1])
             ->notSeeInDatabase('annotations', ['id' => 1, 'title' => 'First title 1', 'content' => 'First content 1']);
 
-        // @todo add further tests related to missing required fields
+        // Missing required title
+        $this->json('PUT',
+            '/annotations/1',
+            [
+                'content' => 'First content',
+                'user_id' => 123,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'title' => [
+                        'code error_required',
+                        'in body',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400);
+
+        // Missing required content
+        $this->json('PUT',
+            '/annotations/1',
+            [
+                'title' => 'First title',
+                'user_id' => 123,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'content' => [
+                        'code error_required',
+                        'in body',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400);
+
+        // Missing required user_id
+        $this->json('PUT',
+            '/annotations/1',
+            [
+                'title' => 'First title',
+                'content' => 'First content',
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'user_id' => [
+                        'code error_required',
+                        'in body',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400);
+
+        // @todo add further tests related to invalid attribute format
 
     }
 
