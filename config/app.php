@@ -15,12 +15,12 @@ return [
                         return sprintf('%02d', $index);
                     },
                     range(1, 99)
-                ) as $index => $item) {
-                if (env('EVALUATION_ITEM_' . $index . '_NAME')) {
+                ) as $itemIndex) {
+                if (env('EVALUATION_ITEM_' . $itemIndex . '_NAME')) {
                     $items[] = [
-                        'name' => env('EVALUATION_ITEM_' . $index . '_NAME'),
-                        'values' => explode(',', env('EVALUATION_ITEM_' . $index . '_VALUES')),
-                        'required' => env('EVALUATION_ITEM_' . $index . '_REQUIRED'),
+                        'name' => env('EVALUATION_ITEM_' . $itemIndex . '_NAME'),
+                        'values' => explode(',', env('EVALUATION_ITEM_' . $itemIndex . '_VALUES')),
+                        'required' => env('EVALUATION_ITEM_' . $itemIndex . '_REQUIRED'),
                     ];
                 }
             }
