@@ -18,10 +18,16 @@ class EvaluationsTableSeeder extends Seeder
             'created_at' => '2019-01-25 02:00:00',
             'updated_at' => '2019-01-25 02:00:00',
         ];
-        foreach (config('app.evaluations.items') as $item) {
-            // $record[$item['name']] = $item['values'][0];
+        foreach (config('app.evaluations.items') as $index => $item) {
+            $numberOfValues = count(config('app.evaluations.items')[$index]['values']);
+            $record[$item['name']] = $item['values'][$index % $numberOfValues];
+            // Items at power-of-two position are set to null, if not required.
+            if (in_array($index, [2, 4, 8, 16, 32])) {
+                if (config('app.evaluations.items')[$index]['required'] === false) {
+                    $record[$item['name']] = null;
+                }
+            }
         }
-
         DB::table('evaluations')->insert($record);
 
         $record = [
@@ -32,8 +38,15 @@ class EvaluationsTableSeeder extends Seeder
             'updated_at' => '2019-01-26 02:00:00',
             'deleted_at' => '2019-01-26 03:00:00',
         ];
-        foreach (config('app.evaluations.items') as $item) {
-            // $record[$item['name']] = $item['values'][0];
+        foreach (config('app.evaluations.items') as $index => $item) {
+            $numberOfValues = count(config('app.evaluations.items')[$index]['values']);
+            $record[$item['name']] = $item['values'][$index % $numberOfValues];
+            // Items at power-of-three position are set to null, if not required.
+            if (in_array($index, [3, 9, 27])) {
+                if (config('app.evaluations.items')[$index]['required'] === false) {
+                    $record[$item['name']] = null;
+                }
+            }
         }
         DB::table('evaluations')->insert($record);
     }
