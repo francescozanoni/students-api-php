@@ -29,6 +29,11 @@ class Evaluation extends JsonResource
 
         ];
 
+        foreach (config('app.evaluations.items') as $item) {
+            // @todo enable the following statement after updating evaluation schema within OpenAPI schema accordingly
+            // $output[$item['name']] = $this->{$item['name']};
+        }
+
         return $output;
 
     }
