@@ -126,8 +126,12 @@ file_put_contents(HTACCESS_FILE_PATH, $file);
 // $s = Yaml::parseFile(OPENAPI_FILE_PATH);
 // $s['components']['responses']['Evaluations']['content']['application/json']['schema']['example']['data'][0,1]
 // $s['components']['responses']['Evaluation']['content']['application/json']['schema']['example']['data']
-// $s['components']['schemas']['NewEvaluation']['properties']
-// $s['components']['schemas']['NewEvaluation']['required']
+// foreach ($app['config']['app']['evaluations']['items'] as $item) {
+//    $s['components']['schemas']['NewEvaluation']['properties'][$item['name']] = ['type' => 'string', 'enum' => $item['values'];
+//    if ($item['required'] === true) {
+//        $s['components']['schemas']['NewEvaluation']['required'][] = $item['name'];
+//    }
+//}
 // $s['components']['schemas']['NewEvaluation']['example']
 // $s['components']['schemas']['Evaluation']['example']
 // file_put_contents(OPENAPI_FILE_PATH, Yaml::dump($s));
