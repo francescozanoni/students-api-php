@@ -109,19 +109,6 @@ $file = file_get_contents(OPENAPI_FILE_PATH);
 $file = preg_replace('#http://localhost#', $options['application_url'], $file);
 file_put_contents(OPENAPI_FILE_PATH, $file);
 
-// use Symfony\Component\Yaml\Yaml;
-// $app = require BASE_PATH . '/bootstrap/app.php';
-// print_r($app['config']['app']['evaluations']['items']);
-// $s = Yaml::parseFile($app['config']['openapi']['schema_file_path']);
-// $yaml = Yaml::dump($s);
-// file_put_contents($app['config']['openapi']['schema_file_path'], $yaml);
-// components.responses.Evaluations.content.application/json.schema.example.data[0,1]
-// components.responses.Evaluation.content.application/json.schema.example.data
-// components.schemas.NewEvaluation.properties
-// components.schemas.NewEvaluation.required
-// components.schemas.NewEvaluation.example
-// components.schemas.Evaluation.example
-
 $baseUrl = parse_url($options['application_url'], PHP_URL_PATH);
 if (empty($baseUrl) === true) {
     $baseUrl = '/';
@@ -129,6 +116,21 @@ if (empty($baseUrl) === true) {
 $file = file_get_contents(HTACCESS_FILE_PATH);
 $file = preg_replace('#RewriteBase\s/#', 'RewriteBase ' . $baseUrl, $file);
 file_put_contents(HTACCESS_FILE_PATH, $file);
+
+# #####################################################
+
+# Evaluation item customization within OpenAPI schema
+// use Symfony\Component\Yaml\Yaml;
+// $app = require BASE_PATH . '/bootstrap/app.php';
+// print_r($app['config']['app']['evaluations']['items']);
+// $s = Yaml::parseFile(OPENAPI_FILE_PATH);
+// $s['components']['responses']['Evaluations']['content']['application/json.']['schema']['example']['data'][0,1]
+// $s['components']['responses']['Evaluation']['content']['application/json']['schema']['example']['data']
+// $s['components']['schemas']['NewEvaluation']['properties']
+// $s['components']['schemas']['NewEvaluation']['required']
+// $s['components']['schemas']['NewEvaluation']['example']
+// $s['components']['schemas']['Evaluation']['example']
+// file_put_contents(OPENAPI_FILE_PATH, Yaml::dump($s));
 
 # #####################################################
 
