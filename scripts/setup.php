@@ -119,21 +119,23 @@ file_put_contents(HTACCESS_FILE_PATH, $file);
 
 # #####################################################
 
-# Evaluation item customization within OpenAPI schema
+# Evaluation item dynamic setting within OpenAPI schema
 use Symfony\Component\Yaml\Yaml;
 $app = require BASE_PATH . '/bootstrap/app.php';
- $s = Yaml::parseFile(OPENAPI_FILE_PATH);
- //$s['components']['responses']['Evaluations']['content']['application/json']['schema']['example']['data'][0,1]
-// $s['components']['responses']['Evaluation']['content']['application/json']['schema']['example']['data']
- foreach ($app['config']['app']['evaluations']['items'] as $item) {
+$s = Yaml::parseFile(OPENAPI_FILE_PATH);
+foreach ($app['config']['app']['evaluations']['items'] as $index => $item) {
     $s['components']['schemas']['NewEvaluation']['properties'][$item['name']] = ['type' => 'string', 'enum' => $item['values']];
     if ($item['required'] === true) {
         $s['components']['schemas']['NewEvaluation']['required'][] = $item['name'];
     }
+    $value = $item['values'][$index % count($item['values'])];
+    $s['components']['responses']['Evaluations']['content']['application/json']['schema']['example']['data'][0][$item['name']] = $value;
+    $s['components']['responses']['Evaluations']['content']['application/json']['schema']['example']['data'][1][$item['name']] = $value;
+    $s['components']['responses']['Evaluation']['content']['application/json']['schema']['example']['data'][$item['name']] = $value;
+    $s['components']['schemas']['NewEvaluation']['example'][$item['name']] = $value;
+    $s['components']['schemas']['Evaluation']['example'][$item['name']] = $value;
 }
-// $s['components']['schemas']['NewEvaluation']['example']
-// $s['components']['schemas']['Evaluation']['example']
- file_put_contents(OPENAPI_FILE_PATH, Yaml::dump($s, 1000, 2));
+file_put_contents(OPENAPI_FILE_PATH, Yaml::dump($s, 1000, 2));
 
 # #####################################################
 
