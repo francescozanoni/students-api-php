@@ -109,6 +109,13 @@ $file = file_get_contents(OPENAPI_FILE_PATH);
 $file = preg_replace('#http://localhost#', $options['application_url'], $file);
 file_put_contents(OPENAPI_FILE_PATH, $file);
 
+// use Symfony\Component\Yaml\Yaml;
+// $app = require BASE_PATH . '/bootstrap/app.php';
+// print_r($app['config']['app']['evaluations']['items']);
+// $s = Yaml::parseFile($app['config']['openapi']['schema_file_path']);
+// $yaml = Yaml::dump($s);
+// file_put_contents($app['config']['openapi']['schema_file_path'], $yaml);
+
 $baseUrl = parse_url($options['application_url'], PHP_URL_PATH);
 if (empty($baseUrl) === true) {
     $baseUrl = '/';

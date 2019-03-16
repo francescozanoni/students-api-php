@@ -9,6 +9,26 @@ return [
     'evaluations' => [
         'items' => (function () {
             $items = [];
+            /* .env items
+             * EVALUATION_ITEM_01_NAME=item_1_1
+             * EVALUATION_ITEM_01_VALUES=A,B,C,D,E,NV
+             * EVALUATION_ITEM_01_REQUIRED=false
+             * 
+             * become
+             * 
+             * Array (
+             *  [name] => item_1_1
+             *  [values] => Array (
+                                    [0] => A
+                                    [1] => B
+                                    [2] => C
+                                    [3] => D
+                                    [4] => E
+                                    [5] => NV
+                                )
+                            [required] => false
+                        )
+             */
             foreach (
                 array_map(
                     function ($index) {

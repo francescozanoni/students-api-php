@@ -40,8 +40,7 @@
   "scripts": {
     "post-install-cmd": "@php scripts/publish_swagger_ui.php",
     "post-update-cmd": "@php scripts/publish_swagger_ui.php",
-    "test": "php vendor/phpunit/phpunit/phpunit tests",
-    "serve": "php -S localhost:80 -t public public/router.php"
+    "test": "php vendor/phpunit/phpunit/phpunit tests"
   },
   "config": {
     "preferred-install": "dist",
