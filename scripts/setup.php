@@ -115,6 +115,12 @@ file_put_contents(OPENAPI_FILE_PATH, $file);
 // $s = Yaml::parseFile($app['config']['openapi']['schema_file_path']);
 // $yaml = Yaml::dump($s);
 // file_put_contents($app['config']['openapi']['schema_file_path'], $yaml);
+// components.responses.Evaluations.content.application/json.schema.example.data[0,1]
+// components.responses.Evaluation.content.application/json.schema.example.data
+// components.schemas.NewEvaluation.properties
+// components.schemas.NewEvaluation.required
+// components.schemas.NewEvaluation.example
+// components.schemas.Evaluation.example
 
 $baseUrl = parse_url($options['application_url'], PHP_URL_PATH);
 if (empty($baseUrl) === true) {
