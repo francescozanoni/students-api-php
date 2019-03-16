@@ -120,21 +120,20 @@ file_put_contents(HTACCESS_FILE_PATH, $file);
 # #####################################################
 
 # Evaluation item customization within OpenAPI schema
-// use Symfony\Component\Yaml\Yaml;
-// $app = require BASE_PATH . '/bootstrap/app.php';
-// print_r($app['config']['app']['evaluations']['items']);
-// $s = Yaml::parseFile(OPENAPI_FILE_PATH);
-// $s['components']['responses']['Evaluations']['content']['application/json']['schema']['example']['data'][0,1]
+use Symfony\Component\Yaml\Yaml;
+$app = require BASE_PATH . '/bootstrap/app.php';
+ $s = Yaml::parseFile(OPENAPI_FILE_PATH);
+ //$s['components']['responses']['Evaluations']['content']['application/json']['schema']['example']['data'][0,1]
 // $s['components']['responses']['Evaluation']['content']['application/json']['schema']['example']['data']
-// foreach ($app['config']['app']['evaluations']['items'] as $item) {
-//    $s['components']['schemas']['NewEvaluation']['properties'][$item['name']] = ['type' => 'string', 'enum' => $item['values'];
-//    if ($item['required'] === true) {
-//        $s['components']['schemas']['NewEvaluation']['required'][] = $item['name'];
-//    }
-//}
+ foreach ($app['config']['app']['evaluations']['items'] as $item) {
+    $s['components']['schemas']['NewEvaluation']['properties'][$item['name']] = ['type' => 'string', 'enum' => $item['values']];
+    if ($item['required'] === true) {
+        $s['components']['schemas']['NewEvaluation']['required'][] = $item['name'];
+    }
+}
 // $s['components']['schemas']['NewEvaluation']['example']
 // $s['components']['schemas']['Evaluation']['example']
-// file_put_contents(OPENAPI_FILE_PATH, Yaml::dump($s));
+ file_put_contents(OPENAPI_FILE_PATH, Yaml::dump($s, 1000, 2));
 
 # #####################################################
 
