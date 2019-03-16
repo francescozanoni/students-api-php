@@ -124,7 +124,7 @@ file_put_contents(HTACCESS_FILE_PATH, $file);
 // $app = require BASE_PATH . '/bootstrap/app.php';
 // print_r($app['config']['app']['evaluations']['items']);
 // $s = Yaml::parseFile(OPENAPI_FILE_PATH);
-// $s['components']['responses']['Evaluations']['content']['application/json.']['schema']['example']['data'][0,1]
+// $s['components']['responses']['Evaluations']['content']['application/json']['schema']['example']['data'][0,1]
 // $s['components']['responses']['Evaluation']['content']['application/json']['schema']['example']['data']
 // $s['components']['schemas']['NewEvaluation']['properties']
 // $s['components']['schemas']['NewEvaluation']['required']
