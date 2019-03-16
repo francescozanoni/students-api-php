@@ -121,21 +121,25 @@ file_put_contents(HTACCESS_FILE_PATH, $file);
 
 # Evaluation item dynamic setting within OpenAPI schema
 use Symfony\Component\Yaml\Yaml;
+
 $app = require BASE_PATH . '/bootstrap/app.php';
-$s = Yaml::parseFile(OPENAPI_FILE_PATH);
+$schemaAsArray = Yaml::parseFile(OPENAPI_FILE_PATH);
 foreach ($app['config']['app']['evaluations']['items'] as $index => $item) {
-    $s['components']['schemas']['NewEvaluation']['properties'][$item['name']] = ['type' => 'string', 'enum' => $item['values']];
+    $schemaAsArray['components']['schemas']['NewEvaluation']['properties'][$item['name']] = ['type' => 'string', 'enum' => $item['values']];
     if ($item['required'] === true) {
-        $s['components']['schemas']['NewEvaluation']['required'][] = $item['name'];
+        $schemaAsArray['components']['schemas']['NewEvaluation']['required'][] = $item['name'];
     }
+    // The n-th item is assigned the n-th of its possible values.
+    // If n is greater than the number of possible values,
+    // value position count restarts from the beginning of the possible value array.
     $value = $item['values'][$index % count($item['values'])];
-    $s['components']['responses']['Evaluations']['content']['application/json']['schema']['example']['data'][0][$item['name']] = $value;
-    $s['components']['responses']['Evaluations']['content']['application/json']['schema']['example']['data'][1][$item['name']] = $value;
-    $s['components']['responses']['Evaluation']['content']['application/json']['schema']['example']['data'][$item['name']] = $value;
-    $s['components']['schemas']['NewEvaluation']['example'][$item['name']] = $value;
-    $s['components']['schemas']['Evaluation']['example'][$item['name']] = $value;
+    $schemaAsArray['components']['responses']['Evaluations']['content']['application/json']['schema']['example']['data'][0][$item['name']] = $value;
+    $schemaAsArray['components']['responses']['Evaluations']['content']['application/json']['schema']['example']['data'][1][$item['name']] = $value;
+    $schemaAsArray['components']['responses']['Evaluation']['content']['application/json']['schema']['example']['data'][$item['name']] = $value;
+    $schemaAsArray['components']['schemas']['NewEvaluation']['example'][$item['name']] = $value;
+    $schemaAsArray['components']['schemas']['Evaluation']['example'][$item['name']] = $value;
 }
-file_put_contents(OPENAPI_FILE_PATH, Yaml::dump($s, 1000, 2));
+file_put_contents(OPENAPI_FILE_PATH, Yaml::dump($schemaAsArray, 1000, 2));
 
 # #####################################################
 

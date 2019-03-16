@@ -19,8 +19,10 @@ class EvaluationsTableSeeder extends Seeder
             'updated_at' => '2019-01-25 02:00:00',
         ];
         foreach (config('app.evaluations.items') as $index => $item) {
-            $numberOfValues = count($item['values']);
-            $record[$item['name']] = $item['values'][$index % $numberOfValues];
+            // The n-th item is assigned the n-th of its possible values.
+            // If n is greater than the number of possible values,
+            // value position count restarts from the beginning of the possible value array.
+            $record[$item['name']] = $item['values'][$index % count($item['values'])];
             // Items at power-of-two position are set to null, if not required.
             if (in_array($index, [2, 4, 8, 16, 32])) {
                 if ($item['required'] === false) {
@@ -39,8 +41,10 @@ class EvaluationsTableSeeder extends Seeder
             'deleted_at' => '2019-01-26 03:00:00',
         ];
         foreach (config('app.evaluations.items') as $index => $item) {
-            $numberOfValues = count($item['values']);
-            $record[$item['name']] = $item['values'][$index % $numberOfValues];
+            // The n-th item is assigned the n-th of its possible values.
+            // If n is greater than the number of possible values,
+            // value position count restarts from the beginning of the possible value array.
+            $record[$item['name']] = $item['values'][$index % count($item['values'])];
             // Items at power-of-three position are set to null, if not required.
             if (in_array($index, [3, 9, 27])) {
                 if ($item['required'] === false) {
