@@ -31,6 +31,7 @@ $app->configure('app');
 $app->configure('openapi');
 $app->configure('database');
 $app->configure('stages');
+$app->configure('erd-generator');
 
 /*
 |--------------------------------------------------------------------------
@@ -97,6 +98,7 @@ $app->register(App\Providers\AppServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 $app->register(App\Providers\RouteServiceProvider::class);
 $app->register(App\Providers\ValidationServiceProvider::class);
+$app->register(BeyondCode\ErdGenerator\ErdGeneratorServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
