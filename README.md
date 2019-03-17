@@ -27,6 +27,11 @@ php scripts/setup.php
 #  - to use custom URL
 # php scripts/setup.php --application_url=<APPLICATION_URL>
 
+# Edit .env with stage evaluation stage item details...
+
+# Configuration of OpenAPI schema
+php artisan openapi:configure
+
 # Database structure
 php artisan migrate
 ```

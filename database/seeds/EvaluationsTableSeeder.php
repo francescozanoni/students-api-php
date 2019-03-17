@@ -68,6 +68,10 @@ class EvaluationsTableSeeder extends Seeder
 
         $itemValues = [];
 
+        if (empty($itemDefinitions) === true) {
+            return $itemValues;
+        }
+
         foreach ($itemDefinitions as $index => $item) {
 
             // The n-th item is assigned the n-th of its possible values.

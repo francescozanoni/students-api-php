@@ -105,6 +105,7 @@ $file = file_get_contents(PHPUNIT_XML_FILE_PATH);
 $file = preg_replace('#http://localhost#', $options['application_url'], $file);
 file_put_contents(PHPUNIT_XML_FILE_PATH, $file);
 
+# @todo move to ConfigureOpenApiSchema command
 $file = file_get_contents(OPENAPI_FILE_PATH);
 $file = preg_replace('#http://localhost#', $options['application_url'], $file);
 file_put_contents(OPENAPI_FILE_PATH, $file);
@@ -116,31 +117,6 @@ if (empty($baseUrl) === true) {
 $file = file_get_contents(HTACCESS_FILE_PATH);
 $file = preg_replace('#RewriteBase\s/#', 'RewriteBase ' . $baseUrl, $file);
 file_put_contents(HTACCESS_FILE_PATH, $file);
-
-# #####################################################
-
-# Evaluation item dynamic setting within OpenAPI schema
-# @todo move to an Artisan command
-use Symfony\Component\Yaml\Yaml;
-
-$app = require BASE_PATH . '/bootstrap/app.php';
-$schemaAsArray = Yaml::parseFile(OPENAPI_FILE_PATH);
-# Evaluation model is updated
-foreach ($app['config']['stages']['evaluations']['items'] as $index => $item) {
-    $schemaAsArray['components']['schemas']['NewEvaluation']['properties'][$item['name']] = ['type' => 'string', 'enum' => $item['values']];
-    if ($item['required'] === true) {
-        $schemaAsArray['components']['schemas']['NewEvaluation']['required'][] = $item['name'];
-    }
-}
-# Evaluation examples are updated
-$stageEvaluationItemExamples = EvaluationsTableSeeder::generateItemValues($app['config']['stages']['evaluations']['items']);
-$schemaAsArray['components']['responses']['Evaluations']['content']['application/json']['schema']['example']['data'][0] = array_merge($schemaAsArray['components']['responses']['Evaluations']['content']['application/json']['schema']['example']['data'][0], $stageEvaluationItemExamples);
-$schemaAsArray['components']['responses']['Evaluations']['content']['application/json']['schema']['example']['data'][1] = array_merge($schemaAsArray['components']['responses']['Evaluations']['content']['application/json']['schema']['example']['data'][1], $stageEvaluationItemExamples);
-$schemaAsArray['components']['responses']['Evaluation']['content']['application/json']['schema']['example']['data'] = array_merge($schemaAsArray['components']['responses']['Evaluation']['content']['application/json']['schema']['example']['data'], $stageEvaluationItemExamples);
-$schemaAsArray['components']['schemas']['NewEvaluation']['example'] = array_merge($schemaAsArray['components']['schemas']['NewEvaluation']['example'], $stageEvaluationItemExamples);
-$schemaAsArray['components']['schemas']['Evaluation']['example'] = array_merge($schemaAsArray['components']['schemas']['Evaluation']['example'], $stageEvaluationItemExamples);
-
-file_put_contents(OPENAPI_FILE_PATH, Yaml::dump($schemaAsArray, 999, 2));
 
 # #####################################################
 

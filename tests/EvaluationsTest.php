@@ -219,22 +219,28 @@ class EvaluationsTest extends TestCase
         // Existing stage
         $this->json('POST',
             '/stages/3/evaluation',
-            [
-                'clinical_tutor_id' => 123,
-                'notes' => 'Another evaluation notes',
-            ]
+            array_merge(
+                [
+                    'clinical_tutor_id' => 123,
+                    'notes' => 'Another evaluation notes',
+                ],
+                EvaluationsTableSeeder::generateItemValues($this->app['config']['stages']['evaluations']['items'])
+            )
         )
             ->seeJsonEquals([
                 'status_code' => 200,
                 'status' => 'OK',
                 'message' => 'Resource successfully retrieved/created/modified',
-                'data' => [
-                    'id' => 3,
-                    'clinical_tutor_id' => 123,
-                    'notes' => 'Another evaluation notes',
-                    'created_at' => date('Y-m-d H:i:s'),
-                    'updated_at' => date('Y-m-d H:i:s'),
-                ],
+                'data' => array_merge(
+                    [
+                        'id' => 3,
+                        'clinical_tutor_id' => 123,
+                        'notes' => 'Another evaluation notes',
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'updated_at' => date('Y-m-d H:i:s'),
+                    ],
+                    EvaluationsTableSeeder::generateItemValues($this->app['config']['stages']['evaluations']['items'])
+                )
             ])
             ->seeStatusCode(200)
             ->seeInDatabase('evaluations', ['id' => 3, 'stage_id' => 3, 'clinical_tutor_id' => 123, 'notes' => 'Another evaluation notes', 'deleted_at' => null])
@@ -243,20 +249,26 @@ class EvaluationsTest extends TestCase
         // Existing stage, no notes
         $this->json('POST',
             '/stages/2/evaluation',
-            [
-                'clinical_tutor_id' => 123,
-            ]
+            array_merge(
+                [
+                    'clinical_tutor_id' => 123,
+                ],
+                EvaluationsTableSeeder::generateItemValues($this->app['config']['stages']['evaluations']['items'])
+            )
         )
             ->seeJsonEquals([
                 'status_code' => 200,
                 'status' => 'OK',
                 'message' => 'Resource successfully retrieved/created/modified',
-                'data' => [
-                    'id' => 4,
-                    'clinical_tutor_id' => 123,
-                    'created_at' => date('Y-m-d H:i:s'),
-                    'updated_at' => date('Y-m-d H:i:s'),
-                ],
+                'data' => array_merge(
+                    [
+                        'id' => 4,
+                        'clinical_tutor_id' => 123,
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'updated_at' => date('Y-m-d H:i:s'),
+                    ],
+                    EvaluationsTableSeeder::generateItemValues($this->app['config']['stages']['evaluations']['items'])
+                ),
             ])
             ->seeStatusCode(200)
             ->seeInDatabase('evaluations', ['id' => 4, 'stage_id' => 2, 'clinical_tutor_id' => 123, 'notes' => null, 'deleted_at' => null])
@@ -275,10 +287,13 @@ class EvaluationsTest extends TestCase
         // Non existing stage
         $this->json('POST',
             '/stages/999/evaluation',
-            [
-                'clinical_tutor_id' => 123,
-                'notes' => 'Another evaluation notes',
-            ]
+            array_merge(
+                [
+                    'clinical_tutor_id' => 123,
+                    'notes' => 'Another evaluation notes',
+                ],
+                EvaluationsTableSeeder::generateItemValues($this->app['config']['stages']['evaluations']['items'])
+            )
         )
             ->seeJsonEquals([
                 'status_code' => 404,
@@ -292,10 +307,13 @@ class EvaluationsTest extends TestCase
         // Invalid stage ID
         $this->json('POST',
             '/stages/abc/evaluation',
-            [
-                'clinical_tutor_id' => 123,
-                'notes' => 'Another evaluation notes',
-            ]
+            array_merge(
+                [
+                    'clinical_tutor_id' => 123,
+                    'notes' => 'Another evaluation notes',
+                ],
+                EvaluationsTableSeeder::generateItemValues($this->app['config']['stages']['evaluations']['items'])
+            )
         )
             ->seeJsonEquals([
                 'status_code' => 400,
@@ -318,10 +336,13 @@ class EvaluationsTest extends TestCase
         // Stage already with evaluation
         $this->json('POST',
             '/stages/1/evaluation',
-            [
-                'clinical_tutor_id' => 123,
-                'notes' => 'Another evaluation notes',
-            ]
+            array_merge(
+                [
+                    'clinical_tutor_id' => 123,
+                    'notes' => 'Another evaluation notes',
+                ],
+                EvaluationsTableSeeder::generateItemValues($this->app['config']['stages']['evaluations']['items'])
+            )
         )
             ->seeJsonEquals([
                 'status_code' => 400,
@@ -339,10 +360,13 @@ class EvaluationsTest extends TestCase
         // Stage with start date in the future
         $this->json('POST',
             '/stages/4/evaluation',
-            [
-                'clinical_tutor_id' => 123,
-                'notes' => 'Another evaluation notes',
-            ]
+            array_merge(
+                [
+                    'clinical_tutor_id' => 123,
+                    'notes' => 'Another evaluation notes',
+                ],
+                EvaluationsTableSeeder::generateItemValues($this->app['config']['stages']['evaluations']['items'])
+            )
         )
             ->seeJsonEquals([
                 'status_code' => 400,
@@ -360,9 +384,12 @@ class EvaluationsTest extends TestCase
         // Missing required clinical_tutor_id
         $this->json('POST',
             '/stages/3/evaluation',
-            [
-                'notes' => 'Another evaluation notes',
-            ]
+            array_merge(
+                [
+                    'notes' => 'Another evaluation notes',
+                ],
+                EvaluationsTableSeeder::generateItemValues($this->app['config']['stages']['evaluations']['items'])
+            )
         )
             ->seeJsonEquals([
                 'status_code' => 400,
@@ -379,7 +406,6 @@ class EvaluationsTest extends TestCase
             ->notSeeInDatabase('evaluations', ['id' => 3]);
 
         // @todo add further tests related to invalid attribute format
-        // @todo add tests with items
 
     }
 
@@ -391,10 +417,13 @@ class EvaluationsTest extends TestCase
 
         $this->json('PUT',
             '/evaluations/1',
-            [
-                'clinical_tutor_id' => 456,
-                'notes' => 'First evaluation notes modified', // --> modified
-            ]
+            array_merge(
+                [
+                    'clinical_tutor_id' => 456,
+                    'notes' => 'First evaluation notes modified', // --> modified
+                ],
+                EvaluationsTableSeeder::generateItemValues($this->app['config']['stages']['evaluations']['items'])
+            )
         )
             ->seeJsonEquals([
                 'status_code' => 200,
@@ -438,9 +467,12 @@ class EvaluationsTest extends TestCase
         // Remove notes
         $this->json('PUT',
             '/evaluations/1',
-            [
-                'clinical_tutor_id' => 456,
-            ]
+            array_merge(
+                [
+                    'clinical_tutor_id' => 456,
+                ],
+                EvaluationsTableSeeder::generateItemValues($this->app['config']['stages']['evaluations']['items'])
+            )
         )
             ->seeJsonEquals([
                 'status_code' => 200,
@@ -491,10 +523,13 @@ class EvaluationsTest extends TestCase
         // Non existing ID
         $this->json('PUT',
             '/evaluations/999',
-            [
-                'clinical_tutor_id' => 789,
-                'notes' => 'Second evaluation notes modified', // --> modified
-            ]
+            array_merge(
+                [
+                    'clinical_tutor_id' => 789,
+                    'notes' => 'Second evaluation notes modified', // --> modified
+                ],
+                EvaluationsTableSeeder::generateItemValues($this->app['config']['stages']['evaluations']['items'])
+            )
         )
             ->seeJsonEquals([
                 'status_code' => 404,
@@ -508,10 +543,13 @@ class EvaluationsTest extends TestCase
         // Invalid ID
         $this->json('PUT',
             '/evaluations/abc',
-            [
-                'clinical_tutor_id' => 789,
-                'notes' => 'Second evaluation notes modified', // --> modified
-            ]
+            array_merge(
+                [
+                    'clinical_tutor_id' => 789,
+                    'notes' => 'Second evaluation notes modified', // --> modified
+                ],
+                EvaluationsTableSeeder::generateItemValues($this->app['config']['stages']['evaluations']['items'])
+            )
         )
             ->seeJsonEquals([
                 'status_code' => 400,
@@ -534,10 +572,13 @@ class EvaluationsTest extends TestCase
         // Different clinical tutor
         $this->json('PUT',
             '/evaluations/1',
-            [
-                'clinical_tutor_id' => 123,  // --> modified
-                'notes' => 'First evaluation notes',
-            ]
+            array_merge(
+                [
+                    'clinical_tutor_id' => 123,  // --> modified
+                    'notes' => 'First evaluation notes',
+                ],
+                EvaluationsTableSeeder::generateItemValues($this->app['config']['stages']['evaluations']['items'])
+            )
         )
             ->seeJsonEquals([
                 'status_code' => 400,
@@ -556,9 +597,12 @@ class EvaluationsTest extends TestCase
         // Missing required clinical_tutor_id
         $this->json('PUT',
             '/evaluations/1',
-            [
-                'notes' => 'Another evaluation notes', // --> modified
-            ]
+            array_merge(
+                [
+                    'notes' => 'Another evaluation notes', // --> modified
+                ],
+                EvaluationsTableSeeder::generateItemValues($this->app['config']['stages']['evaluations']['items'])
+            )
         )
             ->seeJsonEquals([
                 'status_code' => 400,
@@ -576,6 +620,7 @@ class EvaluationsTest extends TestCase
             ->notSeeInDatabase('evaluations', ['id' => 1, 'notes' => 'Another evaluation notes']);
 
         // @todo add further tests related to invalid attribute format
+        // @todo add tests related to items
 
     }
 
