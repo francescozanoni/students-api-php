@@ -30,6 +30,7 @@ $app->withEloquent();
 $app->configure('app');
 $app->configure('openapi');
 $app->configure('database');
+$app->configure('stages');
 
 /*
 |--------------------------------------------------------------------------

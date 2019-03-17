@@ -10,7 +10,7 @@ require_once BASE_PATH . '/vendor/autoload.php';
 
 # Default values
 $options = [
-    'application_url' => 'http://localhost', // Laravel's default
+    'application_url' => 'http://localhost', // Laravel/Lumen's default
 ];
 
 # If provided, input values override default values
@@ -120,26 +120,27 @@ file_put_contents(HTACCESS_FILE_PATH, $file);
 # #####################################################
 
 # Evaluation item dynamic setting within OpenAPI schema
+# @todo move to an Artisan command
 use Symfony\Component\Yaml\Yaml;
 
 $app = require BASE_PATH . '/bootstrap/app.php';
 $schemaAsArray = Yaml::parseFile(OPENAPI_FILE_PATH);
-foreach ($app['config']['app']['evaluations']['items'] as $index => $item) {
+# Evaluation model is updated
+foreach ($app['config']['stages']['evaluations']['items'] as $index => $item) {
     $schemaAsArray['components']['schemas']['NewEvaluation']['properties'][$item['name']] = ['type' => 'string', 'enum' => $item['values']];
     if ($item['required'] === true) {
         $schemaAsArray['components']['schemas']['NewEvaluation']['required'][] = $item['name'];
     }
-    // The n-th item is assigned the n-th of its possible values.
-    // If n is greater than the number of possible values,
-    // value position count restarts from the beginning of the possible value array.
-    $value = $item['values'][$index % count($item['values'])];
-    $schemaAsArray['components']['responses']['Evaluations']['content']['application/json']['schema']['example']['data'][0][$item['name']] = $value;
-    $schemaAsArray['components']['responses']['Evaluations']['content']['application/json']['schema']['example']['data'][1][$item['name']] = $value;
-    $schemaAsArray['components']['responses']['Evaluation']['content']['application/json']['schema']['example']['data'][$item['name']] = $value;
-    $schemaAsArray['components']['schemas']['NewEvaluation']['example'][$item['name']] = $value;
-    $schemaAsArray['components']['schemas']['Evaluation']['example'][$item['name']] = $value;
 }
-file_put_contents(OPENAPI_FILE_PATH, Yaml::dump($schemaAsArray, 1000, 2));
+# Evaluation examples are updated
+$stageEvaluationItemExamples = EvaluationsTableSeeder::generateItemValues($app['config']['stages']['evaluations']['items']);
+$schemaAsArray['components']['responses']['Evaluations']['content']['application/json']['schema']['example']['data'][0] = array_merge($schemaAsArray['components']['responses']['Evaluations']['content']['application/json']['schema']['example']['data'][0], $stageEvaluationItemExamples);
+$schemaAsArray['components']['responses']['Evaluations']['content']['application/json']['schema']['example']['data'][1] = array_merge($schemaAsArray['components']['responses']['Evaluations']['content']['application/json']['schema']['example']['data'][1], $stageEvaluationItemExamples);
+$schemaAsArray['components']['responses']['Evaluation']['content']['application/json']['schema']['example']['data'] = array_merge($schemaAsArray['components']['responses']['Evaluation']['content']['application/json']['schema']['example']['data'], $stageEvaluationItemExamples);
+$schemaAsArray['components']['schemas']['NewEvaluation']['example'] = array_merge($schemaAsArray['components']['schemas']['NewEvaluation']['example'], $stageEvaluationItemExamples);
+$schemaAsArray['components']['schemas']['Evaluation']['example'] = array_merge($schemaAsArray['components']['schemas']['Evaluation']['example'], $stageEvaluationItemExamples);
+
+file_put_contents(OPENAPI_FILE_PATH, Yaml::dump($schemaAsArray, 999, 2));
 
 # #####################################################
 

@@ -29,7 +29,7 @@ class Evaluation extends JsonResource
 
         ];
 
-        foreach (config('app.evaluations.items') as $item) {
+        foreach (config('stages.evaluations.items') as $item) {
             $output[$item['name']] = $this->{$item['name']};
         }
 

@@ -15,7 +15,7 @@ class CreateEvaluationsTable extends Migration
     {
         Schema::create('evaluations', function (Blueprint $table) {
             $table->increments('id');
-            foreach (config('app.evaluations.items') as $item) {
+            foreach (config('stages.evaluations.items') as $item) {
                 $table->enum($item['name'], $item['values'])->nullable(!$item['required']);
             }
             $table->string('notes')->nullable(true);

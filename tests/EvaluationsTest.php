@@ -15,6 +15,53 @@ class EvaluationsTest extends TestCase
                 'status' => 'OK',
                 'message' => 'Resource(s) found',
                 'data' => [
+                    array_merge(
+                        [
+                            'id' => 1,
+                            'stage' => [
+                                'id' => 1,
+                                'location' => 'Location 1',
+                                'sub_location' => 'Sub-location 1',
+                                'student' => [
+                                    'id' => 1,
+                                    'first_name' => 'John',
+                                    'last_name' => 'Doe',
+                                    'e_mail' => 'john.doe@foo.com',
+                                    'phone' => '1234-567890',
+                                    'nationality' => 'GB',
+                                ],
+                                'start_date' => '2019-01-10',
+                                'end_date' => '2019-01-24',
+                                'hour_amount' => 123,
+                                'other_amount' => 5,
+                                'is_optional' => false,
+                                'is_interrupted' => false
+                            ],
+                            'clinical_tutor_id' => 456,
+                            'notes' => 'First evaluation notes',
+                            'created_at' => '2019-01-25 02:00:00',
+                            'updated_at' => '2019-01-25 02:00:00',
+                        ],
+                        EvaluationsTableSeeder::generateItemValues($this->app['config']['stages']['evaluations']['items'])
+                    ),
+                ],
+            ])
+            ->seeStatusCode(200);
+    }
+
+    /**
+     * Get evaluation by ID.
+     */
+    public function testGetById()
+    {
+
+        // Existing
+        $this->json('GET', '/evaluations/1')
+            ->seeJsonEquals([
+                'status_code' => 200,
+                'status' => 'OK',
+                'message' => 'Resource successfully retrieved/created/modified',
+                'data' => array_merge(
                     [
                         'id' => 1,
                         'stage' => [
@@ -40,128 +87,9 @@ class EvaluationsTest extends TestCase
                         'notes' => 'First evaluation notes',
                         'created_at' => '2019-01-25 02:00:00',
                         'updated_at' => '2019-01-25 02:00:00',
-                        'item_1_1' => 'A',
-                        'item_1_2' => 'B',
-                        'item_1_4' => 'D',
-                        'item_2_2' => 'NV',
-                        'item_2_3' => 'A',
-                        'item_2_4' => 'B',
-                        'item_3_1' => 'D',
-                        'item_3_2' => 'E',
-                        'item_3_3' => 'NV',
-                        'item_3_4' => 'A',
-                        'item_4_1' => 'B',
-                        'item_4_2' => 'C',
-                        'item_4_3' => 'D',
-                        'item_4_5' => 'NV',
-                        'item_5_1' => 'A',
-                        'item_5_2' => 'B',
-                        'item_5_3' => 'C',
-                        'item_5_4' => 'D',
-                        'item_5_5' => 'E',
-                        'item_6_1' => 'NV',
-                        'item_6_2' => 'A',
-                        'item_6_3' => 'B',
-                        'item_7_1' => 'C',
-                        'item_7_2' => 'D',
-                        'item_8_1' => 'E',
-                        'item_8_2' => 'NV',
-                        'item_8_3' => 'A',
-                        'item_8_4' => 'B',
-                        'item_9_1' => 'D',
-                        'item_9_2' => 'E',
-                        'item_10_1' => 'NV',
-                        'item_10_2' => 'A',
-                        'item_11_1' => 'B',
-                        'item_11_2' => 'C',
-                        'item_12_1' => 'D',
-                        'item_12_2' => 'E',
-                        'item_12_3' => 'NV',
-                        'item_13_1' => 'A',
-                        'item_13_2' => 'B'
                     ],
-                ]
-            ])
-            ->seeStatusCode(200);
-    }
-
-    /**
-     * Get evaluation by ID.
-     */
-    public function testGetById()
-    {
-
-        // Existing
-        $this->json('GET', '/evaluations/1')
-            ->seeJsonEquals([
-                'status_code' => 200,
-                'status' => 'OK',
-                'message' => 'Resource successfully retrieved/created/modified',
-                'data' => [
-                    'id' => 1,
-                    'stage' => [
-                        'id' => 1,
-                        'location' => 'Location 1',
-                        'sub_location' => 'Sub-location 1',
-                        'student' => [
-                            'id' => 1,
-                            'first_name' => 'John',
-                            'last_name' => 'Doe',
-                            'e_mail' => 'john.doe@foo.com',
-                            'phone' => '1234-567890',
-                            'nationality' => 'GB',
-                        ],
-                        'start_date' => '2019-01-10',
-                        'end_date' => '2019-01-24',
-                        'hour_amount' => 123,
-                        'other_amount' => 5,
-                        'is_optional' => false,
-                        'is_interrupted' => false
-                    ],
-                    'clinical_tutor_id' => 456,
-                    'notes' => 'First evaluation notes',
-                    'created_at' => '2019-01-25 02:00:00',
-                    'updated_at' => '2019-01-25 02:00:00',
-                    'item_1_1' => 'A',
-                    'item_1_2' => 'B',
-                    'item_1_4' => 'D',
-                    'item_2_2' => 'NV',
-                    'item_2_3' => 'A',
-                    'item_2_4' => 'B',
-                    'item_3_1' => 'D',
-                    'item_3_2' => 'E',
-                    'item_3_3' => 'NV',
-                    'item_3_4' => 'A',
-                    'item_4_1' => 'B',
-                    'item_4_2' => 'C',
-                    'item_4_3' => 'D',
-                    'item_4_5' => 'NV',
-                    'item_5_1' => 'A',
-                    'item_5_2' => 'B',
-                    'item_5_3' => 'C',
-                    'item_5_4' => 'D',
-                    'item_5_5' => 'E',
-                    'item_6_1' => 'NV',
-                    'item_6_2' => 'A',
-                    'item_6_3' => 'B',
-                    'item_7_1' => 'C',
-                    'item_7_2' => 'D',
-                    'item_8_1' => 'E',
-                    'item_8_2' => 'NV',
-                    'item_8_3' => 'A',
-                    'item_8_4' => 'B',
-                    'item_9_1' => 'D',
-                    'item_9_2' => 'E',
-                    'item_10_1' => 'NV',
-                    'item_10_2' => 'A',
-                    'item_11_1' => 'B',
-                    'item_11_2' => 'C',
-                    'item_12_1' => 'D',
-                    'item_12_2' => 'E',
-                    'item_12_3' => 'NV',
-                    'item_13_1' => 'A',
-                    'item_13_2' => 'B'
-                ],
+                    EvaluationsTableSeeder::generateItemValues($this->app['config']['stages']['evaluations']['items'])
+                ),
             ])
             ->seeStatusCode(200);
 
@@ -223,52 +151,16 @@ class EvaluationsTest extends TestCase
                 'status_code' => 200,
                 'status' => 'OK',
                 'message' => 'Resource successfully retrieved/created/modified',
-                'data' => [
-                    'id' => 1,
-                    'clinical_tutor_id' => 456,
-                    'notes' => 'First evaluation notes',
-                    'created_at' => '2019-01-25 02:00:00',
-                    'updated_at' => '2019-01-25 02:00:00',
-                    'item_1_1' => 'A',
-                    'item_1_2' => 'B',
-                    'item_1_4' => 'D',
-                    'item_2_2' => 'NV',
-                    'item_2_3' => 'A',
-                    'item_2_4' => 'B',
-                    'item_3_1' => 'D',
-                    'item_3_2' => 'E',
-                    'item_3_3' => 'NV',
-                    'item_3_4' => 'A',
-                    'item_4_1' => 'B',
-                    'item_4_2' => 'C',
-                    'item_4_3' => 'D',
-                    'item_4_5' => 'NV',
-                    'item_5_1' => 'A',
-                    'item_5_2' => 'B',
-                    'item_5_3' => 'C',
-                    'item_5_4' => 'D',
-                    'item_5_5' => 'E',
-                    'item_6_1' => 'NV',
-                    'item_6_2' => 'A',
-                    'item_6_3' => 'B',
-                    'item_7_1' => 'C',
-                    'item_7_2' => 'D',
-                    'item_8_1' => 'E',
-                    'item_8_2' => 'NV',
-                    'item_8_3' => 'A',
-                    'item_8_4' => 'B',
-                    'item_9_1' => 'D',
-                    'item_9_2' => 'E',
-                    'item_10_1' => 'NV',
-                    'item_10_2' => 'A',
-                    'item_11_1' => 'B',
-                    'item_11_2' => 'C',
-                    'item_12_1' => 'D',
-                    'item_12_2' => 'E',
-                    'item_12_3' => 'NV',
-                    'item_13_1' => 'A',
-                    'item_13_2' => 'B'
-                ],
+                'data' => array_merge(
+                    [
+                        'id' => 1,
+                        'clinical_tutor_id' => 456,
+                        'notes' => 'First evaluation notes',
+                        'created_at' => '2019-01-25 02:00:00',
+                        'updated_at' => '2019-01-25 02:00:00',
+                    ],
+                    EvaluationsTableSeeder::generateItemValues($this->app['config']['stages']['evaluations']['items'])
+                ),
             ])
             ->seeStatusCode(200);
 
@@ -508,71 +400,35 @@ class EvaluationsTest extends TestCase
                 'status_code' => 200,
                 'status' => 'OK',
                 'message' => 'Resource successfully retrieved/created/modified',
-                'data' => [
-                    'id' => 1,
-                    'stage' => [
+                'data' => array_merge(
+                    [
                         'id' => 1,
-                        'location' => 'Location 1',
-                        'sub_location' => 'Sub-location 1',
-                        'student' => [
+                        'stage' => [
                             'id' => 1,
-                            'first_name' => 'John',
-                            'last_name' => 'Doe',
-                            'e_mail' => 'john.doe@foo.com',
-                            'phone' => '1234-567890',
-                            'nationality' => 'GB',
+                            'location' => 'Location 1',
+                            'sub_location' => 'Sub-location 1',
+                            'student' => [
+                                'id' => 1,
+                                'first_name' => 'John',
+                                'last_name' => 'Doe',
+                                'e_mail' => 'john.doe@foo.com',
+                                'phone' => '1234-567890',
+                                'nationality' => 'GB',
+                            ],
+                            'start_date' => '2019-01-10',
+                            'end_date' => '2019-01-24',
+                            'hour_amount' => 123,
+                            'other_amount' => 5,
+                            'is_optional' => false,
+                            'is_interrupted' => false
                         ],
-                        'start_date' => '2019-01-10',
-                        'end_date' => '2019-01-24',
-                        'hour_amount' => 123,
-                        'other_amount' => 5,
-                        'is_optional' => false,
-                        'is_interrupted' => false
+                        'clinical_tutor_id' => 456,
+                        'notes' => 'First evaluation notes modified',
+                        'created_at' => '2019-01-25 02:00:00',
+                        'updated_at' => date('Y-m-d H:i:s'),
                     ],
-                    'clinical_tutor_id' => 456,
-                    'notes' => 'First evaluation notes modified',
-                    'created_at' => '2019-01-25 02:00:00',
-                    'updated_at' => date('Y-m-d H:i:s'),
-                    'item_1_1' => 'A',
-                    'item_1_2' => 'B',
-                    'item_1_4' => 'D',
-                    'item_2_2' => 'NV',
-                    'item_2_3' => 'A',
-                    'item_2_4' => 'B',
-                    'item_3_1' => 'D',
-                    'item_3_2' => 'E',
-                    'item_3_3' => 'NV',
-                    'item_3_4' => 'A',
-                    'item_4_1' => 'B',
-                    'item_4_2' => 'C',
-                    'item_4_3' => 'D',
-                    'item_4_5' => 'NV',
-                    'item_5_1' => 'A',
-                    'item_5_2' => 'B',
-                    'item_5_3' => 'C',
-                    'item_5_4' => 'D',
-                    'item_5_5' => 'E',
-                    'item_6_1' => 'NV',
-                    'item_6_2' => 'A',
-                    'item_6_3' => 'B',
-                    'item_7_1' => 'C',
-                    'item_7_2' => 'D',
-                    'item_8_1' => 'E',
-                    'item_8_2' => 'NV',
-                    'item_8_3' => 'A',
-                    'item_8_4' => 'B',
-                    'item_9_1' => 'D',
-                    'item_9_2' => 'E',
-                    'item_10_1' => 'NV',
-                    'item_10_2' => 'A',
-                    'item_11_1' => 'B',
-                    'item_11_2' => 'C',
-                    'item_12_1' => 'D',
-                    'item_12_2' => 'E',
-                    'item_12_3' => 'NV',
-                    'item_13_1' => 'A',
-                    'item_13_2' => 'B'
-                ],
+                    EvaluationsTableSeeder::generateItemValues($this->app['config']['stages']['evaluations']['items'])
+                ),
             ])
             ->seeStatusCode(200)
             ->seeInDatabase('evaluations', ['id' => 1, 'notes' => 'First evaluation notes modified'])
@@ -590,70 +446,34 @@ class EvaluationsTest extends TestCase
                 'status_code' => 200,
                 'status' => 'OK',
                 'message' => 'Resource successfully retrieved/created/modified',
-                'data' => [
-                    'id' => 1,
-                    'stage' => [
+                'data' => array_merge(
+                    [
                         'id' => 1,
-                        'location' => 'Location 1',
-                        'sub_location' => 'Sub-location 1',
-                        'student' => [
+                        'stage' => [
                             'id' => 1,
-                            'first_name' => 'John',
-                            'last_name' => 'Doe',
-                            'e_mail' => 'john.doe@foo.com',
-                            'phone' => '1234-567890',
-                            'nationality' => 'GB',
+                            'location' => 'Location 1',
+                            'sub_location' => 'Sub-location 1',
+                            'student' => [
+                                'id' => 1,
+                                'first_name' => 'John',
+                                'last_name' => 'Doe',
+                                'e_mail' => 'john.doe@foo.com',
+                                'phone' => '1234-567890',
+                                'nationality' => 'GB',
+                            ],
+                            'start_date' => '2019-01-10',
+                            'end_date' => '2019-01-24',
+                            'hour_amount' => 123,
+                            'other_amount' => 5,
+                            'is_optional' => false,
+                            'is_interrupted' => false
                         ],
-                        'start_date' => '2019-01-10',
-                        'end_date' => '2019-01-24',
-                        'hour_amount' => 123,
-                        'other_amount' => 5,
-                        'is_optional' => false,
-                        'is_interrupted' => false
+                        'clinical_tutor_id' => 456,
+                        'created_at' => '2019-01-25 02:00:00',
+                        'updated_at' => date('Y-m-d H:i:s'),
                     ],
-                    'clinical_tutor_id' => 456,
-                    'created_at' => '2019-01-25 02:00:00',
-                    'updated_at' => date('Y-m-d H:i:s'),
-                    'item_1_1' => 'A',
-                    'item_1_2' => 'B',
-                    'item_1_4' => 'D',
-                    'item_2_2' => 'NV',
-                    'item_2_3' => 'A',
-                    'item_2_4' => 'B',
-                    'item_3_1' => 'D',
-                    'item_3_2' => 'E',
-                    'item_3_3' => 'NV',
-                    'item_3_4' => 'A',
-                    'item_4_1' => 'B',
-                    'item_4_2' => 'C',
-                    'item_4_3' => 'D',
-                    'item_4_5' => 'NV',
-                    'item_5_1' => 'A',
-                    'item_5_2' => 'B',
-                    'item_5_3' => 'C',
-                    'item_5_4' => 'D',
-                    'item_5_5' => 'E',
-                    'item_6_1' => 'NV',
-                    'item_6_2' => 'A',
-                    'item_6_3' => 'B',
-                    'item_7_1' => 'C',
-                    'item_7_2' => 'D',
-                    'item_8_1' => 'E',
-                    'item_8_2' => 'NV',
-                    'item_8_3' => 'A',
-                    'item_8_4' => 'B',
-                    'item_9_1' => 'D',
-                    'item_9_2' => 'E',
-                    'item_10_1' => 'NV',
-                    'item_10_2' => 'A',
-                    'item_11_1' => 'B',
-                    'item_11_2' => 'C',
-                    'item_12_1' => 'D',
-                    'item_12_2' => 'E',
-                    'item_12_3' => 'NV',
-                    'item_13_1' => 'A',
-                    'item_13_2' => 'B'
-                ],
+                    EvaluationsTableSeeder::generateItemValues($this->app['config']['stages']['evaluations']['items'])
+                ),
             ])
             ->seeStatusCode(200)
             ->seeInDatabase('evaluations', ['id' => 1, 'notes' => null])
