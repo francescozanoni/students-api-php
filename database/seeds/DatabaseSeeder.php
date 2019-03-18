@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
         $this->call('SubLocationsTableSeeder');
         $this->call('StudentsTableSeeder');
         $this->call('AnnotationsTableSeeder');
-        $this->call('StagesTableSeeder');
+        $this->call('InternshipsTableSeeder');
         $this->call('EducationalActivityAttendancesTableSeeder');
         $this->call('EvaluationsTableSeeder');
         $this->call('InterruptionReportsTableSeeder');

@@ -39,9 +39,9 @@ class Student extends Model
     /**
      * @return HasMany
      */
-    public function stages() : HasMany
+    public function internships() : HasMany
     {
-        return $this->hasMany('App\Models\Stage');
+        return $this->hasMany('App\Models\Internship');
     }
     
     /**

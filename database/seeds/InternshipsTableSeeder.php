@@ -4,7 +4,7 @@ declare(strict_types = 1);
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class StagesTableSeeder extends Seeder
+class InternshipsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,8 +14,8 @@ class StagesTableSeeder extends Seeder
     public function run()
     {
 
-        // Standard stage, with evaluation
-        DB::table('stages')->insert([
+        // Standard internship, with evaluation
+        DB::table('internships')->insert([
             'student_id' => 1,
             'location_id' => 1,
             'sub_location_id' => 1,
@@ -29,8 +29,8 @@ class StagesTableSeeder extends Seeder
             'updated_at' => '2019-01-09 02:00:00',
         ]);
 
-        // Optional interrupted stage, with interruption report.
-        DB::table('stages')->insert([
+        // Optional interrupted internship, with interruption report.
+        DB::table('internships')->insert([
             'student_id' => 1,
             'location_id' => 1,
             'sub_location_id' => 1,
@@ -44,8 +44,8 @@ class StagesTableSeeder extends Seeder
             'updated_at' => '2019-01-25 02:00:00',
         ]);
 
-        // Interrupted stage.
-        DB::table('stages')->insert([
+        // Interrupted internship.
+        DB::table('internships')->insert([
             'student_id' => 4,
             'location_id' => 1,
             'sub_location_id' => 1,
@@ -59,8 +59,8 @@ class StagesTableSeeder extends Seeder
             'updated_at' => '2019-01-28 02:00:00',
         ]);
 
-        // Interrupted stage, in the future (very unlikely :-) ).
-        DB::table('stages')->insert([
+        // Interrupted internship, in the future (very unlikely :-) ).
+        DB::table('internships')->insert([
             'student_id' => 4,
             'location_id' => 1,
             'sub_location_id' => 1,

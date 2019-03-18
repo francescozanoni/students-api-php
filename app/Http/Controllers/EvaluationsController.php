@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace App\Http\Controllers;
 
 use App\Models\Evaluation;
-use App\Models\Stage;
+use App\Models\Internship;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -13,7 +13,7 @@ class EvaluationsController extends Controller
 {
 
     /**
-     * Retrieve all stage evaluations.
+     * Retrieve all internship evaluations.
      *
      * @return Evaluation[]|\Illuminate\Database\Eloquent\Collection
      */
@@ -23,15 +23,15 @@ class EvaluationsController extends Controller
     }
 
     /**
-     * Retrieve evaluation of a stage.
+     * Retrieve evaluation of a internship.
      *
-     * @param int $stageId
+     * @param int $internshipId
      *
      * @return Evaluation
      */
-    public function getRelatedToStage(int $stageId) : Evaluation
+    public function getRelatedToInternship(int $internshipId) : Evaluation
     {
-        $evaluation = Stage::findOrFail($stageId)->evaluation;
+        $evaluation = Internship::findOrFail($internshipId)->evaluation;
 
         if (empty($evaluation) === true) {
             throw new NotFoundHttpException();
@@ -41,7 +41,7 @@ class EvaluationsController extends Controller
     }
 
     /**
-     * Retrieve a stage evaluation.
+     * Retrieve a internship evaluation.
      *
      * @param int $id
      *
@@ -53,28 +53,28 @@ class EvaluationsController extends Controller
     }
 
     /**
-     * Create a stage's evaluation.
+     * Create a internship's evaluation.
      *
      * @param Request $request
-     * @param int $stageId
+     * @param int $internshipId
      *
      * @return Evaluation
      */
-    public function createRelatedToStage(Request $request, int $stageId) : Evaluation
+    public function createRelatedToInternship(Request $request, int $internshipId) : Evaluation
     {
-        $stage = Stage::findOrFail($stageId);
+        $internship = Internship::findOrFail($internshipId);
 
         $input = $request->request->all();
 
         $evaluation = new Evaluation($input);
 
-        $stage->evaluation()->save($evaluation);
+        $internship->evaluation()->save($evaluation);
 
         return $evaluation;
     }
 
     /**
-     * Modify a stage evaluation.
+     * Modify a internship evaluation.
      *
      * @param Request $request
      * @param int $id
@@ -101,7 +101,7 @@ class EvaluationsController extends Controller
     }
 
     /**
-     * Delete a stage evaluation.
+     * Delete a internship evaluation.
      *
      * @param int $id
      */

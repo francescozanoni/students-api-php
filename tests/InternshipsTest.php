@@ -1,18 +1,18 @@
 <?php
 declare(strict_types = 1);
 
-class StagesTest extends TestCase
+class InternshipsTest extends TestCase
 {
 
     /**
-     * Get all stages.
+     * Get all internships.
      *
      * @throws Exception
      */
     public function testGet()
     {
 
-        $this->json('GET', '/stages')
+        $this->json('GET', '/internships')
             ->seeJsonEquals([
                 'status_code' => 200,
                 'status' => 'OK',
@@ -101,13 +101,13 @@ class StagesTest extends TestCase
     }
 
     /**
-     * Get stage by ID.
+     * Get internship by ID.
      */
     public function testGetById()
     {
 
         // Existing
-        $this->json('GET', '/stages/1')
+        $this->json('GET', '/internships/1')
             ->seeJsonEquals([
                 'status_code' => 200,
                 'status' => 'OK',
@@ -137,13 +137,13 @@ class StagesTest extends TestCase
     }
 
     /**
-     * Get stage by ID: failure.
+     * Get internship by ID: failure.
      */
     public function testGetByIdFailure()
     {
 
         // Non existing
-        $this->json('GET', '/stages/9999')
+        $this->json('GET', '/internships/9999')
             ->seeJsonEquals([
                 'status_code' => 404,
                 'status' => 'Not Found',
@@ -152,7 +152,7 @@ class StagesTest extends TestCase
             ->seeStatusCode(404);
 
         // Invalid ID
-        $this->json('GET', '/stages/abc')
+        $this->json('GET', '/internships/abc')
             ->seeJsonEquals([
                 'status_code' => 400,
                 'status' => 'Bad Request',
@@ -172,13 +172,13 @@ class StagesTest extends TestCase
     }
 
     /**
-     * Get student's stages: success.
+     * Get student's internships: success.
      */
     public function testGetRelatedToStudent()
     {
 
         // Existing
-        $this->json('GET', '/students/1/stages')
+        $this->json('GET', '/students/1/internships')
             ->seeJsonEquals([
                 'status_code' => 200,
                 'status' => 'OK',
@@ -213,13 +213,13 @@ class StagesTest extends TestCase
     }
 
     /**
-     * Get student's stages: failure.
+     * Get student's internships: failure.
      */
     public function testGetRelatedToStudentFailure()
     {
 
-        // Non existing stages
-        $this->json('GET', '/students/2/stages')
+        // Non existing internships
+        $this->json('GET', '/students/2/internships')
             ->seeJsonEquals([
                 'status_code' => 404,
                 'status' => 'Not Found',
@@ -228,7 +228,7 @@ class StagesTest extends TestCase
             ->seeStatusCode(404);
 
         // Non existing student
-        $this->json('GET', '/students/999/stages')
+        $this->json('GET', '/students/999/internships')
             ->seeJsonEquals([
                 'status_code' => 404,
                 'status' => 'Not Found',
@@ -237,7 +237,7 @@ class StagesTest extends TestCase
             ->seeStatusCode(404);
 
         // Invalid student ID
-        $this->json('GET', '/students/abc/stages')
+        $this->json('GET', '/students/abc/internships')
             ->seeJsonEquals([
                 'status_code' => 400,
                 'status' => 'Bad Request',
@@ -257,14 +257,14 @@ class StagesTest extends TestCase
     }
 
     /**
-     * Create a student's stage: success.
+     * Create a student's internship: success.
      */
     public function testCreateRelatedToStudent()
     {
 
         // Existing student, with sub-location
         $this->json('POST',
-            '/students/1/stages',
+            '/students/1/internships',
             [
                 'location' => 'Location 1',
                 'sub_location' => 'Sub-location 1',
@@ -293,12 +293,12 @@ class StagesTest extends TestCase
                 ],
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('stages', ['id' => 5, 'student_id' => 1, 'location_id' => 1, 'sub_location_id' => 1, 'deleted_at' => null])
-            ->notSeeInDatabase('stages', ['id' => 6]);
+            ->seeInDatabase('internships', ['id' => 5, 'student_id' => 1, 'location_id' => 1, 'sub_location_id' => 1, 'deleted_at' => null])
+            ->notSeeInDatabase('internships', ['id' => 6]);
 
         // Existing student, without sub-location
         $this->json('POST',
-            '/students/1/stages',
+            '/students/1/internships',
             [
                 'location' => 'Location 1',
                 'start_date' => '2019-04-01',
@@ -325,20 +325,20 @@ class StagesTest extends TestCase
                 ],
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('stages', ['id' => 6, 'student_id' => 1, 'location_id' => null, 'sub_location_id' => 1, 'deleted_at' => null])
-            ->notSeeInDatabase('stages', ['id' => 7]);
+            ->seeInDatabase('internships', ['id' => 6, 'student_id' => 1, 'location_id' => null, 'sub_location_id' => 1, 'deleted_at' => null])
+            ->notSeeInDatabase('internships', ['id' => 7]);
 
     }
 
     /**
-     * Create a student's stage: failure.
+     * Create a student's internship: failure.
      */
     public function testCreateRelatedToStudentFailure()
     {
 
         // Non existing student
         $this->json('POST',
-            '/students/999/stages',
+            '/students/999/internships',
             [
                 'location' => 'Location 1',
                 'sub_location' => 'Sub-location 1',
@@ -356,12 +356,12 @@ class StagesTest extends TestCase
                 'message' => 'Resource(s) not found',
             ])
             ->seeStatusCode(404)
-            ->notSeeInDatabase('stages', ['id' => 5])
-            ->notSeeInDatabase('stages', ['student_id' => 999]);
+            ->notSeeInDatabase('internships', ['id' => 5])
+            ->notSeeInDatabase('internships', ['student_id' => 999]);
 
         // Invalid student ID
         $this->json('POST',
-            '/students/abc/stages',
+            '/students/abc/internships',
             [
                 'location' => 'Location 1',
                 'sub_location' => 'Sub-location 1',
@@ -388,12 +388,12 @@ class StagesTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('stages', ['id' => 5])
-            ->notSeeInDatabase('stages', ['student_id' => 'abc']);
+            ->notSeeInDatabase('internships', ['id' => 5])
+            ->notSeeInDatabase('internships', ['student_id' => 'abc']);
 
         // Non existing location
         $this->json('POST',
-            '/students/1/stages',
+            '/students/1/internships',
             [
                 'location' => 'Location 999',
                 'sub_location' => 'Sub-location 1',
@@ -416,11 +416,11 @@ class StagesTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('stages', ['id' => 5]);
+            ->notSeeInDatabase('internships', ['id' => 5]);
 
         // Non existing sub-location
         $this->json('POST',
-            '/students/1/stages',
+            '/students/1/internships',
             [
                 'location' => 'Location 1',
                 'sub_location' => 'Sub-location 999',
@@ -443,11 +443,11 @@ class StagesTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('stages', ['id' => 5]);
+            ->notSeeInDatabase('internships', ['id' => 5]);
 
         // Switched dates
         $this->json('POST',
-            '/students/1/stages',
+            '/students/1/internships',
             [
                 'location' => 'Location 1',
                 'sub_location' => 'Sub-location 1',
@@ -473,12 +473,12 @@ class StagesTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('stages', ['id' => 5])
-            ->notSeeInDatabase('stages', ['start_date' => '2019-01-31', 'end_date' => '2019-01-25']);
+            ->notSeeInDatabase('internships', ['id' => 5])
+            ->notSeeInDatabase('internships', ['start_date' => '2019-01-31', 'end_date' => '2019-01-25']);
 
         // Identical dates
         $this->json('POST',
-            '/students/1/stages',
+            '/students/1/internships',
             [
                 'location' => 'Location 1',
                 'sub_location' => 'Sub-location 1',
@@ -504,12 +504,12 @@ class StagesTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('stages', ['id' => 5])
-            ->notSeeInDatabase('stages', ['start_date' => '2019-01-25', 'end_date' => '2019-01-25']);
+            ->notSeeInDatabase('internships', ['id' => 5])
+            ->notSeeInDatabase('internships', ['start_date' => '2019-01-25', 'end_date' => '2019-01-25']);
 
         // Overlapping time range
         $this->json('POST',
-            '/students/1/stages',
+            '/students/1/internships',
             [
                 'location' => 'Location 1',
                 'sub_location' => 'Sub-location 1',
@@ -535,9 +535,9 @@ class StagesTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('stages', ['id' => 5]);
+            ->notSeeInDatabase('internships', ['id' => 5]);
         $this->json('POST',
-            '/students/1/stages',
+            '/students/1/internships',
             [
                 'location' => 'Location 1',
                 'sub_location' => 'Sub-location 1',
@@ -563,9 +563,9 @@ class StagesTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('stages', ['id' => 5]);
+            ->notSeeInDatabase('internships', ['id' => 5]);
         $this->json('POST',
-            '/students/1/stages',
+            '/students/1/internships',
             [
                 'location' => 'Location 1',
                 'sub_location' => 'Sub-location 1',
@@ -591,9 +591,9 @@ class StagesTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('stages', ['id' => 5]);
+            ->notSeeInDatabase('internships', ['id' => 5]);
         $this->json('POST',
-            '/students/1/stages',
+            '/students/1/internships',
             [
                 'location' => 'Location 1',
                 'sub_location' => 'Sub-location 1',
@@ -619,11 +619,11 @@ class StagesTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('stages', ['id' => 5]);
+            ->notSeeInDatabase('internships', ['id' => 5]);
 
         // Unallowed additional property.
         $this->json('POST',
-            '/students/1/stages',
+            '/students/1/internships',
             [
                 'location' => 'Location 1',
                 'sub_location' => 'Sub-location 1',
@@ -649,11 +649,11 @@ class StagesTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('stages', ['id' => 5]);
+            ->notSeeInDatabase('internships', ['id' => 5]);
 
         // Missing required location
         $this->json('POST',
-            '/students/1/stages',
+            '/students/1/internships',
             [
                 'start_date' => '2019-02-25',
                 'end_date' => '2019-02-28',
@@ -675,11 +675,11 @@ class StagesTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('stages', ['id' => 5]);
+            ->notSeeInDatabase('internships', ['id' => 5]);
 
         // Missing required start_date
         $this->json('POST',
-            '/students/1/stages',
+            '/students/1/internships',
             [
                 'location' => 'Location 1',
                 'end_date' => '2019-02-28',
@@ -701,11 +701,11 @@ class StagesTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('stages', ['id' => 5]);
+            ->notSeeInDatabase('internships', ['id' => 5]);
 
         // Missing required end_date
         $this->json('POST',
-            '/students/1/stages',
+            '/students/1/internships',
             [
                 'location' => 'Location 1',
                 'start_date' => '2019-02-25',
@@ -727,11 +727,11 @@ class StagesTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('stages', ['id' => 5]);
+            ->notSeeInDatabase('internships', ['id' => 5]);
 
         // Missing required hour_amount
         $this->json('POST',
-            '/students/1/stages',
+            '/students/1/internships',
             [
                 'location' => 'Location 1',
                 'start_date' => '2019-02-25',
@@ -753,11 +753,11 @@ class StagesTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('stages', ['id' => 5]);
+            ->notSeeInDatabase('internships', ['id' => 5]);
 
         // Missing required other_amount
         $this->json('POST',
-            '/students/1/stages',
+            '/students/1/internships',
             [
                 'location' => 'Location 1',
                 'start_date' => '2019-02-25',
@@ -779,11 +779,11 @@ class StagesTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('stages', ['id' => 5]);
+            ->notSeeInDatabase('internships', ['id' => 5]);
 
         // Missing required is_optional
         $this->json('POST',
-            '/students/1/stages',
+            '/students/1/internships',
             [
                 'location' => 'Location 1',
                 'start_date' => '2019-02-25',
@@ -805,20 +805,20 @@ class StagesTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('stages', ['id' => 5]);
+            ->notSeeInDatabase('internships', ['id' => 5]);
 
         // @todo add further tests related to invalid attribute format
 
     }
 
     /**
-     * Modify a stage: success.
+     * Modify a internship: success.
      */
     public function testModifyById()
     {
 
         $this->json('PUT',
-            '/stages/1',
+            '/internships/1',
             [
                 'location' => 'Location 1',
                 'sub_location' => 'Sub-location 1',
@@ -855,13 +855,13 @@ class StagesTest extends TestCase
                 ],
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('stages', ['id' => 1, 'hour_amount' => 456, 'other_amount' => 7])
-            ->notSeeInDatabase('stages', ['id' => 1, 'hour_amount' => 123, 'other_amount' => 5])
-            ->notSeeInDatabase('stages', ['id' => 5]);
+            ->seeInDatabase('internships', ['id' => 1, 'hour_amount' => 456, 'other_amount' => 7])
+            ->notSeeInDatabase('internships', ['id' => 1, 'hour_amount' => 123, 'other_amount' => 5])
+            ->notSeeInDatabase('internships', ['id' => 5]);
 
         // Remove sub-location
         $this->json('PUT',
-            '/stages/1',
+            '/internships/1',
             [
                 'location' => 'Location 1',
                 'start_date' => '2019-01-10',
@@ -896,13 +896,13 @@ class StagesTest extends TestCase
                 ],
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('stages', ['id' => 1, 'sub_location_id' => null])
-            ->notSeeInDatabase('stages', ['id' => 1, 'sub_location_id' => 1])
-            ->notSeeInDatabase('stages', ['id' => 5]);
+            ->seeInDatabase('internships', ['id' => 1, 'sub_location_id' => null])
+            ->notSeeInDatabase('internships', ['id' => 1, 'sub_location_id' => 1])
+            ->notSeeInDatabase('internships', ['id' => 5]);
 
         // Re-add sub-location
         $this->json('PUT',
-            '/stages/1',
+            '/internships/1',
             [
                 'location' => 'Location 1',
                 'sub_location' => 'Sub-location 1',
@@ -939,21 +939,21 @@ class StagesTest extends TestCase
                 ],
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('stages', ['id' => 1, 'sub_location_id' => 1])
-            ->notSeeInDatabase('stages', ['id' => 1, 'sub_location_id' => null])
-            ->notSeeInDatabase('stages', ['id' => 5]);
+            ->seeInDatabase('internships', ['id' => 1, 'sub_location_id' => 1])
+            ->notSeeInDatabase('internships', ['id' => 1, 'sub_location_id' => null])
+            ->notSeeInDatabase('internships', ['id' => 5]);
 
     }
 
     /**
-     * Modify a stage: failure.
+     * Modify a internship: failure.
      */
     public function testModifyByIdFailure()
     {
 
         // Non existing ID
         $this->json('PUT',
-            '/stages/999',
+            '/internships/999',
             [
                 'location' => 'Location 1',
                 'sub_location' => 'Sub-location 1',
@@ -971,12 +971,12 @@ class StagesTest extends TestCase
                 'message' => 'Resource(s) not found',
             ])
             ->seeStatusCode(404)
-            ->notSeeInDatabase('stages', ['id' => 999])
-            ->notSeeInDatabase('stages', ['id' => 5]);
+            ->notSeeInDatabase('internships', ['id' => 999])
+            ->notSeeInDatabase('internships', ['id' => 5]);
 
         // Invalid ID
         $this->json('PUT',
-            '/stages/abc',
+            '/internships/abc',
             [
                 'location' => 'Location 1',
                 'sub_location' => 'Sub-location 1',
@@ -1003,15 +1003,15 @@ class StagesTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('stages', ['id' => 'abc'])
-            ->notSeeInDatabase('stages', ['id' => 5]);
+            ->notSeeInDatabase('internships', ['id' => 'abc'])
+            ->notSeeInDatabase('internships', ['id' => 5]);
 
         // The record created by this method is used by below tests.
         $this->testCreateRelatedToStudent();
 
         // Overlapping time range
         $this->json('PUT',
-            '/stages/5',
+            '/internships/5',
             [
                 'location' => 'Location 1',
                 'sub_location' => 'Sub-location 1',
@@ -1037,12 +1037,12 @@ class StagesTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->seeInDatabase('stages', ['id' => 5, 'start_date' => '2019-02-01'])
-            ->notSeeInDatabase('stages', ['id' => 5, 'start_date' => '2019-01-20']);
+            ->seeInDatabase('internships', ['id' => 5, 'start_date' => '2019-02-01'])
+            ->notSeeInDatabase('internships', ['id' => 5, 'start_date' => '2019-01-20']);
 
         // Switched dates
         $this->json('PUT',
-            '/stages/5',
+            '/internships/5',
             [
                 'location' => 'Location 1',
                 'sub_location' => 'Sub-location 1',
@@ -1068,12 +1068,12 @@ class StagesTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->seeInDatabase('stages', ['id' => 5, 'start_date' => '2019-02-01', 'end_date' => '2019-02-11'])
-            ->notSeeInDatabase('stages', ['id' => 5, 'start_date' => '2019-01-25', 'end_date' => '2019-01-21']);
+            ->seeInDatabase('internships', ['id' => 5, 'start_date' => '2019-02-01', 'end_date' => '2019-02-11'])
+            ->notSeeInDatabase('internships', ['id' => 5, 'start_date' => '2019-01-25', 'end_date' => '2019-01-21']);
 
         // Unallowed additional property.
         $this->json('PUT',
-            '/stages/1',
+            '/internships/1',
             [
                 'location' => 'Location 1',
                 'sub_location' => 'Sub-location 1',
@@ -1098,12 +1098,12 @@ class StagesTest extends TestCase
                     ]
                 ]
             ])
-            ->seeInDatabase('stages', ['id' => 1])
-            ->notSeeInDatabase('stages', ['id' => 1, 'hour_amount' => 111, 'is_optional' => true]);
+            ->seeInDatabase('internships', ['id' => 1])
+            ->notSeeInDatabase('internships', ['id' => 1, 'hour_amount' => 111, 'is_optional' => true]);
 
         // If interruption report is available, "is_interrupted" cannot be switched from true to false.
         $this->json('PUT',
-            '/stages/2',
+            '/internships/2',
             [
                 'location' => 'Location 1',
                 'sub_location' => 'Sub-location 1',
@@ -1121,15 +1121,15 @@ class StagesTest extends TestCase
                 'message' => 'Request is not valid',
                 'data' => [
                     'is_interrupted' => [
-                        'Stage actually has interruption report',
+                        'Internship actually has interruption report',
                     ]
                 ]
             ])
-            ->seeInDatabase('stages', ['id' => 2, 'is_interrupted' => true]);
+            ->seeInDatabase('internships', ['id' => 2, 'is_interrupted' => true]);
 
         // Missing required location
         $this->json('PUT',
-            '/stages/3',
+            '/internships/3',
             [
                 'sub_location' => 'Sub-location 1',
                 'start_date' => '2019-01-26',
@@ -1155,7 +1155,7 @@ class StagesTest extends TestCase
 
         // Missing required start_date
         $this->json('PUT',
-            '/stages/3',
+            '/internships/3',
             [
                 'location' => 'Location 1',
                 'sub_location' => 'Sub-location 1',
@@ -1181,7 +1181,7 @@ class StagesTest extends TestCase
 
         // Missing required end_date
         $this->json('PUT',
-            '/stages/3',
+            '/internships/3',
             [
                 'location' => 'Location 1',
                 'sub_location' => 'Sub-location 1',
@@ -1207,7 +1207,7 @@ class StagesTest extends TestCase
 
         // Missing required hour_amount
         $this->json('PUT',
-            '/stages/3',
+            '/internships/3',
             [
                 'location' => 'Location 1',
                 'sub_location' => 'Sub-location 1',
@@ -1233,7 +1233,7 @@ class StagesTest extends TestCase
 
         // Missing required other_amount
         $this->json('PUT',
-            '/stages/3',
+            '/internships/3',
             [
                 'location' => 'Location 1',
                 'sub_location' => 'Sub-location 1',
@@ -1259,7 +1259,7 @@ class StagesTest extends TestCase
 
         // Missing required is_optional
         $this->json('PUT',
-            '/stages/3',
+            '/internships/3',
             [
                 'location' => 'Location 1',
                 'sub_location' => 'Sub-location 1',
@@ -1285,7 +1285,7 @@ class StagesTest extends TestCase
 
         // Missing required is_interrupted
         $this->json('PUT',
-            '/stages/3',
+            '/internships/3',
             [
                 'location' => 'Location 1',
                 'sub_location' => 'Sub-location 1',
@@ -1314,42 +1314,42 @@ class StagesTest extends TestCase
     }
 
     /**
-     * Delete a stage: success.
+     * Delete a internship: success.
      */
     public function testDeleteById()
     {
 
-        // Existing stage
-        $this->json('DELETE', '/stages/3')
+        // Existing internship
+        $this->json('DELETE', '/internships/3')
             ->seeJsonEquals([
                 'status_code' => 200,
                 'status' => 'OK',
                 'message' => 'Resource deleted',
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('stages', ['id' => 3, 'deleted_at' => date('Y-m-d H:i:s')])
-            ->notSeeInDatabase('stages', ['id' => 3, 'deleted_at' => null]);
+            ->seeInDatabase('internships', ['id' => 3, 'deleted_at' => date('Y-m-d H:i:s')])
+            ->notSeeInDatabase('internships', ['id' => 3, 'deleted_at' => null]);
 
     }
 
     /**
-     * Delete a stage: failure.
+     * Delete a internship: failure.
      */
     public function testDeleteByIdFailure()
     {
 
-        // Non existing stage
-        $this->json('DELETE', '/stages/999')
+        // Non existing internship
+        $this->json('DELETE', '/internships/999')
             ->seeJsonEquals([
                 'status_code' => 404,
                 'status' => 'Not Found',
                 'message' => 'Resource(s) not found',
             ])
             ->seeStatusCode(404)
-            ->notSeeInDatabase('stages', ['id' => 999]);
+            ->notSeeInDatabase('internships', ['id' => 999]);
 
         // Invalid ID
-        $this->json('DELETE', '/stages/abc')
+        $this->json('DELETE', '/internships/abc')
             ->seeJsonEquals([
                 'status_code' => 400,
                 'status' => 'Bad Request',
@@ -1365,37 +1365,37 @@ class StagesTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('stages', ['id' => 'abc']);
+            ->notSeeInDatabase('internships', ['id' => 'abc']);
 
-        // Stage with evaluation
-        $this->json('DELETE', '/stages/1')
+        // Internship with evaluation
+        $this->json('DELETE', '/internships/1')
             ->seeJsonEquals([
                 'status_code' => 400,
                 'status' => 'Bad Request',
                 'message' => 'Request is not valid',
                 'data' => [
-                    'stage_id' => [
-                        'Stage actually has evaluation and/or interruption report',
+                    'internship_id' => [
+                        'Internship actually has evaluation and/or interruption report',
                     ],
                 ]
             ])
             ->seeStatusCode(400)
-            ->seeInDatabase('stages', ['id' => 1, 'deleted_at' => null]);
+            ->seeInDatabase('internships', ['id' => 1, 'deleted_at' => null]);
 
-        // Stage with interruption report
-        $this->json('DELETE', '/stages/2')
+        // Internship with interruption report
+        $this->json('DELETE', '/internships/2')
             ->seeJsonEquals([
                 'status_code' => 400,
                 'status' => 'Bad Request',
                 'message' => 'Request is not valid',
                 'data' => [
-                    'stage_id' => [
-                        'Stage actually has evaluation and/or interruption report',
+                    'internship_id' => [
+                        'Internship actually has evaluation and/or interruption report',
                     ],
                 ]
             ])
             ->seeStatusCode(400)
-            ->seeInDatabase('stages', ['id' => 2, 'deleted_at' => null]);
+            ->seeInDatabase('internships', ['id' => 2, 'deleted_at' => null]);
 
     }
 

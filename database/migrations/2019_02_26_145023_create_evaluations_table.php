@@ -15,16 +15,16 @@ class CreateEvaluationsTable extends Migration
     {
         Schema::create('evaluations', function (Blueprint $table) {
             $table->increments('id');
-            foreach (config('stages.evaluations.items') as $item) {
+            foreach (config('internships.evaluations.items') as $item) {
                 $table->enum($item['name'], $item['values'])->nullable(!$item['required']);
             }
             $table->string('notes')->nullable(true);
-            $table->unsignedInteger('stage_id')->nullable(false);
+            $table->unsignedInteger('internship_id')->nullable(false);
             // evaluation author, whose referential integrity is enforced by input validation rules
             $table->unsignedInteger('clinical_tutor_id')->nullable(false);
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('stage_id')->references('id')->on('stages');
+            $table->foreign('internship_id')->references('id')->on('internships');
         });
 
         // @todo assess whether to create a clinical tutor importer

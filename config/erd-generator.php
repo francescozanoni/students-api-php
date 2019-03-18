@@ -22,17 +22,17 @@ return [
         App\Models\Annotation::class => [
              'student'
         ],
-        App\Models\Stage::class => [
+        App\Models\Internship::class => [
              'student'
         ],
         App\Models\EducationalActivityAttendance::class => [
              'student'
         ],
         App\Models\Evaluation::class => [
-             'stage'
+             'internship'
         ],
         App\Models\InterruptionReport::class => [
-             'stage'
+             'internship'
         ],
     ],
     

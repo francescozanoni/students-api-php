@@ -31,7 +31,7 @@ class ValidationServiceProvider extends ServiceProvider
              *
              * @param string $attribute name of the attribute being validated, e.g. start_date
              * @param mixed $value value of the attribute, e.g. 2019-01-01
-             * @param array $parameters array of parameters passed to the rule, e.g. end_date, stages, student_id, =, 1
+             * @param array $parameters array of parameters passed to the rule, e.g. end_date, internships, student_id, =, 1
              * @param Validator $validator the Validator instance
              *
              * @return bool

@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace App\Http\Controllers;
 
 use App\Models\InterruptionReport;
-use App\Models\Stage;
+use App\Models\Internship;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -13,7 +13,7 @@ class InterruptionReportsController extends Controller
 {
 
     /**
-     * Retrieve all stage interruption reports.
+     * Retrieve all internship interruption reports.
      *
      * @return InterruptionReport[]|\Illuminate\Database\Eloquent\Collection
      */
@@ -23,15 +23,15 @@ class InterruptionReportsController extends Controller
     }
 
     /**
-     * Retrieve interruption report of a stage.
+     * Retrieve interruption report of a internship.
      *
-     * @param int $stageId
+     * @param int $internshipId
      *
      * @return InterruptionReport
      */
-    public function getRelatedToStage(int $stageId) : InterruptionReport
+    public function getRelatedToInternship(int $internshipId) : InterruptionReport
     {
-        $interruptionReport = Stage::findOrFail($stageId)->interruptionReport;
+        $interruptionReport = Internship::findOrFail($internshipId)->interruptionReport;
 
         if (empty($interruptionReport) === true) {
             throw new NotFoundHttpException();
@@ -41,7 +41,7 @@ class InterruptionReportsController extends Controller
     }
 
     /**
-     * Retrieve a stage interruption report.
+     * Retrieve a internship interruption report.
      *
      * @param int $id
      *
@@ -53,28 +53,28 @@ class InterruptionReportsController extends Controller
     }
 
     /**
-     * Create a stage's interruption report.
+     * Create a internship's interruption report.
      *
      * @param Request $request
-     * @param int $stageId
+     * @param int $internshipId
      *
      * @return InterruptionReport
      */
-    public function createRelatedToStage(Request $request, int $stageId) : InterruptionReport
+    public function createRelatedToInternship(Request $request, int $internshipId) : InterruptionReport
     {
-        $stage = Stage::findOrFail($stageId);
+        $internship = Internship::findOrFail($internshipId);
 
         $input = $request->request->all();
 
         $interruptionReport = new InterruptionReport($input);
 
-        $stage->interruptionReport()->save($interruptionReport);
+        $internship->interruptionReport()->save($interruptionReport);
 
         return $interruptionReport;
     }
 
     /**
-     * Modify a stage interruption report.
+     * Modify a internship interruption report.
      *
      * @param Request $request
      * @param int $id
@@ -95,7 +95,7 @@ class InterruptionReportsController extends Controller
     }
 
     /**
-     * Delete a stage interruption report.
+     * Delete a internship interruption report.
      *
      * @param int $id
      */

@@ -7,7 +7,7 @@ use App\Http\Resources\Student as StudentResource;
 use App\Http\Resources\Traits\OptionalStudentAttribute;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class Stage extends JsonResource
+class Internship extends JsonResource
 {
 
     use OptionalStudentAttribute;

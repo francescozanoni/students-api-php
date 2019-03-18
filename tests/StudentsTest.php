@@ -457,7 +457,7 @@ class StudentsTest extends TestCase
             ->seeInDatabase('students', ['id' => 2, 'deleted_at' => date('Y-m-d H:i:s')])
             ->notSeeInDatabase('students', ['id' => 2, 'deleted_at' => null]);
 
-        // Existing student with annotation, stage and educational activity attendance
+        // Existing student with annotation, internship and educational activity attendance
         $this->json('DELETE', '/students/1')
             ->seeJsonEquals([
                 'status_code' => 200,
@@ -469,8 +469,8 @@ class StudentsTest extends TestCase
             ->notSeeInDatabase('students', ['id' => 1, 'deleted_at' => null])
             ->seeInDatabase('annotations', ['id' => 1, 'student_id' => 1, 'deleted_at' => date('Y-m-d H:i:s')])
             ->notSeeInDatabase('annotations', ['id' => 1, 'student_id' => 1, 'deleted_at' => null])
-            ->seeInDatabase('stages', ['id' => 1, 'student_id' => 1, 'deleted_at' => date('Y-m-d H:i:s')])
-            ->notSeeInDatabase('stages', ['id' => 1, 'student_id' => 1, 'deleted_at' => null])
+            ->seeInDatabase('internships', ['id' => 1, 'student_id' => 1, 'deleted_at' => date('Y-m-d H:i:s')])
+            ->notSeeInDatabase('internships', ['id' => 1, 'student_id' => 1, 'deleted_at' => null])
             ->seeInDatabase('evaluations', ['id' => 1, 'student_id' => 1, 'deleted_at' => date('Y-m-d H:i:s')])
             ->notSeeInDatabase('evaluations', ['id' => 1, 'student_id' => 1, 'deleted_at' => null])
             ->seeInDatabase('educational_activity_attendances', ['id' => 1, 'student_id' => 1, 'deleted_at' => date('Y-m-d H:i:s')])

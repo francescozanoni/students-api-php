@@ -13,30 +13,30 @@ class EvaluationsTableSeeder extends Seeder
     {
 
         $record = [
-            'stage_id' => 1,
+            'internship_id' => 1,
             'clinical_tutor_id' => 456,
             'notes' => 'First evaluation notes',
             'created_at' => '2019-01-25 02:00:00',
             'updated_at' => '2019-01-25 02:00:00',
         ];
-        $record = array_merge($record, self::generateItemValues(config('stages.evaluations.items')));
+        $record = array_merge($record, self::generateItemValues(config('internships.evaluations.items')));
         DB::table('evaluations')->insert($record);
 
         $record = [
-            'stage_id' => 1,
+            'internship_id' => 1,
             'clinical_tutor_id' => 789,
             'notes' => 'Second evaluation notes',
             'created_at' => '2019-01-26 02:00:00',
             'updated_at' => '2019-01-26 02:00:00',
             'deleted_at' => '2019-01-26 03:00:00',
         ];
-        $record = array_merge($record, self::generateItemValues(config('stages.evaluations.items')));
+        $record = array_merge($record, self::generateItemValues(config('internships.evaluations.items')));
         DB::table('evaluations')->insert($record);
 
     }
 
     /**
-     * Generate stage item values.
+     * Generate internship item values.
      *
      * This logic is made public because shared with:
      *  - OpenAPI schema file customizer (scripts/setup.php)

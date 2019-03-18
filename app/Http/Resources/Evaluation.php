@@ -3,14 +3,14 @@ declare(strict_types = 1);
 
 namespace App\Http\Resources;
 
-use App\Http\Resources\Stage as StageResource;
-use App\Http\Resources\Traits\OptionalStageAttribute;
+use App\Http\Resources\Internship as InternshipResource;
+use App\Http\Resources\Traits\OptionalInternshipAttribute;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class Evaluation extends JsonResource
 {
 
-    use OptionalStageAttribute;
+    use OptionalInternshipAttribute;
 
     public function toArray($request)
     {
@@ -19,7 +19,7 @@ class Evaluation extends JsonResource
 
             'id' => $this->id,
             'notes' => $this->notes,
-            'stage' => $this->when($this->withStageAttribute($request) === true, new StageResource($this->stage)),
+            'internship' => $this->when($this->withInternshipAttribute($request) === true, new InternshipResource($this->internship)),
 
             // This field is returned as string, but cannot understand why...
             'clinical_tutor_id' => (int)$this->clinical_tutor_id,
@@ -29,7 +29,7 @@ class Evaluation extends JsonResource
 
         ];
 
-        foreach (config('stages.evaluations.items') as $item) {
+        foreach (config('internships.evaluations.items') as $item) {
             $output[$item['name']] = $this->{$item['name']};
         }
 

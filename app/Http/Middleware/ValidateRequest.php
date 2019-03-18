@@ -4,12 +4,12 @@ declare(strict_types = 1);
 namespace App\Http\Middleware;
 
 use App\Http\Middleware\Traits\UsesOpenApiValidator;
-use App\Http\Resources\Stage as StageResource;
+use App\Http\Resources\Internship as InternshipResource;
 use App\Models\Annotation;
 use App\Models\EducationalActivityAttendance;
 use App\Models\Evaluation;
 use App\Models\InterruptionReport;
-use App\Models\Stage;
+use App\Models\Internship;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
@@ -104,7 +104,7 @@ class ValidateRequest
                 // @todo add user_id validation, that must be provided, exist and match the current value
                 break;
 
-            case 'createStudentStage':
+            case 'createStudentInternship':
                 Validator::make(
                     $request->request->all(),
                     [
@@ -117,12 +117,12 @@ class ValidateRequest
                         'start_date' => [
                             'bail',
                             'before:end_date',
-                            'not_overlapping_time_range:end_date,stages,student_id,=,' . app('current_route_path_parameters')['id'],
+                            'not_overlapping_time_range:end_date,internships,student_id,=,' . app('current_route_path_parameters')['id'],
                         ],
                         'end_date' => [
                             'bail',
                             'after:start_date',
-                            'not_overlapping_time_range:start_date,stages,student_id,=,' . app('current_route_path_parameters')['id'],
+                            'not_overlapping_time_range:start_date,internships,student_id,=,' . app('current_route_path_parameters')['id'],
                         ],
                     ],
                     [
@@ -136,15 +136,15 @@ class ValidateRequest
                 )->validate();
                 break;
 
-            case 'updateStageById':
-                $stage = Stage::find(app('current_route_path_parameters')['id']);
-                if ($stage) {
+            case 'updateInternshipById':
+                $internship = Internship::find(app('current_route_path_parameters')['id']);
+                if ($internship) {
                     // If attribute "is_interrupted" is switched from true to false,
                     // there must not be any interruption reports.
-                    if ((new StageResource($stage))->toArray($request)['is_interrupted'] === true &&
+                    if ((new InternshipResource($internship))->toArray($request)['is_interrupted'] === true &&
                         $request->request->get('is_interrupted') === false &&
-                        $stage->interruptionReport !== null) {
-                        throw ValidationException::withMessages(['is_interrupted' => ['Stage actually has interruption report']]);
+                        $internship->interruptionReport !== null) {
+                        throw ValidationException::withMessages(['is_interrupted' => ['Internship actually has interruption report']]);
                     }
                     Validator::make(
                         $request->request->all(),
@@ -158,12 +158,12 @@ class ValidateRequest
                             'start_date' => [
                                 'bail',
                                 'before:end_date',
-                                'not_overlapping_time_range:end_date,stages,student_id,=,' . $stage->student->id . ',id,!=,' . $stage->id,
+                                'not_overlapping_time_range:end_date,internships,student_id,=,' . $internship->student->id . ',id,!=,' . $internship->id,
                             ],
                             'end_date' => [
                                 'bail',
                                 'after:start_date',
-                                'not_overlapping_time_range:start_date,stages,student_id,=,' . $stage->student->id . ',id,!=,' . $stage->id,
+                                'not_overlapping_time_range:start_date,internships,student_id,=,' . $internship->student->id . ',id,!=,' . $internship->id,
                             ],
                         ],
                         [
@@ -178,13 +178,13 @@ class ValidateRequest
                 }
                 break;
 
-            case 'deleteStageById':
-                $stage = Stage::find(app('current_route_path_parameters')['id']);
-                if ($stage) {
-                    // In case of evaluation or interruption report available, stage cannot be deleted.
-                    if ($stage->evaluation !== null ||
-                        $stage->interruptionReport !== null) {
-                        throw ValidationException::withMessages(['stage_id' => ['Stage actually has evaluation and/or interruption report']]);
+            case 'deleteInternshipById':
+                $internship = Internship::find(app('current_route_path_parameters')['id']);
+                if ($internship) {
+                    // In case of evaluation or interruption report available, internship cannot be deleted.
+                    if ($internship->evaluation !== null ||
+                        $internship->interruptionReport !== null) {
+                        throw ValidationException::withMessages(['internship_id' => ['Internship actually has evaluation and/or interruption report']]);
                     }
                 }
                 break;
@@ -268,18 +268,18 @@ class ValidateRequest
                 }
                 break;
 
-            case 'createStageEvaluation':
-                $stage = Stage::find(app('current_route_path_parameters')['id']);
-                if ($stage) {
-                    // Stage must not have any evaluations yet.
-                    if ($stage->evaluation !== null) {
-                        throw ValidationException::withMessages(['stage_id' => ['Stage already has evaluation']]);
+            case 'createInternshipEvaluation':
+                $internship = Internship::find(app('current_route_path_parameters')['id']);
+                if ($internship) {
+                    // Internship must not have any evaluations yet.
+                    if ($internship->evaluation !== null) {
+                        throw ValidationException::withMessages(['internship_id' => ['Internship already has evaluation']]);
                     }
-                    // Stage must be already started.
+                    // Internship must be already started.
                     $currentDate = new \DateTime();
-                    $stageStartDate = \DateTime::createFromFormat('Y-m-d', $stage->start_date);
-                    if ((int)($currentDate->diff($stageStartDate))->format('%r%d') > 1) {
-                        throw ValidationException::withMessages(['stage_id' => ['Stage not started yet']]);
+                    $internshipStartDate = \DateTime::createFromFormat('Y-m-d', $internship->start_date);
+                    if ((int)($currentDate->diff($internshipStartDate))->format('%r%d') > 1) {
+                        throw ValidationException::withMessages(['internship_id' => ['Internship not started yet']]);
                     }
                 }
                 Validator::make(
@@ -312,22 +312,22 @@ class ValidateRequest
                 }
                 break;
 
-            case 'createStageInterruptionReport':
-                $stage = Stage::find(app('current_route_path_parameters')['id']);
-                if ($stage) {
-                    // Stage must be interrupted.
-                    if ((new StageResource($stage))->toArray($request)['is_interrupted'] !== true) {
-                        throw ValidationException::withMessages(['stage_id' => ['Stage is not interrupted']]);
+            case 'createInternshipInterruptionReport':
+                $internship = Internship::find(app('current_route_path_parameters')['id']);
+                if ($internship) {
+                    // Internship must be interrupted.
+                    if ((new InternshipResource($internship))->toArray($request)['is_interrupted'] !== true) {
+                        throw ValidationException::withMessages(['internship_id' => ['Internship is not interrupted']]);
                     }
-                    // Stage must not have any interruption reports yet.
-                    if ($stage->interruptionReport !== null) {
-                        throw ValidationException::withMessages(['stage_id' => ['Stage already has interruption report']]);
+                    // Internship must not have any interruption reports yet.
+                    if ($internship->interruptionReport !== null) {
+                        throw ValidationException::withMessages(['internship_id' => ['Internship already has interruption report']]);
                     }
-                    // Stage must be already started.
+                    // Internship must be already started.
                     $currentDate = new \DateTime();
-                    $stageStartDate = \DateTime::createFromFormat('Y-m-d', $stage->start_date);
-                    if ((int)($currentDate->diff($stageStartDate))->format('%r%d') > 1) {
-                        throw ValidationException::withMessages(['stage_id' => ['Stage not started yet']]);
+                    $internshipStartDate = \DateTime::createFromFormat('Y-m-d', $internship->start_date);
+                    if ((int)($currentDate->diff($internshipStartDate))->format('%r%d') > 1) {
+                        throw ValidationException::withMessages(['internship_id' => ['Internship not started yet']]);
                     }
                 }
                 Validator::make(
@@ -345,9 +345,9 @@ class ValidateRequest
             case 'updateInterruptionReportById':
                 $interruptionReport = InterruptionReport::find(app('current_route_path_parameters')['id']);
                 if ($interruptionReport) {
-                    // Stage must be interrupted.
-                    if ((new StageResource($interruptionReport->stage))->toArray($request)['is_interrupted'] !== true) {
-                        throw ValidationException::withMessages(['stage_id' => ['Stage is not interrupted']]);
+                    // Internship must be interrupted.
+                    if ((new InternshipResource($interruptionReport->internship))->toArray($request)['is_interrupted'] !== true) {
+                        throw ValidationException::withMessages(['internship_id' => ['Internship is not interrupted']]);
                     }
                     Validator::make(
                     // @todo validate clinical_tutor_id against clinical_tutors table

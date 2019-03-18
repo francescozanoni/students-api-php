@@ -4,7 +4,7 @@ This is a [RESTful](https://en.wikipedia.org/wiki/Representational_state_transfe
 
 - students
 - annotations (usually managed by tutors)
-- stages
+- internships
   - evaluations
   - interruption reports
 - educational activity attendances
@@ -29,7 +29,7 @@ php scripts/setup.php
 #  - to use custom URL
 # php scripts/setup.php --application_url=<APPLICATION_URL>
 
-# Edit .env with stage evaluation stage item details...
+# Edit .env with internship evaluation item details...
 
 # Configuration of OpenAPI schema
 php artisan openapi:configure

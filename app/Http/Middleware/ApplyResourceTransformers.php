@@ -7,7 +7,7 @@ use App\Http\Resources\Annotation as AnnotationResource;
 use App\Http\Resources\EducationalActivityAttendance as EducationalActivityAttendanceResource;
 use App\Http\Resources\Evaluation as EvaluationResource;
 use App\Http\Resources\InterruptionReport as InterruptionReportResource;
-use App\Http\Resources\Stage as StageResource;
+use App\Http\Resources\Internship as InternshipResource;
 use App\Http\Resources\Student as StudentResource;
 
 /**
@@ -57,15 +57,15 @@ class ApplyResourceTransformers
                 $response->setContent(new AnnotationResource($response->original));
                 break;
 
-            case 'getStages':
-            case 'getStudentStages':
-                $response->setContent(StageResource::collection($response->original));
+            case 'getInternships':
+            case 'getStudentInternships':
+                $response->setContent(InternshipResource::collection($response->original));
                 break;
 
-            case 'getStageById':
-            case 'createStudentStage':
-            case 'updateStageById':
-                $response->setContent(new StageResource($response->original));
+            case 'getInternshipById':
+            case 'createStudentInternship':
+            case 'updateInternshipById':
+                $response->setContent(new InternshipResource($response->original));
                 break;
 
             case 'getEducationalActivityAttendances':
@@ -83,9 +83,9 @@ class ApplyResourceTransformers
                 $response->setContent(EvaluationResource::collection($response->original));
                 break;
 
-            case 'getStageEvaluation':
+            case 'getInternshipEvaluation':
             case 'getEvaluationById':
-            case 'createStageEvaluation':
+            case 'createInternshipEvaluation':
             case 'updateEvaluationById':
                 $response->setContent(new EvaluationResource($response->original));
                 break;
@@ -94,9 +94,9 @@ class ApplyResourceTransformers
                 $response->setContent(InterruptionReportResource::collection($response->original));
                 break;
 
-            case 'getStageInterruptionReport':
+            case 'getInternshipInterruptionReport':
             case 'getInterruptionReportById':
-            case 'createStageInterruptionReport':
+            case 'createInternshipInterruptionReport':
             case 'updateInterruptionReportById':
                 $response->setContent(new InterruptionReportResource($response->original));
                 break;

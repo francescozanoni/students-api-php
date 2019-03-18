@@ -35,15 +35,15 @@ class ConfigureOpenApiSchema extends Command
 
         // @todoadd URL configuration (currently within scripts/setup.php)
 
-        $stageEvaluationItemDefinitions = config('stages.evaluations.items');
-        $stageEvaluationItemExamples = \EvaluationsTableSeeder::generateItemValues($stageEvaluationItemDefinitions);
+        $internshipEvaluationItemDefinitions = config('internships.evaluations.items');
+        $internshipEvaluationItemExamples = \EvaluationsTableSeeder::generateItemValues($internshipEvaluationItemDefinitions);
 
-        if (empty($stageEvaluationItemDefinitions) === true) {
+        if (empty($internshipEvaluationItemDefinitions) === true) {
             return;
         }
 
         # Evaluation model is updated
-        foreach ($stageEvaluationItemDefinitions as $index => $item) {
+        foreach ($internshipEvaluationItemDefinitions as $index => $item) {
             $schemaAsArray['components']['schemas']['NewEvaluation']['properties'][$item['name']] = ['type' => 'string', 'enum' => $item['values']];
             if ($item['required'] === true) {
                 $schemaAsArray['components']['schemas']['NewEvaluation']['required'][] = $item['name'];
@@ -51,7 +51,7 @@ class ConfigureOpenApiSchema extends Command
         }
 
         # Evaluation examples are updated
-        foreach ($stageEvaluationItemExamples as $name => $value) {
+        foreach ($internshipEvaluationItemExamples as $name => $value) {
             $schemaAsArray['components']['responses']['Evaluations']['content']['application/json']['schema']['example']['data'][0][$name] = $value;
             $schemaAsArray['components']['responses']['Evaluations']['content']['application/json']['schema']['example']['data'][1][$name] = $value;
             $schemaAsArray['components']['responses']['Evaluation']['content']['application/json']['schema']['example']['data'][$name] = $value;

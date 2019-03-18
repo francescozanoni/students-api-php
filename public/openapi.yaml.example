@@ -238,35 +238,35 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /stages:
+  /internships:
     get:
-      summary: Returns a list of stages
-      operationId: getStages
+      summary: Returns a list of internships
+      operationId: getInternships
       tags:
-        - stages
+        - internships
       responses:
         '200':
-          $ref: '#/components/responses/Stages'
+          $ref: '#/components/responses/Internships'
         '404':
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /stages/{id}:
+  /internships/{id}:
     get:
-      summary: Returns a stage
-      operationId: getStageById
+      summary: Returns an internship
+      operationId: getInternshipById
       tags:
-        - stages
+        - internships
       parameters:
         - name: id
           in: path
           required: true
-          description: The ID of the stage to retrieve
+          description: The ID of the internship to retrieve
           schema:
             type: integer
       responses:
         '200':
-          $ref: '#/components/responses/Stage'
+          $ref: '#/components/responses/Internship'
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
@@ -274,26 +274,26 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     put:
-      summary: Updates a stage
-      operationId: updateStageById
+      summary: Updates an internship
+      operationId: updateInternshipById
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/NewStage'
+              $ref: '#/components/schemas/NewInternship'
       tags:
-        - stages
+        - internships
       parameters:
         - name: id
           in: path
           required: true
-          description: The ID of the stage to update
+          description: The ID of the internship to update
           schema:
             type: integer
       responses:
         '200':
-          $ref: '#/components/responses/Stage'
+          $ref: '#/components/responses/Internship'
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
@@ -301,15 +301,15 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     delete:
-      summary: Deletes a stage
-      operationId: deleteStageById
+      summary: Deletes an internship
+      operationId: deleteInternshipById
       tags:
-        - stages
+        - internships
       parameters:
         - name: id
           in: path
           required: true
-          description: The ID of the stage to delete
+          description: The ID of the internship to delete
           schema:
             type: integer
       responses:
@@ -321,12 +321,12 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /students/{id}/stages:
+  /students/{id}/internships:
     get:
-      summary: Returns the list of a student's stages
-      operationId: getStudentStages
+      summary: Returns the list of a student's internships
+      operationId: getStudentInternships
       tags:
-        - stages
+        - internships
       parameters:
         - name: id
           in: path
@@ -336,7 +336,7 @@ paths:
             type: integer
       responses:
         '200':
-          $ref: '#/components/responses/Stages'
+          $ref: '#/components/responses/Internships'
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
@@ -344,26 +344,26 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     post:
-      summary: Creates a student's new stage
-      operationId: createStudentStage
+      summary: Creates a student's new internship
+      operationId: createStudentInternship
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/NewStage'
+              $ref: '#/components/schemas/NewInternship'
       tags:
-        - stages
+        - internships
       parameters:
         - name: id
           in: path
           required: true
-          description: The ID of the stage's student
+          description: The ID of the internship's student
           schema:
             type: integer
       responses:
         '200':
-          $ref: '#/components/responses/Stage'
+          $ref: '#/components/responses/Internship'
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
@@ -502,17 +502,17 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /stages/{id}/evaluation:
+  /internships/{id}/evaluation:
     get:
-      summary: Returns the stage's evaluation
-      operationId: getStageEvaluation
+      summary: Returns the internship's evaluation
+      operationId: getInternshipEvaluation
       tags:
         - evaluations
       parameters:
         - name: id
           in: path
           required: true
-          description: The ID of the stage
+          description: The ID of the internship
           schema:
             type: integer
       responses:
@@ -525,8 +525,8 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     post:
-      summary: Creates the stage's evaluation
-      operationId: createStageEvaluation
+      summary: Creates the internship's evaluation
+      operationId: createInternshipEvaluation
       requestBody:
         required: true
         content:
@@ -539,7 +539,7 @@ paths:
         - name: id
           in: path
           required: true
-          description: The ID of the evaluation's stage
+          description: The ID of the evaluation's internship
           schema:
             type: integer
       responses:
@@ -553,7 +553,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
   /evaluations:
     get:
-      summary: Returns a list of stage evaluations
+      summary: Returns a list of internship evaluations
       operationId: getEvaluations
       tags:
         - evaluations
@@ -566,7 +566,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
   /evaluations/{id}:
     get:
-      summary: Returns a stage evaluation
+      summary: Returns an internship evaluation
       operationId: getEvaluationById
       tags:
         - evaluations
@@ -574,7 +574,7 @@ paths:
         - name: id
           in: path
           required: true
-          description: The ID of the stage evaluation to retrieve
+          description: The ID of the internship evaluation to retrieve
           schema:
             type: integer
       responses:
@@ -587,7 +587,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     put:
-      summary: Updates a stage evaluation
+      summary: Updates an internship evaluation
       operationId: updateEvaluationById
       requestBody:
         required: true
@@ -601,7 +601,7 @@ paths:
         - name: id
           in: path
           required: true
-          description: The ID of the stage evaluation to update
+          description: The ID of the internship evaluation to update
           schema:
             type: integer
       responses:
@@ -614,7 +614,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     delete:
-      summary: Deletes a stage evaluation
+      summary: Deletes an internship evaluation
       operationId: deleteEvaluationById
       tags:
         - evaluations
@@ -622,7 +622,7 @@ paths:
         - name: id
           in: path
           required: true
-          description: The ID of the stage evaluation to delete
+          description: The ID of the internship evaluation to delete
           schema:
             type: integer
       responses:
@@ -634,17 +634,17 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /stages/{id}/interruption_report:
+  /internships/{id}/interruption_report:
     get:
-      summary: Returns the stage's interruption report
-      operationId: getStageInterruptionReport
+      summary: Returns the internship's interruption report
+      operationId: getInternshipInterruptionReport
       tags:
         - interruption_reports
       parameters:
         - name: id
           in: path
           required: true
-          description: The ID of the stage
+          description: The ID of the internship
           schema:
             type: integer
       responses:
@@ -657,8 +657,8 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     post:
-      summary: Creates the stage's interruption report
-      operationId: createStageInterruptionReport
+      summary: Creates the internship's interruption report
+      operationId: createInternshipInterruptionReport
       requestBody:
         required: true
         content:
@@ -671,7 +671,7 @@ paths:
         - name: id
           in: path
           required: true
-          description: The ID of the interruption report's stage
+          description: The ID of the interruption report's internship
           schema:
             type: integer
       responses:
@@ -685,7 +685,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
   /interruption_reports:
     get:
-      summary: Returns a list of stage interruption reports
+      summary: Returns a list of internship interruption reports
       operationId: getInterruptionReports
       tags:
         - interruption_reports
@@ -698,7 +698,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
   /interruption_reports/{id}:
     get:
-      summary: Returns a stage interruption report
+      summary: Returns an internship interruption report
       operationId: getInterruptionReportById
       tags:
         - interruption_reports
@@ -706,7 +706,7 @@ paths:
         - name: id
           in: path
           required: true
-          description: The ID of the stage interruption report to retrieve
+          description: The ID of the internship interruption report to retrieve
           schema:
             type: integer
       responses:
@@ -719,7 +719,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     put:
-      summary: Updates a stage interruption report
+      summary: Updates an internship interruption report
       operationId: updateInterruptionReportById
       requestBody:
         required: true
@@ -733,7 +733,7 @@ paths:
         - name: id
           in: path
           required: true
-          description: The ID of the stage interruption report to update
+          description: The ID of the internship interruption report to update
           schema:
             type: integer
       responses:
@@ -746,7 +746,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     delete:
-      summary: Deletes a stage interruption report
+      summary: Deletes an internship interruption report
       operationId: deleteInterruptionReportById
       tags:
         - interruption_reports
@@ -754,7 +754,7 @@ paths:
         - name: id
           in: path
           required: true
-          description: The ID of the stage interruption report to delete
+          description: The ID of the internship interruption report to delete
           schema:
             type: integer
       responses:
@@ -996,8 +996,8 @@ components:
                   nationality: GB
                 created_at: '2019-01-01 01:00:00'
                 updated_at: '2019-01-01 01:00:00'
-    Stages:
-      description: Response returning a list of stages
+    Internships:
+      description: Response returning a list of internships
       content:
         application/json:
           schema:
@@ -1014,7 +1014,7 @@ components:
               data:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Stage'
+                  $ref: '#/components/schemas/Internship'
             required:
               - status_code
               - status
@@ -1057,8 +1057,8 @@ components:
                     e_mail: joan.doe@bar.com
                     phone: null
                     nationality: CA
-    Stage:
-      description: Response returning a stage
+    Internship:
+      description: Response returning an internship
       content:
         application/json:
           schema:
@@ -1073,7 +1073,7 @@ components:
               message:
                 type: string
               data:
-                $ref: '#/components/schemas/Stage'
+                $ref: '#/components/schemas/Internship'
             required:
               - status_code
               - status
@@ -1193,7 +1193,7 @@ components:
                   phone: 1234-567890
                   nationality: GB
     Evaluations:
-      description: Response returning a list of stage evaluations
+      description: Response returning a list of internship evaluations
       content:
         application/json:
           schema:
@@ -1224,7 +1224,7 @@ components:
                 - id: 1
                   notes: First evaluation notes
                   clinical_tutor_id: 456
-                  stage:
+                  internship:
                     id: 1
                     location: Location 1
                     sub_location: Sub-location 1
@@ -1246,7 +1246,7 @@ components:
                 - id: 2
                   notes: Second evaluation notes
                   clinical_tutor_id: 789
-                  stage:
+                  internship:
                     id: 2
                     location: Location 2
                     sub_location: Sub-location 2
@@ -1266,7 +1266,7 @@ components:
                   created_at: '2019-01-19 01:00:00'
                   updated_at: '2019-01-19 01:00:00'
     Evaluation:
-      description: Response returning a stage evaluation
+      description: Response returning an internship evaluation
       content:
         application/json:
           schema:
@@ -1295,7 +1295,7 @@ components:
                 id: 1
                 notes: First evaluation notes
                 clinical_tutor_id: 456
-                stage:
+                internship:
                   id: 1
                   location: Location 1
                   sub_location: Sub-location 1
@@ -1315,7 +1315,7 @@ components:
                 created_at: '2019-01-21 01:00:00'
                 updated_at: '2019-01-21 01:00:00'
     InterruptionReports:
-      description: Response returning a list of stage interruption reports
+      description: Response returning a list of internship interruption reports
       content:
         application/json:
           schema:
@@ -1346,7 +1346,7 @@ components:
                 - id: 1
                   notes: First interruption report notes
                   clinical_tutor_id: 456
-                  stage:
+                  internship:
                     id: 1
                     location: Location 1
                     sub_location: Sub-location 1
@@ -1368,7 +1368,7 @@ components:
                 - id: 2
                   notes: Second interruption report notes
                   clinical_tutor_id: 789
-                  stage:
+                  internship:
                     id: 2
                     location: Location 2
                     sub_location: Sub-location 2
@@ -1388,7 +1388,7 @@ components:
                   created_at: '2019-01-19 01:00:00'
                   updated_at: '2019-01-19 01:00:00'
     InterruptionReport:
-      description: Response returning a stage interruption report
+      description: Response returning an internship interruption report
       content:
         application/json:
           schema:
@@ -1417,7 +1417,7 @@ components:
                 id: 1
                 notes: First interruption report notes
                 clinical_tutor_id: 456
-                stage:
+                internship:
                   id: 1
                   location: Location 1
                   sub_location: Sub-location 1
@@ -1559,7 +1559,7 @@ components:
           nationality: GB
         created_at: '2019-01-01 01:00:00'
         updated_at: '2019-01-01 01:00:00'
-    NewStage:
+    NewInternship:
       type: object
       properties:
         location:
@@ -1598,9 +1598,9 @@ components:
         other_amount: 23
         is_optional: false
         is_interrupted: false
-    Stage:
+    Internship:
       allOf:
-        - $ref: '#/components/schemas/NewStage'
+        - $ref: '#/components/schemas/NewInternship'
         - type: object
           properties:
             id:
@@ -1699,8 +1699,8 @@ components:
           properties:
             id:
               type: integer
-            stage:
-              $ref: '#/components/schemas/Stage'
+            internship:
+              $ref: '#/components/schemas/Internship'
             created_at:
               type: string
               pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$'
@@ -1709,14 +1709,14 @@ components:
               pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$'
           required:
             - id
-            # stage is not required because it is omitted in case stage ID is a path parameter
+            # internship is not required because it is omitted in case internship ID is a path parameter
             - created_at
           additionalProperties: false
       example:
         id: 1
         notes: First evaluation notes
         clinical_tutor_id: 456
-        stage:
+        internship:
           id: 1
           location: Location 1
           sub_location: Sub-location 1
@@ -1757,8 +1757,8 @@ components:
           properties:
             id:
               type: integer
-            stage:
-              $ref: '#/components/schemas/Stage'
+            internship:
+              $ref: '#/components/schemas/Internship'
             created_at:
               type: string
               pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$'
@@ -1767,14 +1767,14 @@ components:
               pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$'
           required:
             - id
-            # stage is not required because it is omitted in case stage ID is a path parameter
+            # internship is not required because it is omitted in case internship ID is a path parameter
             - created_at
           additionalProperties: false
       example:
         id: 1
         notes: First interruption report notes
         clinical_tutor_id: 456
-        stage:
+        internship:
           id: 1
           location: Location 1
           sub_location: Sub-location 1

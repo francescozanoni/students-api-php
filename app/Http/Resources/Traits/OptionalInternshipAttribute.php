@@ -4,21 +4,21 @@ declare(strict_types = 1);
 namespace App\Http\Resources\Traits;
 
 /**
- * Trait OptionalStageAttribute
+ * Trait OptionalInternshipAttribute
  *
  * Inspired by https://github.com/laravel/framework/issues/1436
  *
  * @package App\Http\Resources\Traits
  */
-trait OptionalStageAttribute
+trait OptionalInternshipAttribute
 {
 
     /**
      * @return bool
      */
-    protected function withStageAttribute($request) : bool
+    protected function withInternshipAttribute($request) : bool
     {
-        return preg_match('/^(get|create)Stage[A-Z][a-zA-Z]+$/', app('current_route_alias')) !== 1;
+        return preg_match('/^(get|create)Internship[A-Z][a-zA-Z]+$/', app('current_route_alias')) !== 1;
     }
 
 }

@@ -26,14 +26,14 @@ class InterruptionReport extends Model
      *
      * @var array
      */
-    protected $guarded = ['id', 'stage_id', 'created_at', 'updated_at', 'deleted_at'];
+    protected $guarded = ['id', 'internship_id', 'created_at', 'updated_at', 'deleted_at'];
 
     /**
      * @return BelongsTo
      */
-    public function stage() : BelongsTo
+    public function internship() : BelongsTo
     {
-        return $this->belongsTo('App\Models\Stage');
+        return $this->belongsTo('App\Models\Internship');
     }
 
 }

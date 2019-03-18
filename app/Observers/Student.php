@@ -16,7 +16,7 @@ class Student
     public function deleted(StudentModel $student)
     {
         $student->annotations()->delete();
-        $student->stages()->delete();
+        $student->internships()->delete();
         $student->educationalActivityAttendances()->delete();
     }
 

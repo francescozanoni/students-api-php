@@ -17,7 +17,7 @@ class InterruptionReportsTest extends TestCase
                 'data' => [
                     [
                         'id' => 2,
-                        'stage' => [
+                        'internship' => [
                             'id' => 2,
                             'location' => 'Location 1',
                             'sub_location' => 'Sub-location 1',
@@ -60,7 +60,7 @@ class InterruptionReportsTest extends TestCase
                 'message' => 'Resource successfully retrieved/created/modified',
                 'data' => [
                     'id' => 2,
-                    'stage' => [
+                    'internship' => [
                         'id' => 2,
                         'location' => 'Location 1',
                         'sub_location' => 'Sub-location 1',
@@ -134,13 +134,13 @@ class InterruptionReportsTest extends TestCase
     }
 
     /**
-     * Get stage's interruption report: success.
+     * Get internship's interruption report: success.
      */
-    public function testGetRelatedToStage()
+    public function testGetRelatedToInternship()
     {
 
         // Existing
-        $this->json('GET', '/stages/2/interruption_report')
+        $this->json('GET', '/internships/2/interruption_report')
             ->seeJsonEquals([
                 'status_code' => 200,
                 'status' => 'OK',
@@ -158,13 +158,13 @@ class InterruptionReportsTest extends TestCase
     }
 
     /**
-     * Get stage's interruption report: failure.
+     * Get internship's interruption report: failure.
      */
-    public function testGetRelatedToStageFailure()
+    public function testGetRelatedToInternshipFailure()
     {
 
-        // Non existing stage interruption report
-        $this->json('GET', '/stages/1/interruption_report')
+        // Non existing internship interruption report
+        $this->json('GET', '/internships/1/interruption_report')
             ->seeJsonEquals([
                 'status_code' => 404,
                 'status' => 'Not Found',
@@ -172,8 +172,8 @@ class InterruptionReportsTest extends TestCase
             ])
             ->seeStatusCode(404);
 
-        // Non existing stage
-        $this->json('GET', '/stages/999/interruption_report')
+        // Non existing internship
+        $this->json('GET', '/internships/999/interruption_report')
             ->seeJsonEquals([
                 'status_code' => 404,
                 'status' => 'Not Found',
@@ -181,8 +181,8 @@ class InterruptionReportsTest extends TestCase
             ])
             ->seeStatusCode(404);
 
-        // Invalid stage ID
-        $this->json('GET', '/stages/abc/interruption_report')
+        // Invalid internship ID
+        $this->json('GET', '/internships/abc/interruption_report')
             ->seeJsonEquals([
                 'status_code' => 400,
                 'status' => 'Bad Request',
@@ -202,14 +202,14 @@ class InterruptionReportsTest extends TestCase
     }
 
     /**
-     * Create a stage's interruption report: success.
+     * Create a internship's interruption report: success.
      */
-    public function testCreateRelatedToStage()
+    public function testCreateRelatedToInternship()
     {
 
-        // Existing stage
+        // Existing internship
         $this->json('POST',
-            '/stages/3/interruption_report',
+            '/internships/3/interruption_report',
             [
                 'clinical_tutor_id' => 123,
                 'notes' => 'Another interruption report notes',
@@ -228,20 +228,20 @@ class InterruptionReportsTest extends TestCase
                 ],
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('interruption_reports', ['id' => 3, 'stage_id' => 3, 'clinical_tutor_id' => 123, 'deleted_at' => null])
+            ->seeInDatabase('interruption_reports', ['id' => 3, 'internship_id' => 3, 'clinical_tutor_id' => 123, 'deleted_at' => null])
             ->notSeeInDatabase('interruption_reports', ['id' => 4]);
 
     }
 
     /**
-     * Create a stage's interruption report: failure.
+     * Create a internship's interruption report: failure.
      */
-    public function testCreateRelatedToStageFailure()
+    public function testCreateRelatedToInternshipFailure()
     {
 
-        // Non existing stage
+        // Non existing internship
         $this->json('POST',
-            '/stages/999/interruption_report',
+            '/internships/999/interruption_report',
             [
                 'clinical_tutor_id' => 123,
                 'notes' => 'Another interruption report notes',
@@ -254,11 +254,11 @@ class InterruptionReportsTest extends TestCase
             ])
             ->seeStatusCode(404)
             ->notSeeInDatabase('interruption_reports', ['id' => 3])
-            ->notSeeInDatabase('interruption_reports', ['stage_id' => 999]);
+            ->notSeeInDatabase('interruption_reports', ['internship_id' => 999]);
 
-        // Invalid stage ID
+        // Invalid internship ID
         $this->json('POST',
-            '/stages/abc/interruption_report',
+            '/internships/abc/interruption_report',
             [
                 'clinical_tutor_id' => 123,
                 'notes' => 'Another interruption report notes',
@@ -280,11 +280,11 @@ class InterruptionReportsTest extends TestCase
             ])
             ->seeStatusCode(400)
             ->notSeeInDatabase('interruption_reports', ['id' => 3])
-            ->notSeeInDatabase('interruption_reports', ['stage_id' => 'abc']);
+            ->notSeeInDatabase('interruption_reports', ['internship_id' => 'abc']);
 
-        // Non interrupted stage
+        // Non interrupted internship
         $this->json('POST',
-            '/stages/1/interruption_report',
+            '/internships/1/interruption_report',
             [
                 'clinical_tutor_id' => 123,
                 'notes' => 'Another interruption report notes',
@@ -295,18 +295,18 @@ class InterruptionReportsTest extends TestCase
                 'status' => 'Bad Request',
                 'message' => 'Request is not valid',
                 'data' => [
-                    'stage_id' => [
-                        'Stage is not interrupted',
+                    'internship_id' => [
+                        'Internship is not interrupted',
                     ],
                 ]
             ])
             ->seeStatusCode(400)
             ->notSeeInDatabase('interruption_reports', ['id' => 3])
-            ->notSeeInDatabase('interruption_reports', ['stage_id' => 1]);
+            ->notSeeInDatabase('interruption_reports', ['internship_id' => 1]);
 
-        // Stage already with interruption report
+        // Internship already with interruption report
         $this->json('POST',
-            '/stages/2/interruption_report',
+            '/internships/2/interruption_report',
             [
                 'clinical_tutor_id' => 123,
                 'notes' => 'Another interruption report notes',
@@ -317,17 +317,17 @@ class InterruptionReportsTest extends TestCase
                 'status' => 'Bad Request',
                 'message' => 'Request is not valid',
                 'data' => [
-                    'stage_id' => [
-                        'Stage already has interruption report',
+                    'internship_id' => [
+                        'Internship already has interruption report',
                     ],
                 ]
             ])
             ->seeStatusCode(400)
             ->notSeeInDatabase('interruption_reports', ['id' => 3]);
 
-        // Stage with start date in the future
+        // Internship with start date in the future
         $this->json('POST',
-            '/stages/4/interruption_report',
+            '/internships/4/interruption_report',
             [
                 'clinical_tutor_id' => 123,
                 'notes' => 'Another interruption report notes',
@@ -338,8 +338,8 @@ class InterruptionReportsTest extends TestCase
                 'status' => 'Bad Request',
                 'message' => 'Request is not valid',
                 'data' => [
-                    'stage_id' => [
-                        'Stage not started yet',
+                    'internship_id' => [
+                        'Internship not started yet',
                     ],
                 ]
             ])
@@ -348,7 +348,7 @@ class InterruptionReportsTest extends TestCase
             
         // Missing required clinical_tutor_id
         $this->json('POST',
-            '/stages/3/interruption_report',
+            '/internships/3/interruption_report',
             [
                 'notes' => 'Another interruption report notes',
             ]
@@ -369,7 +369,7 @@ class InterruptionReportsTest extends TestCase
             
         // Missing required notes
         $this->json('POST',
-            '/stages/3/interruption_report',
+            '/internships/3/interruption_report',
             [
                 'clinical_tutor_id' => 123,
             ]
@@ -393,7 +393,7 @@ class InterruptionReportsTest extends TestCase
     }
     
     /**
-     * Modify a stage interruption report: success.
+     * Modify a internship interruption report: success.
      */
     public function testModifyById()
     {
@@ -411,7 +411,7 @@ class InterruptionReportsTest extends TestCase
                 'message' => 'Resource successfully retrieved/created/modified',
                 'data' => [
                         'id' => 2,
-                        'stage' => [
+                        'internship' => [
                             'id' => 2,
                             'location' => 'Location 1',
                             'sub_location' => 'Sub-location 1',
@@ -444,7 +444,7 @@ class InterruptionReportsTest extends TestCase
     }
 
     /**
-     * Modify a stage interruption report: failure.
+     * Modify a internship interruption report: failure.
      */
     public function testModifyByIdFailure()
     {
@@ -563,12 +563,12 @@ class InterruptionReportsTest extends TestCase
     }
     
     /**
-     * Delete a stage interruption report: success.
+     * Delete a internship interruption report: success.
      */
     public function testDeleteById()
     {
 
-        // Existing stage
+        // Existing internship
         $this->json('DELETE', '/interruption_reports/2')
             ->seeJsonEquals([
                 'status_code' => 200,
@@ -582,7 +582,7 @@ class InterruptionReportsTest extends TestCase
     }
 
     /**
-     * Delete a stage interruption report: failure.
+     * Delete a internship interruption report: failure.
      */
     public function testDeleteByIdFailure()
     {

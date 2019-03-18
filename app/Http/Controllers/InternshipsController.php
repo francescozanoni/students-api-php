@@ -5,64 +5,64 @@ namespace App\Http\Controllers;
 
 use App\Models\Location;
 use App\Models\SubLocation;
-use App\Models\Stage;
+use App\Models\Internship;
 use App\Models\Student;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class StagesController extends Controller
+class InternshipsController extends Controller
 {
 
     /**
-     * Retrieve all stages.
+     * Retrieve all internships.
      *
-     * @return Stage[]|\Illuminate\Database\Eloquent\Collection
+     * @return Internship[]|\Illuminate\Database\Eloquent\Collection
      */
     public function index() : Collection
     {
-        return Stage::all();
+        return Internship::all();
     }
 
     /**
-     * Retrieve all stages of a student.
+     * Retrieve all internships of a student.
      *
      * @param int $studentId
      *
-     * @return Stage[]|\Illuminate\Database\Eloquent\Collection
+     * @return Internship[]|\Illuminate\Database\Eloquent\Collection
      */
     public function getRelatedToStudent(int $studentId) : Collection
     {
-        $stages = Student::findOrFail($studentId)->stages;
+        $internships = Student::findOrFail($studentId)->internships;
 
-        if (count($stages) === 0) {
+        if (count($internships) === 0) {
             throw new NotFoundHttpException();
         }
 
-        return $stages;
+        return $internships;
     }
 
     /**
-     * Retrieve a stage.
+     * Retrieve a internship.
      *
      * @param int $id
      *
-     * @return Stage
+     * @return Internship
      */
-    public function show(int $id) : Stage
+    public function show(int $id) : Internship
     {
-        return Stage::findOrFail($id);
+        return Internship::findOrFail($id);
     }
     
     /**
-     * Create a student's stage.
+     * Create a student's internship.
      *
      * @param Request $request
      * @param int $studentId
      *
-     * @return Stage
+     * @return Internship
      */
-    public function createRelatedToStudent(Request $request, int $studentId) : Stage
+    public function createRelatedToStudent(Request $request, int $studentId) : Internship
     {
         $student = Student::findOrFail($studentId);
         
@@ -72,32 +72,32 @@ class StagesController extends Controller
             unset($input['sub_location']);
         }
 
-        $stage = new Stage($input);
+        $internship = new Internship($input);
         
         $location = Location::where('name', $request->request->get('location'))->first();
-        $stage->location()->associate($location);
+        $internship->location()->associate($location);
         
         if ($request->request->has('sub_location') === true) {
             $subLocation = SubLocation::where('name', $request->request->get('sub_location'))->first();
-            $stage->subLocation()->associate($subLocation);
+            $internship->subLocation()->associate($subLocation);
         }
 
-        $student->stages()->save($stage);
+        $student->internships()->save($internship);
 
-        return $stage;
+        return $internship;
     }
     
     /**
-     * Modify a stage.
+     * Modify a internship.
      *
      * @param Request $request
      * @param int $id
      *
-     * @return Stage
+     * @return Internship
      */
-    public function update(Request $request, int $id) : Stage
+    public function update(Request $request, int $id) : Internship
     {
-        $stage = Stage::findOrFail($id);
+        $internship = Internship::findOrFail($id);
         
         $input = $request->request->all();
         unset($input['location']);
@@ -105,31 +105,31 @@ class StagesController extends Controller
             unset($input['sub_location']);
         }
         
-        $stage->fill($input);
+        $internship->fill($input);
         
         $location = Location::where('name', $request->request->get('location'))->first();
-        $stage->location()->associate($location);
+        $internship->location()->associate($location);
         
         if ($request->request->has('sub_location') === true) {
             $subLocation = SubLocation::where('name', $request->request->get('sub_location'))->first();
-            $stage->subLocation()->associate($subLocation);
+            $internship->subLocation()->associate($subLocation);
         } else {
-            $stage->subLocation()->dissociate();
+            $internship->subLocation()->dissociate();
         }
         
-        $stage->save();
+        $internship->save();
         
-        return $stage;
+        return $internship;
     }
 
     /**
-     * Delete a stage.
+     * Delete a internship.
      *
      * @param int $id
      */
     public function destroy(int $id)
     {
-        $annotation = Stage::findOrFail($id);
+        $annotation = Internship::findOrFail($id);
         $annotation->delete();
     }
 

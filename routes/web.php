@@ -43,13 +43,13 @@ $router->group(['middleware' => 'validate_request'], function () use ($router) {
     $router->put('annotations/{id}', ['as' => 'updateAnnotationById', 'uses' => 'AnnotationsController@update']);
     $router->delete('annotations/{id}', ['as' => 'deleteAnnotationById', 'uses' => 'AnnotationsController@destroy']);
 
-    $router->get('students/{id}/stages', ['as' => 'getStudentStages', 'uses' => 'StagesController@getRelatedToStudent']);
-    $router->post('students/{id}/stages', ['as' => 'createStudentStage', 'uses' => 'StagesController@createRelatedToStudent']);
+    $router->get('students/{id}/internships', ['as' => 'getStudentInternships', 'uses' => 'InternshipsController@getRelatedToStudent']);
+    $router->post('students/{id}/internships', ['as' => 'createStudentInternship', 'uses' => 'InternshipsController@createRelatedToStudent']);
 
-    $router->get('stages', ['as' => 'getStages', 'uses' => 'StagesController@index']);
-    $router->get('stages/{id}', ['as' => 'getStageById', 'uses' => 'StagesController@show']);
-    $router->put('stages/{id}', ['as' => 'updateStageById', 'uses' => 'StagesController@update']);
-    $router->delete('stages/{id}', ['as' => 'deleteStageById', 'uses' => 'StagesController@destroy']);
+    $router->get('internships', ['as' => 'getInternships', 'uses' => 'InternshipsController@index']);
+    $router->get('internships/{id}', ['as' => 'getInternshipById', 'uses' => 'InternshipsController@show']);
+    $router->put('internships/{id}', ['as' => 'updateInternshipById', 'uses' => 'InternshipsController@update']);
+    $router->delete('internships/{id}', ['as' => 'deleteInternshipById', 'uses' => 'InternshipsController@destroy']);
 
     $router->get('students/{id}/educational_activity_attendances', ['as' => 'getStudentEducationalActivityAttendances', 'uses' => 'EducationalActivityAttendancesController@getRelatedToStudent']);
     $router->post('students/{id}/educational_activity_attendances', ['as' => 'createStudentEducationalActivityAttendance', 'uses' => 'EducationalActivityAttendancesController@createRelatedToStudent']);
@@ -59,16 +59,16 @@ $router->group(['middleware' => 'validate_request'], function () use ($router) {
     $router->put('educational_activity_attendances/{id}', ['as' => 'updateEducationalActivityAttendanceById', 'uses' => 'EducationalActivityAttendancesController@update']);
     $router->delete('educational_activity_attendances/{id}', ['as' => 'deleteEducationalActivityAttendanceById', 'uses' => 'EducationalActivityAttendancesController@destroy']);
 
-    $router->get('stages/{id}/evaluation', ['as' => 'getStageEvaluation', 'uses' => 'EvaluationsController@getRelatedToStage']);
-    $router->post('stages/{id}/evaluation', ['as' => 'createStageEvaluation', 'uses' => 'EvaluationsController@createRelatedToStage']);
+    $router->get('internships/{id}/evaluation', ['as' => 'getInternshipEvaluation', 'uses' => 'EvaluationsController@getRelatedToInternship']);
+    $router->post('internships/{id}/evaluation', ['as' => 'createInternshipEvaluation', 'uses' => 'EvaluationsController@createRelatedToInternship']);
 
     $router->get('evaluations', ['as' => 'getEvaluations', 'uses' => 'EvaluationsController@index']);
     $router->get('evaluations/{id}', ['as' => 'getEvaluationById', 'uses' => 'EvaluationsController@show']);
     $router->put('evaluations/{id}', ['as' => 'updateEvaluationById', 'uses' => 'EvaluationsController@update']);
     $router->delete('evaluations/{id}', ['as' => 'deleteEvaluationById', 'uses' => 'EvaluationsController@destroy']);
 
-    $router->get('stages/{id}/interruption_report', ['as' => 'getStageInterruptionReport', 'uses' => 'InterruptionReportsController@getRelatedToStage']);
-    $router->post('stages/{id}/interruption_report', ['as' => 'createStageInterruptionReport', 'uses' => 'InterruptionReportsController@createRelatedToStage']);
+    $router->get('internships/{id}/interruption_report', ['as' => 'getInternshipInterruptionReport', 'uses' => 'InterruptionReportsController@getRelatedToInternship']);
+    $router->post('internships/{id}/interruption_report', ['as' => 'createInternshipInterruptionReport', 'uses' => 'InterruptionReportsController@createRelatedToInternship']);
 
     $router->get('interruption_reports', ['as' => 'getInterruptionReports', 'uses' => 'InterruptionReportsController@index']);
     $router->get('interruption_reports/{id}', ['as' => 'getInterruptionReportById', 'uses' => 'InterruptionReportsController@show']);
