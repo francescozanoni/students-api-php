@@ -392,7 +392,7 @@ class EducationalActivityAttendancesTest extends TestCase
             ])
             ->seeStatusCode(400)
             ->notSeeInDatabase('educational_activity_attendances', ['id' => 3]);
-            
+
         // Missing required educational_activity
         $this->json('POST',
             '/students/1/educational_activity_attendances',
@@ -414,7 +414,7 @@ class EducationalActivityAttendancesTest extends TestCase
             ])
             ->seeStatusCode(400)
             ->notSeeInDatabase('educational_activity_attendances', ['id' => 3]);
-            
+
         // Missing required start_date
         $this->json('POST',
             '/students/1/educational_activity_attendances',
@@ -436,7 +436,7 @@ class EducationalActivityAttendancesTest extends TestCase
             ])
             ->seeStatusCode(400)
             ->notSeeInDatabase('educational_activity_attendances', ['id' => 3]);
-            
+
         // Missing required credits
         $this->json('POST',
             '/students/1/educational_activity_attendances',

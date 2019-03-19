@@ -63,4 +63,8 @@ return [
         })(),
     ],
 
+    'eligibilities' => [
+        'enforced' => env('ELIGIBILITIES_ENFORCED', false),
+    ]
+
 ];

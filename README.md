@@ -5,6 +5,7 @@ This is a [RESTful](https://en.wikipedia.org/wiki/Representational_state_transfe
 - students
 - annotations (usually managed by tutors)
 - internships
+  - eligibilities
   - evaluations
   - interruption reports
 - educational activity attendances

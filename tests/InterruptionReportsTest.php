@@ -198,7 +198,7 @@ class InterruptionReportsTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400);
-           
+
     }
 
     /**
@@ -345,7 +345,7 @@ class InterruptionReportsTest extends TestCase
             ])
             ->seeStatusCode(400)
             ->notSeeInDatabase('interruption_reports', ['id' => 3]);
-            
+
         // Missing required clinical_tutor_id
         $this->json('POST',
             '/internships/3/interruption_report',
@@ -366,7 +366,7 @@ class InterruptionReportsTest extends TestCase
             ])
             ->seeStatusCode(400)
             ->notSeeInDatabase('interruption_reports', ['id' => 3]);
-            
+
         // Missing required notes
         $this->json('POST',
             '/internships/3/interruption_report',
@@ -387,11 +387,11 @@ class InterruptionReportsTest extends TestCase
             ])
             ->seeStatusCode(400)
             ->notSeeInDatabase('interruption_reports', ['id' => 3]);
-            
+
         // @todo add further tests related to invalid attribute format
 
     }
-    
+
     /**
      * Modify a internship interruption report: success.
      */
@@ -410,30 +410,30 @@ class InterruptionReportsTest extends TestCase
                 'status' => 'OK',
                 'message' => 'Resource successfully retrieved/created/modified',
                 'data' => [
+                    'id' => 2,
+                    'internship' => [
                         'id' => 2,
-                        'internship' => [
-                            'id' => 2,
-                            'location' => 'Location 1',
-                            'sub_location' => 'Sub-location 1',
-                            'student' => [
-                                'id' => 1,
-                                'first_name' => 'John',
-                                'last_name' => 'Doe',
-                                'e_mail' => 'john.doe@foo.com',
-                                'phone' => '1234-567890',
-                                'nationality' => 'GB',
-                            ],
-                            'start_date' => '2019-01-26',
-                            'end_date' => '2019-01-31',
-                            'hour_amount' => 34,
-                            'other_amount' => 0,
-                            'is_optional' => true,
-                            'is_interrupted' => true
+                        'location' => 'Location 1',
+                        'sub_location' => 'Sub-location 1',
+                        'student' => [
+                            'id' => 1,
+                            'first_name' => 'John',
+                            'last_name' => 'Doe',
+                            'e_mail' => 'john.doe@foo.com',
+                            'phone' => '1234-567890',
+                            'nationality' => 'GB',
                         ],
-                        'clinical_tutor_id' => 789,
-                        'notes' => 'Second interruption report notes modified',
-                        'created_at' => '2019-01-31 02:00:00',
-                        'updated_at' => date('Y-m-d H:i:s'),
+                        'start_date' => '2019-01-26',
+                        'end_date' => '2019-01-31',
+                        'hour_amount' => 34,
+                        'other_amount' => 0,
+                        'is_optional' => true,
+                        'is_interrupted' => true
+                    ],
+                    'clinical_tutor_id' => 789,
+                    'notes' => 'Second interruption report notes modified',
+                    'created_at' => '2019-01-31 02:00:00',
+                    'updated_at' => date('Y-m-d H:i:s'),
                 ],
             ])
             ->seeStatusCode(200)
@@ -491,7 +491,7 @@ class InterruptionReportsTest extends TestCase
             ->seeStatusCode(400)
             ->notSeeInDatabase('interruption_reports', ['id' => 'abc'])
             ->notSeeInDatabase('interruption_reports', ['id' => 3]);
-            
+
         // Different clinical tutor
         $this->json('PUT',
             '/interruption_reports/2',
@@ -513,7 +513,7 @@ class InterruptionReportsTest extends TestCase
             ->seeStatusCode(400)
             ->seeInDatabase('interruption_reports', ['id' => 2, 'clinical_tutor_id' => 789])
             ->notSeeInDatabase('interruption_reports', ['id' => 2, 'clinical_tutor_id' => 123]);
-            
+
         // Missing required clinical_tutor_id
         $this->json('PUT',
             '/interruption_reports/2',
@@ -535,7 +535,7 @@ class InterruptionReportsTest extends TestCase
             ->seeStatusCode(400)
             ->seeInDatabase('interruption_reports', ['id' => 2, 'notes' => 'Second interruption report notes'])
             ->notSeeInDatabase('interruption_reports', ['id' => 2, 'notes' => 'Another interruption report notes']);
-            
+
         // Missing required notes
         $this->json('PUT',
             '/interruption_reports/2',
@@ -557,11 +557,11 @@ class InterruptionReportsTest extends TestCase
             ->seeStatusCode(400)
             ->seeInDatabase('interruption_reports', ['id' => 2, 'clinical_tutor_id' => 789])
             ->notSeeInDatabase('interruption_reports', ['id' => 2, 'clinical_tutor_id' => 123]);
-        
+
         // @todo add further tests related to invalid attribute format
 
     }
-    
+
     /**
      * Delete a internship interruption report: success.
      */
