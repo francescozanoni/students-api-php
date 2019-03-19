@@ -19,7 +19,7 @@ class CreateEligibilitiesTable extends Migration
             $table->date('start_date')->nullable(false);
             $table->date('end_date')->nullable(false);
             $table->string('notes')->nullable(true);
-            $table->boolean('eligibible')->nullable(false);
+            $table->boolean('is_eligible')->nullable(false);
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('student_id')->references('id')->on('students');
