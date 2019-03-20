@@ -7,9 +7,10 @@ use App\Http\Middleware\Traits\UsesOpenApiValidator;
 use App\Http\Resources\Internship as InternshipResource;
 use App\Models\Annotation;
 use App\Models\EducationalActivityAttendance;
+use App\Models\Eligibility;
 use App\Models\Evaluation;
-use App\Models\InterruptionReport;
 use App\Models\Internship;
+use App\Models\InterruptionReport;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
@@ -283,7 +284,7 @@ class ValidateRequest
                     }
                 }
                 Validator::make(
-                    // @todo validate clinical_tutor_id against clinical_tutors table
+                // @todo validate clinical_tutor_id against clinical_tutors table
                     $request->request->all(),
                     [
                         // 'clinical_tutor_id' => 'exists:clinical_tutors,id'
@@ -297,18 +298,18 @@ class ValidateRequest
             case 'updateEvaluationById':
                 $evaluation = Evaluation::find(app('current_route_path_parameters')['id']);
                 if ($evaluation) {
-                Validator::make(
+                    Validator::make(
                     // @todo validate clinical_tutor_id against clinical_tutors table
-                    $request->request->all(),
-                    [
-                        // 'clinical_tutor_id' => 'exists:clinical_tutors,id'
-                        'clinical_tutor_id' => 'in:' . $evaluation->clinical_tutor_id,
-                    ],
-                    [
-                        // 'clinical_tutor_id.exists' => 'The :attribute must exist'
-                        'clinical_tutor_id.in' => 'The :attribute cannot be changed',
-                    ]
-                )->validate();
+                        $request->request->all(),
+                        [
+                            // 'clinical_tutor_id' => 'exists:clinical_tutors,id'
+                            'clinical_tutor_id' => 'in:' . $evaluation->clinical_tutor_id,
+                        ],
+                        [
+                            // 'clinical_tutor_id.exists' => 'The :attribute must exist'
+                            'clinical_tutor_id.in' => 'The :attribute cannot be changed',
+                        ]
+                    )->validate();
                 }
                 break;
 
@@ -331,7 +332,7 @@ class ValidateRequest
                     }
                 }
                 Validator::make(
-                    // @todo validate clinical_tutor_id against clinical_tutors table
+                // @todo validate clinical_tutor_id against clinical_tutors table
                     $request->request->all(),
                     [
                         // 'clinical_tutor_id' => 'exists:clinical_tutors,id'
@@ -351,17 +352,73 @@ class ValidateRequest
                     }
                     Validator::make(
                     // @todo validate clinical_tutor_id against clinical_tutors table
+                        $request->request->all(),
+                        [
+                            // 'clinical_tutor_id' => 'exists:clinical_tutors,id'
+                            'clinical_tutor_id' => 'in:' . $interruptionReport->clinical_tutor_id,
+                        ],
+                        [
+                            // 'clinical_tutor_id.exists' => 'The :attribute must exist'
+                            'clinical_tutor_id.in' => 'The :attribute cannot be changed',
+                        ]
+                    )->validate();
+                }
+                break;
+
+            case 'createStudentEligibility':
+                Validator::make(
                     $request->request->all(),
                     [
-                        // 'clinical_tutor_id' => 'exists:clinical_tutors,id'
-                        'clinical_tutor_id' => 'in:' . $interruptionReport->clinical_tutor_id,
+                        'start_date' => [
+                            'bail',
+                            'before:end_date',
+                            'not_overlapping_time_range:end_date,eligibilities,student_id,=,' . app('current_route_path_parameters')['id'],
+                        ],
+                        'end_date' => [
+                            'bail',
+                            'after:start_date',
+                            'not_overlapping_time_range:start_date,eligibilities,student_id,=,' . app('current_route_path_parameters')['id'],
+                        ],
                     ],
                     [
-                        // 'clinical_tutor_id.exists' => 'The :attribute must exist'
-                        'clinical_tutor_id.in' => 'The :attribute cannot be changed',
+                        'start_date.before' => 'The :attribute must be a date before end date',
+                        'end_date.after' => 'The :attribute must be a date after start date',
+                        'start_date.not_overlapping_time_range' => 'Unavailable time range',
+                        'end_date.not_overlapping_time_range' => 'Unavailable time range',
                     ]
                 )->validate();
+                break;
+
+            case 'updateEligibilityById':
+                $eligibility = Eligibility::find(app('current_route_path_parameters')['id']);
+                if ($eligibility) {
+                    // @todo handle case of switch of is_eligible from true to false, with related internships, if its config parameter is true
+                    Validator::make(
+                        $request->request->all(),
+                        [
+                            'start_date' => [
+                                'bail',
+                                'before:end_date',
+                                'not_overlapping_time_range:end_date,eligibilities,student_id,=,' . $eligibility->student->id . ',id,!=,' . $eligibility->id,
+                            ],
+                            'end_date' => [
+                                'bail',
+                                'after:start_date',
+                                'not_overlapping_time_range:start_date,eligibilities,student_id,=,' . $eligibility->student->id . ',id,!=,' . $eligibility->id,
+                            ],
+                        ],
+                        [
+                            'start_date.before' => 'The :attribute must be a date before end date',
+                            'end_date.after' => 'The :attribute must be a date after start date',
+                            'start_date.not_overlapping_time_range' => 'Unavailable time range',
+                            'end_date.not_overlapping_time_range' => 'Unavailable time range',
+                        ]
+                    )->validate();
                 }
+                break;
+
+            case 'deleteEligibilityById':
+                // @todo handle case of eligibility with related internships, if its config parameter is true
                 break;
 
             default:

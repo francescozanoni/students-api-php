@@ -5,9 +5,10 @@ namespace App\Http\Middleware;
 
 use App\Http\Resources\Annotation as AnnotationResource;
 use App\Http\Resources\EducationalActivityAttendance as EducationalActivityAttendanceResource;
+use App\Http\Resources\Eligibility as EligibilityResource;
 use App\Http\Resources\Evaluation as EvaluationResource;
-use App\Http\Resources\InterruptionReport as InterruptionReportResource;
 use App\Http\Resources\Internship as InternshipResource;
+use App\Http\Resources\InterruptionReport as InterruptionReportResource;
 use App\Http\Resources\Student as StudentResource;
 
 /**
@@ -99,6 +100,17 @@ class ApplyResourceTransformers
             case 'createInternshipInterruptionReport':
             case 'updateInterruptionReportById':
                 $response->setContent(new InterruptionReportResource($response->original));
+                break;
+
+            case 'getEligibilities':
+            case 'getStudentEligibilities':
+                $response->setContent(EligibilityResource::collection($response->original));
+                break;
+
+            case 'getEligibilityById':
+            case 'createStudentEligibility':
+            case 'updateEligibilityById':
+                $response->setContent(new EligibilityResource($response->original));
                 break;
 
             default:
