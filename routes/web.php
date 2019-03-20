@@ -75,4 +75,11 @@ $router->group(['middleware' => 'validate_request'], function () use ($router) {
     $router->put('interruption_reports/{id}', ['as' => 'updateInterruptionReportById', 'uses' => 'InterruptionReportsController@update']);
     $router->delete('interruption_reports/{id}', ['as' => 'deleteInterruptionReportById', 'uses' => 'InterruptionReportsController@destroy']);
 
+    $router->get('students/{id}/eligibilities', ['as' => 'getStudentEligibilities', 'uses' => 'EligibilitiesController@getRelatedToStudent']);
+    $router->post('students/{id}/eligibilities', ['as' => 'createStudentEligibility', 'uses' => 'EligibilitiesController@createRelatedToStudent']);
+
+    $router->get('eligibilities', ['as' => 'getEligibilities', 'uses' => 'EligibilitiesController@index']);
+    $router->get('eligibilities/{id}', ['as' => 'getEligibilityById', 'uses' => 'EligibilitiesController@show']);
+    $router->put('eligibilities/{id}', ['as' => 'updateEligibilityById', 'uses' => 'EligibilitiesController@update']);
+
 });

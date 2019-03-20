@@ -52,4 +52,12 @@ class Student extends Model
         return $this->hasMany('App\Models\EducationalActivityAttendance');
     }
 
+    /**
+     * @return HasMany
+     */
+    public function eligibilities() : HasMany
+    {
+        return $this->hasMany('App\Models\Eligibility');
+    }
+
 }

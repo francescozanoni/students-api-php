@@ -18,6 +18,7 @@ class Student
         $student->annotations()->delete();
         $student->internships()->delete();
         $student->educationalActivityAttendances()->delete();
+        $student->eligibilities()->delete();
     }
 
 }
