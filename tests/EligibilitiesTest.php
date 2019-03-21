@@ -34,7 +34,6 @@ class EligibilitiesTest extends TestCase
                         'id' => 3,
                         'start_date' => '2019-01-01',
                         'end_date' => '2019-12-01',
-                        'notes' => 'Second eligibility notes',
                         'is_eligible' => false,
                         'student' => [
                             'id' => 2,
