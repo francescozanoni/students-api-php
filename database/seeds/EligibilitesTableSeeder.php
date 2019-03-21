@@ -48,7 +48,7 @@ class EligibilitesTableSeeder extends Seeder
         DB::table('eligibilities')->insert([
             'student_id' => 4,
             'start_date' => '2019-01-01',
-            'end_date' => (string)((int)date('Y') + 1) . '-12-01',
+            'end_date' => (string)((int)date('Y') + 1) . '-12-01', // --> end of next year
             'notes' => 'Third eligibility notes',
             'is_eligible' => true,
             'created_at' => '2019-01-02 04:00:00',

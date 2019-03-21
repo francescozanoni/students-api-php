@@ -26,9 +26,6 @@ class Eligibility extends JsonResource
             // This field is returned as string, but cannot understand why...
             'is_eligible' => (boolean)$this->is_eligible,
 
-            'created_at' => (string)$this->created_at,
-            'updated_at' => (string)$this->updated_at,
-
         ];
 
         return $output;
