@@ -42,11 +42,12 @@ class ValidationServiceProvider extends ServiceProvider
                 //  - other time attribute,
                 //  - database table name,
                 //  - (optional) filter 1 field,
-                //  - (optional) filter 1 operator,
-                //  - (optional) filter 1 value (no comma allowed),
-                //  - (optional) filter 2 field,
-                //  - (optional) filter 2 operator,
-                //  - (optional) filter 2 value (no comma allowed).
+                //  - (optional) filter 1 operator (e.g. =, !=, IS),
+                //  - (optional) filter 1 value (no comma allowed; "NULL" or "NOT NULL" to use IS NULL/IS NOT NULL),
+                //  - ...
+                //  - (optional) filter N field,
+                //  - (optional) filter N operator (e.g. =, !=, IS),
+                //  - (optional) filter N value (no comma allowed; "NULL" or "NOT NULL" to use IS NULL/IS NOT NULL).
                 $otherTimeAttribute = array_shift($parameters);
                 $otherTimeAttributeValue = $validator->getData()[$otherTimeAttribute];
                 $tableName = array_shift($parameters);
@@ -56,9 +57,9 @@ class ValidationServiceProvider extends ServiceProvider
                 $filters = [];
                 while (empty($parameters) === false) {
                     $filters[] = [
-                        'field' => array_shift($parameters),
-                        'operator' => array_shift($parameters),
-                        'value' => array_shift($parameters),
+                        'field' => (string)array_shift($parameters),
+                        'operator' => (string)array_shift($parameters),
+                        'value' => (string)array_shift($parameters),
                     ];
                 }
 
@@ -73,7 +74,16 @@ class ValidationServiceProvider extends ServiceProvider
                 $query = DB::table($tableName);
                 if (empty($filters) === false) {
                     foreach ($filters as $filter) {
-                        $query->where($filter['field'], $filter['operator'], $filter['value']);
+                        if (strtolower($filter['operator']) === 'is') {
+                            if (strtolower($filter['value']) === 'null') {
+                                $query->whereNull($filter['field']);
+                            }
+                            if (strtolower($filter['value']) === 'not null') {
+                                $query->whereNotNull($filter['field']);
+                            }
+                        } else {
+                            $query->where($filter['field'], $filter['operator'], $filter['value']);
+                        }
                     }
                 }
                 $query->where(function ($query) use ($startTime, $endTime, $startField, $endField) {
