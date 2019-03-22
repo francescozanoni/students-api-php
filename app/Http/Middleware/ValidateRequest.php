@@ -118,12 +118,12 @@ class ValidateRequest
                         'start_date' => [
                             'bail',
                             'before:end_date',
-                            'not_overlapping_time_range:end_date,internships,student_id,=,' . app('current_route_path_parameters')['id'],
+                            'not_overlapping_time_range:end_date,internships,student_id,=,' . app('current_route_path_parameters')['id'] . ',deleted_at,is,null',
                         ],
                         'end_date' => [
                             'bail',
                             'after:start_date',
-                            'not_overlapping_time_range:start_date,internships,student_id,=,' . app('current_route_path_parameters')['id'],
+                            'not_overlapping_time_range:start_date,internships,student_id,=,' . app('current_route_path_parameters')['id'] . ',deleted_at,is,null',
                         ],
                     ],
                     [
@@ -159,12 +159,12 @@ class ValidateRequest
                             'start_date' => [
                                 'bail',
                                 'before:end_date',
-                                'not_overlapping_time_range:end_date,internships,student_id,=,' . $internship->student->id . ',id,!=,' . $internship->id,
+                                'not_overlapping_time_range:end_date,internships,student_id,=,' . $internship->student->id . ',id,!=,' . $internship->id . ',deleted_at,is,null',
                             ],
                             'end_date' => [
                                 'bail',
                                 'after:start_date',
-                                'not_overlapping_time_range:start_date,internships,student_id,=,' . $internship->student->id . ',id,!=,' . $internship->id,
+                                'not_overlapping_time_range:start_date,internships,student_id,=,' . $internship->student->id . ',id,!=,' . $internship->id . ',deleted_at,is,null',
                             ],
                         ],
                         [
@@ -372,12 +372,12 @@ class ValidateRequest
                         'start_date' => [
                             'bail',
                             'before:end_date',
-                            'not_overlapping_time_range:end_date,eligibilities,student_id,=,' . app('current_route_path_parameters')['id'],
+                            'not_overlapping_time_range:end_date,eligibilities,student_id,=,' . app('current_route_path_parameters')['id'] . ',deleted_at,is,null',
                         ],
                         'end_date' => [
                             'bail',
                             'after:start_date',
-                            'not_overlapping_time_range:start_date,eligibilities,student_id,=,' . app('current_route_path_parameters')['id'],
+                            'not_overlapping_time_range:start_date,eligibilities,student_id,=,' . app('current_route_path_parameters')['id'] . ',deleted_at,is,null',
                         ],
                     ],
                     [
@@ -399,12 +399,12 @@ class ValidateRequest
                             'start_date' => [
                                 'bail',
                                 'before:end_date',
-                                'not_overlapping_time_range:end_date,eligibilities,student_id,=,' . $eligibility->student->id . ',id,!=,' . $eligibility->id,
+                                'not_overlapping_time_range:end_date,eligibilities,student_id,=,' . $eligibility->student->id . ',id,!=,' . $eligibility->id . ',deleted_at,is,null',
                             ],
                             'end_date' => [
                                 'bail',
                                 'after:start_date',
-                                'not_overlapping_time_range:start_date,eligibilities,student_id,=,' . $eligibility->student->id . ',id,!=,' . $eligibility->id,
+                                'not_overlapping_time_range:start_date,eligibilities,student_id,=,' . $eligibility->student->id . ',id,!=,' . $eligibility->id . ',deleted_at,is,null',
                             ],
                         ],
                         [
