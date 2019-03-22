@@ -202,7 +202,7 @@ class InterruptionReportsTest extends TestCase
     }
 
     /**
-     * Create a internship's interruption report: success.
+     * Create an internship's interruption report: success.
      */
     public function testCreateRelatedToInternship()
     {
@@ -234,7 +234,7 @@ class InterruptionReportsTest extends TestCase
     }
 
     /**
-     * Create a internship's interruption report: failure.
+     * Create an internship's interruption report: failure.
      */
     public function testCreateRelatedToInternshipFailure()
     {
@@ -393,7 +393,7 @@ class InterruptionReportsTest extends TestCase
     }
 
     /**
-     * Modify a internship interruption report: success.
+     * Modify an internship interruption report: success.
      */
     public function testModifyById()
     {
@@ -444,7 +444,7 @@ class InterruptionReportsTest extends TestCase
     }
 
     /**
-     * Modify a internship interruption report: failure.
+     * Modify an internship interruption report: failure.
      */
     public function testModifyByIdFailure()
     {
@@ -563,7 +563,7 @@ class InterruptionReportsTest extends TestCase
     }
 
     /**
-     * Delete a internship interruption report: success.
+     * Delete an internship interruption report: success.
      */
     public function testDeleteById()
     {
@@ -582,7 +582,7 @@ class InterruptionReportsTest extends TestCase
     }
 
     /**
-     * Delete a internship interruption report: failure.
+     * Delete an internship interruption report: failure.
      */
     public function testDeleteByIdFailure()
     {

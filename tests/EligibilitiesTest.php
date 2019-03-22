@@ -407,4 +407,46 @@ class EligibilitiesTest extends TestCase
 
     }
 
+    /**
+     * Modify an eligibility: success.
+     */
+    public function testModifyById()
+    {
+
+        // Success
+        $this->json('PUT',
+            '/eligibilities/2',
+            [
+                'start_date' => '2019-01-01',
+                'end_date' => '2019-12-01',
+                'notes' => 'First eligibility notes modified', // --> modified
+                'is_eligible' => true,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 200,
+                'status' => 'OK',
+                'message' => 'Resource successfully retrieved/created/modified',
+                'data' => [
+                    'id' => 2,
+                    'start_date' => '2019-01-01',
+                    'end_date' => '2019-12-01',
+                    'notes' => 'First eligibility notes modified', // --> modified
+                    'is_eligible' => true,
+                    'student' => [
+                        'id' => 1,
+                        'first_name' => 'John',
+                        'last_name' => 'Doe',
+                        'e_mail' => 'john.doe@foo.com',
+                        'phone' => '1234-567890',
+                        'nationality' => 'GB',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(200)
+            ->seeInDatabase('eligibilities', ['id' => 2, 'notes' => 'First eligibility notes modified'])
+            ->notSeeInDatabase('eligibilities', ['id' => 2, 'notes' => 'First eligibility notes']);
+
+    }
+
 }

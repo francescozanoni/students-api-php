@@ -211,7 +211,7 @@ class EvaluationsTest extends TestCase
     }
 
     /**
-     * Create a internship's evaluation: success.
+     * Create an internship's evaluation: success.
      */
     public function testCreateRelatedToInternship()
     {
@@ -279,7 +279,7 @@ class EvaluationsTest extends TestCase
     }
 
     /**
-     * Create a internship's evaluation: failure.
+     * Create an internship's evaluation: failure.
      */
     public function testCreateRelatedToInternshipFailure()
     {
@@ -410,7 +410,7 @@ class EvaluationsTest extends TestCase
     }
 
     /**
-     * Modify a internship evaluation: success.
+     * Modify an internship evaluation: success.
      */
     public function testModifyById()
     {
@@ -515,7 +515,7 @@ class EvaluationsTest extends TestCase
     }
 
     /**
-     * Modify a internship evaluation: failure.
+     * Modify an internship evaluation: failure.
      */
     public function testModifyByIdFailure()
     {
@@ -625,7 +625,7 @@ class EvaluationsTest extends TestCase
     }
 
     /**
-     * Delete a internship evaluation: success.
+     * Delete an internship evaluation: success.
      */
     public function testDeleteById()
     {
@@ -644,7 +644,7 @@ class EvaluationsTest extends TestCase
     }
 
     /**
-     * Delete a internship evaluation: failure.
+     * Delete an internship evaluation: failure.
      */
     public function testDeleteByIdFailure()
     {

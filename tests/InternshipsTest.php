@@ -812,7 +812,7 @@ class InternshipsTest extends TestCase
     }
 
     /**
-     * Modify a internship: success.
+     * Modify an internship: success.
      */
     public function testModifyById()
     {
@@ -946,7 +946,7 @@ class InternshipsTest extends TestCase
     }
 
     /**
-     * Modify a internship: failure.
+     * Modify an internship: failure.
      */
     public function testModifyByIdFailure()
     {
@@ -1314,7 +1314,7 @@ class InternshipsTest extends TestCase
     }
 
     /**
-     * Delete a internship: success.
+     * Delete an internship: success.
      */
     public function testDeleteById()
     {
@@ -1333,7 +1333,7 @@ class InternshipsTest extends TestCase
     }
 
     /**
-     * Delete a internship: failure.
+     * Delete an internship: failure.
      */
     public function testDeleteByIdFailure()
     {

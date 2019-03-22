@@ -43,7 +43,7 @@ class InternshipsController extends Controller
     }
 
     /**
-     * Retrieve a internship.
+     * Retrieve an internship.
      *
      * @param int $id
      *
@@ -88,7 +88,7 @@ class InternshipsController extends Controller
     }
     
     /**
-     * Modify a internship.
+     * Modify an internship.
      *
      * @param Request $request
      * @param int $id
@@ -123,7 +123,7 @@ class InternshipsController extends Controller
     }
 
     /**
-     * Delete a internship.
+     * Delete an internship.
      *
      * @param int $id
      */

@@ -23,7 +23,7 @@ class EvaluationsController extends Controller
     }
 
     /**
-     * Retrieve evaluation of a internship.
+     * Retrieve evaluation of an internship.
      *
      * @param int $internshipId
      *
@@ -41,7 +41,7 @@ class EvaluationsController extends Controller
     }
 
     /**
-     * Retrieve a internship evaluation.
+     * Retrieve an internship evaluation.
      *
      * @param int $id
      *
@@ -53,7 +53,7 @@ class EvaluationsController extends Controller
     }
 
     /**
-     * Create a internship's evaluation.
+     * Create an internship's evaluation.
      *
      * @param Request $request
      * @param int $internshipId
@@ -74,7 +74,7 @@ class EvaluationsController extends Controller
     }
 
     /**
-     * Modify a internship evaluation.
+     * Modify an internship evaluation.
      *
      * @param Request $request
      * @param int $id
@@ -101,7 +101,7 @@ class EvaluationsController extends Controller
     }
 
     /**
-     * Delete a internship evaluation.
+     * Delete an internship evaluation.
      *
      * @param int $id
      */

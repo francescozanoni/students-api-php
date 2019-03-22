@@ -23,7 +23,7 @@ class InterruptionReportsController extends Controller
     }
 
     /**
-     * Retrieve interruption report of a internship.
+     * Retrieve interruption report of an internship.
      *
      * @param int $internshipId
      *
@@ -41,7 +41,7 @@ class InterruptionReportsController extends Controller
     }
 
     /**
-     * Retrieve a internship interruption report.
+     * Retrieve an internship interruption report.
      *
      * @param int $id
      *
@@ -53,7 +53,7 @@ class InterruptionReportsController extends Controller
     }
 
     /**
-     * Create a internship's interruption report.
+     * Create an internship's interruption report.
      *
      * @param Request $request
      * @param int $internshipId
@@ -74,7 +74,7 @@ class InterruptionReportsController extends Controller
     }
 
     /**
-     * Modify a internship interruption report.
+     * Modify an internship interruption report.
      *
      * @param Request $request
      * @param int $id
@@ -95,7 +95,7 @@ class InterruptionReportsController extends Controller
     }
 
     /**
-     * Delete a internship interruption report.
+     * Delete an internship interruption report.
      *
      * @param int $id
      */
