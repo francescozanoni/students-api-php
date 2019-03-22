@@ -42,21 +42,7 @@ class EligibilitiesTest extends TestCase
                             'e_mail' => 'jane.doe@bar.com',
                             'nationality' => 'CA',
                         ],
-                    ],
-                    [
-                        'id' => 4,
-                        'start_date' => '2019-01-01',
-                        'end_date' => (string)((int)date('Y') + 1) . '-12-01', // --> end of next year
-                        'notes' => 'Third eligibility notes',
-                        'is_eligible' => true,
-                        'student' => [
-                            'id' => 4,
-                            'first_name' => 'Joan',
-                            'last_name' => 'Doe',
-                            'e_mail' => 'joan.doe@foo.com',
-                            'nationality' => 'IE',
-                        ],
-                    ],
+                    ]
                 ]
             ])
             ->seeStatusCode(200);
@@ -171,7 +157,7 @@ class EligibilitiesTest extends TestCase
     {
 
         // Non existing eligibilities
-        $this->json('GET', '/students/3/eligibilities')
+        $this->json('GET', '/students/4/eligibilities')
             ->seeJsonEquals([
                 'status_code' => 404,
                 'status' => 'Not Found',
@@ -214,6 +200,64 @@ class EligibilitiesTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400);
+
+    }
+
+    /**
+     * Create a student's eligibility.
+     */
+    public function testCreateRelatedToStudent()
+    {
+
+        // Existing student
+        $this->json('POST',
+            '/students/1/eligibilities',
+            [
+                'start_date' => '2020-01-01',
+                'end_date' => '2020-12-01',
+                'notes' => 'Another eligibility notes',
+                'is_eligible' => true,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 200,
+                'status' => 'OK',
+                'message' => 'Resource successfully retrieved/created/modified',
+                'data' => [
+                    'id' => 4,
+                    'start_date' => '2020-01-01',
+                    'end_date' => '2020-12-01',
+                    'notes' => 'Another eligibility notes',
+                    'is_eligible' => true,
+                ],
+            ])
+            ->seeStatusCode(200)
+            ->seeInDatabase('eligibilities', ['id' => 4, 'student_id' => 1, 'deleted_at' => null])
+            ->notSeeInDatabase('eligibilities', ['id' => 5]);
+
+        // Existing student, without notes
+        $this->json('POST',
+            '/students/2/eligibilities',
+            [
+                'start_date' => '2020-01-01',
+                'end_date' => '2020-12-01',
+                'is_eligible' => true,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 200,
+                'status' => 'OK',
+                'message' => 'Resource successfully retrieved/created/modified',
+                'data' => [
+                    'id' => 5,
+                    'start_date' => '2020-01-01',
+                    'end_date' => '2020-12-01',
+                    'is_eligible' => true,
+                ],
+            ])
+            ->seeStatusCode(200)
+            ->seeInDatabase('eligibilities', ['id' => 5, 'student_id' => 2, 'deleted_at' => null])
+            ->notSeeInDatabase('eligibilities', ['id' => 6]);
 
     }
 
