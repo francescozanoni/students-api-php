@@ -261,4 +261,150 @@ class EligibilitiesTest extends TestCase
 
     }
 
+    /**
+     * Create a student's eligibility: failure.
+     */
+    public function testCreateRelatedToStudentFailure()
+    {
+
+        // Non existing student
+        $this->json('POST',
+            '/students/999/eligibilities',
+            [
+                'start_date' => '2020-01-01',
+                'end_date' => '2020-12-01',
+                'notes' => 'Another eligibility notes',
+                'is_eligible' => true,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 404,
+                'status' => 'Not Found',
+                'message' => 'Resource(s) not found',
+            ])
+            ->seeStatusCode(404)
+            ->notSeeInDatabase('eligibilities', ['id' => 4])
+            ->notSeeInDatabase('eligibilities', ['student_id' => 999]);
+
+        // Deleted student
+        $this->json('POST',
+            '/students/3/eligibilities',
+            [
+                'start_date' => '2020-01-01',
+                'end_date' => '2020-12-01',
+                'notes' => 'Another eligibility notes',
+                'is_eligible' => true,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 404,
+                'status' => 'Not Found',
+                'message' => 'Resource(s) not found',
+            ])
+            ->seeStatusCode(404)
+            ->notSeeInDatabase('eligibilities', ['id' => 4])
+            ->notSeeInDatabase('eligibilities', ['student_id' => 999]);
+
+        // Invalid student ID
+        $this->json('POST',
+            '/students/abc/eligibilities',
+            [
+                'start_date' => '2020-01-01',
+                'end_date' => '2020-12-01',
+                'notes' => 'Another eligibility notes',
+                'is_eligible' => true,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'id' => [
+                        'code error_type',
+                        'value abc',
+                        'expected integer',
+                        'used string',
+                        'in path',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('eligibilities', ['id' => 4])
+            ->notSeeInDatabase('eligibilities', ['student_id' => 'abc']);
+
+        // Missing required start_date
+        $this->json('POST',
+            '/students/1/eligibilities',
+            [
+                'end_date' => '2020-12-01',
+                'notes' => 'Another eligibility notes',
+                'is_eligible' => true,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'start_date' => [
+                        'code error_required',
+                        'in body',
+                    ]
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('eligibilities', ['id' => 4]);
+
+        // Missing required end_date
+        $this->json('POST',
+            '/students/1/eligibilities',
+            [
+                'start_date' => '2020-01-01',
+                'notes' => 'Another eligibility notes',
+                'is_eligible' => true,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'end_date' => [
+                        'code error_required',
+                        'in body',
+                    ]
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('eligibilities', ['id' => 4]);
+
+        // Missing required is_eligible
+        $this->json('POST',
+            '/students/1/eligibilities',
+            [
+                'start_date' => '2020-01-01',
+                'end_date' => '2020-12-01',
+                'notes' => 'Another eligibility notes',
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'is_eligible' => [
+                        'code error_required',
+                        'in body',
+                    ]
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('eligibilities', ['id' => 4]);
+
+        // @todo add further tests related to invalid attribute format
+        // @todo add further tests related overlapping dates
+
+    }
+
 }
