@@ -20,5 +20,6 @@ class DatabaseSeeder extends Seeder
         $this->call('EvaluationsTableSeeder');
         $this->call('InterruptionReportsTableSeeder');
         $this->call('EligibilitesTableSeeder');
+        $this->call('OshCourseAttendancesTableSeeder');
     }
 }

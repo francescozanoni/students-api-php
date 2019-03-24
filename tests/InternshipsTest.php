@@ -808,6 +808,7 @@ class InternshipsTest extends TestCase
             ->notSeeInDatabase('internships', ['id' => 5]);
 
         // @todo add further tests related to invalid attribute format
+        // @todo if eligibilities are enforced (config parameter), check if valid time range
 
     }
 
@@ -1310,6 +1311,7 @@ class InternshipsTest extends TestCase
             ->seeStatusCode(400);
 
         // @todo add further tests related to invalid attribute format
+        // @todo if eligibilities are enforced (config parameter), check if valid time range
 
     }
 

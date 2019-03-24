@@ -65,6 +65,11 @@ return [
 
     'eligibilities' => [
         'enforced' => env('ELIGIBILITIES_ENFORCED', false),
+    ],
+    
+    // Are Occupational Safety and Health courses obligatory for internships?
+    'osh_course_attendances' => [
+        'obligatory' => env('OSH_COURSE_ATTENDANCES_OBLIGATORY', false),
     ]
 
 ];
