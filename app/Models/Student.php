@@ -59,5 +59,13 @@ class Student extends Model
     {
         return $this->hasMany('App\Models\Eligibility');
     }
+    
+    /**
+     * @return HasOne
+     */
+    public function oshCourseAttendance() : HasOne
+    {
+        return $this->hasOne('App\Models\OshCourseAttendance');
+    }
 
 }

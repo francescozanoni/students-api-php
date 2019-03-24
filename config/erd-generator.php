@@ -34,6 +34,9 @@ return [
         App\Models\InterruptionReport::class => [
              'internship'
         ],
+        App\Model\OshCourseAttendance::class => [
+             'student'
+        ],
     ],
     
     /*
