@@ -256,7 +256,7 @@ class EligibilitiesTest extends TestCase
                 ],
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('eligibilities', ['id' => 5, 'student_id' => 2, 'deleted_at' => null])
+            ->seeInDatabase('eligibilities', ['id' => 5, 'student_id' => 2, 'notes' => null, 'deleted_at' => null])
             ->notSeeInDatabase('eligibilities', ['id' => 6]);
 
     }
@@ -401,9 +401,133 @@ class EligibilitiesTest extends TestCase
             ])
             ->seeStatusCode(400)
             ->notSeeInDatabase('eligibilities', ['id' => 4]);
+            
+        // Overlapping dates - 1
+        $this->json('POST',
+            '/students/1/eligibilities',
+            [
+                'start_date' => '2019-02-01',
+                'end_date' => '2019-03-01',
+                'is_eligible' => true,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'start_date' => [
+                        'Unavailable time range',
+                    ],
+                    'end_date' => [
+                        'Unavailable time range',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('eligibilities', ['id' => 4]);
+            
+        // Overlapping dates - 2
+        $this->json('POST',
+            '/students/1/eligibilities',
+            [
+                'start_date' => '2018-12-01',
+                'end_date' => '2019-03-01',
+                'is_eligible' => true,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'start_date' => [
+                        'Unavailable time range',
+                    ],
+                    'end_date' => [
+                        'Unavailable time range',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('eligibilities', ['id' => 4]);
+            
+        // Overlapping dates - 3
+        $this->json('POST',
+            '/students/1/eligibilities',
+            [
+                'start_date' => '2019-02-01',
+                'end_date' => '2020-03-01',
+                'is_eligible' => true,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'start_date' => [
+                        'Unavailable time range',
+                    ],
+                    'end_date' => [
+                        'Unavailable time range',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('eligibilities', ['id' => 4]);
+            
+        // Identical dates
+        $this->json('POST',
+            '/students/1/eligibilities',
+            [
+                'start_date' => '2020-03-01',
+                'end_date' => '2020-03-01',
+                'is_eligible' => true,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'start_date' => [
+                        'The start date must be a date before end date',
+                    ],
+                    'end_date' => [
+                        'The end date must be a date after start date',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('eligibilities', ['id' => 4]);
+            
+        // Switched dates
+        $this->json('POST',
+            '/students/1/eligibilities',
+            [
+                'start_date' => '2020-04-01',
+                'end_date' => '2020-03-01',
+                'is_eligible' => true,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'start_date' => [
+                        'The start date must be a date before end date',
+                    ],
+                    'end_date' => [
+                        'The end date must be a date after start date',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('eligibilities', ['id' => 4]);
 
         // @todo add further tests related to invalid attribute format
-        // @todo add further tests related overlapping dates
 
     }
 
@@ -446,6 +570,38 @@ class EligibilitiesTest extends TestCase
             ->seeStatusCode(200)
             ->seeInDatabase('eligibilities', ['id' => 2, 'notes' => 'First eligibility notes modified'])
             ->notSeeInDatabase('eligibilities', ['id' => 2, 'notes' => 'First eligibility notes']);
+            
+        // Success, remove notes
+        $this->json('PUT',
+            '/eligibilities/2',
+            [
+                'start_date' => '2019-01-01',
+                'end_date' => '2019-12-01',
+                'is_eligible' => true,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 200,
+                'status' => 'OK',
+                'message' => 'Resource successfully retrieved/created/modified',
+                'data' => [
+                    'id' => 2,
+                    'start_date' => '2019-01-01',
+                    'end_date' => '2019-12-01',
+                    'is_eligible' => true,
+                    'student' => [
+                        'id' => 1,
+                        'first_name' => 'John',
+                        'last_name' => 'Doe',
+                        'e_mail' => 'john.doe@foo.com',
+                        'phone' => '1234-567890',
+                        'nationality' => 'GB',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(200)
+            ->seeInDatabase('eligibilities', ['id' => 2, 'notes' => null])
+            ->notSeeInDatabase('eligibilities', ['id' => 2, 'notes' => 'First eligibility notes modified']);
 
     }
 
