@@ -81,5 +81,6 @@ $router->group(['middleware' => 'validate_request'], function () use ($router) {
     $router->get('eligibilities', ['as' => 'getEligibilities', 'uses' => 'EligibilitiesController@index']);
     $router->get('eligibilities/{id}', ['as' => 'getEligibilityById', 'uses' => 'EligibilitiesController@show']);
     $router->put('eligibilities/{id}', ['as' => 'updateEligibilityById', 'uses' => 'EligibilitiesController@update']);
+    $router->delete('eligibilities/{id}', ['as' => 'deleteEligibilityById', 'uses' => 'EligibilitiesController@destroy']);
 
 });

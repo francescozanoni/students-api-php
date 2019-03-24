@@ -526,6 +526,31 @@ class EligibilitiesTest extends TestCase
             ])
             ->seeStatusCode(400)
             ->notSeeInDatabase('eligibilities', ['id' => 4]);
+            
+        // Unallowed additional property.
+        $this->json('POST',
+            '/students/1/eligibilities',
+            [
+                'start_date' => '2020-02-01',
+                'end_date' => '2020-03-01',
+                'is_eligible' => true,
+                'an_additional_property' => 'an additional value',
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'an_additional_property' => [
+                        'code error_additional',
+                        'value an additional value',
+                        'in body',
+                    ]
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('eligibilities', ['id' => 4]);
 
         // @todo add further tests related to invalid attribute format
 
@@ -571,11 +596,11 @@ class EligibilitiesTest extends TestCase
             ->seeInDatabase('eligibilities', ['id' => 2, 'notes' => 'First eligibility notes modified'])
             ->notSeeInDatabase('eligibilities', ['id' => 2, 'notes' => 'First eligibility notes']);
             
-        // Success, remove notes
+        // Success, remove notes and change start date
         $this->json('PUT',
             '/eligibilities/2',
             [
-                'start_date' => '2019-01-01',
+                'start_date' => '2019-02-01', // --> modified
                 'end_date' => '2019-12-01',
                 'is_eligible' => true,
             ]
@@ -586,7 +611,7 @@ class EligibilitiesTest extends TestCase
                 'message' => 'Resource successfully retrieved/created/modified',
                 'data' => [
                     'id' => 2,
-                    'start_date' => '2019-01-01',
+                    'start_date' => '2019-02-01', // --> modified
                     'end_date' => '2019-12-01',
                     'is_eligible' => true,
                     'student' => [
@@ -600,8 +625,183 @@ class EligibilitiesTest extends TestCase
                 ]
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('eligibilities', ['id' => 2, 'notes' => null])
-            ->notSeeInDatabase('eligibilities', ['id' => 2, 'notes' => 'First eligibility notes modified']);
+            ->seeInDatabase('eligibilities', ['id' => 2, 'start_date' => '2019-02-01', 'notes' => null])
+            ->notSeeInDatabase('eligibilities', ['id' => 2, 'notes' => 'First eligibility notes modified'])
+            ->notSeeInDatabase('eligibilities', ['id' => 2, 'start_date' => '2019-01-01']);
+
+    }
+    
+    /**
+     * Modify an eligibility: failure.
+     */
+    public function testModifyByIdFailure()
+    {
+
+        // Invalid ID
+        $this->json('PUT',
+            '/eligibilities/abc',
+            [
+                'start_date' => '2019-01-01',
+                'end_date' => '2019-12-01',
+                'notes' => 'Modified eligibility notes',
+                'is_eligible' => true,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'id' => [
+                        'code error_type',
+                        'value abc',
+                        'expected integer',
+                        'used string',
+                        'in path',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('eligibilities', ['id' => 'abc'])
+            ->notSeeInDatabase('eligibilities', ['id' => 4]);
+
+        // Non existing ID
+        $this->json('PUT',
+            '/eligibilities/999',
+            [
+                'start_date' => '2019-01-01',
+                'end_date' => '2019-12-01',
+                'notes' => 'Modified eligibility notes',
+                'is_eligible' => true,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 404,
+                'status' => 'Not Found',
+                'message' => 'Resource(s) not found',
+            ])
+            ->seeStatusCode(404)
+            ->notSeeInDatabase('eligibilities', ['id' => 999])
+            ->notSeeInDatabase('eligibilities', ['id' => 4]);
+            
+        // Deleted eligibility.
+        $this->json('PUT',
+            '/eligibilities/1',
+            [
+                'start_date' => '2019-01-01',
+                'end_date' => '2019-12-01',
+                'notes' => 'Modified eligibility notes',
+                'is_eligible' => true,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 404,
+                'status' => 'Not Found',
+                'message' => 'Resource(s) not found',
+            ])
+            ->seeStatusCode(404)
+            ->notSeeInDatabase('eligibilities', ['id' => 999])
+            ->notSeeInDatabase('eligibilities', ['id' => 4]);
+
+        // Unallowed additional property.
+        $this->json('PUT',
+            '/eligibilities/2',
+            [
+                'start_date' => '2019-01-01',
+                'end_date' => '2019-12-01',
+                'notes' => 'Modified eligibility notes', // --> modified
+                'is_eligible' => true,
+                'an_additional_property' => 'an additional value',
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'an_additional_property' => [
+                        'code error_additional',
+                        'value an additional value',
+                        'in body',
+                    ]
+                ]
+            ])
+            ->seeInDatabase('eligibilities', ['id' => 2])
+            ->notSeeInDatabase('eligibilities', ['id' => 2, 'notes' => 'Modified eligibility notes']);
+            
+        // @todo add test related to missing required fields
+        // @todo add test related to switched dates
+        // @todo add test related to identical dates
+        // @todo add test related to overlapping time ranges
+        // @todo add further tests related to invalid attribute format
+        // @todo if eligibilities are enforced (config parameter), check with the ones that make internships allowed
+
+    }
+    
+    /**
+     * Delete an eligibility: success.
+     */
+    public function testDeleteById()
+    {
+
+        // Existing annotation
+        $this->json('DELETE', '/eligibilities/2')
+            ->seeJsonEquals([
+                'status_code' => 200,
+                'status' => 'OK',
+                'message' => 'Resource deleted',
+            ])
+            ->seeStatusCode(200)
+            ->seeInDatabase('eligibilities', ['id' => 2, 'deleted_at' => date('Y-m-d H:i:s')])
+            ->notSeeInDatabase('eligibilities', ['id' => 2, 'deleted_at' => null]);
+
+    }
+
+    /**
+     * Delete an eligibility: failure.
+     */
+    public function testDeleteByIdFailure()
+    {
+
+        // Non existing eligibility
+        $this->json('DELETE', '/eligibilities/999')
+            ->seeJsonEquals([
+                'status_code' => 404,
+                'status' => 'Not Found',
+                'message' => 'Resource(s) not found',
+            ])
+            ->seeStatusCode(404)
+            ->notSeeInDatabase('eligibilities', ['id' => 999]);
+            
+        // Already deleted eligibility
+        $this->json('DELETE', '/eligibilities/1')
+            ->seeJsonEquals([
+                'status_code' => 404,
+                'status' => 'Not Found',
+                'message' => 'Resource(s) not found',
+            ])
+            ->seeStatusCode(404);
+
+        // Invalid ID
+        $this->json('DELETE', '/eligibilities/abc')
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'id' => [
+                        'code error_type',
+                        'value abc',
+                        'expected integer',
+                        'used string',
+                        'in path',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('eligibilities', ['id' => 'abc']);
+            
+        // @todo if eligibilities are enforced (config parameter), check with the ones that make internships allowed
 
     }
 
