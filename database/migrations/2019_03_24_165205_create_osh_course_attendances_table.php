@@ -16,7 +16,8 @@ class CreateOshCourseAttendancesTable extends Migration
         Schema::create('osh_course_attendances', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('student_id')->nullable(false);
-            $table->date('date')->nullable(false);
+            $table->date('start_date')->nullable(false);
+            $table->date('end_date')->nullable(false);
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('student_id')->references('id')->on('students');
