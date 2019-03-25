@@ -6,6 +6,7 @@ This is a [RESTful](https://en.wikipedia.org/wiki/Representational_state_transfe
 - annotations (usually managed by tutors)
 - internships
   - eligibilities
+  - occupational safety and health course attendances
   - evaluations
   - interruption reports
 - educational activity attendances

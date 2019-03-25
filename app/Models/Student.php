@@ -43,7 +43,7 @@ class Student extends Model
     {
         return $this->hasMany('App\Models\Internship');
     }
-    
+
     /**
      * @return HasMany
      */
@@ -59,13 +59,13 @@ class Student extends Model
     {
         return $this->hasMany('App\Models\Eligibility');
     }
-    
+
     /**
-     * @return HasOne
+     * @return HasMany
      */
-    public function oshCourseAttendance() : HasOne
+    public function oshCourseAttendances() : HasMany
     {
-        return $this->hasOne('App\Models\OshCourseAttendance');
+        return $this->hasMany('App\Models\OshCourseAttendance');
     }
 
 }

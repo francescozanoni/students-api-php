@@ -401,7 +401,7 @@ class EligibilitiesTest extends TestCase
             ])
             ->seeStatusCode(400)
             ->notSeeInDatabase('eligibilities', ['id' => 4]);
-            
+
         // Overlapping dates - 1
         $this->json('POST',
             '/students/1/eligibilities',
@@ -426,7 +426,7 @@ class EligibilitiesTest extends TestCase
             ])
             ->seeStatusCode(400)
             ->notSeeInDatabase('eligibilities', ['id' => 4]);
-            
+
         // Overlapping dates - 2
         $this->json('POST',
             '/students/1/eligibilities',
@@ -451,7 +451,7 @@ class EligibilitiesTest extends TestCase
             ])
             ->seeStatusCode(400)
             ->notSeeInDatabase('eligibilities', ['id' => 4]);
-            
+
         // Overlapping dates - 3
         $this->json('POST',
             '/students/1/eligibilities',
@@ -476,7 +476,7 @@ class EligibilitiesTest extends TestCase
             ])
             ->seeStatusCode(400)
             ->notSeeInDatabase('eligibilities', ['id' => 4]);
-            
+
         // Identical dates
         $this->json('POST',
             '/students/1/eligibilities',
@@ -501,7 +501,7 @@ class EligibilitiesTest extends TestCase
             ])
             ->seeStatusCode(400)
             ->notSeeInDatabase('eligibilities', ['id' => 4]);
-            
+
         // Switched dates
         $this->json('POST',
             '/students/1/eligibilities',
@@ -526,7 +526,7 @@ class EligibilitiesTest extends TestCase
             ])
             ->seeStatusCode(400)
             ->notSeeInDatabase('eligibilities', ['id' => 4]);
-            
+
         // Unallowed additional property.
         $this->json('POST',
             '/students/1/eligibilities',
@@ -595,7 +595,7 @@ class EligibilitiesTest extends TestCase
             ->seeStatusCode(200)
             ->seeInDatabase('eligibilities', ['id' => 2, 'notes' => 'First eligibility notes modified'])
             ->notSeeInDatabase('eligibilities', ['id' => 2, 'notes' => 'First eligibility notes']);
-            
+
         // Success, remove notes and change start date
         $this->json('PUT',
             '/eligibilities/2',
@@ -630,7 +630,7 @@ class EligibilitiesTest extends TestCase
             ->notSeeInDatabase('eligibilities', ['id' => 2, 'start_date' => '2019-01-01']);
 
     }
-    
+
     /**
      * Modify an eligibility: failure.
      */
@@ -683,7 +683,7 @@ class EligibilitiesTest extends TestCase
             ->seeStatusCode(404)
             ->notSeeInDatabase('eligibilities', ['id' => 999])
             ->notSeeInDatabase('eligibilities', ['id' => 4]);
-            
+
         // Deleted eligibility.
         $this->json('PUT',
             '/eligibilities/1',
@@ -728,7 +728,7 @@ class EligibilitiesTest extends TestCase
             ])
             ->seeInDatabase('eligibilities', ['id' => 2])
             ->notSeeInDatabase('eligibilities', ['id' => 2, 'notes' => 'Modified eligibility notes']);
-            
+
         // @todo add test related to missing required fields
         // @todo add test related to switched dates
         // @todo add test related to identical dates
@@ -737,7 +737,7 @@ class EligibilitiesTest extends TestCase
         // @todo if eligibilities are enforced (config parameter), check with the ones that make internships allowed
 
     }
-    
+
     /**
      * Delete an eligibility: success.
      */
@@ -772,7 +772,7 @@ class EligibilitiesTest extends TestCase
             ])
             ->seeStatusCode(404)
             ->notSeeInDatabase('eligibilities', ['id' => 999]);
-            
+
         // Already deleted eligibility
         $this->json('DELETE', '/eligibilities/1')
             ->seeJsonEquals([
@@ -800,7 +800,7 @@ class EligibilitiesTest extends TestCase
             ])
             ->seeStatusCode(400)
             ->notSeeInDatabase('eligibilities', ['id' => 'abc']);
-            
+
         // @todo if eligibilities are enforced (config parameter), check with the ones that make internships allowed
 
     }
