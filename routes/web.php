@@ -83,4 +83,13 @@ $router->group(['middleware' => 'validate_request'], function () use ($router) {
     $router->put('eligibilities/{id}', ['as' => 'updateEligibilityById', 'uses' => 'EligibilitiesController@update']);
     $router->delete('eligibilities/{id}', ['as' => 'deleteEligibilityById', 'uses' => 'EligibilitiesController@destroy']);
 
+    $router->get('students/{id}/osh_course_attendances', ['as' => 'getStudentOshCourseAttendances', 'uses' => 'OshCourseAttendancesController@getRelatedToStudent']);
+    $router->post('students/{id}/osh_course_attendances', ['as' => 'createStudentOshCourseAttendance', 'uses' => 'OshCourseAttendancesController@createRelatedToStudent']);
+
+    $router->get('osh_course_attendances', ['as' => 'getOshCourseAttendances', 'uses' => 'OshCourseAttendancesController@index']);
+    $router->get('osh_course_attendances/{id}', ['as' => 'getOshCourseAttendanceById', 'uses' => 'OshCourseAttendancesController@show']);
+    $router->put('osh_course_attendances/{id}', ['as' => 'updateOshCourseAttendanceById', 'uses' => 'OshCourseAttendancesController@update']);
+    $router->delete('osh_course_attendances/{id}', ['as' => 'deleteOshCourseAttendanceById', 'uses' => 'OshCourseAttendancesController@destroy']);
+
+
 });
