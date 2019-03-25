@@ -48,12 +48,14 @@ class ValidateResponse
 
             $response = new \Illuminate\Http\JsonResponse(null, 500);
 
-            // Since AddResponseMetadata middleware is not executed,
-            // its logic is here re-applied manually on the error response.
+            // Since AddResponseMetadata and PrettyPrint middlewares are not executed,
+            // their logic is here re-applied manually on the error response.
             // @todo improve design of this
             $metadata = app('App\Http\Middleware\AddResponseMetadata')->getMetadata($request, $response);
             $fullData = array_merge($metadata, ['data' => $e->validator->errors()->toArray()]);
             $response->setData($fullData);
+            // https://www.aaronsaray.com/2017/laravel-pretty-print-middleware
+            $response->setEncodingOptions(config('app.json_encode_options'));
 
         }
 

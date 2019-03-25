@@ -903,6 +903,138 @@ paths:
           $ref: '#/components/responses/NotFound'
         500:
           $ref: '#/components/responses/InternalServerError'
+  /osh_course_attendances:
+    get:
+      summary: Returns a list of Occupational Safety and Health course attendances
+      operationId: getOshCourseAttendances
+      tags:
+        - osh_course_attendances
+      responses:
+        200:
+          $ref: '#/components/responses/OshCourseAttendances'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+  '/osh_course_attendances/{id}':
+    get:
+      summary: Returns an Occupational Safety and Health course attendance
+      operationId: getOshCourseAttendanceById
+      tags:
+        - osh_course_attendances
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the Occupational Safety and Health course attendance to retrieve
+          schema:
+            type: integer
+      responses:
+        200:
+          $ref: '#/components/responses/OshCourseAttendance'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      summary: 'Updates an Occupational Safety and Health course attendance'
+      operationId: updateOshCourseAttendanceById
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewOshCourseAttendance'
+      tags:
+        - osh_course_attendances
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the Occupational Safety and Health course attendance to update
+          schema:
+            type: integer
+      responses:
+        200:
+          $ref: '#/components/responses/OshCourseAttendance'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      summary: Deletes an Occupational Safety and Health course attendance
+      operationId: deleteOshCourseAttendanceById
+      tags:
+        - osh_course_attendances
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the Occupational Safety and Health course attendance to delete
+          schema:
+            type: integer
+      responses:
+        200:
+          $ref: '#/components/responses/ResourceDeletion'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+  '/students/{id}/osh_course_attendances':
+    get:
+      summary: Returns the list of a student's Occupational Safety and Health course attendances
+      operationId: getStudentOshCourseAttendances
+      tags:
+        - osh_course_attendances
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: 'The ID of the student'
+          schema:
+            type: integer
+      responses:
+        200:
+          $ref: '#/components/responses/OshCourseAttendances'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      summary: Creates a student's new Occupational Safety and Health course attendance
+      operationId: createStudentOshCourseAttendance
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewOshCourseAttendance'
+      tags:
+        - osh_course_attendances
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the Occupational Safety and Health course attendance''s student
+          schema:
+            type: integer
+      responses:
+        200:
+          $ref: '#/components/responses/OshCourseAttendance'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
 components:
   responses:
     BadRequest:
@@ -1023,7 +1155,6 @@ components:
                   first_name: Jane
                   last_name: Doe
                   e_mail: jane.doe@bar.com
-                  phone: null
                   nationality: CA
     Student:
       description: Response returning a student
@@ -1192,7 +1323,6 @@ components:
                     first_name: Jane
                     last_name: Doe
                     e_mail: jane.doe@bar.com
-                    phone: null
                     nationality: CA
     Internship:
       description: Response returning an internship
@@ -1288,7 +1418,6 @@ components:
                     first_name: Jane
                     last_name: Doe
                     e_mail: jane.doe@bar.com
-                    phone: null
                     nationality: CA
     EducationalActivityAttendance:
       description: Response returning an educational activity attendance
@@ -1398,7 +1527,6 @@ components:
                       first_name: Jane
                       last_name: Doe
                       e_mail: jane.doe@bar.com
-                      phone: null
                       nationality: CA
                   created_at: '2019-01-19 01:00:00'
                   updated_at: '2019-01-19 01:00:00'
@@ -1520,7 +1648,6 @@ components:
                       first_name: Jane
                       last_name: Doe
                       e_mail: jane.doe@bar.com
-                      phone: null
                       nationality: CA
                   created_at: '2019-01-19 01:00:00'
                   updated_at: '2019-01-19 01:00:00'
@@ -1623,7 +1750,6 @@ components:
                     first_name: Jane
                     last_name: Doe
                     e_mail: jane.doe@bar.com
-                    phone: null
                     nationality: CA
     Eligibility:
       description: 'Response returning an eligibility'
@@ -1657,6 +1783,91 @@ components:
                 end_date: '2019-12-01'
                 notes: First eligibility notes
                 is_eligible: true
+                student:
+                  id: 1
+                  first_name: John
+                  last_name: Doe
+                  e_mail: john.doe@foo.com
+                  phone: 1234-567890
+                  nationality: GB
+    OshCourseAttendances:
+      description: 'Response returning a list of Occupational Safety and Health course attendances'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                description: 'HTTP status code'
+              status:
+                type: string
+                description: 'HTTP status description'
+              message:
+                type: string
+              data:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OshCourseAttendance'
+            required:
+              - status_code
+              - status
+              - message
+              - data
+            example:
+              status_code: 200
+              status: OK
+              message: 'Resource(s) found'
+              data:
+                - id: 1
+                  start_date: '2018-12-08'
+                  end_date: '2019-12-07'
+                  student:
+                    id: 1
+                    first_name: John
+                    last_name: Doe
+                    e_mail: john.doe@foo.com
+                    phone: 1234-567890
+                    nationality: GB
+                - id: 3
+                  start_date: '2018-12-14'
+                  end_date: '2019-12-13'
+                  student:
+                    id: 4
+                    first_name: Joan
+                    last_name: Doe
+                    e_mail: joan.doe@foo.com
+                    nationality: IE
+    OshCourseAttendance:
+      description: 'Response returning an Occupational Safety and Health course attendance'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                description: 'HTTP status code'
+              status:
+                type: string
+                description: 'HTTP status description'
+              message:
+                type: string
+              data:
+                $ref: '#/components/schemas/OshCourseAttendance'
+            required:
+              - status_code
+              - status
+              - message
+              - data
+            example:
+              status_code: 200
+              status: OK
+              message: 'Resource successfully retrieved/created/modified'
+              data:
+                id: 1
+                start_date: '2018-12-08'
+                end_date: '2019-12-07'
                 student:
                   id: 1
                   first_name: John
@@ -2062,6 +2273,45 @@ components:
         end_date: '2019-12-01'
         notes: First eligibility notes
         is_eligible: true
+        student:
+          id: 1
+          first_name: John
+          last_name: Doe
+          e_mail: john.doe@foo.com
+          phone: 1234-567890
+          nationality: GB
+    NewOshCourseAttendance:
+      type: object
+      properties:
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+      required:
+        - start_date
+        - end_date
+      additionalProperties: false
+      example:
+        start_date: '2018-12-08'
+        end_date: '2019-12-07'
+    OshCourseAttendance:
+      allOf:
+        - $ref: '#/components/schemas/NewOshCourseAttendance'
+        - type: object
+          properties:
+            id:
+              type: integer
+            student:
+              $ref: '#/components/schemas/Student'
+          required:
+            - id
+          additionalProperties: false
+      example:
+        id: 1
+        start_date: '2018-12-08'
+        end_date: '2019-12-07'
         student:
           id: 1
           first_name: John
