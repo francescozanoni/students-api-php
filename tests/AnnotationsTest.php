@@ -233,6 +233,24 @@ class AnnotationsTest extends TestCase
             ->notSeeInDatabase('annotations', ['id' => 3])
             ->notSeeInDatabase('annotations', ['student_id' => 999]);
 
+        // Deleted student
+        $this->json('POST',
+            '/students/3/annotations',
+            [
+                'title' => 'Second title',
+                'content' => 'Second content',
+                'user_id' => 456,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 404,
+                'status' => 'Not Found',
+                'message' => 'Resource(s) not found',
+            ])
+            ->seeStatusCode(404)
+            ->notSeeInDatabase('annotations', ['id' => 3])
+            ->notSeeInDatabase('annotations', ['student_id' => 999]);
+
         // Invalid student ID
         $this->json('POST',
             '/students/abc/annotations',
