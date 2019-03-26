@@ -9,6 +9,7 @@ use App\Http\Resources\Eligibility as EligibilityResource;
 use App\Http\Resources\Evaluation as EvaluationResource;
 use App\Http\Resources\Internship as InternshipResource;
 use App\Http\Resources\InterruptionReport as InterruptionReportResource;
+use App\Http\Resources\OshCourseAttendance as OshCourseAttendanceResource;
 use App\Http\Resources\Student as StudentResource;
 
 /**
@@ -111,6 +112,17 @@ class ApplyResourceTransformers
             case 'createStudentEligibility':
             case 'updateEligibilityById':
                 $response->setContent(new EligibilityResource($response->original));
+                break;
+
+            case 'getOshCourseAttendances':
+            case 'getStudentOshCourseAttendances':
+                $response->setContent(OshCourseAttendanceResource::collection($response->original));
+                break;
+
+            case 'getOshCourseAttendanceById':
+            case 'createStudentOshCourseAttendance':
+            case 'updateOshCourseAttendanceById':
+                $response->setContent(new OshCourseAttendanceResource($response->original));
                 break;
 
             default:
