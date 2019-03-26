@@ -11,6 +11,7 @@ use App\Models\Eligibility;
 use App\Models\Evaluation;
 use App\Models\Internship;
 use App\Models\InterruptionReport;
+use App\Models\OshCourseAttendance;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
@@ -393,6 +394,7 @@ class ValidateRequest
                 $eligibility = Eligibility::find(app('current_route_path_parameters')['id']);
                 if ($eligibility) {
                     // @todo handle case of switch of is_eligible from true to false, with related internships, if its config parameter is true
+                    // @todo handle case of switch of date change, with related internships, if its config parameter is true
                     Validator::make(
                         $request->request->all(),
                         [
@@ -419,6 +421,62 @@ class ValidateRequest
 
             case 'deleteEligibilityById':
                 // @todo handle case of eligibility with related internships, if its config parameter is true
+                break;
+
+            case 'createStudentOshCourseAttendance':
+                Validator::make(
+                    $request->request->all(),
+                    [
+                        'start_date' => [
+                            'bail',
+                            'before:end_date',
+                            'not_overlapping_time_range:end_date,osh_course_attendances,student_id,=,' . app('current_route_path_parameters')['id'] . ',deleted_at,is,null',
+                        ],
+                        'end_date' => [
+                            'bail',
+                            'after:start_date',
+                            'not_overlapping_time_range:start_date,osh_course_attendances,student_id,=,' . app('current_route_path_parameters')['id'] . ',deleted_at,is,null',
+                        ],
+                    ],
+                    [
+                        'start_date.before' => 'The :attribute must be a date before end date',
+                        'end_date.after' => 'The :attribute must be a date after start date',
+                        'start_date.not_overlapping_time_range' => 'Unavailable time range',
+                        'end_date.not_overlapping_time_range' => 'Unavailable time range',
+                    ]
+                )->validate();
+                break;
+
+            case 'updateOshCourseAttendanceById':
+                $oshCourseAttendance = OshCourseAttendance::find(app('current_route_path_parameters')['id']);
+                if ($oshCourseAttendance) {
+                    // @todo handle case of date change, with related internships, if its config parameter is true
+                    Validator::make(
+                        $request->request->all(),
+                        [
+                            'start_date' => [
+                                'bail',
+                                'before:end_date',
+                                'not_overlapping_time_range:end_date,osh_course_attendances,student_id,=,' . $oshCourseAttendance->student->id . ',id,!=,' . $oshCourseAttendance->id . ',deleted_at,is,null',
+                            ],
+                            'end_date' => [
+                                'bail',
+                                'after:start_date',
+                                'not_overlapping_time_range:start_date,osh_course_attendances,student_id,=,' . $oshCourseAttendance->student->id . ',id,!=,' . $oshCourseAttendance->id . ',deleted_at,is,null',
+                            ],
+                        ],
+                        [
+                            'start_date.before' => 'The :attribute must be a date before end date',
+                            'end_date.after' => 'The :attribute must be a date after start date',
+                            'start_date.not_overlapping_time_range' => 'Unavailable time range',
+                            'end_date.not_overlapping_time_range' => 'Unavailable time range',
+                        ]
+                    )->validate();
+                }
+                break;
+
+            case 'deleteOshCourseAttendanceById':
+                // @todo handle case of attendances with related internships, if its config parameter is true
                 break;
 
             default:
