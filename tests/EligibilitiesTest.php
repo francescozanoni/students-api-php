@@ -744,7 +744,7 @@ class EligibilitiesTest extends TestCase
     public function testDeleteById()
     {
 
-        // Existing annotation
+        // Existing eligibility
         $this->json('DELETE', '/eligibilities/2')
             ->seeJsonEquals([
                 'status_code' => 200,

@@ -472,5 +472,72 @@ class OshCourseAttendancesTest extends TestCase
         // @todo add further tests related to invalid attribute format
 
     }
+
+    /**
+     * Delete an attendance: success.
+     */
+    public function testDeleteById()
+    {
+
+        // Existing attendance
+        $this->json('DELETE', '/osh_course_attendances/1')
+            ->seeJsonEquals([
+                'status_code' => 200,
+                'status' => 'OK',
+                'message' => 'Resource deleted',
+            ])
+            ->seeStatusCode(200)
+            ->seeInDatabase('osh_course_attendances', ['id' => 1, 'deleted_at' => date('Y-m-d H:i:s')])
+            ->notSeeInDatabase('osh_course_attendances', ['id' => 1, 'deleted_at' => null]);
+
+    }
+
+    /**
+     * Delete an attendance: failure.
+     */
+    public function testDeleteByIdFailure()
+    {
+
+        // Non existing attendance
+        $this->json('DELETE', '/osh_course_attendances/999')
+            ->seeJsonEquals([
+                'status_code' => 404,
+                'status' => 'Not Found',
+                'message' => 'Resource(s) not found',
+            ])
+            ->seeStatusCode(404)
+            ->notSeeInDatabase('osh_course_attendances', ['id' => 999]);
+
+        // Already deleted attendance
+        $this->json('DELETE', '/osh_course_attendances/2')
+            ->seeJsonEquals([
+                'status_code' => 404,
+                'status' => 'Not Found',
+                'message' => 'Resource(s) not found',
+            ])
+            ->seeStatusCode(404);
+
+        // Invalid ID
+        $this->json('DELETE', '/osh_course_attendances/abc')
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'id' => [
+                        'code error_type',
+                        'value abc',
+                        'expected integer',
+                        'used string',
+                        'in path',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('osh_course_attendances', ['id' => 'abc']);
+
+        // @todo if attendances are enforced (config parameter), check with the ones that make internships allowed
+
+    }
     
 }
