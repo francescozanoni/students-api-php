@@ -729,9 +729,127 @@ class EligibilitiesTest extends TestCase
             ->seeInDatabase('eligibilities', ['id' => 2])
             ->notSeeInDatabase('eligibilities', ['id' => 2, 'notes' => 'Modified eligibility notes']);
 
-        // @todo add test related to missing required fields
-        // @todo add test related to switched dates
-        // @todo add test related to identical dates
+        // Missing required start_date.
+        $this->json('PUT',
+            '/eligibilities/2',
+            [
+                'end_date' => '2019-12-01',
+                'notes' => 'Modified eligibility notes', // --> modified
+                'is_eligible' => true,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'start_date' => [
+                        'code error_required',
+                        'in body',
+                    ]
+                ]
+            ])
+            ->seeInDatabase('eligibilities', ['id' => 2])
+            ->notSeeInDatabase('eligibilities', ['id' => 2, 'notes' => 'Modified eligibility notes']);
+
+        // Missing required end_date.
+        $this->json('PUT',
+            '/eligibilities/2',
+            [
+                'start_date' => '2019-01-01',
+                'notes' => 'Modified eligibility notes', // --> modified
+                'is_eligible' => true,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'end_date' => [
+                        'code error_required',
+                        'in body',
+                    ]
+                ]
+            ])
+            ->seeInDatabase('eligibilities', ['id' => 2])
+            ->notSeeInDatabase('eligibilities', ['id' => 2, 'notes' => 'Modified eligibility notes']);
+
+        // Missing required is_eligible.
+        $this->json('PUT',
+            '/eligibilities/2',
+            [
+                'start_date' => '2019-01-01',
+                'end_date' => '2019-12-01',
+                'notes' => 'Modified eligibility notes', // --> modified
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'is_eligible' => [
+                        'code error_required',
+                        'in body',
+                    ]
+                ]
+            ])
+            ->seeInDatabase('eligibilities', ['id' => 2])
+            ->notSeeInDatabase('eligibilities', ['id' => 2, 'notes' => 'Modified eligibility notes']);
+
+        // Identical dates.
+        $this->json('PUT',
+            '/eligibilities/2',
+            [
+                'start_date' => '2019-01-01',
+                'end_date' => '2019-01-01',
+                'notes' => 'Modified eligibility notes', // --> modified
+                'is_eligible' => true,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'start_date' => [
+                        'The start date must be a date before end date',
+                    ],
+                    'end_date' => [
+                        'The end date must be a date after start date',
+                    ],
+                ]
+            ])
+            ->seeInDatabase('eligibilities', ['id' => 2])
+            ->notSeeInDatabase('eligibilities', ['id' => 2, 'notes' => 'Modified eligibility notes']);
+
+        // Switched dates.
+        $this->json('PUT',
+            '/eligibilities/2',
+            [
+                'start_date' => '2019-12-01',
+                'end_date' => '2019-01-01',
+                'notes' => 'Modified eligibility notes', // --> modified
+                'is_eligible' => true,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'start_date' => [
+                        'The start date must be a date before end date',
+                    ],
+                    'end_date' => [
+                        'The end date must be a date after start date',
+                    ],
+                ]
+            ])
+            ->seeInDatabase('eligibilities', ['id' => 2])
+            ->notSeeInDatabase('eligibilities', ['id' => 2, 'notes' => 'Modified eligibility notes']);
+
         // @todo add test related to overlapping time ranges
         // @todo add further tests related to invalid attribute format
         // @todo if eligibilities are enforced (config parameter), check with the ones that make internships allowed
