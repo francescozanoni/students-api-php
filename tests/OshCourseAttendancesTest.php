@@ -474,6 +474,302 @@ class OshCourseAttendancesTest extends TestCase
     }
 
     /**
+     * Modify an attendance: success.
+     */
+    public function testModifyById()
+    {
+
+        // Success
+        $this->json('PUT',
+            '/osh_course_attendances/1',
+            [
+                'start_date' => '2018-12-18', // --> modified
+                'end_date' => '2019-11-07', // --> modified
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 200,
+                'status' => 'OK',
+                'message' => 'Resource successfully retrieved/created/modified',
+                'data' => [
+                    'id' => 1,
+                    'start_date' => '2018-12-18', // --> modified
+                    'end_date' => '2019-11-07', // --> modified
+                    'student' => [
+                        'id' => 1,
+                        'first_name' => 'John',
+                        'last_name' => 'Doe',
+                        'e_mail' => 'john.doe@foo.com',
+                        'phone' => '1234-567890',
+                        'nationality' => 'GB',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(200)
+            ->seeInDatabase('osh_course_attendances', ['id' => 1, 'start_date' => '2018-12-18', 'end_date' => '2019-11-07'])
+            ->notSeeInDatabase('osh_course_attendances', ['id' => 1, 'start_date' => '2018-12-08', 'end_date' => '2019-12-07']);
+
+    }
+
+    /**
+     * Modify an attendance: failure.
+     */
+    public function testModifyByIdFailure()
+    {
+
+        // Invalid ID
+        $this->json('PUT',
+            '/osh_course_attendances/abc',
+            [
+                'start_date' => '2018-12-18',
+                'end_date' => '2019-11-07',
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'id' => [
+                        'code error_type',
+                        'value abc',
+                        'expected integer',
+                        'used string',
+                        'in path',
+                    ],
+                ]
+            ])
+            ->seeStatusCode(400)
+            ->notSeeInDatabase('osh_course_attendances', ['id' => 'abc'])
+            ->notSeeInDatabase('osh_course_attendances', ['id' => 4]);
+
+        // Non existing ID
+        $this->json('PUT',
+            '/osh_course_attendances/999',
+            [
+                'start_date' => '2018-12-18',
+                'end_date' => '2019-11-07',
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 404,
+                'status' => 'Not Found',
+                'message' => 'Resource(s) not found',
+            ])
+            ->seeStatusCode(404)
+            ->notSeeInDatabase('osh_course_attendances', ['id' => 999])
+            ->notSeeInDatabase('osh_course_attendances', ['id' => 4]);
+
+        // Deleted eligibility.
+        $this->json('PUT',
+            '/osh_course_attendances/2',
+            [
+                'start_date' => '2018-12-18',
+                'end_date' => '2019-11-07',
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 404,
+                'status' => 'Not Found',
+                'message' => 'Resource(s) not found',
+            ])
+            ->seeStatusCode(404)
+            ->notSeeInDatabase('osh_course_attendances', ['id' => 999])
+            ->notSeeInDatabase('osh_course_attendances', ['id' => 4]);
+
+        // Unallowed additional property.
+        $this->json('PUT',
+            '/osh_course_attendances/1',
+            [
+                'start_date' => '2018-12-18', // -->modified
+                'end_date' => '2019-11-07', // -->modified
+                'an_additional_property' => 'an additional value',
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'an_additional_property' => [
+                        'code error_additional',
+                        'value an additional value',
+                        'in body',
+                    ]
+                ]
+            ])
+            ->seeInDatabase('osh_course_attendances', ['id' => 1])
+            ->notSeeInDatabase('osh_course_attendances', ['id' => 1, 'start_date' => '2018-12-18', 'end_date' => '2019-11-07']);
+
+        // Switched dates.
+        $this->json('PUT',
+            '/osh_course_attendances/1',
+            [
+                'start_date' => '2019-11-07',
+                'end_date' => '2018-12-18',
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'start_date' => [
+                        'The start date must be a date before end date',
+                    ],
+                    'end_date' => [
+                        'The end date must be a date after start date',
+                    ],
+                ]
+            ])
+            ->seeInDatabase('osh_course_attendances', ['id' => 1])
+            ->notSeeInDatabase('osh_course_attendances', ['id' => 1, 'start_date' => '2019-11-07', 'end_date' => '2018-12-18']);
+
+        // Identical dates.
+        $this->json('PUT',
+            '/osh_course_attendances/1',
+            [
+                'start_date' => '2018-12-18',
+                'end_date' => '2018-12-18',
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'start_date' => [
+                        'The start date must be a date before end date',
+                    ],
+                    'end_date' => [
+                        'The end date must be a date after start date',
+                    ],
+                ]
+            ])
+            ->seeInDatabase('osh_course_attendances', ['id' => 1])
+            ->notSeeInDatabase('osh_course_attendances', ['id' => 1, 'start_date' => '2018-12-18', 'end_date' => '2018-12-18']);
+
+        // The record created by this method is used by below tests.
+        $this->testCreateRelatedToStudent();
+
+        // Overlapping time ranges - 1.
+        $this->json('PUT',
+            '/osh_course_attendances/1',
+            [
+                'start_date' => '2019-12-08',
+                'end_date' => '2020-12-07',
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'start_date' => [
+                        'Unavailable time range',
+                    ],
+                    'end_date' => [
+                        'Unavailable time range',
+                    ],
+                ]
+            ])
+            ->seeInDatabase('osh_course_attendances', ['id' => 1])
+            ->notSeeInDatabase('osh_course_attendances', ['id' => 1, 'start_date' => '2019-12-08', 'end_date' => '2020-12-07']);
+
+        // Overlapping time ranges - 2.
+        $this->json('PUT',
+            '/osh_course_attendances/1',
+            [
+                'start_date' => '2018-12-18',
+                'end_date' => '2019-12-17',
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'start_date' => [
+                        'Unavailable time range',
+                    ],
+                    'end_date' => [
+                        'Unavailable time range',
+                    ],
+                ]
+            ])
+            ->seeInDatabase('osh_course_attendances', ['id' => 1])
+            ->notSeeInDatabase('osh_course_attendances', ['id' => 1, 'start_date' => '2018-12-18', 'end_date' => '2019-12-17']);
+
+        // Overlapping time ranges - 3.
+        $this->json('PUT',
+            '/osh_course_attendances/1',
+            [
+                'start_date' => '2019-12-02',
+                'end_date' => '2020-12-01',
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'start_date' => [
+                        'Unavailable time range',
+                    ],
+                    'end_date' => [
+                        'Unavailable time range',
+                    ],
+                ]
+            ])
+            ->seeInDatabase('osh_course_attendances', ['id' => 1])
+            ->notSeeInDatabase('osh_course_attendances', ['id' => 1, 'start_date' => '2019-12-02', 'end_date' => '2020-12-01']);
+
+        // Missing required start_date.
+        $this->json('PUT',
+            '/osh_course_attendances/1',
+            [
+                'end_date' => '2019-12-07',
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'start_date' => [
+                        'code error_required',
+                        'in body',
+                    ]
+                ]
+            ])
+            ->seeInDatabase('osh_course_attendances', ['id' => 1, 'start_date' => '2018-12-08', 'end_date' => '2019-12-07']);
+
+        // Missing required end_date.
+        $this->json('PUT',
+            '/osh_course_attendances/1',
+            [
+                'start_date' => '2018-12-08',
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 400,
+                'status' => 'Bad Request',
+                'message' => 'Request is not valid',
+                'data' => [
+                    'end_date' => [
+                        'code error_required',
+                        'in body',
+                    ]
+                ]
+            ])
+            ->seeInDatabase('osh_course_attendances', ['id' => 1, 'start_date' => '2018-12-08', 'end_date' => '2019-12-07']);
+
+        // @todo add further tests related to invalid attribute format
+        // @todo if attendances are enforced (config parameter), check with the ones that make internships allowed
+
+    }
+
+    /**
      * Delete an attendance: success.
      */
     public function testDeleteById()
@@ -539,5 +835,5 @@ class OshCourseAttendancesTest extends TestCase
         // @todo if attendances are enforced (config parameter), check with the ones that make internships allowed
 
     }
-    
+
 }
