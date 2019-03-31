@@ -8,6 +8,11 @@ abstract class TestCase extends Laravel\Lumen\Testing\TestCase
 {
 
     use DatabaseMigrations;
+    
+    /**
+     * @var int
+     */
+    protected $secondsToShiftCreatedUpdatedDeletedAt = 5;
 
     public function setUp()
     {
@@ -57,10 +62,12 @@ abstract class TestCase extends Laravel\Lumen\Testing\TestCase
             return $this;
         }
 
-        $dataMinusOneSecond = $this->shiftCreatedUpdatedDeletedAt(json_decode($data, true), 1);
-        $dataMinusOneSecond = json_encode($dataMinusOneSecond);
+        $expected = [$data];
+        for ($i = 1; $i <= $this->secondsToShiftCreatedUpdatedDeletedAt; $i++) {
+            $expected[] = json_encode($this->shiftCreatedUpdatedDeletedAt(json_decode($data, true), $i));
+        }
 
-        PHPUnit::assertTrue(in_array($actual, [$data, $dataMinusOneSecond]));
+        PHPUnit::assertTrue(in_array($actual, $expected));
 
         return $this;
 
@@ -100,9 +107,11 @@ abstract class TestCase extends Laravel\Lumen\Testing\TestCase
 
         }
 
-        $dataMinusOneSecond = $this->shiftCreatedUpdatedDeletedAt($data, 1);
-
-        $count = $this->app->make('db')->connection($onConnection)->table($table)->where($data)->orWhere($dataMinusOneSecond)->count();
+        $count = $this->app->make('db')->connection($onConnection)->table($table)->where($data);
+        for ($i = 1; $i <= $this->secondsToShiftCreatedUpdatedDeletedAt; $i++) {
+            $count = $count->orWhere($this->shiftCreatedUpdatedDeletedAt($data, $i));
+        }
+        $count = $count->count();
 
         $this->assertGreaterThan(0, $count, sprintf(
             'Unable to find row in database table [%s] that matched attributes [%s].', $table, json_encode($data)
