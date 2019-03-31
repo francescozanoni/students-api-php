@@ -57,25 +57,7 @@ abstract class TestCase extends Laravel\Lumen\Testing\TestCase
             return $this;
         }
 
-        $dataMinusOneSecond = json_decode($data, true);
-
-        array_walk_recursive($dataMinusOneSecond, function (&$item, $key) {
-            if (in_array($key, ['created_at', 'updated_at', 'deleted_at']) === true) {
-                $dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $item);
-
-                // If the date/time field contains a very old value (typically,
-                // in case of static value provided by seeder), it is not considered.
-                $currentDateTime = new DateTime();
-                $interval = $currentDateTime->diff($dateTime);
-                if ((int)$interval->format('%s') > 10) {
-                    return;
-                }
-
-                $dateTime->sub(new DateInterval('PT1S'));
-                $item = $dateTime->format('Y-m-d H:i:s');
-            }
-        });
-
+        $dataMinusOneSecond = $this->shiftCreatedUpdatedDeletedAt(json_decode($data, true), 1);
         $dataMinusOneSecond = json_encode($dataMinusOneSecond);
 
         PHPUnit::assertTrue(in_array($actual, [$data, $dataMinusOneSecond]));
@@ -118,25 +100,7 @@ abstract class TestCase extends Laravel\Lumen\Testing\TestCase
 
         }
 
-        $dataMinusOneSecond = $data;
-
-        array_walk_recursive($dataMinusOneSecond, function (&$item, $key) {
-            if (in_array($key, ['created_at', 'updated_at', 'deleted_at']) === true &&
-                is_string($item) === true) {
-                $dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $item);
-
-                // If the date/time field contains a very old value (typically,
-                // in case of static value provided by seeder), it is not considered.
-                $currentDateTime = new DateTime();
-                $interval = $currentDateTime->diff($dateTime);
-                if ((int)$interval->format('%s') > 10) {
-                    return;
-                }
-
-                $dateTime->sub(new DateInterval('PT1S'));
-                $item = $dateTime->format('Y-m-d H:i:s');
-            }
-        });
+        $dataMinusOneSecond = $this->shiftCreatedUpdatedDeletedAt($data, 1);
 
         $count = $this->app->make('db')->connection($onConnection)->table($table)->where($data)->orWhere($dataMinusOneSecond)->count();
 
@@ -146,6 +110,43 @@ abstract class TestCase extends Laravel\Lumen\Testing\TestCase
 
         return $this;
 
+    }
+    
+    /**
+     * Within input $data, shift "created_at", "updated_at" and "deleted_at" field values by $seconds seconds.
+     *
+     * @param  array $data
+     * @param  int $seconds
+     *
+     * @return array
+     */
+    protected function shiftCreatedUpdatedDeletedAt(array $data, int $seconds) : array
+    {
+    
+        array_walk_recursive($data, function (&$item, $key) use ($seconds) {
+        
+            if (in_array($key, ['created_at', 'updated_at', 'deleted_at']) === false ||
+                is_string($item) === false) {
+                return;
+            }
+            
+            $dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $item);
+
+            // If the date/time field contains a very old value (typically,
+            // in case of static value provided by seeder), it is not considered.
+            $currentDateTime = new DateTime();
+            $interval = $currentDateTime->diff($dateTime);
+            if ((int)$interval->format('%s') > 10) {
+                return;
+            }
+
+            $dateTime->sub(new DateInterval('PT' . abs($seconds) . 'S'));
+            $item = $dateTime->format('Y-m-d H:i:s');
+        
+        });
+        
+        return $data;
+    
     }
 
 }
