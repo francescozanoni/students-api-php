@@ -23,6 +23,7 @@
   },
   "require-dev": {
     "beyondcode/laravel-er-diagram-generator": "^1.2",
+    "php-coveralls/php-coveralls": "^2.1",
     "phpunit/phpunit": "~7.0"
   },
   "autoload": {
