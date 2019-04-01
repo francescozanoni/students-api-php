@@ -15,4 +15,4 @@ install:
   - php artisan openapi:configure
 script: php vendor/bin/phpunit tests --coverage-clover storage/clover.xml
 after_success:
-  - travis_retry php vendor/bin/php-coveralls --coverage_clover=storage/clover.xml
+  - travis_retry php vendor/bin/php-coveralls --coverage_clover=storage/clover.xml --json_path=storage/coveralls.json
