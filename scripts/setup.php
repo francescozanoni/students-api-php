@@ -33,8 +33,6 @@ define('DOT_ENV_FILE_PATH', BASE_PATH . '/.env');
 define('DOT_ENV_EXAMPLE_FILE_PATH', BASE_PATH . '/.env.example');
 define('PHPUNIT_XML_FILE_PATH', BASE_PATH . '/phpunit.xml');
 define('PHPUNIT_XML_EXAMPLE_FILE_PATH', BASE_PATH . '/phpunit.xml.example');
-define('OPENAPI_FILE_PATH', BASE_PATH . '/public/openapi.yaml');
-define('OPENAPI_EXAMPLE_FILE_PATH', BASE_PATH . '/public/openapi.yaml.example');
 
 # #####################################################
 
@@ -45,7 +43,6 @@ $filePathsToCheck = [
     DATABASE_FILE_PATH,
     DOT_ENV_FILE_PATH,
     PHPUNIT_XML_FILE_PATH,
-    OPENAPI_FILE_PATH,
 ];
 
 foreach ($filePathsToCheck as $filePath) {
@@ -89,9 +86,6 @@ copy(HTACCESS_EXAMPLE_FILE_PATH, HTACCESS_FILE_PATH);
 copy(DOT_ENV_EXAMPLE_FILE_PATH, DOT_ENV_FILE_PATH);
 copy(PHPUNIT_XML_EXAMPLE_FILE_PATH, PHPUNIT_XML_FILE_PATH);
 
-# OpenAPI files
-copy(OPENAPI_EXAMPLE_FILE_PATH, OPENAPI_FILE_PATH);
-
 # #####################################################
 
 # Base URL and database file path setting
@@ -104,11 +98,6 @@ file_put_contents(DOT_ENV_FILE_PATH, $file);
 $file = file_get_contents(PHPUNIT_XML_FILE_PATH);
 $file = preg_replace('#http://localhost#', $options['application_url'], $file);
 file_put_contents(PHPUNIT_XML_FILE_PATH, $file);
-
-# @todo move to ConfigureOpenApiSchema command
-$file = file_get_contents(OPENAPI_FILE_PATH);
-$file = preg_replace('#http://localhost#', $options['application_url'], $file);
-file_put_contents(OPENAPI_FILE_PATH, $file);
 
 $baseUrl = parse_url($options['application_url'], PHP_URL_PATH);
 if (empty($baseUrl) === true) {

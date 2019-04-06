@@ -1,9 +1,4 @@
 <?php
-/**
- * User: Francesco.Zanoni
- * Date: 17/09/2018
- * Time: 14:09
- */
 
 $sourcePath = 'vendor/swagger-api/swagger-ui/dist';
 
