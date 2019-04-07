@@ -75,35 +75,12 @@ class ValidateRequest
                 break;
 
             case 'createStudentAnnotation':
-                /* @todo validate user_id against users table
-                 * Validator::make(
-                 *   $request->request->all(),
-                 *   ['user_id' => 'exists:users,id'],
-                 *   ['user_id.exists' => 'The :attribute must exist']
-                 * )->validate();
-                 */
                 break;
 
             case 'updateAnnotationById':
-                // An annotation cannot be changed by a different user.
-                $annotation = Annotation::find(app('current_route_path_parameters')['id']);
-                if ($annotation) {
-                    // @todo validate user_id against users table
-                    Validator::make(
-                        $request->request->all(),
-                        [
-                            'user_id' => 'in:' . $annotation->user_id, // 'exists:users,id'
-                        ],
-                        [
-                            'user_id.in' => 'The :attribute cannot be changed',
-                            // 'user_id.exists' => 'The :attribute must exist']
-                        ]
-                    )->validate();
-                }
                 break;
 
             case 'deleteAnnotationById':
-                // @todo add user_id validation, that must be provided, exist and match the current value
                 break;
 
             case 'createStudentInternship':

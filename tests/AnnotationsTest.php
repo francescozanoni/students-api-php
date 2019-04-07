@@ -27,7 +27,6 @@ class AnnotationsTest extends TestCase
                             'phone' => '1234-567890',
                             'nationality' => 'GB',
                         ],
-                        'user_id' => 123,
                         'created_at' => '2019-01-01 01:00:00',
                         'updated_at' => '2019-01-01 01:00:00',
                     ],
@@ -60,7 +59,6 @@ class AnnotationsTest extends TestCase
                         'phone' => '1234-567890',
                         'nationality' => 'GB',
                     ],
-                    'user_id' => 123,
                     'created_at' => '2019-01-01 01:00:00',
                     'updated_at' => '2019-01-01 01:00:00',
                 ],
@@ -121,7 +119,6 @@ class AnnotationsTest extends TestCase
                         'id' => 1,
                         'title' => 'First title',
                         'content' => 'First content',
-                        'user_id' => 123,
                         'created_at' => '2019-01-01 01:00:00',
                         'updated_at' => '2019-01-01 01:00:00',
                     ]
@@ -187,7 +184,6 @@ class AnnotationsTest extends TestCase
             [
                 'title' => 'Second title',
                 'content' => 'Second content',
-                'user_id' => 456,
             ]
         )
             ->seeJsonEquals([
@@ -198,7 +194,6 @@ class AnnotationsTest extends TestCase
                     'id' => 2,
                     'title' => 'Second title',
                     'content' => 'Second content',
-                    'user_id' => 456,
                     'created_at' => date('Y-m-d H:i:s'),
                     'updated_at' => date('Y-m-d H:i:s'),
                 ],
@@ -221,7 +216,6 @@ class AnnotationsTest extends TestCase
             [
                 'title' => 'Second title',
                 'content' => 'Second content',
-                'user_id' => 456,
             ]
         )
             ->seeJsonEquals([
@@ -239,7 +233,6 @@ class AnnotationsTest extends TestCase
             [
                 'title' => 'Second title',
                 'content' => 'Second content',
-                'user_id' => 456,
             ]
         )
             ->seeJsonEquals([
@@ -257,7 +250,6 @@ class AnnotationsTest extends TestCase
             [
                 'title' => 'Second title',
                 'content' => 'Second content',
-                'user_id' => 456,
             ]
         )
             ->seeJsonEquals([
@@ -283,7 +275,6 @@ class AnnotationsTest extends TestCase
             '/students/1/annotations',
             [
                 'content' => 'Second content',
-                'user_id' => 456,
             ]
         )
             ->seeJsonEquals([
@@ -306,7 +297,6 @@ class AnnotationsTest extends TestCase
             [
                 'title' => 'A',
                 'content' => 'Second content',
-                'user_id' => 456,
             ]
         )
             ->seeJsonEquals([
@@ -331,7 +321,6 @@ class AnnotationsTest extends TestCase
             '/students/1/annotations',
             [
                 'title' => 'Second title',
-                'user_id' => 456,
             ]
         )
             ->seeJsonEquals([
@@ -354,7 +343,6 @@ class AnnotationsTest extends TestCase
             [
                 'title' => 'Second title',
                 'content' => 'A',
-                'user_id' => 456,
             ]
         )
             ->seeJsonEquals([
@@ -374,61 +362,12 @@ class AnnotationsTest extends TestCase
             ->seeStatusCode(400)
             ->notSeeInDatabase('annotations', ['id' => 3]);
 
-        // Missing required user_id
-        $this->json('POST',
-            '/students/1/annotations',
-            [
-                'title' => 'Second title',
-                'content' => 'Second content',
-            ]
-        )
-            ->seeJsonEquals([
-                'status_code' => 400,
-                'status' => 'Bad Request',
-                'message' => 'Request is not valid',
-                'data' => [
-                    'user_id' => [
-                        'code error_required',
-                        'in body',
-                    ],
-                ]
-            ])
-            ->seeStatusCode(400)
-            ->notSeeInDatabase('annotations', ['id' => 3]);
-
-        // Invalid user_id
-        $this->json('POST',
-            '/students/1/annotations',
-            [
-                'title' => 'Second title',
-                'content' => 'Second content',
-                'user_id' => 'abc',
-            ]
-        )
-            ->seeJsonEquals([
-                'status_code' => 400,
-                'status' => 'Bad Request',
-                'message' => 'Request is not valid',
-                'data' => [
-                    'user_id' => [
-                        'code error_type',
-                        'value abc',
-                        'expected integer',
-                        'used string',
-                        'in body',
-                    ],
-                ]
-            ])
-            ->seeStatusCode(400)
-            ->notSeeInDatabase('annotations', ['id' => 3]);
-
         // Unallowed additional property.
         $this->json('POST',
             '/students/1/annotations',
             [
                 'title' => 'Second title',
                 'content' => 'Second content',
-                'user_id' => 456,
                 'an_additional_property' => 'an additional value',
             ]
         )
@@ -461,7 +400,6 @@ class AnnotationsTest extends TestCase
             [
                 'title' => 'First title modified',
                 'content' => 'First content',
-                'user_id' => 123,
             ]
         )
             ->seeJsonEquals([
@@ -480,7 +418,6 @@ class AnnotationsTest extends TestCase
                         'phone' => '1234-567890',
                         'nationality' => 'GB',
                     ],
-                    'user_id' => 123,
                     'created_at' => '2019-01-01 01:00:00',
                     'updated_at' => date('Y-m-d H:i:s'),
                 ]
@@ -497,37 +434,12 @@ class AnnotationsTest extends TestCase
     public function testModifyByIdFailure()
     {
 
-        // Different user_id
-        $this->json('PUT',
-            '/annotations/1',
-            [
-                'title' => 'First title modified',
-                'content' => 'First content',
-                'user_id' => 456,
-            ]
-        )
-            ->seeJsonEquals([
-                'status_code' => 400,
-                'status' => 'Bad Request',
-                'message' => 'Request is not valid',
-                'data' => [
-                    'user_id' => [
-                        'The user id cannot be changed',
-                    ],
-                ]
-            ])
-            ->seeStatusCode(400)
-            ->seeInDatabase('annotations', ['id' => 1, 'user_id' => 123])
-            ->notSeeInDatabase('annotations', ['id' => 1, 'title' => 'First title modified'])
-            ->notSeeInDatabase('annotations', ['id' => 1, 'user_id' => 456]);
-
         // Invalid ID
         $this->json('PUT',
             '/annotations/abc',
             [
                 'title' => 'Second title',
                 'content' => 'Second content',
-                'user_id' => 123,
             ]
         )
             ->seeJsonEquals([
@@ -554,7 +466,6 @@ class AnnotationsTest extends TestCase
             [
                 'title' => 'Second title',
                 'content' => 'Second content',
-                'user_id' => 123,
             ]
         )
             ->seeJsonEquals([
@@ -572,7 +483,6 @@ class AnnotationsTest extends TestCase
             [
                 'title' => 'First title 1', // --> modified
                 'content' => 'First content 1', // --> modified
-                'user_id' => 123,
                 'an_additional_property' => 'an additional value',
             ]
         )
@@ -596,7 +506,6 @@ class AnnotationsTest extends TestCase
             '/annotations/1',
             [
                 'content' => 'First content',
-                'user_id' => 123,
             ]
         )
             ->seeJsonEquals([
@@ -617,7 +526,6 @@ class AnnotationsTest extends TestCase
             '/annotations/1',
             [
                 'title' => 'First title',
-                'user_id' => 123,
             ]
         )
             ->seeJsonEquals([
@@ -626,27 +534,6 @@ class AnnotationsTest extends TestCase
                 'message' => 'Request is not valid',
                 'data' => [
                     'content' => [
-                        'code error_required',
-                        'in body',
-                    ],
-                ]
-            ])
-            ->seeStatusCode(400);
-
-        // Missing required user_id
-        $this->json('PUT',
-            '/annotations/1',
-            [
-                'title' => 'First title',
-                'content' => 'First content',
-            ]
-        )
-            ->seeJsonEquals([
-                'status_code' => 400,
-                'status' => 'Bad Request',
-                'message' => 'Request is not valid',
-                'data' => [
-                    'user_id' => [
                         'code error_required',
                         'in body',
                     ],
@@ -711,8 +598,6 @@ class AnnotationsTest extends TestCase
             ])
             ->seeStatusCode(400)
             ->notSeeInDatabase('annotations', ['id' => 'abc']);
-
-        // @todo assess whether to add check of user_id
 
     }
 

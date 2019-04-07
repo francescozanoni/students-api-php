@@ -1293,7 +1293,6 @@ components:
                 id: 1
                 title: 'First annotation title'
                 content: 'First annotation body'
-                user_id: 123
                 student:
                   id: 1
                   first_name: John
@@ -2006,17 +2005,13 @@ components:
         content:
           type: string
           minLength: 3
-        user_id:
-          type: integer
       required:
         - title
         - content
-        - user_id
       additionalProperties: false
       example:
         title: 'First annotation title'
         content: 'First annotation body'
-        user_id: 123
     Annotation:
       allOf:
         -
@@ -2042,7 +2037,6 @@ components:
         id: 1
         title: 'First annotation title'
         content: 'First annotation body'
-        user_id: 123
         student:
           id: 1
           first_name: John

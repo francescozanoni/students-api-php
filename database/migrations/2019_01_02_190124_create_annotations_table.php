@@ -18,8 +18,6 @@ class CreateAnnotationsTable extends Migration
             $table->unsignedInteger('student_id')->nullable(false);
             $table->string('title')->nullable(false);
             $table->string('content')->nullable(false);
-            // annotation author, whose referential integrity is enforced by input validation rules
-            $table->unsignedInteger('user_id')->nullable(false);
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('student_id')->references('id')->on('students');
