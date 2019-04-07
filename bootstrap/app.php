@@ -97,6 +97,7 @@ $app->register(App\Providers\AppServiceProvider::class);
 $app->register(App\Providers\RouteServiceProvider::class);
 $app->register(App\Providers\ValidationServiceProvider::class);
 $app->register(BeyondCode\ErdGenerator\ErdGeneratorServiceProvider::class);
+$app->register(OwenIt\Auditing\AuditingServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
