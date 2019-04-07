@@ -13,7 +13,6 @@ class InterruptionReportsTableSeeder extends Seeder
     {
         DB::table('interruption_reports')->insert([
             'internship_id' => 2,
-            'clinical_tutor_id' => 456,
             'notes' => 'First interruption report notes',
             'created_at' => '2019-01-30 02:00:00',
             'updated_at' => '2019-01-30 02:00:00',
@@ -21,7 +20,6 @@ class InterruptionReportsTableSeeder extends Seeder
         ]);
         DB::table('interruption_reports')->insert([
             'internship_id' => 2,
-            'clinical_tutor_id' => 789,
             'notes' => 'Second interruption report notes',
             'created_at' => '2019-01-31 02:00:00',
             'updated_at' => '2019-01-31 02:00:00',

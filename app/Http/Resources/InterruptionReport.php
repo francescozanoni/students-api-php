@@ -20,9 +20,6 @@ class InterruptionReport extends JsonResource
             'id' => $this->id,
             'notes' => $this->notes,
             'internship' => $this->when($this->withInternshipAttribute($request) === true, new InternshipResource($this->internship)),
-            
-            // This field is returned as string, but cannot understand why...
-            'clinical_tutor_id' => (int)$this->clinical_tutor_id,
 
         ];
 

@@ -20,14 +20,10 @@ class CreateEvaluationsTable extends Migration
             }
             $table->string('notes')->nullable(true);
             $table->unsignedInteger('internship_id')->nullable(false);
-            // evaluation author, whose referential integrity is enforced by input validation rules
-            $table->unsignedInteger('clinical_tutor_id')->nullable(false);
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('internship_id')->references('id')->on('internships');
         });
-
-        // @todo assess whether to create a clinical tutor importer
     }
 
     /**

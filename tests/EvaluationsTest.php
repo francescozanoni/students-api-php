@@ -37,7 +37,6 @@ class EvaluationsTest extends TestCase
                                 'is_optional' => false,
                                 'is_interrupted' => false
                             ],
-                            'clinical_tutor_id' => 456,
                             'notes' => 'First evaluation notes',
                         ],
                         EvaluationsTableSeeder::generateItemValues($this->app['config']['internships']['evaluations']['items'])
@@ -81,7 +80,6 @@ class EvaluationsTest extends TestCase
                             'is_optional' => false,
                             'is_interrupted' => false
                         ],
-                        'clinical_tutor_id' => 456,
                         'notes' => 'First evaluation notes',
                     ],
                     EvaluationsTableSeeder::generateItemValues($this->app['config']['internships']['evaluations']['items'])
@@ -150,7 +148,6 @@ class EvaluationsTest extends TestCase
                 'data' => array_merge(
                     [
                         'id' => 1,
-                        'clinical_tutor_id' => 456,
                         'notes' => 'First evaluation notes',
                     ],
                     EvaluationsTableSeeder::generateItemValues($this->app['config']['internships']['evaluations']['items'])
@@ -215,7 +212,6 @@ class EvaluationsTest extends TestCase
             '/internships/3/evaluation',
             array_merge(
                 [
-                    'clinical_tutor_id' => 123,
                     'notes' => 'Another evaluation notes',
                 ],
                 EvaluationsTableSeeder::generateItemValues($this->app['config']['internships']['evaluations']['items'])
@@ -228,23 +224,20 @@ class EvaluationsTest extends TestCase
                 'data' => array_merge(
                     [
                         'id' => 3,
-                        'clinical_tutor_id' => 123,
                         'notes' => 'Another evaluation notes',
                     ],
                     EvaluationsTableSeeder::generateItemValues($this->app['config']['internships']['evaluations']['items'])
                 )
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('evaluations', ['id' => 3, 'internship_id' => 3, 'clinical_tutor_id' => 123, 'notes' => 'Another evaluation notes', 'deleted_at' => null])
+            ->seeInDatabase('evaluations', ['id' => 3, 'internship_id' => 3, 'notes' => 'Another evaluation notes', 'deleted_at' => null])
             ->notSeeInDatabase('evaluations', ['id' => 4]);
 
         // Existing internship, no notes
         $this->json('POST',
             '/internships/2/evaluation',
             array_merge(
-                [
-                    'clinical_tutor_id' => 123,
-                ],
+                [],
                 EvaluationsTableSeeder::generateItemValues($this->app['config']['internships']['evaluations']['items'])
             )
         )
@@ -255,13 +248,12 @@ class EvaluationsTest extends TestCase
                 'data' => array_merge(
                     [
                         'id' => 4,
-                        'clinical_tutor_id' => 123,
                     ],
                     EvaluationsTableSeeder::generateItemValues($this->app['config']['internships']['evaluations']['items'])
                 ),
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('evaluations', ['id' => 4, 'internship_id' => 2, 'clinical_tutor_id' => 123, 'notes' => null, 'deleted_at' => null])
+            ->seeInDatabase('evaluations', ['id' => 4, 'internship_id' => 2, 'notes' => null, 'deleted_at' => null])
             ->notSeeInDatabase('evaluations', ['id' => 5]);
 
         // @todo add tests with items
@@ -279,7 +271,6 @@ class EvaluationsTest extends TestCase
             '/internships/999/evaluation',
             array_merge(
                 [
-                    'clinical_tutor_id' => 123,
                     'notes' => 'Another evaluation notes',
                 ],
                 EvaluationsTableSeeder::generateItemValues($this->app['config']['internships']['evaluations']['items'])
@@ -299,7 +290,6 @@ class EvaluationsTest extends TestCase
             '/internships/abc/evaluation',
             array_merge(
                 [
-                    'clinical_tutor_id' => 123,
                     'notes' => 'Another evaluation notes',
                 ],
                 EvaluationsTableSeeder::generateItemValues($this->app['config']['internships']['evaluations']['items'])
@@ -328,7 +318,6 @@ class EvaluationsTest extends TestCase
             '/internships/1/evaluation',
             array_merge(
                 [
-                    'clinical_tutor_id' => 123,
                     'notes' => 'Another evaluation notes',
                 ],
                 EvaluationsTableSeeder::generateItemValues($this->app['config']['internships']['evaluations']['items'])
@@ -352,7 +341,6 @@ class EvaluationsTest extends TestCase
             '/internships/4/evaluation',
             array_merge(
                 [
-                    'clinical_tutor_id' => 123,
                     'notes' => 'Another evaluation notes',
                 ],
                 EvaluationsTableSeeder::generateItemValues($this->app['config']['internships']['evaluations']['items'])
@@ -366,30 +354,6 @@ class EvaluationsTest extends TestCase
                     'internship_id' => [
                         'Internship not started yet',
                     ],
-                ]
-            ])
-            ->seeStatusCode(400)
-            ->notSeeInDatabase('evaluations', ['id' => 3]);
-
-        // Missing required clinical_tutor_id
-        $this->json('POST',
-            '/internships/3/evaluation',
-            array_merge(
-                [
-                    'notes' => 'Another evaluation notes',
-                ],
-                EvaluationsTableSeeder::generateItemValues($this->app['config']['internships']['evaluations']['items'])
-            )
-        )
-            ->seeJsonEquals([
-                'status_code' => 400,
-                'status' => 'Bad Request',
-                'message' => 'Request is not valid',
-                'data' => [
-                    'clinical_tutor_id' => [
-                        'code error_required',
-                        'in body',
-                    ]
                 ]
             ])
             ->seeStatusCode(400)
@@ -409,7 +373,6 @@ class EvaluationsTest extends TestCase
             '/evaluations/1',
             array_merge(
                 [
-                    'clinical_tutor_id' => 456,
                     'notes' => 'First evaluation notes modified', // --> modified
                 ],
                 EvaluationsTableSeeder::generateItemValues($this->app['config']['internships']['evaluations']['items'])
@@ -441,7 +404,6 @@ class EvaluationsTest extends TestCase
                             'is_optional' => false,
                             'is_interrupted' => false
                         ],
-                        'clinical_tutor_id' => 456,
                         'notes' => 'First evaluation notes modified',
                     ],
                     EvaluationsTableSeeder::generateItemValues($this->app['config']['internships']['evaluations']['items'])
@@ -456,9 +418,7 @@ class EvaluationsTest extends TestCase
         $this->json('PUT',
             '/evaluations/1',
             array_merge(
-                [
-                    'clinical_tutor_id' => 456,
-                ],
+                [],
                 EvaluationsTableSeeder::generateItemValues($this->app['config']['internships']['evaluations']['items'])
             )
         )
@@ -488,7 +448,6 @@ class EvaluationsTest extends TestCase
                             'is_optional' => false,
                             'is_interrupted' => false
                         ],
-                        'clinical_tutor_id' => 456,
                     ],
                     EvaluationsTableSeeder::generateItemValues($this->app['config']['internships']['evaluations']['items'])
                 ),
@@ -511,7 +470,6 @@ class EvaluationsTest extends TestCase
             '/evaluations/999',
             array_merge(
                 [
-                    'clinical_tutor_id' => 789,
                     'notes' => 'Second evaluation notes modified', // --> modified
                 ],
                 EvaluationsTableSeeder::generateItemValues($this->app['config']['internships']['evaluations']['items'])
@@ -531,7 +489,6 @@ class EvaluationsTest extends TestCase
             '/evaluations/abc',
             array_merge(
                 [
-                    'clinical_tutor_id' => 789,
                     'notes' => 'Second evaluation notes modified', // --> modified
                 ],
                 EvaluationsTableSeeder::generateItemValues($this->app['config']['internships']['evaluations']['items'])
@@ -554,56 +511,6 @@ class EvaluationsTest extends TestCase
             ->seeStatusCode(400)
             ->notSeeInDatabase('evaluations', ['id' => 'abc'])
             ->notSeeInDatabase('evaluations', ['id' => 3]);
-
-        // Different clinical tutor
-        $this->json('PUT',
-            '/evaluations/1',
-            array_merge(
-                [
-                    'clinical_tutor_id' => 123,  // --> modified
-                    'notes' => 'First evaluation notes',
-                ],
-                EvaluationsTableSeeder::generateItemValues($this->app['config']['internships']['evaluations']['items'])
-            )
-        )
-            ->seeJsonEquals([
-                'status_code' => 400,
-                'status' => 'Bad Request',
-                'message' => 'Request is not valid',
-                'data' => [
-                    'clinical_tutor_id' => [
-                        'The clinical tutor id cannot be changed',
-                    ],
-                ]
-            ])
-            ->seeStatusCode(400)
-            ->seeInDatabase('evaluations', ['id' => 1, 'clinical_tutor_id' => 456])
-            ->notSeeInDatabase('evaluations', ['id' => 1, 'clinical_tutor_id' => 123]);
-
-        // Missing required clinical_tutor_id
-        $this->json('PUT',
-            '/evaluations/1',
-            array_merge(
-                [
-                    'notes' => 'Another evaluation notes', // --> modified
-                ],
-                EvaluationsTableSeeder::generateItemValues($this->app['config']['internships']['evaluations']['items'])
-            )
-        )
-            ->seeJsonEquals([
-                'status_code' => 400,
-                'status' => 'Bad Request',
-                'message' => 'Request is not valid',
-                'data' => [
-                    'clinical_tutor_id' => [
-                        'code error_required',
-                        'in body',
-                    ]
-                ]
-            ])
-            ->seeStatusCode(400)
-            ->seeInDatabase('evaluations', ['id' => 1, 'notes' => 'First evaluation notes'])
-            ->notSeeInDatabase('evaluations', ['id' => 1, 'notes' => 'Another evaluation notes']);
 
         // @todo add further tests related to invalid attribute format
         // @todo add tests related to items

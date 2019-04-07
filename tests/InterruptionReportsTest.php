@@ -36,7 +36,6 @@ class InterruptionReportsTest extends TestCase
                             'is_optional' => true,
                             'is_interrupted' => true
                         ],
-                        'clinical_tutor_id' => 789,
                         'notes' => 'Second interruption report notes',
                     ],
                 ]
@@ -77,7 +76,6 @@ class InterruptionReportsTest extends TestCase
                         'is_optional' => true,
                         'is_interrupted' => true,
                     ],
-                    'clinical_tutor_id' => 789,
                     'notes' => 'Second interruption report notes',
                 ],
             ])
@@ -143,7 +141,6 @@ class InterruptionReportsTest extends TestCase
                 'message' => 'Resource successfully retrieved/created/modified',
                 'data' => [
                     'id' => 2,
-                    'clinical_tutor_id' => 789,
                     'notes' => 'Second interruption report notes',
                 ],
             ])
@@ -205,7 +202,6 @@ class InterruptionReportsTest extends TestCase
         $this->json('POST',
             '/internships/3/interruption_report',
             [
-                'clinical_tutor_id' => 123,
                 'notes' => 'Another interruption report notes',
             ]
         )
@@ -215,12 +211,11 @@ class InterruptionReportsTest extends TestCase
                 'message' => 'Resource successfully retrieved/created/modified',
                 'data' => [
                     'id' => 3,
-                    'clinical_tutor_id' => 123,
                     'notes' => 'Another interruption report notes',
                 ],
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('interruption_reports', ['id' => 3, 'internship_id' => 3, 'clinical_tutor_id' => 123, 'deleted_at' => null])
+            ->seeInDatabase('interruption_reports', ['id' => 3, 'internship_id' => 3, 'deleted_at' => null])
             ->notSeeInDatabase('interruption_reports', ['id' => 4]);
 
     }
@@ -235,7 +230,6 @@ class InterruptionReportsTest extends TestCase
         $this->json('POST',
             '/internships/999/interruption_report',
             [
-                'clinical_tutor_id' => 123,
                 'notes' => 'Another interruption report notes',
             ]
         )
@@ -252,7 +246,6 @@ class InterruptionReportsTest extends TestCase
         $this->json('POST',
             '/internships/abc/interruption_report',
             [
-                'clinical_tutor_id' => 123,
                 'notes' => 'Another interruption report notes',
             ]
         )
@@ -278,7 +271,6 @@ class InterruptionReportsTest extends TestCase
         $this->json('POST',
             '/internships/1/interruption_report',
             [
-                'clinical_tutor_id' => 123,
                 'notes' => 'Another interruption report notes',
             ]
         )
@@ -300,7 +292,6 @@ class InterruptionReportsTest extends TestCase
         $this->json('POST',
             '/internships/2/interruption_report',
             [
-                'clinical_tutor_id' => 123,
                 'notes' => 'Another interruption report notes',
             ]
         )
@@ -321,7 +312,6 @@ class InterruptionReportsTest extends TestCase
         $this->json('POST',
             '/internships/4/interruption_report',
             [
-                'clinical_tutor_id' => 123,
                 'notes' => 'Another interruption report notes',
             ]
         )
@@ -338,42 +328,18 @@ class InterruptionReportsTest extends TestCase
             ->seeStatusCode(400)
             ->notSeeInDatabase('interruption_reports', ['id' => 3]);
 
-        // Missing required clinical_tutor_id
+        // Missing required notes (since request body is made only of notes, the reported error is about the empty body)
         $this->json('POST',
             '/internships/3/interruption_report',
-            [
-                'notes' => 'Another interruption report notes',
-            ]
+            []
         )
             ->seeJsonEquals([
                 'status_code' => 400,
                 'status' => 'Bad Request',
                 'message' => 'Request is not valid',
                 'data' => [
-                    'clinical_tutor_id' => [
+                    'requestBody' => [
                         'code error_required',
-                        'in body',
-                    ]
-                ]
-            ])
-            ->seeStatusCode(400)
-            ->notSeeInDatabase('interruption_reports', ['id' => 3]);
-
-        // Missing required notes
-        $this->json('POST',
-            '/internships/3/interruption_report',
-            [
-                'clinical_tutor_id' => 123,
-            ]
-        )
-            ->seeJsonEquals([
-                'status_code' => 400,
-                'status' => 'Bad Request',
-                'message' => 'Request is not valid',
-                'data' => [
-                    'notes' => [
-                        'code error_required',
-                        'in body',
                     ]
                 ]
             ])
@@ -393,7 +359,6 @@ class InterruptionReportsTest extends TestCase
         $this->json('PUT',
             '/interruption_reports/2',
             [
-                'clinical_tutor_id' => 789,
                 'notes' => 'Second interruption report notes modified', // --> modified
             ]
         )
@@ -422,7 +387,6 @@ class InterruptionReportsTest extends TestCase
                         'is_optional' => true,
                         'is_interrupted' => true
                     ],
-                    'clinical_tutor_id' => 789,
                     'notes' => 'Second interruption report notes modified',
                 ],
             ])
@@ -443,7 +407,6 @@ class InterruptionReportsTest extends TestCase
         $this->json('PUT',
             '/interruption_reports/999',
             [
-                'clinical_tutor_id' => 789,
                 'notes' => 'Second interruption report notes modified', // --> modified
             ]
         )
@@ -460,7 +423,6 @@ class InterruptionReportsTest extends TestCase
         $this->json('PUT',
             '/interruption_reports/abc',
             [
-                'clinical_tutor_id' => 789,
                 'notes' => 'Second interruption report notes modified', // --> modified
             ]
         )
@@ -482,71 +444,23 @@ class InterruptionReportsTest extends TestCase
             ->notSeeInDatabase('interruption_reports', ['id' => 'abc'])
             ->notSeeInDatabase('interruption_reports', ['id' => 3]);
 
-        // Different clinical tutor
+        // Missing required notes (since request body is made only of notes, the reported error is about the empty body)
         $this->json('PUT',
             '/interruption_reports/2',
-            [
-                'clinical_tutor_id' => 123,  // --> modified
-                'notes' => 'Second interruption report notes',
-            ]
+            []
         )
             ->seeJsonEquals([
                 'status_code' => 400,
                 'status' => 'Bad Request',
                 'message' => 'Request is not valid',
                 'data' => [
-                    'clinical_tutor_id' => [
-                        'The clinical tutor id cannot be changed',
-                    ],
-                ]
-            ])
-            ->seeStatusCode(400)
-            ->seeInDatabase('interruption_reports', ['id' => 2, 'clinical_tutor_id' => 789])
-            ->notSeeInDatabase('interruption_reports', ['id' => 2, 'clinical_tutor_id' => 123]);
-
-        // Missing required clinical_tutor_id
-        $this->json('PUT',
-            '/interruption_reports/2',
-            [
-                'notes' => 'Another interruption report notes', // --> modified
-            ]
-        )
-            ->seeJsonEquals([
-                'status_code' => 400,
-                'status' => 'Bad Request',
-                'message' => 'Request is not valid',
-                'data' => [
-                    'clinical_tutor_id' => [
+                    'requestBody' => [
                         'code error_required',
-                        'in body',
                     ]
                 ]
             ])
             ->seeStatusCode(400)
-            ->seeInDatabase('interruption_reports', ['id' => 2, 'notes' => 'Second interruption report notes'])
-            ->notSeeInDatabase('interruption_reports', ['id' => 2, 'notes' => 'Another interruption report notes']);
-
-        // Missing required notes
-        $this->json('PUT',
-            '/interruption_reports/2',
-            [
-                'clinical_tutor_id' => 123, // --> modified
-            ]
-        )
-            ->seeJsonEquals([
-                'status_code' => 400,
-                'status' => 'Bad Request',
-                'message' => 'Request is not valid',
-                'data' => [
-                    'notes' => [
-                        'code error_required',
-                        'in body',
-                    ]
-                ]
-            ])
-            ->seeStatusCode(400)
-            ->seeInDatabase('interruption_reports', ['id' => 2, 'clinical_tutor_id' => 789])
-            ->notSeeInDatabase('interruption_reports', ['id' => 2, 'clinical_tutor_id' => 123]);
+            ->seeInDatabase('interruption_reports', ['id' => 2]);
 
         // @todo add further tests related to invalid attribute format
 

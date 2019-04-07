@@ -1530,7 +1530,6 @@ components:
                 -
                   id: 1
                   notes: 'First evaluation notes'
-                  clinical_tutor_id: 456
                   internship:
                     id: 1
                     location: 'Location 1'
@@ -1551,7 +1550,6 @@ components:
                 -
                   id: 2
                   notes: 'Second evaluation notes'
-                  clinical_tutor_id: 789
                   internship:
                     id: 2
                     location: 'Location 2'
@@ -1597,7 +1595,6 @@ components:
               data:
                 id: 1
                 notes: 'First evaluation notes'
-                clinical_tutor_id: 456
                 internship:
                   id: 1
                   location: 'Location 1'
@@ -1647,7 +1644,6 @@ components:
                 -
                   id: 1
                   notes: 'First interruption report notes'
-                  clinical_tutor_id: 456
                   internship:
                     id: 1
                     location: 'Location 1'
@@ -1668,7 +1664,6 @@ components:
                 -
                   id: 2
                   notes: 'Second interruption report notes'
-                  clinical_tutor_id: 789
                   internship:
                     id: 2
                     location: 'Location 2'
@@ -1714,7 +1709,6 @@ components:
               data:
                 id: 1
                 notes: 'First interruption report notes'
-                clinical_tutor_id: 456
                 internship:
                   id: 1
                   location: 'Location 1'
@@ -2150,14 +2144,9 @@ components:
       properties:
         notes:
           type: string
-        clinical_tutor_id:
-          type: integer
-      required:
-        - clinical_tutor_id
       additionalProperties: false
       example:
         notes: 'First evaluation notes'
-        clinical_tutor_id: 456
     Evaluation:
       allOf:
         -
@@ -2175,7 +2164,6 @@ components:
       example:
         id: 1
         notes: 'First evaluation notes'
-        clinical_tutor_id: 456
         internship:
           id: 1
           location: 'Location 1'
@@ -2199,15 +2187,11 @@ components:
         notes:
           type: string
           minLength: 20
-        clinical_tutor_id:
-          type: integer
       required:
-        - clinical_tutor_id
         - notes
       additionalProperties: false
       example:
         notes: 'First interruption report notes'
-        clinical_tutor_id: 456
     InterruptionReport:
       allOf:
         -
@@ -2225,7 +2209,6 @@ components:
       example:
         id: 1
         notes: 'First interruption report notes'
-        clinical_tutor_id: 456
         internship:
           id: 1
           location: 'Location 1'

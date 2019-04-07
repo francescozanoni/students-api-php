@@ -14,7 +14,6 @@ class EvaluationsTableSeeder extends Seeder
 
         $record = [
             'internship_id' => 1,
-            'clinical_tutor_id' => 456,
             'notes' => 'First evaluation notes',
             'created_at' => '2019-01-25 02:00:00',
             'updated_at' => '2019-01-25 02:00:00',
@@ -24,7 +23,6 @@ class EvaluationsTableSeeder extends Seeder
 
         $record = [
             'internship_id' => 1,
-            'clinical_tutor_id' => 789,
             'notes' => 'Second evaluation notes',
             'created_at' => '2019-01-26 02:00:00',
             'updated_at' => '2019-01-26 02:00:00',

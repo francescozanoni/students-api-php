@@ -261,34 +261,9 @@ class ValidateRequest
                         throw ValidationException::withMessages(['internship_id' => ['Internship not started yet']]);
                     }
                 }
-                Validator::make(
-                // @todo validate clinical_tutor_id against clinical_tutors table
-                    $request->request->all(),
-                    [
-                        // 'clinical_tutor_id' => 'exists:clinical_tutors,id'
-                    ],
-                    [
-                        // 'clinical_tutor_id.exists' => 'The :attribute must exist'
-                    ]
-                )->validate();
                 break;
 
             case 'updateEvaluationById':
-                $evaluation = Evaluation::find(app('current_route_path_parameters')['id']);
-                if ($evaluation) {
-                    Validator::make(
-                    // @todo validate clinical_tutor_id against clinical_tutors table
-                        $request->request->all(),
-                        [
-                            // 'clinical_tutor_id' => 'exists:clinical_tutors,id'
-                            'clinical_tutor_id' => 'in:' . $evaluation->clinical_tutor_id,
-                        ],
-                        [
-                            // 'clinical_tutor_id.exists' => 'The :attribute must exist'
-                            'clinical_tutor_id.in' => 'The :attribute cannot be changed',
-                        ]
-                    )->validate();
-                }
                 break;
 
             case 'createInternshipInterruptionReport':
@@ -309,16 +284,6 @@ class ValidateRequest
                         throw ValidationException::withMessages(['internship_id' => ['Internship not started yet']]);
                     }
                 }
-                Validator::make(
-                // @todo validate clinical_tutor_id against clinical_tutors table
-                    $request->request->all(),
-                    [
-                        // 'clinical_tutor_id' => 'exists:clinical_tutors,id'
-                    ],
-                    [
-                        // 'clinical_tutor_id.exists' => 'The :attribute must exist'
-                    ]
-                )->validate();
                 break;
 
             case 'updateInterruptionReportById':
@@ -328,18 +293,6 @@ class ValidateRequest
                     if ((new InternshipResource($interruptionReport->internship))->toArray($request)['is_interrupted'] !== true) {
                         throw ValidationException::withMessages(['internship_id' => ['Internship is not interrupted']]);
                     }
-                    Validator::make(
-                    // @todo validate clinical_tutor_id against clinical_tutors table
-                        $request->request->all(),
-                        [
-                            // 'clinical_tutor_id' => 'exists:clinical_tutors,id'
-                            'clinical_tutor_id' => 'in:' . $interruptionReport->clinical_tutor_id,
-                        ],
-                        [
-                            // 'clinical_tutor_id.exists' => 'The :attribute must exist'
-                            'clinical_tutor_id.in' => 'The :attribute cannot be changed',
-                        ]
-                    )->validate();
                 }
                 break;
 
