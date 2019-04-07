@@ -25,7 +25,7 @@ return [
     'user' => [
         'morph_prefix' => 'user',
         'guards'       => [
-            'web',
+            // 'web', --> Lumen uses 'api' guard by default
             'api',
         ],
     ],

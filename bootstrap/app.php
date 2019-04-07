@@ -30,6 +30,7 @@ $app->configure('openapi');
 $app->configure('database');
 $app->configure('internships');
 $app->configure('erd-generator');
+$app->configure('audit');
 
 /*
 |--------------------------------------------------------------------------
@@ -92,7 +93,7 @@ $app->routeMiddleware([
 */
 
 $app->register(App\Providers\AppServiceProvider::class);
-// $app->register(App\Providers\AuthServiceProvider::class);
+$app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 $app->register(App\Providers\RouteServiceProvider::class);
 $app->register(App\Providers\ValidationServiceProvider::class);
