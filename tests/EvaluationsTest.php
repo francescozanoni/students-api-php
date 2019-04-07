@@ -39,8 +39,6 @@ class EvaluationsTest extends TestCase
                             ],
                             'clinical_tutor_id' => 456,
                             'notes' => 'First evaluation notes',
-                            'created_at' => '2019-01-25 02:00:00',
-                            'updated_at' => '2019-01-25 02:00:00',
                         ],
                         EvaluationsTableSeeder::generateItemValues($this->app['config']['internships']['evaluations']['items'])
                     ),
@@ -85,8 +83,6 @@ class EvaluationsTest extends TestCase
                         ],
                         'clinical_tutor_id' => 456,
                         'notes' => 'First evaluation notes',
-                        'created_at' => '2019-01-25 02:00:00',
-                        'updated_at' => '2019-01-25 02:00:00',
                     ],
                     EvaluationsTableSeeder::generateItemValues($this->app['config']['internships']['evaluations']['items'])
                 ),
@@ -156,8 +152,6 @@ class EvaluationsTest extends TestCase
                         'id' => 1,
                         'clinical_tutor_id' => 456,
                         'notes' => 'First evaluation notes',
-                        'created_at' => '2019-01-25 02:00:00',
-                        'updated_at' => '2019-01-25 02:00:00',
                     ],
                     EvaluationsTableSeeder::generateItemValues($this->app['config']['internships']['evaluations']['items'])
                 ),
@@ -236,8 +230,6 @@ class EvaluationsTest extends TestCase
                         'id' => 3,
                         'clinical_tutor_id' => 123,
                         'notes' => 'Another evaluation notes',
-                        'created_at' => date('Y-m-d H:i:s'),
-                        'updated_at' => date('Y-m-d H:i:s'),
                     ],
                     EvaluationsTableSeeder::generateItemValues($this->app['config']['internships']['evaluations']['items'])
                 )
@@ -264,8 +256,6 @@ class EvaluationsTest extends TestCase
                     [
                         'id' => 4,
                         'clinical_tutor_id' => 123,
-                        'created_at' => date('Y-m-d H:i:s'),
-                        'updated_at' => date('Y-m-d H:i:s'),
                     ],
                     EvaluationsTableSeeder::generateItemValues($this->app['config']['internships']['evaluations']['items'])
                 ),
@@ -453,8 +443,6 @@ class EvaluationsTest extends TestCase
                         ],
                         'clinical_tutor_id' => 456,
                         'notes' => 'First evaluation notes modified',
-                        'created_at' => '2019-01-25 02:00:00',
-                        'updated_at' => date('Y-m-d H:i:s'),
                     ],
                     EvaluationsTableSeeder::generateItemValues($this->app['config']['internships']['evaluations']['items'])
                 ),
@@ -501,8 +489,6 @@ class EvaluationsTest extends TestCase
                             'is_interrupted' => false
                         ],
                         'clinical_tutor_id' => 456,
-                        'created_at' => '2019-01-25 02:00:00',
-                        'updated_at' => date('Y-m-d H:i:s'),
                     ],
                     EvaluationsTableSeeder::generateItemValues($this->app['config']['internships']['evaluations']['items'])
                 ),

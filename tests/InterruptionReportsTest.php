@@ -38,8 +38,6 @@ class InterruptionReportsTest extends TestCase
                         ],
                         'clinical_tutor_id' => 789,
                         'notes' => 'Second interruption report notes',
-                        'created_at' => '2019-01-31 02:00:00',
-                        'updated_at' => '2019-01-31 02:00:00',
                     ],
                 ]
             ])
@@ -81,8 +79,6 @@ class InterruptionReportsTest extends TestCase
                     ],
                     'clinical_tutor_id' => 789,
                     'notes' => 'Second interruption report notes',
-                    'created_at' => '2019-01-31 02:00:00',
-                    'updated_at' => '2019-01-31 02:00:00',
                 ],
             ])
             ->seeStatusCode(200);
@@ -149,8 +145,6 @@ class InterruptionReportsTest extends TestCase
                     'id' => 2,
                     'clinical_tutor_id' => 789,
                     'notes' => 'Second interruption report notes',
-                    'created_at' => '2019-01-31 02:00:00',
-                    'updated_at' => '2019-01-31 02:00:00',
                 ],
             ])
             ->seeStatusCode(200);
@@ -223,8 +217,6 @@ class InterruptionReportsTest extends TestCase
                     'id' => 3,
                     'clinical_tutor_id' => 123,
                     'notes' => 'Another interruption report notes',
-                    'created_at' => date('Y-m-d H:i:s'),
-                    'updated_at' => date('Y-m-d H:i:s'),
                 ],
             ])
             ->seeStatusCode(200)
@@ -432,8 +424,6 @@ class InterruptionReportsTest extends TestCase
                     ],
                     'clinical_tutor_id' => 789,
                     'notes' => 'Second interruption report notes modified',
-                    'created_at' => '2019-01-31 02:00:00',
-                    'updated_at' => date('Y-m-d H:i:s'),
                 ],
             ])
             ->seeStatusCode(200)

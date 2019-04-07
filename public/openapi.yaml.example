@@ -1504,8 +1504,6 @@ components:
                       e_mail: john.doe@foo.com
                       phone: 1234-567890
                       nationality: GB
-                  created_at: '2019-01-21 01:00:00'
-                  updated_at: '2019-01-21 01:00:00'
                 - id: 2
                   notes: Second evaluation notes
                   clinical_tutor_id: 789
@@ -1525,8 +1523,6 @@ components:
                       last_name: Doe
                       e_mail: jane.doe@bar.com
                       nationality: CA
-                  created_at: '2019-01-19 01:00:00'
-                  updated_at: '2019-01-19 01:00:00'
     Evaluation:
       description: Response returning an internship evaluation
       content:
@@ -1574,8 +1570,6 @@ components:
                     e_mail: john.doe@foo.com
                     phone: 1234-567890
                     nationality: GB
-                created_at: '2019-01-21 01:00:00'
-                updated_at: '2019-01-21 01:00:00'
     InterruptionReports:
       description: Response returning a list of internship interruption reports
       content:
@@ -1625,8 +1619,6 @@ components:
                       e_mail: john.doe@foo.com
                       phone: 1234-567890
                       nationality: GB
-                  created_at: '2019-01-21 01:00:00'
-                  updated_at: '2019-01-21 01:00:00'
                 - id: 2
                   notes: Second interruption report notes
                   clinical_tutor_id: 789
@@ -1646,8 +1638,6 @@ components:
                       last_name: Doe
                       e_mail: jane.doe@bar.com
                       nationality: CA
-                  created_at: '2019-01-19 01:00:00'
-                  updated_at: '2019-01-19 01:00:00'
     InterruptionReport:
       description: Response returning an internship interruption report
       content:
@@ -1695,8 +1685,6 @@ components:
                     e_mail: john.doe@foo.com
                     phone: 1234-567890
                     nationality: GB
-                created_at: '2019-01-21 01:00:00'
-                updated_at: '2019-01-21 01:00:00'
     Eligibilities:
       description: 'Response returning a list of eligibilities'
       content:
@@ -2123,16 +2111,9 @@ components:
               type: integer
             internship:
               $ref: '#/components/schemas/Internship'
-            created_at:
-              type: string
-              pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$'
-            updated_at:
-              type: string
-              pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$'
           required:
             - id
             # internship is not required because it is omitted in case internship ID is a path parameter
-            - created_at
           additionalProperties: false
       example:
         id: 1
@@ -2155,8 +2136,6 @@ components:
             e_mail: john.doe@foo.com
             phone: 1234-567890
             nationality: GB
-        created_at: '2019-01-21 01:00:00'
-        updated_at: '2019-01-21 01:00:00'
     NewInterruptionReport:
       type: object
       properties:
@@ -2181,16 +2160,9 @@ components:
               type: integer
             internship:
               $ref: '#/components/schemas/Internship'
-            created_at:
-              type: string
-              pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$'
-            updated_at:
-              type: string
-              pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$'
           required:
             - id
             # internship is not required because it is omitted in case internship ID is a path parameter
-            - created_at
           additionalProperties: false
       example:
         id: 1
@@ -2213,8 +2185,6 @@ components:
             e_mail: john.doe@foo.com
             phone: 1234-567890
             nationality: GB
-        created_at: '2019-01-21 01:00:00'
-        updated_at: '2019-01-21 01:00:00'
     NewEligibility:
       type: object
       properties:

@@ -24,9 +24,6 @@ class Evaluation extends JsonResource
             // This field is returned as string, but cannot understand why...
             'clinical_tutor_id' => (int)$this->clinical_tutor_id,
 
-            'created_at' => (string)$this->created_at,
-            'updated_at' => (string)$this->updated_at,
-
         ];
 
         foreach (config('internships.evaluations.items') as $item) {
