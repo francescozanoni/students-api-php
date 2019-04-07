@@ -21,7 +21,7 @@ class ConfigureOpenApiSchemaTest extends TestCase
      */
     private $testSchemaFilePath;
 
-    public function setup()
+    public function setup() : void
     {
         parent::setup();
 
@@ -38,7 +38,7 @@ class ConfigureOpenApiSchemaTest extends TestCase
         file_put_contents($this->originalSchemaFilePath, $newSchemaFileContent);
     }
 
-    public function teardown()
+    public function teardown() : void
     {
         // Restore original OpenAPI schema.
         unlink($this->originalSchemaFilePath);

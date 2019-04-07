@@ -15,10 +15,11 @@
     "ext-json": "*",
     "ext-zip": "*",
     "hkarlstrom/openapi-validation-middleware": "^0.3.0",
-    "laravel/lumen-framework": "5.7.*",
+    "laravel/lumen-framework": "5.8.*",
+    "owen-it/laravel-auditing": "^9.0",
     "swagger-api/swagger-ui": "^3.20",
     "symfony/psr-http-message-bridge": "^1.1",
-    "vlucas/phpdotenv": "~2.2",
+    "vlucas/phpdotenv": "^3.3",
     "zendframework/zend-diactoros": "^2.1"
   },
   "require-dev": {

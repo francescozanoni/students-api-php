@@ -1,6 +1,7 @@
 <?php
 declare(strict_types = 1);
 
+use Illuminate\Support\Arr;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use PHPUnit\Framework\Assert as PHPUnit;
 
@@ -14,7 +15,7 @@ abstract class TestCase extends Laravel\Lumen\Testing\TestCase
      */
     protected $secondsToShiftCreatedUpdatedDeletedAt = 5;
 
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
         app(DatabaseSeeder::class)->run();
@@ -45,11 +46,11 @@ abstract class TestCase extends Laravel\Lumen\Testing\TestCase
     public function seeJsonEquals(array $data) : self
     {
 
-        $actual = json_encode(array_sort_recursive(
+        $actual = json_encode(Arr::sortRecursive(
             json_decode($this->response->getContent(), true)
         ));
 
-        $data = json_encode(array_sort_recursive(
+        $data = json_encode(Arr::sortRecursive(
             json_decode(json_encode($data), true)
         ));
 
