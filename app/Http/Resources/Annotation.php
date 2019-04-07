@@ -21,8 +21,6 @@ class Annotation extends JsonResource
             'title' => $this->title,
             'content' => $this->content,
             'student' => $this->when($this->withStudentAttribute($request) === true, new StudentResource($this->student)),
-            'created_at' => (string)$this->created_at,
-            'updated_at' => (string)$this->updated_at,
 
         ];
 

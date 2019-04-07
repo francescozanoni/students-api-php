@@ -27,8 +27,6 @@ class AnnotationsTest extends TestCase
                             'phone' => '1234-567890',
                             'nationality' => 'GB',
                         ],
-                        'created_at' => '2019-01-01 01:00:00',
-                        'updated_at' => '2019-01-01 01:00:00',
                     ],
                 ]
             ])
@@ -59,8 +57,6 @@ class AnnotationsTest extends TestCase
                         'phone' => '1234-567890',
                         'nationality' => 'GB',
                     ],
-                    'created_at' => '2019-01-01 01:00:00',
-                    'updated_at' => '2019-01-01 01:00:00',
                 ],
             ])
             ->seeStatusCode(200);
@@ -119,8 +115,6 @@ class AnnotationsTest extends TestCase
                         'id' => 1,
                         'title' => 'First title',
                         'content' => 'First content',
-                        'created_at' => '2019-01-01 01:00:00',
-                        'updated_at' => '2019-01-01 01:00:00',
                     ]
                 ],
             ])
@@ -194,8 +188,6 @@ class AnnotationsTest extends TestCase
                     'id' => 2,
                     'title' => 'Second title',
                     'content' => 'Second content',
-                    'created_at' => date('Y-m-d H:i:s'),
-                    'updated_at' => date('Y-m-d H:i:s'),
                 ],
             ])
             ->seeStatusCode(200)
@@ -418,8 +410,6 @@ class AnnotationsTest extends TestCase
                         'phone' => '1234-567890',
                         'nationality' => 'GB',
                     ],
-                    'created_at' => '2019-01-01 01:00:00',
-                    'updated_at' => date('Y-m-d H:i:s'),
                 ]
             ])
             ->seeStatusCode(200)
