@@ -4,7 +4,7 @@ declare(strict_types = 1);
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class EligibilitesTableSeeder extends Seeder
+class EligibilitiesTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.

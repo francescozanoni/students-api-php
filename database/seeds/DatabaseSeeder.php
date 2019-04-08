@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
         $this->call('EducationalActivityAttendancesTableSeeder');
         $this->call('EvaluationsTableSeeder');
         $this->call('InterruptionReportsTableSeeder');
-        $this->call('EligibilitesTableSeeder');
+        $this->call('EligibilitiesTableSeeder');
         $this->call('OshCourseAttendancesTableSeeder');
     }
 }
