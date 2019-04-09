@@ -42,14 +42,13 @@ class EvaluationsTableSeeder extends Seeder
      *
      * @param array $itemDefinitions e.g. Array (
      *                                      [0] => Array (
-     *                                        [name] => item_1_1
+     *                                        [name] => item_1
      *                                        [values] => Array (
      *                                          [0] => A
      *                                          [1] => B
      *                                          [2] => C
      *                                          [3] => D
      *                                          [4] => E
-     *                                          [5] => NV
      *                                        )
      *                                        [required] => true
      *                                      )
@@ -57,7 +56,7 @@ class EvaluationsTableSeeder extends Seeder
      *                                    )
      *
      * @return array e.g. Array (
-     *                      [item_1_1] => A
+     *                      [item_1] => A
      *                      [...]
      *                    )
      */

@@ -7,38 +7,34 @@ return [
             $items = [];
             /* .env items such as
              *
-             *   EVALUATION_ITEM_01_NAME=item_1_1
-             *   EVALUATION_ITEM_01_VALUES=A,B,C,D,E,NV
+             *   EVALUATION_ITEM_01_NAME=item_1
+             *   EVALUATION_ITEM_01_VALUES=A,B,C,D,E
              *   EVALUATION_ITEM_01_REQUIRED=true
              *
-             *   EVALUATION_ITEM_02_NAME=item_1_2
-             *   EVALUATION_ITEM_02_VALUES=A,B,C,D,E,NV
+             *   EVALUATION_ITEM_02_NAME=item_2
+             *   EVALUATION_ITEM_02_VALUES=F,G,H
              *   EVALUATION_ITEM_02_REQUIRED=false
              *
              * become
              *
              *   Array (
              *     [0] => Array (
-             *       [name] => item_1_1
+             *       [name] => item_1
              *       [values] => Array (
              *         [0] => A
              *         [1] => B
              *         [2] => C
              *         [3] => D
              *         [4] => E
-             *         [5] => NV
              *       )
              *       [required] => true
              *     )
              *     [1] => Array (
-             *       [name] => item_1_2
+             *       [name] => item_2
              *       [values] => Array (
-             *         [0] => A
-             *         [1] => B
-             *         [2] => C
-             *         [3] => D
-             *         [4] => E
-             *         [5] => NV
+             *         [0] => F
+             *         [1] => G
+             *         [2] => H
              *       )
              *       [required] => false
              *     )
