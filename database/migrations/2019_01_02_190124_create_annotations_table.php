@@ -22,8 +22,6 @@ class CreateAnnotationsTable extends Migration
             $table->softDeletes();
             $table->foreign('student_id')->references('id')->on('students');
         });
-
-        // @todo assess whether to create a user importer
     }
 
     /**
