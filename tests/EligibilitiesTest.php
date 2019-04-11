@@ -232,7 +232,7 @@ class EligibilitiesTest extends TestCase
                 ],
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('eligibilities', ['id' => 4, 'student_id' => 1, 'deleted_at' => null])
+            ->seeInDatabase('eligibilities', ['id' => 4, 'student_id' => 1])
             ->notSeeInDatabase('eligibilities', ['id' => 5]);
 
         // Existing student, without notes
@@ -256,7 +256,7 @@ class EligibilitiesTest extends TestCase
                 ],
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('eligibilities', ['id' => 5, 'student_id' => 2, 'notes' => null, 'deleted_at' => null])
+            ->seeInDatabase('eligibilities', ['id' => 5, 'student_id' => 2, 'notes' => null])
             ->notSeeInDatabase('eligibilities', ['id' => 6]);
 
     }
@@ -870,8 +870,7 @@ class EligibilitiesTest extends TestCase
                 'message' => 'Resource deleted',
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('eligibilities', ['id' => 2, 'deleted_at' => date('Y-m-d H:i:s')])
-            ->notSeeInDatabase('eligibilities', ['id' => 2, 'deleted_at' => null]);
+            ->notSeeInDatabase('eligibilities', ['id' => 2]);
 
     }
 

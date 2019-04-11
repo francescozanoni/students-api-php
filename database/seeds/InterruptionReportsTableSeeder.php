@@ -12,17 +12,15 @@ class InterruptionReportsTableSeeder extends Seeder
     public function run()
     {
         DB::table('interruption_reports')->insert([
+            'id' => 1,
             'internship_id' => 2,
             'notes' => 'First interruption report notes',
-            'created_at' => '2019-01-30 02:00:00',
-            'updated_at' => '2019-01-30 02:00:00',
-            'deleted_at' => '2019-01-30 03:00:00',
         ]);
         DB::table('interruption_reports')->insert([
+            'id' => 2,
             'internship_id' => 2,
             'notes' => 'Second interruption report notes',
-            'created_at' => '2019-01-31 02:00:00',
-            'updated_at' => '2019-01-31 02:00:00',
         ]);
+        DB::table('interruption_reports')->delete(1);
     }
 }

@@ -293,7 +293,7 @@ class InternshipsTest extends TestCase
                 ],
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('internships', ['id' => 5, 'student_id' => 1, 'location_id' => 1, 'sub_location_id' => 1, 'deleted_at' => null])
+            ->seeInDatabase('internships', ['id' => 5, 'student_id' => 1, 'location_id' => 1, 'sub_location_id' => 1])
             ->notSeeInDatabase('internships', ['id' => 6]);
 
         // Existing student, without sub-location
@@ -325,7 +325,7 @@ class InternshipsTest extends TestCase
                 ],
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('internships', ['id' => 6, 'student_id' => 1, 'location_id' => null, 'sub_location_id' => 1, 'deleted_at' => null])
+            ->seeInDatabase('internships', ['id' => 6, 'student_id' => 1, 'location_id' => 1, 'sub_location_id' => null])
             ->notSeeInDatabase('internships', ['id' => 7]);
 
     }
@@ -1329,8 +1329,7 @@ class InternshipsTest extends TestCase
                 'message' => 'Resource deleted',
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('internships', ['id' => 3, 'deleted_at' => date('Y-m-d H:i:s')])
-            ->notSeeInDatabase('internships', ['id' => 3, 'deleted_at' => null]);
+            ->notSeeInDatabase('internships', ['id' => 3]);
 
     }
 
@@ -1382,7 +1381,7 @@ class InternshipsTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->seeInDatabase('internships', ['id' => 1, 'deleted_at' => null]);
+            ->seeInDatabase('internships', ['id' => 1]);
 
         // Internship with interruption report
         $this->json('DELETE', '/internships/2')
@@ -1397,7 +1396,7 @@ class InternshipsTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->seeInDatabase('internships', ['id' => 2, 'deleted_at' => null]);
+            ->seeInDatabase('internships', ['id' => 2]);
 
     }
 

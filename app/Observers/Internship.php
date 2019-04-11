@@ -9,11 +9,11 @@ class Internship
 {
 
     /**
-     * Handle the InternshipModel "deleted" event.
+     * Handle the InternshipModel "deleting" event.
      *
      * @param  InternshipModel $internship
      */
-    public function deleted(InternshipModel $internship)
+    public function deleting(InternshipModel $internship)
     {
         $internship->evaluation()->delete();
         $internship->interruptionReport()->delete();

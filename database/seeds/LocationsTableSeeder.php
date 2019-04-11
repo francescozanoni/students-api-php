@@ -12,15 +12,13 @@ class LocationsTableSeeder extends Seeder
     public function run()
     {
         DB::table('locations')->insert([
+            'id' => 1,
             'name' => 'Location 1',
-            'created_at' => '2019-01-01 00:00:00',
-            'updated_at' => '2019-01-01 00:00:00',
         ]);
         DB::table('locations')->insert([
+            'id' => 2,
             'name' => 'Deleted location',
-            'created_at' => '2019-01-02 00:00:00',
-            'updated_at' => '2019-01-02 00:00:00',
-            'deleted_at' => '2019-01-03 00:00:00',
         ]);
+        DB::table('locations')->delete(2);
     }
 }

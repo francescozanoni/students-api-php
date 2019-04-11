@@ -212,7 +212,7 @@ class OshCourseAttendancesTest extends TestCase
                 ],
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('osh_course_attendances', ['id' => 4, 'student_id' => 1, 'deleted_at' => null])
+            ->seeInDatabase('osh_course_attendances', ['id' => 4, 'student_id' => 1])
             ->notSeeInDatabase('osh_course_attendances', ['id' => 5]);
 
     }
@@ -783,8 +783,7 @@ class OshCourseAttendancesTest extends TestCase
                 'message' => 'Resource deleted',
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('osh_course_attendances', ['id' => 1, 'deleted_at' => date('Y-m-d H:i:s')])
-            ->notSeeInDatabase('osh_course_attendances', ['id' => 1, 'deleted_at' => null]);
+            ->notSeeInDatabase('osh_course_attendances', ['id' => 1]);
 
     }
 

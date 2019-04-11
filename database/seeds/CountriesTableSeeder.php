@@ -12,47 +12,40 @@ class CountriesTableSeeder extends Seeder
     public function run()
     {
         DB::table('countries')->insert([
+            'id' => 1,
             'name' => 'Canada',
             'code' => 'CA',
-            'created_at' => '2019-01-01 00:00:00',
-            'updated_at' => '2019-01-01 00:00:00',
         ]);
         DB::table('countries')->insert([
+            'id' => 2,
             'name' => 'United Kingdom',
             'code' => 'GB',
-            'created_at' => '2019-01-02 00:00:00',
-            'updated_at' => '2019-01-02 00:00:00',
         ]);
         DB::table('countries')->insert([
+            'id' => 3,
             'name' => 'Ireland',
             'code' => 'IE',
-            'created_at' => '2019-01-02 00:00:00',
-            'updated_at' => '2019-01-02 00:00:00',
         ]);
         DB::table('countries')->insert([
+            'id' => 4,
             'name' => 'Australia',
             'code' => 'AU',
-            'created_at' => '2019-01-02 00:00:00',
-            'updated_at' => '2019-01-02 00:00:00',
         ]);
         DB::table('countries')->insert([
+            'id' => 5,
             'name' => 'Norway',
             'code' => 'NO',
-            'created_at' => '2019-01-02 00:00:00',
-            'updated_at' => '2019-01-02 00:00:00',
         ]);
         DB::table('countries')->insert([
+            'id' => 6,
             'name' => 'United States of America',
             'code' => 'US',
-            'created_at' => '2019-01-02 00:00:00',
-            'updated_at' => '2019-01-02 00:00:00',
         ]);
         DB::table('countries')->insert([
+            'id' => 7,
             'name' => 'Italy',
             'code' => 'IT',
-            'created_at' => '2019-01-02 00:00:00',
-            'updated_at' => '2019-01-02 00:00:00',
-            'deleted_at' => '2019-01-03 00:00:00',
         ]);
+        DB::table('countries')->delete(7);
     }
 }

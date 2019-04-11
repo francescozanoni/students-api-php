@@ -215,7 +215,7 @@ class InterruptionReportsTest extends TestCase
                 ],
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('interruption_reports', ['id' => 3, 'internship_id' => 3, 'deleted_at' => null])
+            ->seeInDatabase('interruption_reports', ['id' => 3, 'internship_id' => 3])
             ->notSeeInDatabase('interruption_reports', ['id' => 4]);
 
     }
@@ -480,8 +480,7 @@ class InterruptionReportsTest extends TestCase
                 'message' => 'Resource deleted',
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('interruption_reports', ['id' => 2, 'deleted_at' => date('Y-m-d H:i:s')])
-            ->notSeeInDatabase('interruption_reports', ['id' => 2, 'deleted_at' => null]);
+            ->notSeeInDatabase('interruption_reports', ['id' => 2]);
 
     }
 

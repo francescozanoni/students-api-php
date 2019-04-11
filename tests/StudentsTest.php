@@ -133,7 +133,7 @@ class StudentsTest extends TestCase
                 ]
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('students', ['id' => 5, 'deleted_at' => null])
+            ->seeInDatabase('students', ['id' => 5])
             ->notSeeInDatabase('students', ['id' => 6]);
 
     }
@@ -454,8 +454,7 @@ class StudentsTest extends TestCase
                 'message' => 'Resource deleted',
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('students', ['id' => 2, 'deleted_at' => date('Y-m-d H:i:s')])
-            ->notSeeInDatabase('students', ['id' => 2, 'deleted_at' => null]);
+            ->notSeeInDatabase('students', ['id' => 2]);
 
         // Existing student with annotation, internship and educational activity attendance
         $this->json('DELETE', '/students/1')
@@ -465,16 +464,11 @@ class StudentsTest extends TestCase
                 'message' => 'Resource deleted',
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('students', ['id' => 1, 'deleted_at' => date('Y-m-d H:i:s')])
-            ->notSeeInDatabase('students', ['id' => 1, 'deleted_at' => null])
-            ->seeInDatabase('annotations', ['id' => 1, 'student_id' => 1, 'deleted_at' => date('Y-m-d H:i:s')])
-            ->notSeeInDatabase('annotations', ['id' => 1, 'student_id' => 1, 'deleted_at' => null])
-            ->seeInDatabase('internships', ['id' => 1, 'student_id' => 1, 'deleted_at' => date('Y-m-d H:i:s')])
-            ->notSeeInDatabase('internships', ['id' => 1, 'student_id' => 1, 'deleted_at' => null])
-            ->seeInDatabase('evaluations', ['id' => 1, 'student_id' => 1, 'deleted_at' => date('Y-m-d H:i:s')])
-            ->notSeeInDatabase('evaluations', ['id' => 1, 'student_id' => 1, 'deleted_at' => null])
-            ->seeInDatabase('educational_activity_attendances', ['id' => 1, 'student_id' => 1, 'deleted_at' => date('Y-m-d H:i:s')])
-            ->notSeeInDatabase('educational_activity_attendances', ['id' => 1, 'student_id' => 1, 'deleted_at' => null]);
+            ->notSeeInDatabase('students', ['id' => 1])
+            ->notSeeInDatabase('annotations', ['id' => 1, 'student_id' => 1])
+            ->notSeeInDatabase('internships', ['id' => 1, 'student_id' => 1])
+            ->notSeeInDatabase('evaluations', ['id' => 1, 'student_id' => 1])
+            ->notSeeInDatabase('educational_activity_attendances', ['id' => 1, 'student_id' => 1]);
 
     }
 

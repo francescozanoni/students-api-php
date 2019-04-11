@@ -13,23 +13,21 @@ class EvaluationsTableSeeder extends Seeder
     {
 
         $record = [
+            'id' => 1,
             'internship_id' => 1,
             'notes' => 'First evaluation notes',
-            'created_at' => '2019-01-25 02:00:00',
-            'updated_at' => '2019-01-25 02:00:00',
         ];
         $record = array_merge($record, self::generateItemValues(config('internships.evaluations.items')));
         DB::table('evaluations')->insert($record);
 
         $record = [
+            'id' => 2,
             'internship_id' => 1,
             'notes' => 'Second evaluation notes',
-            'created_at' => '2019-01-26 02:00:00',
-            'updated_at' => '2019-01-26 02:00:00',
-            'deleted_at' => '2019-01-26 03:00:00',
         ];
         $record = array_merge($record, self::generateItemValues(config('internships.evaluations.items')));
         DB::table('evaluations')->insert($record);
+        DB::table('evaluations')->delete(2);
 
     }
 

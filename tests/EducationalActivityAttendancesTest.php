@@ -203,7 +203,7 @@ class EducationalActivityAttendancesTest extends TestCase
                 ],
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('educational_activity_attendances', ['id' => 3, 'student_id' => 1, 'deleted_at' => null])
+            ->seeInDatabase('educational_activity_attendances', ['id' => 3, 'student_id' => 1])
             ->notSeeInDatabase('educational_activity_attendances', ['id' => 4]);
 
 
@@ -228,7 +228,7 @@ class EducationalActivityAttendancesTest extends TestCase
                 ],
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('educational_activity_attendances', ['id' => 4, 'student_id' => 2, 'deleted_at' => null])
+            ->seeInDatabase('educational_activity_attendances', ['id' => 4, 'student_id' => 2])
             ->notSeeInDatabase('educational_activity_attendances', ['id' => 5]);
 
     }
@@ -634,8 +634,7 @@ class EducationalActivityAttendancesTest extends TestCase
                 'message' => 'Resource deleted',
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('educational_activity_attendances', ['id' => 1, 'deleted_at' => date('Y-m-d H:i:s')])
-            ->notSeeInDatabase('educational_activity_attendances', ['id' => 1, 'deleted_at' => null]);
+            ->notSeeInDatabase('educational_activity_attendances', ['id' => 1]);
 
     }
 

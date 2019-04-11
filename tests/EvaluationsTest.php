@@ -230,7 +230,7 @@ class EvaluationsTest extends TestCase
                 )
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('evaluations', ['id' => 3, 'internship_id' => 3, 'notes' => 'Another evaluation notes', 'deleted_at' => null])
+            ->seeInDatabase('evaluations', ['id' => 3, 'internship_id' => 3, 'notes' => 'Another evaluation notes'])
             ->notSeeInDatabase('evaluations', ['id' => 4]);
 
         // Existing internship, no notes
@@ -253,7 +253,7 @@ class EvaluationsTest extends TestCase
                 ),
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('evaluations', ['id' => 4, 'internship_id' => 2, 'notes' => null, 'deleted_at' => null])
+            ->seeInDatabase('evaluations', ['id' => 4, 'internship_id' => 2, 'notes' => null])
             ->notSeeInDatabase('evaluations', ['id' => 5]);
 
         // @todo add tests with items
@@ -531,8 +531,7 @@ class EvaluationsTest extends TestCase
                 'message' => 'Resource deleted',
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('evaluations', ['id' => 1, 'deleted_at' => date('Y-m-d H:i:s')])
-            ->notSeeInDatabase('evaluations', ['id' => 1, 'deleted_at' => null]);
+            ->notSeeInDatabase('evaluations', ['id' => 1]);
 
     }
 

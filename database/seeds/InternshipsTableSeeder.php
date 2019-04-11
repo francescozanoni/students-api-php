@@ -16,6 +16,7 @@ class InternshipsTableSeeder extends Seeder
 
         // Standard internship, with evaluation
         DB::table('internships')->insert([
+            'id' => 1,
             'student_id' => 1,
             'location_id' => 1,
             'sub_location_id' => 1,
@@ -25,12 +26,11 @@ class InternshipsTableSeeder extends Seeder
             'other_amount' => 5,
             'is_optional' => false,
             'is_interrupted' => false,
-            'created_at' => '2019-01-09 02:00:00',
-            'updated_at' => '2019-01-09 02:00:00',
         ]);
 
         // Optional interrupted internship, with interruption report.
         DB::table('internships')->insert([
+            'id' => 2,
             'student_id' => 1,
             'location_id' => 1,
             'sub_location_id' => 1,
@@ -40,12 +40,11 @@ class InternshipsTableSeeder extends Seeder
             'other_amount' => 0,
             'is_optional' => true,
             'is_interrupted' => true,
-            'created_at' => '2019-01-25 02:00:00',
-            'updated_at' => '2019-01-25 02:00:00',
         ]);
 
         // Interrupted internship.
         DB::table('internships')->insert([
+            'id' => 3,
             'student_id' => 4,
             'location_id' => 1,
             'sub_location_id' => 1,
@@ -55,12 +54,11 @@ class InternshipsTableSeeder extends Seeder
             'other_amount' => 0,
             'is_optional' => false,
             'is_interrupted' => true,
-            'created_at' => '2019-01-25 02:00:00',
-            'updated_at' => '2019-01-28 02:00:00',
         ]);
 
         // Interrupted internship, in the future (very unlikely :-) ).
         DB::table('internships')->insert([
+            'id' => 4,
             'student_id' => 4,
             'location_id' => 1,
             'sub_location_id' => 1,
@@ -72,8 +70,6 @@ class InternshipsTableSeeder extends Seeder
             'other_amount' => 0,
             'is_optional' => false,
             'is_interrupted' => true,
-            'created_at' => '2019-01-25 02:00:00',
-            'updated_at' => '2019-01-28 02:00:00',
         ]);
 
     }

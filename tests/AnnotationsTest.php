@@ -191,7 +191,7 @@ class AnnotationsTest extends TestCase
                 ],
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('annotations', ['id' => 2, 'student_id' => 1, 'deleted_at' => null])
+            ->seeInDatabase('annotations', ['id' => 2, 'student_id' => 1])
             ->notSeeInDatabase('annotations', ['id' => 3]);
 
     }
@@ -549,8 +549,7 @@ class AnnotationsTest extends TestCase
                 'message' => 'Resource deleted',
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('annotations', ['id' => 1, 'deleted_at' => date('Y-m-d H:i:s')])
-            ->notSeeInDatabase('annotations', ['id' => 1, 'deleted_at' => null]);
+            ->notSeeInDatabase('annotations', ['id' => 1]);
 
     }
 

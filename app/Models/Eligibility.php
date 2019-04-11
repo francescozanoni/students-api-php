@@ -6,27 +6,25 @@ namespace App\Models;
 use App\Models\Traits\EloquentGetTableName;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Eligibility extends Model
 {
 
-    use SoftDeletes;
     use EloquentGetTableName;
 
     /**
-     * The attributes that should be mutated to dates.
+     * Indicates if the model should be timestamped.
      *
-     * @var array
+     * @var bool
      */
-    protected $dates = ['deleted_at'];
+    public $timestamps = false;
 
     /**
      * The attributes that aren't mass assignable.
      *
      * @var array
      */
-    protected $guarded = ['id', 'student_id', 'created_at', 'updated_at', 'deleted_at'];
+    protected $guarded = ['id', 'student_id'];
 
     /**
      * @return BelongsTo
