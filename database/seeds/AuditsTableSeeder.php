@@ -13,7 +13,6 @@ class AuditsTableSeeder extends Seeder
     {
         DB::table('audits')->insert(
             [
-                'id' => 22,
                 'user_type' => 'App\User',
                 'user_id' => 0,
                 'event' => 'created',
@@ -29,7 +28,6 @@ class AuditsTableSeeder extends Seeder
                 'updated_at' => '2018-12-10 01:00:00',
             ],
             [
-                'id' => 21,
                 'user_type' => 'App\User',
                 'user_id' => 0,
                 'event' => 'created',
@@ -45,7 +43,6 @@ class AuditsTableSeeder extends Seeder
                 'updated_at' => '2018-12-10 01:00:00',
             ],
             [
-                'id' => 23,
                 'user_type' => 'App\User',
                 'user_id' => 0,
                 'event' => 'deleted',
@@ -61,7 +58,6 @@ class AuditsTableSeeder extends Seeder
                 'updated_at' => '2018-12-11 04:00:00',
             ],
             [
-                'id' => 24,
                 'user_type' => 'App\User',
                 'user_id' => 0,
                 'event' => 'created',
@@ -77,7 +73,6 @@ class AuditsTableSeeder extends Seeder
                 'updated_at' => '2018-12-15 01:00:00',
             ],
             [
-                'id' => 25,
                 'user_type' => 'App\User',
                 'user_id' => 0,
                 'event' => 'created',
@@ -93,7 +88,6 @@ class AuditsTableSeeder extends Seeder
                 'updated_at' => '2019-01-01 00:00:00',
             ],
             [
-                'id' => 1,
                 'user_type' => 'App\User',
                 'user_id' => 0,
                 'event' => 'created',
@@ -109,7 +103,6 @@ class AuditsTableSeeder extends Seeder
                 'updated_at' => '2019-01-01 01:00:00',
             ],
             [
-                'id' => 26,
                 'user_type' => 'App\User',
                 'user_id' => 0,
                 'event' => 'created',
@@ -125,7 +118,6 @@ class AuditsTableSeeder extends Seeder
                 'updated_at' => '2019-01-02 00:00:00',
             ],
             [
-                'id' => 5,
                 'user_type' => 'App\User',
                 'user_id' => 0,
                 'event' => 'created',
@@ -141,7 +133,6 @@ class AuditsTableSeeder extends Seeder
                 'updated_at' => '2019-01-02 01:00:00',
             ],
             [
-                'id' => 6,
                 'user_type' => 'App\User',
                 'user_id' => 0,
                 'event' => 'deleted',
@@ -157,7 +148,6 @@ class AuditsTableSeeder extends Seeder
                 'updated_at' => '2019-01-02 01:10:00',
             ],
             [
-                'id' => 7,
                 'user_type' => 'App\User',
                 'user_id' => 0,
                 'event' => 'created',
@@ -173,7 +163,6 @@ class AuditsTableSeeder extends Seeder
                 'updated_at' => '2019-01-02 02:00:00',
             ],
             [
-                'id' => 8,
                 'user_type' => 'App\User',
                 'user_id' => 0,
                 'event' => 'created',
@@ -189,7 +178,6 @@ class AuditsTableSeeder extends Seeder
                 'updated_at' => '2019-01-02 03:00:00',
             ],
             [
-                'id' => 27,
                 'user_type' => 'App\User',
                 'user_id' => 0,
                 'event' => 'created',
@@ -205,7 +193,6 @@ class AuditsTableSeeder extends Seeder
                 'updated_at' => '2019-01-03 00:00:00',
             ],
             [
-                'id' => 28,
                 'user_type' => 'App\User',
                 'user_id' => 0,
                 'event' => 'deleted',
@@ -221,7 +208,6 @@ class AuditsTableSeeder extends Seeder
                 'updated_at' => '2019-01-04 00:00:00',
             ],
             [
-                'id' => 29,
                 'user_type' => 'App\User',
                 'user_id' => 0,
                 'event' => 'created',
@@ -237,7 +223,6 @@ class AuditsTableSeeder extends Seeder
                 'updated_at' => '2019-01-05 00:00:00',
             ],
             [
-                'id' => 3,
                 'user_type' => 'App\User',
                 'user_id' => 0,
                 'event' => 'created',
@@ -253,7 +238,6 @@ class AuditsTableSeeder extends Seeder
                 'updated_at' => '2019-01-05 01:00:00',
             ],
             [
-                'id' => 4,
                 'user_type' => 'App\User',
                 'user_id' => 0,
                 'event' => 'deleted',
@@ -269,7 +253,6 @@ class AuditsTableSeeder extends Seeder
                 'updated_at' => '2019-01-06 01:00:00',
             ],
             [
-                'id' => 12,
                 'user_type' => 'App\User',
                 'user_id' => 0,
                 'event' => 'created',
@@ -285,7 +268,6 @@ class AuditsTableSeeder extends Seeder
                 'updated_at' => '2019-01-09 02:00:00',
             ],
             [
-                'id' => 2,
                 'user_type' => 'App\User',
                 'user_id' => 0,
                 'event' => 'created',
@@ -301,7 +283,6 @@ class AuditsTableSeeder extends Seeder
                 'updated_at' => '2019-01-10 01:00:00',
             ],
             [
-                'id' => 16,
                 'user_type' => 'App\User',
                 'user_id' => 0,
                 'event' => 'created',
@@ -317,7 +298,6 @@ class AuditsTableSeeder extends Seeder
                 'updated_at' => '2019-01-25 02:00:00',
             ],
             [
-                'id' => 14,
                 'user_type' => 'App\User',
                 'user_id' => 0,
                 'event' => 'created',
@@ -333,7 +313,6 @@ class AuditsTableSeeder extends Seeder
                 'updated_at' => '2019-01-25 02:00:00',
             ],
             [
-                'id' => 13,
                 'user_type' => 'App\User',
                 'user_id' => 0,
                 'event' => 'created',
@@ -349,7 +328,6 @@ class AuditsTableSeeder extends Seeder
                 'updated_at' => '2019-01-25 02:00:00',
             ],
             [
-                'id' => 9,
                 'user_type' => 'App\User',
                 'user_id' => 0,
                 'event' => 'created',
@@ -365,7 +343,6 @@ class AuditsTableSeeder extends Seeder
                 'updated_at' => '2019-01-25 02:00:00',
             ],
             [
-                'id' => 10,
                 'user_type' => 'App\User',
                 'user_id' => 0,
                 'event' => 'created',
@@ -381,7 +358,6 @@ class AuditsTableSeeder extends Seeder
                 'updated_at' => '2019-01-26 02:00:00',
             ],
             [
-                'id' => 11,
                 'user_type' => 'App\User',
                 'user_id' => 0,
                 'event' => 'deleted',
@@ -397,7 +373,6 @@ class AuditsTableSeeder extends Seeder
                 'updated_at' => '2019-01-26 03:00:00',
             ],
             [
-                'id' => 17,
                 'user_type' => 'App\User',
                 'user_id' => 0,
                 'event' => 'updated',
@@ -413,7 +388,6 @@ class AuditsTableSeeder extends Seeder
                 'updated_at' => '2019-01-28 02:00:00',
             ],
             [
-                'id' => 15,
                 'user_type' => 'App\User',
                 'user_id' => 0,
                 'event' => 'updated',
@@ -429,7 +403,6 @@ class AuditsTableSeeder extends Seeder
                 'updated_at' => '2019-01-28 02:00:00',
             ],
             [
-                'id' => 18,
                 'user_type' => 'App\User',
                 'user_id' => 0,
                 'event' => 'created',
@@ -445,7 +418,6 @@ class AuditsTableSeeder extends Seeder
                 'updated_at' => '2019-01-30 02:00:00',
             ],
             [
-                'id' => 19,
                 'user_type' => 'App\User',
                 'user_id' => 0,
                 'event' => 'deleted',
@@ -461,7 +433,6 @@ class AuditsTableSeeder extends Seeder
                 'updated_at' => '2019-01-30 03:00:00',
             ],
             [
-                'id' => 20,
                 'user_type' => 'App\User',
                 'user_id' => 0,
                 'event' => 'created',
@@ -477,7 +448,7 @@ class AuditsTableSeeder extends Seeder
                 'updated_at' => '2019-01-31 02:00:00',
             ]
 
-            // @todo reset IDs
+        // @todo reset IDs
         );
     }
 }
