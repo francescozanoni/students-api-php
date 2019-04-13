@@ -15,7 +15,7 @@ class ErrorTest extends TestCase
                     'class' => 'Exception',
                     'message' => 'TEST EXCEPTION',
                     'file' => realpath(base_path('routes/web.php')),
-                    'line' => 98
+                    'line' => 99
                 ]
             ])
             ->seeStatusCode(500);

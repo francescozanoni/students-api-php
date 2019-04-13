@@ -93,7 +93,7 @@ $router->group(['middleware' => 'validate_request'], function () use ($router) {
 
 });
 
-// Endpint used only to test error handler.
+// Endpoint used only to test error handler.
 if (env('APP_ENV') === 'testing') {
     $router->get('/test', ['as' => 'test', function () {
         throw new Exception('TEST EXCEPTION');
