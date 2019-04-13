@@ -91,5 +91,11 @@ $router->group(['middleware' => 'validate_request'], function () use ($router) {
     $router->put('osh_course_attendances/{id}', ['as' => 'updateOshCourseAttendanceById', 'uses' => 'OshCourseAttendancesController@update']);
     $router->delete('osh_course_attendances/{id}', ['as' => 'deleteOshCourseAttendanceById', 'uses' => 'OshCourseAttendancesController@destroy']);
 
-
 });
+
+// Endpint used only to test error handler.
+if (env('APP_ENV') === 'testing') {
+    $router->get('/test', ['as' => 'test', function () {
+        throw new Exception('TEST EXCEPTION');
+    }]);
+}
