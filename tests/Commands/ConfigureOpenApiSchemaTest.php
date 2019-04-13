@@ -53,7 +53,7 @@ class ConfigureOpenApiSchemaTest extends TestCase
         parent::teardown();
     }
 
-    public function testSuccess()
+    public function testSuccessWithEvalutationItems()
     {
         Artisan::call('openapi:configure');
 
@@ -61,6 +61,22 @@ class ConfigureOpenApiSchemaTest extends TestCase
         $newSchemaFileContent = file_get_contents($this->schemaFilePath);
 
         $this->assertEquals($schemaFileContent, $newSchemaFileContent);
+    }
+    
+    public function testSuccessWithoutEvalutationItems()
+    {
+        $actualItems = config('internships.evaluations.items');
+        config(['internships.evaluations.items' => []]);
+        
+        Artisan::call('openapi:configure');
+        
+        config(['internships.evaluations.items' => $actualItems]);
+
+        $schemaFileContent = file_get_contents($this->backupSchemaFilePath);
+        $newSchemaFileContent = file_get_contents($this->schemaFilePath);
+
+        $this->assertNotEquals($schemaFileContent, $newSchemaFileContent);
+        // @todo test real schema content
     }
 
     public function testFailureMissingExampleSchema()
