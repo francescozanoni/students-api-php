@@ -3,14 +3,11 @@ declare(strict_types = 1);
 
 namespace App\Models;
 
-use App\Models\Traits\EloquentGetTableName;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Student extends Model
 {
-
-    use EloquentGetTableName;
 
     /**
      * Indicates if the model should be timestamped.
