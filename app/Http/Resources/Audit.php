@@ -12,6 +12,7 @@ class Audit extends JsonResource
     {
 
         $output = [
+            'id' => $this->id,
             'event' => $this->event,
             'old_values' => $this->old_values,
             'new_values' => $this->new_values,

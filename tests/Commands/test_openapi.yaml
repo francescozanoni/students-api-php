@@ -1929,6 +1929,40 @@ components:
               status: OK
               message: 'Resource deleted'
   schemas:
+    Audit:
+      type: object
+      properties:
+        id:
+          type: integer
+        event:
+          type: string
+        old_values:
+          type: object
+        new_values:
+          type: object
+        user_id:
+          type: integer
+        created_at:
+          type: string
+      required:
+        - id
+        - event
+        - created_at
+      example:
+        id: 6
+        event: updated
+        old_values: 
+          title: First title
+          content: First content
+          student_id: 1
+          id: 1
+        new_values: 
+          title: First modified title
+          content: First modified content
+          student_id: 1
+          id: 1
+        user_id: 0
+        created_at: '2019-01-01 01:00:00'
     NewStudent:
       type: object
       properties:
