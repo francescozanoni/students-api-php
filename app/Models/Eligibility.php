@@ -5,9 +5,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class Eligibility extends Model
+class Eligibility extends Model implements Auditable
 {
+
+    use \OwenIt\Auditing\Auditable;
 
     /**
      * Indicates if the model should be timestamped.
