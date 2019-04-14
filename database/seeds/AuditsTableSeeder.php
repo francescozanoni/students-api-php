@@ -26,7 +26,9 @@ class AuditsTableSeeder extends Seeder
                 'tags' => null,
                 'created_at' => '2018-12-10 01:00:00',
                 'updated_at' => '2018-12-10 01:00:00',
-            ],
+            ]
+        );
+        DB::table('audits')->insert(
             [
                 'user_type' => 'App\User',
                 'user_id' => 0,
@@ -41,7 +43,9 @@ class AuditsTableSeeder extends Seeder
                 'tags' => null,
                 'created_at' => '2018-12-10 01:00:00',
                 'updated_at' => '2018-12-10 01:00:00',
-            ],
+            ]
+        );
+        DB::table('audits')->insert(
             [
                 'user_type' => 'App\User',
                 'user_id' => 0,
@@ -56,7 +60,9 @@ class AuditsTableSeeder extends Seeder
                 'tags' => null,
                 'created_at' => '2018-12-11 04:00:00',
                 'updated_at' => '2018-12-11 04:00:00',
-            ],
+            ]
+        );
+        DB::table('audits')->insert(
             [
                 'user_type' => 'App\User',
                 'user_id' => 0,
@@ -71,7 +77,9 @@ class AuditsTableSeeder extends Seeder
                 'tags' => null,
                 'created_at' => '2018-12-15 01:00:00',
                 'updated_at' => '2018-12-15 01:00:00',
-            ],
+            ]
+        );
+        DB::table('audits')->insert(
             [
                 'user_type' => 'App\User',
                 'user_id' => 0,
@@ -86,7 +94,9 @@ class AuditsTableSeeder extends Seeder
                 'tags' => null,
                 'created_at' => '2019-01-01 00:00:00',
                 'updated_at' => '2019-01-01 00:00:00',
-            ],
+            ]
+        );
+        DB::table('audits')->insert(
             [
                 'user_type' => 'App\User',
                 'user_id' => 0,
@@ -101,7 +111,9 @@ class AuditsTableSeeder extends Seeder
                 'tags' => null,
                 'created_at' => '2019-01-01 01:00:00',
                 'updated_at' => '2019-01-01 01:00:00',
-            ],
+            ]
+        );
+        DB::table('audits')->insert(
             [
                 'user_type' => 'App\User',
                 'user_id' => 0,
@@ -116,7 +128,9 @@ class AuditsTableSeeder extends Seeder
                 'tags' => null,
                 'created_at' => '2019-01-02 00:00:00',
                 'updated_at' => '2019-01-02 00:00:00',
-            ],
+            ]
+        );
+        DB::table('audits')->insert(
             [
                 'user_type' => 'App\User',
                 'user_id' => 0,
@@ -131,7 +145,9 @@ class AuditsTableSeeder extends Seeder
                 'tags' => null,
                 'created_at' => '2019-01-02 01:00:00',
                 'updated_at' => '2019-01-02 01:00:00',
-            ],
+            ]
+        );
+        DB::table('audits')->insert(
             [
                 'user_type' => 'App\User',
                 'user_id' => 0,
@@ -146,7 +162,9 @@ class AuditsTableSeeder extends Seeder
                 'tags' => null,
                 'created_at' => '2019-01-02 01:10:00',
                 'updated_at' => '2019-01-02 01:10:00',
-            ],
+            ]
+        );
+        DB::table('audits')->insert(
             [
                 'user_type' => 'App\User',
                 'user_id' => 0,
@@ -161,7 +179,9 @@ class AuditsTableSeeder extends Seeder
                 'tags' => null,
                 'created_at' => '2019-01-02 02:00:00',
                 'updated_at' => '2019-01-02 02:00:00',
-            ],
+            ]
+        );
+        DB::table('audits')->insert(
             [
                 'user_type' => 'App\User',
                 'user_id' => 0,
@@ -176,7 +196,9 @@ class AuditsTableSeeder extends Seeder
                 'tags' => null,
                 'created_at' => '2019-01-02 03:00:00',
                 'updated_at' => '2019-01-02 03:00:00',
-            ],
+            ]
+        );
+        DB::table('audits')->insert(
             [
                 'user_type' => 'App\User',
                 'user_id' => 0,
@@ -191,7 +213,9 @@ class AuditsTableSeeder extends Seeder
                 'tags' => null,
                 'created_at' => '2019-01-03 00:00:00',
                 'updated_at' => '2019-01-03 00:00:00',
-            ],
+            ]
+        );
+        DB::table('audits')->insert(
             [
                 'user_type' => 'App\User',
                 'user_id' => 0,
@@ -206,7 +230,9 @@ class AuditsTableSeeder extends Seeder
                 'tags' => null,
                 'created_at' => '2019-01-04 00:00:00',
                 'updated_at' => '2019-01-04 00:00:00',
-            ],
+            ]
+        );
+        DB::table('audits')->insert(
             [
                 'user_type' => 'App\User',
                 'user_id' => 0,
@@ -221,7 +247,9 @@ class AuditsTableSeeder extends Seeder
                 'tags' => null,
                 'created_at' => '2019-01-05 00:00:00',
                 'updated_at' => '2019-01-05 00:00:00',
-            ],
+            ]
+        );
+        DB::table('audits')->insert(
             [
                 'user_type' => 'App\User',
                 'user_id' => 0,
@@ -236,7 +264,9 @@ class AuditsTableSeeder extends Seeder
                 'tags' => null,
                 'created_at' => '2019-01-05 01:00:00',
                 'updated_at' => '2019-01-05 01:00:00',
-            ],
+            ]
+        );
+        DB::table('audits')->insert(
             [
                 'user_type' => 'App\User',
                 'user_id' => 0,
@@ -251,7 +281,9 @@ class AuditsTableSeeder extends Seeder
                 'tags' => null,
                 'created_at' => '2019-01-06 01:00:00',
                 'updated_at' => '2019-01-06 01:00:00',
-            ],
+            ]
+        );
+        DB::table('audits')->insert(
             [
                 'user_type' => 'App\User',
                 'user_id' => 0,
@@ -266,7 +298,9 @@ class AuditsTableSeeder extends Seeder
                 'tags' => null,
                 'created_at' => '2019-01-09 02:00:00',
                 'updated_at' => '2019-01-09 02:00:00',
-            ],
+            ]
+        );
+        DB::table('audits')->insert(
             [
                 'user_type' => 'App\User',
                 'user_id' => 0,
@@ -281,7 +315,9 @@ class AuditsTableSeeder extends Seeder
                 'tags' => null,
                 'created_at' => '2019-01-10 01:00:00',
                 'updated_at' => '2019-01-10 01:00:00',
-            ],
+            ]
+        );
+        DB::table('audits')->insert(
             [
                 'user_type' => 'App\User',
                 'user_id' => 0,
@@ -296,7 +332,9 @@ class AuditsTableSeeder extends Seeder
                 'tags' => null,
                 'created_at' => '2019-01-25 02:00:00',
                 'updated_at' => '2019-01-25 02:00:00',
-            ],
+            ]
+        );
+        DB::table('audits')->insert(
             [
                 'user_type' => 'App\User',
                 'user_id' => 0,
@@ -311,7 +349,9 @@ class AuditsTableSeeder extends Seeder
                 'tags' => null,
                 'created_at' => '2019-01-25 02:00:00',
                 'updated_at' => '2019-01-25 02:00:00',
-            ],
+            ]
+        );
+        DB::table('audits')->insert(
             [
                 'user_type' => 'App\User',
                 'user_id' => 0,
@@ -326,7 +366,9 @@ class AuditsTableSeeder extends Seeder
                 'tags' => null,
                 'created_at' => '2019-01-25 02:00:00',
                 'updated_at' => '2019-01-25 02:00:00',
-            ],
+            ]
+        );
+        DB::table('audits')->insert(
             [
                 'user_type' => 'App\User',
                 'user_id' => 0,
@@ -341,7 +383,9 @@ class AuditsTableSeeder extends Seeder
                 'tags' => null,
                 'created_at' => '2019-01-25 02:00:00',
                 'updated_at' => '2019-01-25 02:00:00',
-            ],
+            ]
+        );
+        DB::table('audits')->insert(
             [
                 'user_type' => 'App\User',
                 'user_id' => 0,
@@ -356,7 +400,9 @@ class AuditsTableSeeder extends Seeder
                 'tags' => null,
                 'created_at' => '2019-01-26 02:00:00',
                 'updated_at' => '2019-01-26 02:00:00',
-            ],
+            ]
+        );
+        DB::table('audits')->insert(
             [
                 'user_type' => 'App\User',
                 'user_id' => 0,
@@ -371,7 +417,9 @@ class AuditsTableSeeder extends Seeder
                 'tags' => null,
                 'created_at' => '2019-01-26 03:00:00',
                 'updated_at' => '2019-01-26 03:00:00',
-            ],
+            ]
+        );
+        DB::table('audits')->insert(
             [
                 'user_type' => 'App\User',
                 'user_id' => 0,
@@ -386,7 +434,9 @@ class AuditsTableSeeder extends Seeder
                 'tags' => null,
                 'created_at' => '2019-01-28 02:00:00',
                 'updated_at' => '2019-01-28 02:00:00',
-            ],
+            ]
+        );
+        DB::table('audits')->insert(
             [
                 'user_type' => 'App\User',
                 'user_id' => 0,
@@ -401,7 +451,9 @@ class AuditsTableSeeder extends Seeder
                 'tags' => null,
                 'created_at' => '2019-01-28 02:00:00',
                 'updated_at' => '2019-01-28 02:00:00',
-            ],
+            ]
+        );
+        DB::table('audits')->insert(
             [
                 'user_type' => 'App\User',
                 'user_id' => 0,
@@ -416,7 +468,9 @@ class AuditsTableSeeder extends Seeder
                 'tags' => null,
                 'created_at' => '2019-01-30 02:00:00',
                 'updated_at' => '2019-01-30 02:00:00',
-            ],
+            ]
+        );
+        DB::table('audits')->insert(
             [
                 'user_type' => 'App\User',
                 'user_id' => 0,
@@ -431,7 +485,9 @@ class AuditsTableSeeder extends Seeder
                 'tags' => null,
                 'created_at' => '2019-01-30 03:00:00',
                 'updated_at' => '2019-01-30 03:00:00',
-            ],
+            ]
+        );
+        DB::table('audits')->insert(
             [
                 'user_type' => 'App\User',
                 'user_id' => 0,
@@ -447,8 +503,6 @@ class AuditsTableSeeder extends Seeder
                 'created_at' => '2019-01-31 02:00:00',
                 'updated_at' => '2019-01-31 02:00:00',
             ]
-
-        // @todo reset IDs
         );
     }
 }
