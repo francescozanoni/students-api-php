@@ -1900,18 +1900,50 @@ components:
       example:
         id: 6
         event: updated
-        old_values: 
-          title: First title
-          content: First content
+        old_values:
+          title: 'First title'
+          content: 'First content'
           student_id: 1
           id: 1
-        new_values: 
-          title: First modified title
-          content: First modified content
+        new_values:
+          title: 'First modified title'
+          content: 'First modified content'
           student_id: 1
           id: 1
-        user_id: 0
+        user_id: 34
         created_at: '2019-01-01 01:00:00'
+    Auditable:
+      type: object
+      properties:
+        audits:
+          type: array
+          items:
+            $ref: '#/components/schemas/Audit'
+      example:
+        audits:
+          - id: 3
+            event: created
+            new_values:
+              title: 'First title'
+              content: 'First content'
+              student_id: 1
+              id: 1
+            user_id: 12
+            created_at: '2019-01-01 00:00:00'
+          - id: 6
+            event: updated
+            old_values:
+              title: 'First title'
+              content: 'First content'
+              student_id: 1
+              id: 1
+            new_values:
+              title: 'First modified title'
+              content: 'First modified content'
+              student_id: 1
+              id: 1
+            user_id: 34
+            created_at: '2019-01-01 01:00:00'
     NewStudent:
       type: object
       properties:
@@ -1943,6 +1975,7 @@ components:
     Student:
       allOf:
         - $ref: '#/components/schemas/NewStudent'
+        - $ref: '#/components/schemas/Auditable'
         - type: object
           properties:
             id:
@@ -1976,6 +2009,7 @@ components:
     Annotation:
       allOf:
         - $ref: '#/components/schemas/NewAnnotation'
+        - $ref: '#/components/schemas/Auditable'
         - type: object
           properties:
             id:
@@ -2039,6 +2073,7 @@ components:
     Internship:
       allOf:
         - $ref: '#/components/schemas/NewInternship'
+        - $ref: '#/components/schemas/Auditable'
         - type: object
           properties:
             id:
@@ -2094,6 +2129,7 @@ components:
     EducationalActivityAttendance:
       allOf:
         - $ref: '#/components/schemas/NewEducationalActivityAttendance'
+        - $ref: '#/components/schemas/Auditable'
         - type: object
           properties:
             id:
@@ -2128,6 +2164,7 @@ components:
     Evaluation:
       allOf:
         - $ref: '#/components/schemas/NewEvaluation'
+        - $ref: '#/components/schemas/Auditable'
         - type: object
           properties:
             id:
@@ -2172,6 +2209,7 @@ components:
     InterruptionReport:
       allOf:
         - $ref: '#/components/schemas/NewInterruptionReport'
+        - $ref: '#/components/schemas/Auditable'
         - type: object
           properties:
             id:
@@ -2228,6 +2266,7 @@ components:
     Eligibility:
       allOf:
         - $ref: '#/components/schemas/NewEligibility'
+        - $ref: '#/components/schemas/Auditable'
         - type: object
           properties:
             id:
@@ -2269,6 +2308,7 @@ components:
     OshCourseAttendance:
       allOf:
         - $ref: '#/components/schemas/NewOshCourseAttendance'
+        - $ref: '#/components/schemas/Auditable'
         - type: object
           properties:
             id:
