@@ -12,6 +12,8 @@ paths:
       operationId: getStudents
       tags:
         - students
+      parameters:
+        - $ref: '#/components/parameters/withAudits'
       responses:
         200:
           $ref: '#/components/responses/Students'
@@ -51,6 +53,7 @@ paths:
           description: 'The ID of the student to retrieve'
           schema:
             type: integer
+        - $ref: '#/components/parameters/withAudits'
       responses:
         200:
           $ref: '#/components/responses/Student'
@@ -116,6 +119,8 @@ paths:
       operationId: getAnnotations
       tags:
         - annotations
+      parameters:
+        - $ref: '#/components/parameters/withAudits'
       responses:
         200:
           $ref: '#/components/responses/Annotations'
@@ -137,6 +142,7 @@ paths:
           description: 'The ID of the annotation to retrieve'
           schema:
             type: integer
+        - $ref: '#/components/parameters/withAudits'
       responses:
         200:
           $ref: '#/components/responses/Annotation'
@@ -210,6 +216,7 @@ paths:
           description: 'The ID of the student'
           schema:
             type: integer
+        - $ref: '#/components/parameters/withAudits'
       responses:
         200:
           $ref: '#/components/responses/Annotations'
@@ -253,6 +260,8 @@ paths:
       operationId: getInternships
       tags:
         - internships
+      parameters:
+        - $ref: '#/components/parameters/withAudits'
       responses:
         200:
           $ref: '#/components/responses/Internships'
@@ -274,6 +283,7 @@ paths:
           description: 'The ID of the internship to retrieve'
           schema:
             type: integer
+        - $ref: '#/components/parameters/withAudits'
       responses:
         200:
           $ref: '#/components/responses/Internship'
@@ -347,6 +357,7 @@ paths:
           description: 'The ID of the student'
           schema:
             type: integer
+        - $ref: '#/components/parameters/withAudits'
       responses:
         200:
           $ref: '#/components/responses/Internships'
@@ -390,6 +401,8 @@ paths:
       operationId: getEducationalActivityAttendances
       tags:
         - educational_activity_attendances
+      parameters:
+        - $ref: '#/components/parameters/withAudits'
       responses:
         200:
           $ref: '#/components/responses/EducationalActivityAttendances'
@@ -411,6 +424,7 @@ paths:
           description: 'The ID of the educational activity attendance to retrieve'
           schema:
             type: integer
+        - $ref: '#/components/parameters/withAudits'
       responses:
         200:
           $ref: '#/components/responses/EducationalActivityAttendance'
@@ -484,6 +498,7 @@ paths:
           description: 'The ID of the student'
           schema:
             type: integer
+        - $ref: '#/components/parameters/withAudits'
       responses:
         200:
           $ref: '#/components/responses/EducationalActivityAttendances'
@@ -535,6 +550,7 @@ paths:
           description: 'The ID of the internship'
           schema:
             type: integer
+        - $ref: '#/components/parameters/withAudits'
       responses:
         200:
           $ref: '#/components/responses/Evaluation'
@@ -578,6 +594,8 @@ paths:
       operationId: getEvaluations
       tags:
         - evaluations
+      parameters:
+        - $ref: '#/components/parameters/withAudits'
       responses:
         200:
           $ref: '#/components/responses/Evaluations'
@@ -599,6 +617,7 @@ paths:
           description: 'The ID of the internship evaluation to retrieve'
           schema:
             type: integer
+        - $ref: '#/components/parameters/withAudits'
       responses:
         200:
           $ref: '#/components/responses/Evaluation'
@@ -672,6 +691,7 @@ paths:
           description: 'The ID of the internship'
           schema:
             type: integer
+        - $ref: '#/components/parameters/withAudits'
       responses:
         200:
           $ref: '#/components/responses/InterruptionReport'
@@ -715,6 +735,8 @@ paths:
       operationId: getInterruptionReports
       tags:
         - interruption_reports
+      parameters:
+        - $ref: '#/components/parameters/withAudits'
       responses:
         200:
           $ref: '#/components/responses/InterruptionReports'
@@ -736,6 +758,7 @@ paths:
           description: 'The ID of the internship interruption report to retrieve'
           schema:
             type: integer
+        - $ref: '#/components/parameters/withAudits'
       responses:
         200:
           $ref: '#/components/responses/InterruptionReport'
@@ -801,6 +824,8 @@ paths:
       operationId: getEligibilities
       tags:
         - eligibilities
+      parameters:
+        - $ref: '#/components/parameters/withAudits'
       responses:
         200:
           $ref: '#/components/responses/Eligibilities'
@@ -822,6 +847,7 @@ paths:
           description: 'The ID of the eligibility to retrieve'
           schema:
             type: integer
+        - $ref: '#/components/parameters/withAudits'
       responses:
         200:
           $ref: '#/components/responses/Eligibility'
@@ -938,6 +964,8 @@ paths:
       operationId: getOshCourseAttendances
       tags:
         - osh_course_attendances
+      parameters:
+        - $ref: '#/components/parameters/withAudits'
       responses:
         200:
           $ref: '#/components/responses/OshCourseAttendances'
@@ -959,6 +987,7 @@ paths:
           description: 'The ID of the Occupational Safety and Health course attendance to retrieve'
           schema:
             type: integer
+        - $ref: '#/components/parameters/withAudits'
       responses:
         200:
           $ref: '#/components/responses/OshCourseAttendance'
@@ -1032,6 +1061,7 @@ paths:
           description: 'The ID of the student'
           schema:
             type: integer
+        - $ref: '#/components/parameters/withAudits'
       responses:
         200:
           $ref: '#/components/responses/OshCourseAttendances'
@@ -1070,6 +1100,13 @@ paths:
         500:
           $ref: '#/components/responses/InternalServerError'
 components:
+  parameters:
+    withAudits:
+      in: query
+      name: with_audits
+      schema:
+        type: boolean
+      required: false
   responses:
     BadRequest:
       description: 'Response reporting invalid request'
