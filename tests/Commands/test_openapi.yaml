@@ -1105,7 +1105,10 @@ components:
       in: query
       name: with_audits
       schema:
-        type: boolean
+        type: string
+        enum:
+          - true
+          - false
       required: false
   responses:
     BadRequest:
