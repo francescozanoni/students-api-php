@@ -3,7 +3,9 @@ declare(strict_types = 1);
 
 namespace App\Http\Resources;
 
+use App\Http\Resources\Audit as AuditResource;
 use App\Http\Resources\Student as StudentResource;
+use App\Http\Resources\Traits\OptionalAuditsAttribute;
 use App\Http\Resources\Traits\OptionalStudentAttribute;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -11,6 +13,7 @@ class Internship extends JsonResource
 {
 
     use OptionalStudentAttribute;
+    use OptionalAuditsAttribute;
 
     public function toArray($request)
     {
@@ -30,6 +33,8 @@ class Internship extends JsonResource
             'other_amount' => (int)$this->other_amount,
             'is_optional' => (bool)$this->is_optional,
             'is_interrupted' => (bool)$this->is_interrupted,
+
+            'audits' => $this->when($this->withAuditsAttribute($request) === true, AuditResource::collection($this->audits)),
 
         ];
 

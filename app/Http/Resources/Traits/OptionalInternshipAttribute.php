@@ -14,6 +14,7 @@ trait OptionalInternshipAttribute
 {
 
     /**
+     * @param $request
      * @return bool
      */
     protected function withInternshipAttribute($request) : bool
