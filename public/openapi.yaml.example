@@ -1069,8 +1069,8 @@ components:
       schema:
         type: string
         enum:
-          - true
-          - false
+          - 'true'
+          - 'false'
       required: false
   responses:
     BadRequest:
