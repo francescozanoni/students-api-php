@@ -235,7 +235,7 @@ class AuditsTest extends TestCase
     }
 
     /**
-     * Get all eligibility(ies) with audits.
+     * Get eligibility(ies) with audits.
      */
     public function testGetEligibilities()
     {
@@ -378,6 +378,147 @@ class AuditsTest extends TestCase
                         ],
                     ],
                 ],
+            ])
+            ->seeStatusCode(200);
+
+    }
+
+    /**
+     * Get internship evaluation(s) with audits.
+     */
+    public function testGetEvaluations()
+    {
+
+        $this->json('GET', '/evaluations?with_audits=true')
+            ->seeJsonEquals([
+                'status_code' => 200,
+                'status' => 'OK',
+                'message' => 'Resource(s) found',
+                'data' => [
+                    array_merge(
+                        [
+                            'id' => 1,
+                            'internship' => [
+                                'id' => 1,
+                                'location' => 'Location 1',
+                                'sub_location' => 'Sub-location 1',
+                                'student' => [
+                                    'id' => 1,
+                                    'first_name' => 'John',
+                                    'last_name' => 'Doe',
+                                    'e_mail' => 'john.doe@foo.com',
+                                    'phone' => '1234-567890',
+                                    'nationality' => 'GB',
+                                ],
+                                'start_date' => '2019-01-10',
+                                'end_date' => '2019-01-24',
+                                'hour_amount' => 123,
+                                'other_amount' => 5,
+                                'is_optional' => false,
+                                'is_interrupted' => false
+                            ],
+                            'notes' => 'First evaluation notes',
+                            'audits' => [
+                                [
+                                    'id' => 22,
+                                    'event' => 'created',
+                                    'new_values' => array_merge(
+                                        [
+                                            'notes' => 'First evaluation notes',
+                                            'internship_id' => 1,
+                                            'id' => 1
+                                        ],
+                                        EvaluationsTableSeeder::generateItemValues($this->app['config']['internships']['evaluations']['items'])
+                                    ),
+                                    'user_id' => 0,
+                                    'created_at' => '2019-01-25 02:00:00'
+                                ]
+                            ],
+                        ],
+                        EvaluationsTableSeeder::generateItemValues($this->app['config']['internships']['evaluations']['items'])
+                    ),
+                ],
+            ])
+            ->seeStatusCode(200);
+
+        $this->json('GET', '/internships/1/evaluation?with_audits=true')
+            ->seeJsonEquals([
+                'status_code' => 200,
+                'status' => 'OK',
+                'message' => 'Resource successfully retrieved/created/modified',
+                'data' => array_merge(
+                    [
+                        'id' => 1,
+                        'notes' => 'First evaluation notes',
+                        'audits' => [
+                            [
+                                'id' => 22,
+                                'event' => 'created',
+                                'new_values' => array_merge(
+                                    [
+                                        'notes' => 'First evaluation notes',
+                                        'internship_id' => 1,
+                                        'id' => 1
+                                    ],
+                                    EvaluationsTableSeeder::generateItemValues($this->app['config']['internships']['evaluations']['items'])
+                                ),
+                                'user_id' => 0,
+                                'created_at' => '2019-01-25 02:00:00'
+                            ]
+                        ],
+                    ],
+                    EvaluationsTableSeeder::generateItemValues($this->app['config']['internships']['evaluations']['items'])
+                ),
+            ])
+            ->seeStatusCode(200);
+
+        $this->json('GET', '/evaluations/1?with_audits=true')
+            ->seeJsonEquals([
+                'status_code' => 200,
+                'status' => 'OK',
+                'message' => 'Resource successfully retrieved/created/modified',
+                'data' => array_merge(
+                    [
+                        'id' => 1,
+                        'internship' => [
+                            'id' => 1,
+                            'location' => 'Location 1',
+                            'sub_location' => 'Sub-location 1',
+                            'student' => [
+                                'id' => 1,
+                                'first_name' => 'John',
+                                'last_name' => 'Doe',
+                                'e_mail' => 'john.doe@foo.com',
+                                'phone' => '1234-567890',
+                                'nationality' => 'GB',
+                            ],
+                            'start_date' => '2019-01-10',
+                            'end_date' => '2019-01-24',
+                            'hour_amount' => 123,
+                            'other_amount' => 5,
+                            'is_optional' => false,
+                            'is_interrupted' => false
+                        ],
+                        'notes' => 'First evaluation notes',
+                        'audits' => [
+                            [
+                                'id' => 22,
+                                'event' => 'created',
+                                'new_values' => array_merge(
+                                    [
+                                        'notes' => 'First evaluation notes',
+                                        'internship_id' => 1,
+                                        'id' => 1
+                                    ],
+                                    EvaluationsTableSeeder::generateItemValues($this->app['config']['internships']['evaluations']['items'])
+                                ),
+                                'user_id' => 0,
+                                'created_at' => '2019-01-25 02:00:00'
+                            ]
+                        ],
+                    ],
+                    EvaluationsTableSeeder::generateItemValues($this->app['config']['internships']['evaluations']['items'])
+                ),
             ])
             ->seeStatusCode(200);
 
