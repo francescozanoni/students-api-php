@@ -109,7 +109,9 @@ class InternshipsController extends Controller
         
         $location = Location::where('name', $request->request->get('location'))->first();
         $internship->location()->associate($location);
-        
+
+        // "sub_location" is an optional field: in case it's removed (not available within input),
+        // current internship's sub_location is dissociated.
         if ($request->request->has('sub_location') === true) {
             $subLocation = SubLocation::where('name', $request->request->get('sub_location'))->first();
             $internship->subLocation()->associate($subLocation);

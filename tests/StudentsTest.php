@@ -353,6 +353,32 @@ class StudentsTest extends TestCase
             ->seeInDatabase('students', ['id' => 2, 'nationality' => 'IE'])
             ->notSeeInDatabase('students', ['id' => 2, 'nationality' => 'CA']);
 
+        // Success, removedphone number
+        $this->json('PUT',
+            '/students/2',
+            [
+                'first_name' => 'Jane',
+                'last_name' => 'Doe',
+                'e_mail' => 'jane.doe@bar.com',
+                'nationality' => 'IE',
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 200,
+                'status' => 'OK',
+                'message' => 'Resource successfully retrieved/created/modified',
+                'data' => [
+                    'id' => 2,
+                    'first_name' => 'Jane',
+                    'last_name' => 'Doe',
+                    'e_mail' => 'jane.doe@bar.com',
+                    'nationality' => 'IE',
+                ]
+            ])
+            ->seeStatusCode(200)
+            ->seeInDatabase('students', ['id' => 2, 'phone' => null])
+            ->notSeeInDatabase('students', ['id' => 2, 'phone' => '3333-11111111',]);
+
     }
 
     /**

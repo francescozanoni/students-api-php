@@ -55,8 +55,19 @@ class StudentsController extends Controller
     public function update(Request $request, int $id) : Student
     {
         $student = Student::findOrFail($id);
-        $student->fill($request->request->all());
+
+        $input = $request->request->all();
+
+        // "phone" is an optional field: in case it's removed (not available within input),
+        // it must be set to null, otherwise the change is ignored by $student->fill($input).
+        if (array_key_exists('phone', $input) === false) {
+            $input['phone'] = null;
+        }
+
+        $student->fill($input);
+
         $student->save();
+
         return $student;
     }
 
