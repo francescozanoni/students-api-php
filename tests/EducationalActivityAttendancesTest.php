@@ -505,6 +505,38 @@ class EducationalActivityAttendancesTest extends TestCase
             ->notSeeInDatabase('educational_activity_attendances', ['id' => 1, 'credits' => 1.2])
             ->notSeeInDatabase('educational_activity_attendances', ['id' => 3]);
 
+        // Removed end_date
+        $this->json('PUT',
+            '/educational_activity_attendances/1',
+            [
+                'educational_activity' => 'First educational activity',
+                'start_date' => '2019-01-09',
+                'credits' => 1.0,
+            ]
+        )
+            ->seeJsonEquals([
+                'status_code' => 200,
+                'status' => 'OK',
+                'message' => 'Resource successfully retrieved/created/modified',
+                'data' => [
+                    'id' => 1,
+                    'educational_activity' => 'First educational activity',
+                    'start_date' => '2019-01-09',
+                    'credits' => 1.0,
+                    'student' => [
+                        'id' => 1,
+                        'first_name' => 'John',
+                        'last_name' => 'Doe',
+                        'e_mail' => 'john.doe@foo.com',
+                        'phone' => '1234-567890',
+                        'nationality' => 'GB',
+                    ],
+                ],
+            ])
+            ->seeStatusCode(200)
+            ->seeInDatabase('educational_activity_attendances', ['id' => 1, 'end_date' => null,])
+            ->notSeeInDatabase('educational_activity_attendances', ['id' => 1, 'end_date' => '2019-01-10',]);
+
     }
 
     /**

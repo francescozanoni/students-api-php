@@ -82,8 +82,19 @@ class EducationalActivityAttendancesController extends Controller
     public function update(Request $request, int $id) : EducationalActivityAttendance
     {
         $educationalActivityAttendance = EducationalActivityAttendance::findOrFail($id);
-        $educationalActivityAttendance->fill($request->request->all());
+
+        $input = $request->request->all();
+
+        // "end_date" is an optional field: in case it's removed (not available within input),
+        // it must be set to null, otherwise the change is ignored by $educationalActivityAttendance->fill($input).
+        if (array_key_exists('end_date', $input) === false) {
+            $input['end_date'] = null;
+        }
+
+        $educationalActivityAttendance->fill($input);
+
         $educationalActivityAttendance->save();
+
         return $educationalActivityAttendance;
     }
 

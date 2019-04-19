@@ -219,7 +219,8 @@ class ValidateRequest
                                         return $query
                                             ->where('student_id', $educationalActivityAttendance->student->id)
                                             ->where('start_date', $request->request->get('start_date'));
-                                    }),
+                                    })
+                                    ->ignore($educationalActivityAttendance->id),
                             ],
                             'start_date' => [
                                 'bail',
@@ -230,7 +231,8 @@ class ValidateRequest
                                         return $query
                                             ->where('student_id', $educationalActivityAttendance->student->id)
                                             ->where('educational_activity', $request->request->get('educational_activity'));
-                                    }),
+                                    })
+                                    ->ignore($educationalActivityAttendance->id),
                             ],
                             'end_date' => [
                                 'bail',
