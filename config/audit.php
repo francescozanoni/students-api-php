@@ -130,6 +130,7 @@ return [
     | Whether console events should be audited (eg. php artisan db:seed).
     |
     */
-
-    'console' => false,
+    // This is required to enable audits during tests (https://github.com/owen-it/laravel-auditing/issues/380)
+    // @todo make this configurable from .env file
+    'console' => true,
 ];

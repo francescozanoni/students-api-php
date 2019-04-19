@@ -28,18 +28,18 @@ class AuditsTest extends TestCase
                             'phone' => '1234-567890',
                             'nationality' => 'GB',
                         ],
-                        "audits" => [
+                        'audits' => [
                             [
-                                "id" => 6,
-                                "event" => "created",
-                                "new_values" => [
-                                    "title" => "First title",
-                                    "content" => "First content",
-                                    "student_id" => 1,
-                                    "id" => 1,
+                                'id' => 6,
+                                'event' => 'created',
+                                'new_values' => [
+                                    'title' => 'First title',
+                                    'content' => 'First content',
+                                    'student_id' => 1,
+                                    'id' => 1,
                                 ],
-                                "user_id" => 0,
-                                "created_at" => "2019-01-01 01:00:00",
+                                'user_id' => 0,
+                                'created_at' => '2019-01-01 01:00:00',
                             ],
                         ],
                     ],
@@ -57,18 +57,18 @@ class AuditsTest extends TestCase
                         'id' => 1,
                         'title' => 'First title',
                         'content' => 'First content',
-                        "audits" => [
+                        'audits' => [
                             [
-                                "id" => 6,
-                                "event" => "created",
-                                "new_values" => [
-                                    "title" => "First title",
-                                    "content" => "First content",
-                                    "student_id" => 1,
-                                    "id" => 1,
+                                'id' => 6,
+                                'event' => 'created',
+                                'new_values' => [
+                                    'title' => 'First title',
+                                    'content' => 'First content',
+                                    'student_id' => 1,
+                                    'id' => 1,
                                 ],
-                                "user_id" => 0,
-                                "created_at" => "2019-01-01 01:00:00",
+                                'user_id' => 0,
+                                'created_at' => '2019-01-01 01:00:00',
                             ],
                         ],
                     ],
@@ -93,18 +93,79 @@ class AuditsTest extends TestCase
                         'phone' => '1234-567890',
                         'nationality' => 'GB',
                     ],
-                    "audits" => [
+                    'audits' => [
                         [
-                            "id" => 6,
-                            "event" => "created",
-                            "new_values" => [
-                                "title" => "First title",
-                                "content" => "First content",
-                                "student_id" => 1,
-                                "id" => 1,
+                            'id' => 6,
+                            'event' => 'created',
+                            'new_values' => [
+                                'title' => 'First title',
+                                'content' => 'First content',
+                                'student_id' => 1,
+                                'id' => 1,
                             ],
-                            "user_id" => 0,
-                            "created_at" => "2019-01-01 01:00:00",
+                            'user_id' => 0,
+                            'created_at' => '2019-01-01 01:00:00',
+                        ],
+                    ],
+                ],
+            ])
+            ->seeStatusCode(200);
+
+    }
+
+    public function testModifyAnnotation()
+    {
+
+        $this->json('PUT',
+            '/annotations/1',
+            [
+                'title' => 'First title modified',
+                'content' => 'First content',
+            ]
+        )
+            ->seeStatusCode(200);
+
+        $this->json('GET', '/annotations/1?with_audits=true')
+            ->seeJsonEquals([
+                'status_code' => 200,
+                'status' => 'OK',
+                'message' => 'Resource successfully retrieved/created/modified',
+                'data' => [
+                    'id' => 1,
+                    'title' => 'First title modified',
+                    'content' => 'First content',
+                    'student' => [
+                        'id' => 1,
+                        'first_name' => 'John',
+                        'last_name' => 'Doe',
+                        'e_mail' => 'john.doe@foo.com',
+                        'phone' => '1234-567890',
+                        'nationality' => 'GB',
+                    ],
+                    'audits' => [
+                        [
+                            'id' => 6,
+                            'event' => 'created',
+                            'new_values' => [
+                                'title' => 'First title',
+                                'content' => 'First content',
+                                'student_id' => 1,
+                                'id' => 1,
+                            ],
+                            'user_id' => 0,
+                            'created_at' => '2019-01-01 01:00:00',
+                        ],
+                        [
+                            'id' => \OwenIt\Auditing\Models\Audit::count(),
+                            'event' => 'updated',
+                            'old_values' => [
+                                'title' => 'First title',
+                            ],
+                            'new_values' => [
+                                'title' => 'First title modified',
+                            ],
+                            'user_id' => 0,
+                            'created_at' => date('Y-m-d H:i:s'),
                         ],
                     ],
                 ],
@@ -654,28 +715,10 @@ class AuditsTest extends TestCase
                                 'id' => 26,
                                 'event' => 'updated',
                                 'old_values' => [
-                                    'student_id' => 4,
-                                    'location_id' => 1,
-                                    'sub_location_id' => 1,
-                                    'start_date' => '2019-01-26',
-                                    'end_date' => '2019-01-31',
-                                    'hour_amount' => 34,
-                                    'other_amount' => 0,
-                                    'is_optional' => false,
                                     'is_interrupted' => false,
-                                    'id' => 3,
                                 ],
                                 'new_values' => [
-                                    'student_id' => 4,
-                                    'location_id' => 1,
-                                    'sub_location_id' => 1,
-                                    'start_date' => '2019-01-26',
-                                    'end_date' => '2019-01-31',
-                                    'hour_amount' => 34,
-                                    'other_amount' => 0,
-                                    'is_optional' => false,
                                     'is_interrupted' => true,
-                                    'id' => 3,
                                 ],
                                 'user_id' => 0,
                                 'created_at' => '2019-01-28 02:00:00',
@@ -726,32 +769,10 @@ class AuditsTest extends TestCase
                                 'id' => 25,
                                 'event' => 'updated',
                                 'old_values' => [
-                                    'student_id' => 4,
-                                    'location_id' => 1,
-                                    'sub_location_id' => 1,
-                                    // 10 days in the future.
-                                    'start_date' => (new DateTime())->add(new DateInterval('P10D'))->format('Y-m-d'),
-                                    // 20 days in the future.
-                                    'end_date' => (new DateTime())->add(new DateInterval('P20D'))->format('Y-m-d'),
-                                    'hour_amount' => 0,
-                                    'other_amount' => 0,
-                                    'is_optional' => false,
                                     'is_interrupted' => false,
-                                    'id' => 4,
                                 ],
                                 'new_values' => [
-                                    'student_id' => 4,
-                                    'location_id' => 1,
-                                    'sub_location_id' => 1,
-                                    // 10 days in the future.
-                                    'start_date' => (new DateTime())->add(new DateInterval('P10D'))->format('Y-m-d'),
-                                    // 20 days in the future.
-                                    'end_date' => (new DateTime())->add(new DateInterval('P20D'))->format('Y-m-d'),
-                                    'hour_amount' => 0,
-                                    'other_amount' => 0,
-                                    'is_optional' => false,
                                     'is_interrupted' => true,
-                                    'id' => 4,
                                 ],
                                 'user_id' => 0,
                                 'created_at' => '2019-01-28 02:00:00',
@@ -879,28 +900,10 @@ class AuditsTest extends TestCase
                             'id' => 26,
                             'event' => 'updated',
                             'old_values' => [
-                                'student_id' => 4,
-                                'location_id' => 1,
-                                'sub_location_id' => 1,
-                                'start_date' => '2019-01-26',
-                                'end_date' => '2019-01-31',
-                                'hour_amount' => 34,
-                                'other_amount' => 0,
-                                'is_optional' => false,
                                 'is_interrupted' => false,
-                                'id' => 3,
                             ],
                             'new_values' => [
-                                'student_id' => 4,
-                                'location_id' => 1,
-                                'sub_location_id' => 1,
-                                'start_date' => '2019-01-26',
-                                'end_date' => '2019-01-31',
-                                'hour_amount' => 34,
-                                'other_amount' => 0,
-                                'is_optional' => false,
                                 'is_interrupted' => true,
-                                'id' => 3,
                             ],
                             'user_id' => 0,
                             'created_at' => '2019-01-28 02:00:00',
