@@ -19,7 +19,7 @@ trait OptionalAuditsAttribute
      */
     protected function withAuditsAttribute($request) : bool
     {
-        switch(get_class($this)) {
+        switch (get_class($this)) {
             case 'App\Http\Resources\Student':
                 return $request->has('with_audits') === true && $request->get('with_audits') === 'true' &&
                     preg_match('/^(get|create)Student[A-Z][a-zA-Z]+$/', app('current_route_alias')) === 1;
