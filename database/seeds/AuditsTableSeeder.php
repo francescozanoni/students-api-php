@@ -8,6 +8,8 @@ class AuditsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
+     *
+     * @todo sort audits/change dates by setting related models after their models
      */
     public function run()
     {

@@ -3,6 +3,8 @@ declare(strict_types = 1);
 
 namespace App\Http\Resources\Traits;
 
+use Illuminate\Http\Request;
+
 /**
  * Trait OptionalAuditsAttribute
  *
@@ -14,21 +16,34 @@ trait OptionalAuditsAttribute
 {
 
     /**
-     * @param $request
+     * State whether the current model is to be appended with its audits.
+     *
+     * @param Request $request
+     *
      * @return bool
      */
-    protected function withAuditsAttribute($request) : bool
+    protected function withAuditsAttribute(Request $request) : bool
     {
-        switch (get_class($this)) {
-            case 'App\Http\Resources\Student':
-                return $request->has('with_audits') === true && $request->get('with_audits') === 'true' &&
-                    preg_match('/^(get|create)Student[A-Z][a-zA-Z]+$/', app('current_route_alias')) === 1;
-            case 'App\Http\Resources\Internship':
-                return $request->has('with_audits') === true && $request->get('with_audits') === 'true' &&
-                    preg_match('/^(get|create)Internship[A-Z][a-zA-Z]+$/', app('current_route_alias')) === 1;
-            default:
-                return $request->has('with_audits') === true && $request->get('with_audits') === 'true';
+
+        // @todo within a middleware, if "with_audits" is not provided, populate request with the default value
+        if ($request->has('with_audits') === false ||
+            $request->get('with_audits') !== 'true') {
+            return false;
         }
+
+        switch (get_class($this)) {
+
+            case 'App\Http\Resources\Student':
+                return in_array(app('current_route_alias'), ['getStudents', 'getStudentById']) === true;
+
+            case 'App\Http\Resources\Internship':
+                return in_array(app('current_route_alias'), ['getInternships', 'getStudentInternships', 'getInternshipById']) === true;
+
+            default:
+                return true;
+
+        }
+
     }
 
 }
