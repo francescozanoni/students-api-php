@@ -121,6 +121,9 @@ class AuditsTest extends TestCase
             [
                 'title' => 'First title modified',
                 'content' => 'First content',
+            ],
+            [
+                'x-user-id' => 123,
             ]
         )
             ->seeStatusCode(200);
@@ -156,7 +159,7 @@ class AuditsTest extends TestCase
                             'created_at' => '2019-01-01 01:00:00',
                         ],
                         [
-                            'id' => \OwenIt\Auditing\Models\Audit::count(),
+                            'id' => app('db')->table('audits')->count(),
                             'event' => 'updated',
                             'old_values' => [
                                 'title' => 'First title',
@@ -164,7 +167,7 @@ class AuditsTest extends TestCase
                             'new_values' => [
                                 'title' => 'First title modified',
                             ],
-                            'user_id' => 0,
+                            'user_id' => 123,
                             'created_at' => date('Y-m-d H:i:s'),
                         ],
                     ],
