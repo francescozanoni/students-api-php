@@ -28,6 +28,16 @@ class OtherTest extends TestCase
             ->seeStatusCode(500);
     }
 
+    public function testEmptyOutputOfRouteServiceProvider()
+    {
+        $this->json('GET', '/test')
+            ->seeStatusCode(500);
+
+        $this->assertNull($this->app['current_route_alias']);
+        $this->assertNull($this->app['current_route_path']);
+        $this->assertEmpty($this->app['current_route_path_parameters']);
+    }
+
     public function testUrlNotFound()
     {
         $this->json('GET', '/url_not_found')
