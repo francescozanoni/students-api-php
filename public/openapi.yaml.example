@@ -12,7 +12,7 @@ paths:
       tags:
         - students
       parameters:
-        - $ref: '#/components/parameters/withAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         '200':
           $ref: '#/components/responses/Students'
@@ -31,6 +31,8 @@ paths:
               $ref: '#/components/schemas/NewStudent'
       tags:
         - students
+      parameters:
+        - $ref: '#/components/parameters/UserId'
       responses:
         '200':
           $ref: '#/components/responses/Student'
@@ -51,7 +53,7 @@ paths:
           description: The ID of the student to retrieve
           schema:
             type: integer
-        - $ref: '#/components/parameters/withAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         '200':
           $ref: '#/components/responses/Student'
@@ -79,6 +81,7 @@ paths:
           description: The ID of the student to update
           schema:
             type: integer
+        - $ref: '#/components/parameters/UserId'
       responses:
         '200':
           $ref: '#/components/responses/Student'
@@ -100,6 +103,7 @@ paths:
           description: The ID of the student to delete
           schema:
             type: integer
+        - $ref: '#/components/parameters/UserId'
       responses:
         '200':
           $ref: '#/components/responses/ResourceDeletion'
@@ -116,7 +120,7 @@ paths:
       tags:
         - annotations
       parameters:
-        - $ref: '#/components/parameters/withAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         '200':
           $ref: '#/components/responses/Annotations'
@@ -137,7 +141,7 @@ paths:
           description: The ID of the annotation to retrieve
           schema:
             type: integer
-        - $ref: '#/components/parameters/withAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         '200':
           $ref: '#/components/responses/Annotation'
@@ -165,6 +169,7 @@ paths:
           description: The ID of the annotation to update
           schema:
             type: integer
+        - $ref: '#/components/parameters/UserId'
       responses:
         '200':
           $ref: '#/components/responses/Annotation'
@@ -186,6 +191,7 @@ paths:
           description: The ID of the annotation to delete
           schema:
             type: integer
+        - $ref: '#/components/parameters/UserId'
       responses:
         '200':
           $ref: '#/components/responses/ResourceDeletion'
@@ -208,7 +214,7 @@ paths:
           description: The ID of the student
           schema:
             type: integer
-        - $ref: '#/components/parameters/withAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         '200':
           $ref: '#/components/responses/Annotations'
@@ -236,6 +242,7 @@ paths:
           description: The ID of the annotation's student
           schema:
             type: integer
+        - $ref: '#/components/parameters/UserId'
       responses:
         '200':
           $ref: '#/components/responses/Annotation'
@@ -252,7 +259,7 @@ paths:
       tags:
         - internships
       parameters:
-        - $ref: '#/components/parameters/withAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         '200':
           $ref: '#/components/responses/Internships'
@@ -273,7 +280,7 @@ paths:
           description: The ID of the internship to retrieve
           schema:
             type: integer
-        - $ref: '#/components/parameters/withAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         '200':
           $ref: '#/components/responses/Internship'
@@ -301,6 +308,7 @@ paths:
           description: The ID of the internship to update
           schema:
             type: integer
+        - $ref: '#/components/parameters/UserId'
       responses:
         '200':
           $ref: '#/components/responses/Internship'
@@ -322,6 +330,7 @@ paths:
           description: The ID of the internship to delete
           schema:
             type: integer
+        - $ref: '#/components/parameters/UserId'
       responses:
         '200':
           $ref: '#/components/responses/ResourceDeletion'
@@ -344,7 +353,7 @@ paths:
           description: The ID of the student
           schema:
             type: integer
-        - $ref: '#/components/parameters/withAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         '200':
           $ref: '#/components/responses/Internships'
@@ -372,6 +381,7 @@ paths:
           description: The ID of the internship's student
           schema:
             type: integer
+        - $ref: '#/components/parameters/UserId'
       responses:
         '200':
           $ref: '#/components/responses/Internship'
@@ -388,7 +398,7 @@ paths:
       tags:
         - educational_activity_attendances
       parameters:
-        - $ref: '#/components/parameters/withAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         '200':
           $ref: '#/components/responses/EducationalActivityAttendances'
@@ -409,7 +419,7 @@ paths:
           description: The ID of the educational activity attendance to retrieve
           schema:
             type: integer
-        - $ref: '#/components/parameters/withAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         '200':
           $ref: '#/components/responses/EducationalActivityAttendance'
@@ -437,6 +447,7 @@ paths:
           description: The ID of the educational activity attendance to update
           schema:
             type: integer
+        - $ref: '#/components/parameters/UserId'
       responses:
         '200':
           $ref: '#/components/responses/EducationalActivityAttendance'
@@ -458,6 +469,7 @@ paths:
           description: The ID of the educational activity attendance to delete
           schema:
             type: integer
+        - $ref: '#/components/parameters/UserId'
       responses:
         '200':
           $ref: '#/components/responses/ResourceDeletion'
@@ -480,7 +492,7 @@ paths:
           description: The ID of the student
           schema:
             type: integer
-        - $ref: '#/components/parameters/withAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         '200':
           $ref: '#/components/responses/EducationalActivityAttendances'
@@ -508,6 +520,7 @@ paths:
           description: The ID of the educational activity attendance's student
           schema:
             type: integer
+        - $ref: '#/components/parameters/UserId'
       responses:
         '200':
           $ref: '#/components/responses/EducationalActivityAttendance'
@@ -530,7 +543,7 @@ paths:
           description: The ID of the internship
           schema:
             type: integer
-        - $ref: '#/components/parameters/withAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         '200':
           $ref: '#/components/responses/Evaluation'
@@ -558,6 +571,7 @@ paths:
           description: The ID of the evaluation's internship
           schema:
             type: integer
+        - $ref: '#/components/parameters/UserId'
       responses:
         '200':
           $ref: '#/components/responses/Evaluation'
@@ -574,7 +588,7 @@ paths:
       tags:
         - evaluations
       parameters:
-        - $ref: '#/components/parameters/withAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         '200':
           $ref: '#/components/responses/Evaluations'
@@ -595,7 +609,7 @@ paths:
           description: The ID of the internship evaluation to retrieve
           schema:
             type: integer
-        - $ref: '#/components/parameters/withAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         '200':
           $ref: '#/components/responses/Evaluation'
@@ -623,6 +637,7 @@ paths:
           description: The ID of the internship evaluation to update
           schema:
             type: integer
+        - $ref: '#/components/parameters/UserId'
       responses:
         '200':
           $ref: '#/components/responses/Evaluation'
@@ -644,6 +659,7 @@ paths:
           description: The ID of the internship evaluation to delete
           schema:
             type: integer
+        - $ref: '#/components/parameters/UserId'
       responses:
         '200':
           $ref: '#/components/responses/ResourceDeletion'
@@ -666,7 +682,7 @@ paths:
           description: The ID of the internship
           schema:
             type: integer
-        - $ref: '#/components/parameters/withAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         '200':
           $ref: '#/components/responses/InterruptionReport'
@@ -694,6 +710,7 @@ paths:
           description: The ID of the interruption report's internship
           schema:
             type: integer
+        - $ref: '#/components/parameters/UserId'
       responses:
         '200':
           $ref: '#/components/responses/InterruptionReport'
@@ -710,7 +727,7 @@ paths:
       tags:
         - interruption_reports
       parameters:
-        - $ref: '#/components/parameters/withAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         '200':
           $ref: '#/components/responses/InterruptionReports'
@@ -731,7 +748,7 @@ paths:
           description: The ID of the internship interruption report to retrieve
           schema:
             type: integer
-        - $ref: '#/components/parameters/withAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         '200':
           $ref: '#/components/responses/InterruptionReport'
@@ -759,6 +776,7 @@ paths:
           description: The ID of the internship interruption report to update
           schema:
             type: integer
+        - $ref: '#/components/parameters/UserId'
       responses:
         '200':
           $ref: '#/components/responses/InterruptionReport'
@@ -780,6 +798,7 @@ paths:
           description: The ID of the internship interruption report to delete
           schema:
             type: integer
+        - $ref: '#/components/parameters/UserId'
       responses:
         '200':
           $ref: '#/components/responses/ResourceDeletion'
@@ -796,7 +815,7 @@ paths:
       tags:
         - eligibilities
       parameters:
-        - $ref: '#/components/parameters/withAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         200:
           $ref: '#/components/responses/Eligibilities'
@@ -817,7 +836,7 @@ paths:
           description: The ID of the eligibility to retrieve
           schema:
             type: integer
-        - $ref: '#/components/parameters/withAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         200:
           $ref: '#/components/responses/Eligibility'
@@ -845,6 +864,7 @@ paths:
           description: The ID of the eligibility to update
           schema:
             type: integer
+        - $ref: '#/components/parameters/UserId'
       responses:
         200:
           $ref: '#/components/responses/Eligibility'
@@ -866,6 +886,7 @@ paths:
           description: The ID of the eligibility to delete
           schema:
             type: integer
+        - $ref: '#/components/parameters/UserId'
       responses:
         200:
           $ref: '#/components/responses/ResourceDeletion'
@@ -888,7 +909,7 @@ paths:
           description: 'The ID of the student'
           schema:
             type: integer
-        - $ref: '#/components/parameters/withAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         200:
           $ref: '#/components/responses/Eligibilities'
@@ -916,6 +937,7 @@ paths:
           description: The ID of the eligibility's student
           schema:
             type: integer
+        - $ref: '#/components/parameters/UserId'
       responses:
         200:
           $ref: '#/components/responses/Eligibility'
@@ -932,7 +954,7 @@ paths:
       tags:
         - osh_course_attendances
       parameters:
-        - $ref: '#/components/parameters/withAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         200:
           $ref: '#/components/responses/OshCourseAttendances'
@@ -953,7 +975,7 @@ paths:
           description: The ID of the Occupational Safety and Health course attendance to retrieve
           schema:
             type: integer
-        - $ref: '#/components/parameters/withAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         200:
           $ref: '#/components/responses/OshCourseAttendance'
@@ -981,6 +1003,7 @@ paths:
           description: The ID of the Occupational Safety and Health course attendance to update
           schema:
             type: integer
+        - $ref: '#/components/parameters/UserId'
       responses:
         200:
           $ref: '#/components/responses/OshCourseAttendance'
@@ -1002,6 +1025,7 @@ paths:
           description: The ID of the Occupational Safety and Health course attendance to delete
           schema:
             type: integer
+        - $ref: '#/components/parameters/UserId'
       responses:
         200:
           $ref: '#/components/responses/ResourceDeletion'
@@ -1024,7 +1048,7 @@ paths:
           description: 'The ID of the student'
           schema:
             type: integer
-        - $ref: '#/components/parameters/withAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         200:
           $ref: '#/components/responses/OshCourseAttendances'
@@ -1052,6 +1076,7 @@ paths:
           description: The ID of the Occupational Safety and Health course attendance''s student
           schema:
             type: integer
+        - $ref: '#/components/parameters/UserId'
       responses:
         200:
           $ref: '#/components/responses/OshCourseAttendance'
@@ -1063,14 +1088,19 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   parameters:
-    withAudits:
+    WithAudits:
       in: query
       name: with_audits
+      description: Flag indicating whether resources must be returned with audits
       schema:
-        type: string
-        enum:
-          - 'true'
-          - 'false'
+        type: boolean
+      required: false
+    UserId:
+      in: header
+      name: x-user-id
+      description: User ID, used to mark audit ownership
+      schema:
+        type: integer
       required: false
   responses:
     BadRequest:
