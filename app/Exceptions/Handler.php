@@ -68,8 +68,7 @@ class Handler extends ExceptionHandler
 
         // Since AddResponseMetadata and PrettyPrint middlewares are not executed,
         // their logic is here re-applied manually on the error response.
-        // @todo improve design of this
-        $metadata = app('App\Http\Middleware\AddResponseMetadata')->getMetadata($request, $response);
+        $metadata = app('App\Services\OpenApi\MetadataManager')->getMetadata($request, $response);
         if (empty($metadata) === true) {
             // @todo retrieve metadata from OpenAPI schema (components -> responses -> InternalServerError)
             $metadata = [

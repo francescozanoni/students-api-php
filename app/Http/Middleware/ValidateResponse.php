@@ -50,8 +50,7 @@ class ValidateResponse
 
             // Since AddResponseMetadata and PrettyPrint middlewares are not executed,
             // their logic is here re-applied manually on the error response.
-            // @todo improve design of this
-            $metadata = app('App\Http\Middleware\AddResponseMetadata')->getMetadata($request, $response);
+            $metadata = app('App\Services\OpenApi\MetadataManager')->getMetadata($request, $response);
             $fullData = array_merge($metadata, ['data' => $e->validator->errors()->toArray()]);
             $response->setData($fullData);
             // https://www.aaronsaray.com/2017/laravel-pretty-print-middleware
