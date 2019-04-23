@@ -5,10 +5,8 @@ namespace App\Http\Middleware;
 
 use App\Http\Middleware\Traits\UsesOpenApiValidator;
 use App\Http\Resources\Internship as InternshipResource;
-use App\Models\Annotation;
 use App\Models\EducationalActivityAttendance;
 use App\Models\Eligibility;
-use App\Models\Evaluation;
 use App\Models\Internship;
 use App\Models\InterruptionReport;
 use App\Models\OshCourseAttendance;

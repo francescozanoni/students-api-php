@@ -1,4 +1,4 @@
-# Student management API - PHP [![Build Status](https://travis-ci.org/francescozanoni/students-api-php.svg?branch=master)](https://travis-ci.org/francescozanoni/students-api-php) [![Coverage Status](https://coveralls.io/repos/github/francescozanoni/students-api-php/badge.svg?branch=master)](https://coveralls.io/github/francescozanoni/students-api-php?branch=master)
+# Student management API - PHP [![Build Status](https://travis-ci.org/francescozanoni/students-api-php.svg?branch=master)](https://travis-ci.org/francescozanoni/students-api-php) [![Coverage Status](https://coveralls.io/repos/github/francescozanoni/students-api-php/badge.svg?branch=master&service=github)](https://coveralls.io/github/francescozanoni/students-api-php?branch=master&service=github)
 
 This is a [RESTful](https://en.wikipedia.org/wiki/Representational_state_transfer) API providing generic management functionalities of university students:
 

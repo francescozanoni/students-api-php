@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace App\Providers;
 
 use App\Services\Psr7Service;
-use App\Services\OpenApiValidator;
+use App\Services\OpenApi\Validator as OpenApiValidator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
@@ -130,7 +130,7 @@ class ValidationServiceProvider extends ServiceProvider
     public function register()
     {
 
-        $this->app->singleton('App\Services\OpenApiValidator', function () {
+        $this->app->singleton('App\Services\OpenApi\Validator', function () {
             return new OpenApiValidator(config('openapi.schema_file_path'), new Psr7Service());
         });
 

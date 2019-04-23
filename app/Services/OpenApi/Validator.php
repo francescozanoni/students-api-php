@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace App\Services;
+namespace App\Services\OpenApi;
 
 use App\Services\Interfaces\Psr7Service;
 use HKarlstrom\Middleware\OpenApiValidation;
@@ -11,13 +11,13 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * Class OpenApiValidator
- * @package App\Services
+ * Class Validator
+ * @package App\Services\OpenApi
  *
  * This class is a Laravel/Lumen-tailored wrapper of HKarlstrom\Middleware\OpenApiValidation class,
  * which handles only PSR-7 requests/responses.
  */
-class OpenApiValidator
+class Validator
 {
 
     /**
