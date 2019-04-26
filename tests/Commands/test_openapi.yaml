@@ -1205,24 +1205,24 @@ components:
               message:
                 type: string
                 description: 'Reason making request invalid'
-              validation:
+              data:
                 type: object
-                description: 'Input item making request invalid'
+                description: 'Input item(s) making request invalid'
             required:
               - status_code
               - status
               - message
+              - data
             example:
               status_code: 400
               status: 'Bad Request'
               message: 'Request is not valid'
               data:
-                -
-                  id:
-                    - 'code error_type'
-                    - 'value abc'
-                    - 'expected integer'
-                    - 'used string'
+                id:
+                  - 'code error_type'
+                  - 'value abc'
+                  - 'expected integer'
+                  - 'used string'
     NotFound:
       description: 'Generic response reporting no resource(s) found'
       content:
@@ -1247,7 +1247,7 @@ components:
               status: 'Not Found'
               message: 'Resource(s) not found'
     InternalServerError:
-      description: 'Generic response reporting an unexpected error (default format of hapi framework)'
+      description: 'Generic response reporting an unexpected error'
       content:
         application/json:
           schema:
