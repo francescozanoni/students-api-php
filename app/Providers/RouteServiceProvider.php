@@ -49,30 +49,24 @@ class RouteServiceProvider extends ServiceProvider
         // Get the current route path, e.g. /students/{id}
         $this->app->bind('current_route_path', function ($app) {
 
-            $route = $app->request->route();
+            $originalRoute = $app->request->route();
 
-            if (isset($route[1]) === false ||
-                isset($route[1]['as']) === false) {
+            if (isset($originalRoute[1]) === false ||
+                isset($originalRoute[1]['as']) === false) {
                 return null;
             }
 
-            $routeAlias = $route[1]['as'];
-            $routes = $app['router']->getRoutes();
-            $route = array_filter(
-                $routes,
-                function ($singleRoute) use ($routeAlias) {
+            $foundRoute = array_filter(
+                $app['router']->getRoutes(),
+                function ($otherRoute) use ($originalRoute) {
                     return
-                        isset($singleRoute['action']) === true &&
-                        isset($singleRoute['action']['as']) === true &&
-                        $singleRoute['action']['as'] === $routeAlias;
+                        isset($otherRoute['action']) === true &&
+                        isset($otherRoute['action']['as']) === true &&
+                        $otherRoute['action']['as'] === $originalRoute[1]['as'];
                 }
             );
 
-            if (empty($route) === false) {
-                return reset($route)['uri'];
-            }
-
-            return null;
+            return empty($foundRoute) === false ? reset($foundRoute)['uri'] : null;
 
         });
 
@@ -80,11 +74,7 @@ class RouteServiceProvider extends ServiceProvider
 
             $route = $app->request->route();
 
-            if (isset($route[2]) === true) {
-                return $route[2];
-            }
-
-            return [];
+            return $route[2] ?? [];
 
         });
 

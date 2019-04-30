@@ -55,14 +55,12 @@ class Handler extends ExceptionHandler
             }
         }
 
-        $content =
-            [
-                'class' => get_class($exception),
-                'message' => $exception->getMessage(),
-                'file' => $exception->getFile(),
-                'line' => $exception->getLine(),
-                // 'trace' => array_slice($exception->getTrace(), 0, 3),
-            ];
+        $content = [
+            'class' => get_class($exception),
+            'message' => $exception->getMessage(),
+            'file' => $exception->getFile(),
+            'line' => $exception->getLine(),
+        ];
 
         $response = new \Illuminate\Http\JsonResponse(null, 500);
 
