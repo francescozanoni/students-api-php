@@ -43,25 +43,31 @@ class AddResponseMetadata
 
         $metadata = $this->metadataManager->getMetadata($request, $response);
 
-        if (empty($metadata) === false) {
-            $data = json_decode($response->getContent(), true);
-            $fullData = $metadata;
-            if (empty($data) === false) {
-                $fullData['data'] = $data;
-            }
-            if ($response instanceof JsonResponse) {
-                $response->setData($fullData);
-            } else {
-                if (is_string($fullData) === false &&
-                    (is_object($fullData) === true && method_exists($fullData, '__toString') === true) === false) {
-                    $fullData = json_encode($fullData);
-                }
-                $response->setContent($fullData);
-            }
+        if (empty($metadata) === true) {
+            return $response;
+        }
+        
+        $data = json_decode($response->getContent(), true);
+        $fullData = $metadata;
+        
+        if (empty($data) === false) {
+            $fullData['data'] = $data;
+        }
+        
+        if ($response instanceof JsonResponse) {
+            $response->setData($fullData);
+        } else {
+            $response->setContent($this->isNotStringifable($fullData) === true ? json_encode($fullData) : $fullData);
         }
 
         return $response;
 
+    }
+    
+    private function isNotStringifable($value) : bool
+    {
+        return is_string($value) === false &&
+                (is_object($value) === true && method_exists($value, '__toString') === true) === false;
     }
 
 }
