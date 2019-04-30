@@ -34,16 +34,8 @@ class RouteServiceProvider extends ServiceProvider
         // This binding works only from route middlewares on (within request/response life cycle).
         // Before any route middlewares, null is returned.
         $this->app->bind('current_route_alias', function ($app) {
-
             $route = $app->request->route();
-
-            if (isset($route[1]) === true &&
-                isset($route[1]['as']) === true) {
-                return $route[1]['as'];
-            }
-
-            return null;
-
+            return $route[1]['as'] ?? null;
         });
 
         // Get the current route path, e.g. /students/{id}
@@ -51,12 +43,11 @@ class RouteServiceProvider extends ServiceProvider
 
             $originalRoute = $app->request->route();
 
-            if (isset($originalRoute[1]) === false ||
-                isset($originalRoute[1]['as']) === false) {
+            if (isset($originalRoute[1]['as']) === false) {
                 return null;
             }
 
-            $foundRoute = array_filter(
+            $foundRoutes = array_filter(
                 $app['router']->getRoutes(),
                 function ($otherRoute) use ($originalRoute) {
                     return
@@ -66,16 +57,13 @@ class RouteServiceProvider extends ServiceProvider
                 }
             );
 
-            return empty($foundRoute) === false ? reset($foundRoute)['uri'] : null;
+            return empty($foundRoutes) === false ? reset($foundRoutes)['uri'] : null;
 
         });
 
         $this->app->bind('current_route_path_parameters', function ($app) {
-
             $route = $app->request->route();
-
             return $route[2] ?? [];
-
         });
 
     }
