@@ -79,6 +79,9 @@ class OtherTest extends TestCase
         // Original OpenAPI schema is restored.
         $newSchemaFileContent = str_replace("type: integer # boolean", "type: boolean", $newSchemaFileContent);
         file_put_contents($this->app['config']['openapi.schema_file_path'], $newSchemaFileContent);
+
     }
+
+    // @todo test index() method of all controllers in case of no data
 
 }

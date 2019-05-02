@@ -3,10 +3,10 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers;
 
-use App\Models\Location;
-use App\Models\SubLocation;
 use App\Models\Internship;
+use App\Models\Location;
 use App\Models\Student;
+use App\Models\SubLocation;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -21,7 +21,13 @@ class InternshipsController extends Controller
      */
     public function index() : Collection
     {
-        return Internship::all();
+        $internships = Internship::all();
+
+        if ($internships->isEmpty() === true) {
+            throw new NotFoundHttpException();
+        }
+
+        return $internships;
     }
 
     /**
@@ -53,7 +59,7 @@ class InternshipsController extends Controller
     {
         return Internship::findOrFail($id);
     }
-    
+
     /**
      * Create a student's internship.
      *
@@ -65,7 +71,7 @@ class InternshipsController extends Controller
     public function createRelatedToStudent(Request $request, int $studentId) : Internship
     {
         $student = Student::findOrFail($studentId);
-        
+
         $input = $request->request->all();
         unset($input['location']);
         if (isset($input['sub_location']) === true) {
@@ -73,10 +79,10 @@ class InternshipsController extends Controller
         }
 
         $internship = new Internship($input);
-        
+
         $location = Location::where('name', $request->request->get('location'))->first();
         $internship->location()->associate($location);
-        
+
         if ($request->request->has('sub_location') === true) {
             $subLocation = SubLocation::where('name', $request->request->get('sub_location'))->first();
             $internship->subLocation()->associate($subLocation);
@@ -86,7 +92,7 @@ class InternshipsController extends Controller
 
         return $internship;
     }
-    
+
     /**
      * Modify an internship.
      *
@@ -98,15 +104,15 @@ class InternshipsController extends Controller
     public function update(Request $request, int $id) : Internship
     {
         $internship = Internship::findOrFail($id);
-        
+
         $input = $request->request->all();
         unset($input['location']);
         if (isset($input['sub_location']) === true) {
             unset($input['sub_location']);
         }
-        
+
         $internship->fill($input);
-        
+
         $location = Location::where('name', $request->request->get('location'))->first();
         $internship->location()->associate($location);
 
@@ -118,9 +124,9 @@ class InternshipsController extends Controller
         } else {
             $internship->subLocation()->dissociate();
         }
-        
+
         $internship->save();
-        
+
         return $internship;
     }
 

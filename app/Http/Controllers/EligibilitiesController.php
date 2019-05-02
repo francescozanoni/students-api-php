@@ -19,7 +19,13 @@ class EligibilitiesController extends Controller
      */
     public function index() : Collection
     {
-        return Eligibility::all();
+        $eligibilities = Eligibility::all();
+
+        if ($eligibilities->isEmpty() === true) {
+            throw new NotFoundHttpException();
+        }
+
+        return $eligibilities;
     }
 
     /**

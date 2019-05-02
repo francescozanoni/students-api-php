@@ -19,7 +19,13 @@ class EducationalActivityAttendancesController extends Controller
      */
     public function index() : Collection
     {
-        return EducationalActivityAttendance::all();
+        $educationalActivityAttendances = EducationalActivityAttendance::all();
+
+        if ($educationalActivityAttendances->isEmpty() === true) {
+            throw new NotFoundHttpException();
+        }
+
+        return $educationalActivityAttendances;
     }
 
     /**

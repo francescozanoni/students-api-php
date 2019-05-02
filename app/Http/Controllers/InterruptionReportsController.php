@@ -3,8 +3,8 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers;
 
-use App\Models\InterruptionReport;
 use App\Models\Internship;
+use App\Models\InterruptionReport;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -19,7 +19,13 @@ class InterruptionReportsController extends Controller
      */
     public function index() : Collection
     {
-        return InterruptionReport::all();
+        $interruptionReports = InterruptionReport::all();
+
+        if ($interruptionReports->isEmpty() === true) {
+            throw new NotFoundHttpException();
+        }
+
+        return $interruptionReports;
     }
 
     /**

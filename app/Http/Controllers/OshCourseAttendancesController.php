@@ -19,7 +19,13 @@ class OshCourseAttendancesController extends Controller
      */
     public function index() : Collection
     {
-        return OshCourseAttendance::all();
+        $oshCourseAttendances = OshCourseAttendance::all();
+
+        if ($oshCourseAttendances->isEmpty() === true) {
+            throw new NotFoundHttpException();
+        }
+
+        return $oshCourseAttendances;
     }
 
     /**

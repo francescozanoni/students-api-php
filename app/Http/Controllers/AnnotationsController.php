@@ -19,7 +19,13 @@ class AnnotationsController extends Controller
      */
     public function index() : Collection
     {
-        return Annotation::all();
+        $annotations = Annotation::all();
+
+        if ($annotations->isEmpty() === true) {
+            throw new NotFoundHttpException();
+        }
+
+        return $annotations;
     }
 
     /**

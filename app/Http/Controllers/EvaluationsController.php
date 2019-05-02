@@ -19,7 +19,13 @@ class EvaluationsController extends Controller
      */
     public function index() : Collection
     {
-        return Evaluation::all();
+        $evaluations = Evaluation::all();
+
+        if ($evaluations->isEmpty() === true) {
+            throw new NotFoundHttpException();
+        }
+
+        return $evaluations;
     }
 
     /**
