@@ -102,18 +102,21 @@ abstract class AbstractBuilder
     /**
      * Remove a property from data being built.
      *
-     * @param string $property
+     * @param array $properties
      *
      * @return AbstractBuilder
      */
-    public function without(string $property) : self
+    public function without(...$properties) : self
     {
-        if (array_key_exists($property, $this->propertyAliases) === true) {
-            $property = $this->propertyAliases[$property];
+        foreach ($properties as $property) {
+            if (array_key_exists($property, $this->propertyAliases) === true) {
+                $property = $this->propertyAliases[$property];
+            }
+            if (array_key_exists($property, $this->builtData) === true) {
+                unset($this->builtData[$property]);
+            }
         }
-        if (array_key_exists($property, $this->builtData) === true) {
-            unset($this->builtData[$property]);
-        }
+
         return $this;
     }
 

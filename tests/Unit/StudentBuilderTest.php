@@ -50,8 +50,19 @@ class StudentBuilderTest extends TestCase
         );
     }
 
-    public function testWithoutProperty()
+    public function testWithoutProperties()
     {
+        $this->assertEquals(
+            [
+                'id' => 1,
+                'first_name' => 'John',
+                'last_name' => 'Doe',
+                'e_mail' => 'john.doe@foo.com',
+                'phone' => '1234-567890',
+                'nationality' => 'GB',
+            ],
+            (new StudentBuilder('john'))->without()->build()
+        );
         $this->assertEquals(
             [
                 'id' => 1,
@@ -61,6 +72,24 @@ class StudentBuilderTest extends TestCase
                 'nationality' => 'GB',
             ],
             (new StudentBuilder('john'))->without('phone')->build()
+        );
+        $this->assertEquals(
+            [
+                'id' => 1,
+                'first_name' => 'John',
+                'last_name' => 'Doe',
+                'e_mail' => 'john.doe@foo.com',
+            ],
+            (new StudentBuilder('john'))->without('phone')->without('nationality')->build()
+        );
+        $this->assertEquals(
+            [
+                'id' => 1,
+                'first_name' => 'John',
+                'last_name' => 'Doe',
+                'e_mail' => 'john.doe@foo.com',
+            ],
+            (new StudentBuilder('john'))->without('phone', 'nationality')->build()
         );
     }
 
