@@ -15,28 +15,9 @@ class StudentsTest extends TestCase
                 'status' => 'OK',
                 'message' => 'Resource(s) found',
                 'data' => [
-                    [
-                        'id' => 1,
-                        'first_name' => 'John',
-                        'last_name' => 'Doe',
-                        'e_mail' => 'john.doe@foo.com',
-                        'phone' => '1234-567890',
-                        'nationality' => 'GB',
-                    ],
-                    [
-                        'id' => 2,
-                        'first_name' => 'Jane',
-                        'last_name' => 'Doe',
-                        'e_mail' => 'jane.doe@bar.com',
-                        'nationality' => 'CA',
-                    ],
-                    [
-                        'id' => 4,
-                        'first_name' => 'Joan',
-                        'last_name' => 'Doe',
-                        'e_mail' => 'joan.doe@foo.com',
-                        'nationality' => 'IE',
-                    ]
+                    (new StudentBuilder('john'))->build(),
+                    (new StudentBuilder('jane'))->build(),
+                    (new StudentBuilder('joan'))->build(),
                 ]
             ])
             ->seeStatusCode(200);
@@ -48,20 +29,15 @@ class StudentsTest extends TestCase
     public function testGetById()
     {
 
+        $data = (new StudentBuilder('john'))->build();
+
         // Existing
-        $this->json('GET', '/students/1')
+        $this->json('GET', '/students/' . $data['id'])
             ->seeJsonEquals([
                 'status_code' => 200,
                 'status' => 'OK',
                 'message' => 'Resource successfully retrieved/created/modified',
-                'data' => [
-                    'id' => 1,
-                    'first_name' => 'John',
-                    'last_name' => 'Doe',
-                    'e_mail' => 'john.doe@foo.com',
-                    'phone' => '1234-567890',
-                    'nationality' => 'GB',
-                ]
+                'data' => $data
             ])
             ->seeStatusCode(200);
 
@@ -108,33 +84,22 @@ class StudentsTest extends TestCase
     public function testCreate()
     {
 
+        $data = (new StudentBuilder('jack'))->build();
+
         // Valid data
         $this->json('POST',
             '/students',
-            [
-                'first_name' => 'Jack',
-                'last_name' => 'Doe',
-                'e_mail' => 'jack.doe@faz.com',
-                'phone' => '0000-11111111',
-                'nationality' => 'AU',
-            ]
+            (new StudentBuilder('jack'))->without('id')->build()
         )
             ->seeJsonEquals([
                 'status_code' => 200,
                 'status' => 'OK',
                 'message' => 'Resource successfully retrieved/created/modified',
-                'data' => [
-                    'id' => 5,
-                    'first_name' => 'Jack',
-                    'last_name' => 'Doe',
-                    'e_mail' => 'jack.doe@faz.com',
-                    'phone' => '0000-11111111',
-                    'nationality' => 'AU',
-                ]
+                'data' => $data
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('students', ['id' => 5])
-            ->notSeeInDatabase('students', ['id' => 6]);
+            ->seeInDatabase('students', ['id' => $data['id']])
+            ->notSeeInDatabase('students', ['id' => $data['id'] + 1]);
 
     }
 
@@ -144,15 +109,15 @@ class StudentsTest extends TestCase
     public function testCreateFailure()
     {
 
+        $idNotToFind = (new StudentBuilder('jack'))->build()['id'] + 1;
+
         // Missing required first_name
         $this->json('POST',
             '/students',
-            [
-                'last_name' => 'Doe',
-                'e_mail' => 'jack.doe@faz.com',
-                'phone' => '0000-11111111',
-                'nationality' => 'AU',
-            ]
+            (new StudentBuilder('jack'))
+                ->without('id')
+                ->without('first_name')
+                ->build()
         )
             ->seeJsonEquals([
                 'status_code' => 400,
@@ -166,17 +131,15 @@ class StudentsTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('students', ['id' => 6]);
+            ->notSeeInDatabase('students', ['id' => $idNotToFind]);
 
         // Missing required last_name
         $this->json('POST',
             '/students',
-            [
-                'first_name' => 'Jack',
-                'e_mail' => 'jack.doe@faz.com',
-                'phone' => '0000-11111111',
-                'nationality' => 'AU',
-            ]
+            (new StudentBuilder('jack'))
+                ->without('id')
+                ->without('last_name')
+                ->build()
         )
             ->seeJsonEquals([
                 'status_code' => 400,
@@ -190,17 +153,15 @@ class StudentsTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('students', ['id' => 6]);
+            ->notSeeInDatabase('students', ['id' => $idNotToFind]);
 
         // Missing required e_mail
         $this->json('POST',
             '/students',
-            [
-                'first_name' => 'Jack',
-                'last_name' => 'Doe',
-                'phone' => '0000-11111111',
-                'nationality' => 'AU',
-            ]
+            (new StudentBuilder('jack'))
+                ->without('id')
+                ->without('e_mail')
+                ->build()
         )
             ->seeJsonEquals([
                 'status_code' => 400,
@@ -214,17 +175,15 @@ class StudentsTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('students', ['id' => 6]);
+            ->notSeeInDatabase('students', ['id' => $idNotToFind]);
 
         // Missing required nationality
         $this->json('POST',
             '/students',
-            [
-                'first_name' => 'Jack',
-                'last_name' => 'Doe',
-                'e_mail' => 'jack.doe@faz.com',
-                'phone' => '0000-11111111',
-            ]
+            (new StudentBuilder('jack'))
+                ->without('id')
+                ->without('nationality')
+                ->build()
         )
             ->seeJsonEquals([
                 'status_code' => 400,
@@ -238,18 +197,15 @@ class StudentsTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('students', ['id' => 6]);
+            ->notSeeInDatabase('students', ['id' => $idNotToFind]);
 
         // Inexistent nationality
         $this->json('POST',
             '/students',
-            [
-                'first_name' => 'Jack',
-                'last_name' => 'Doe',
-                'e_mail' => 'jack.doe@faz.com',
-                'phone' => '0000-11111111',
-                'nationality' => 'XX',
-            ]
+            (new StudentBuilder('jack'))
+                ->without('id')
+                ->with('nationality', 'XX')
+                ->build()
         )
             ->seeJsonEquals([
                 'status_code' => 400,
@@ -262,18 +218,15 @@ class StudentsTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('students', ['id' => 6]);
+            ->notSeeInDatabase('students', ['id' => $idNotToFind]);
 
         // Deleted nationality
         $this->json('POST',
             '/students',
-            [
-                'first_name' => 'Jack',
-                'last_name' => 'Doe',
-                'e_mail' => 'jack.doe@faz.com',
-                'phone' => '0000-11111111',
-                'nationality' => 'IT',
-            ]
+            (new StudentBuilder('jack'))
+                ->without('id')
+                ->with('nationality', 'IT')
+                ->build()
         )
             ->seeJsonEquals([
                 'status_code' => 400,
@@ -286,19 +239,15 @@ class StudentsTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('students', ['id' => 6]);
+            ->notSeeInDatabase('students', ['id' => $idNotToFind]);
 
         // Unallowed additional property.
         $this->json('POST',
             '/students',
-            [
-                'first_name' => 'Jack',
-                'last_name' => 'Doe',
-                'e_mail' => 'jack.doe@faz.com',
-                'phone' => '0000-11111111',
-                'nationality' => 'AU',
-                'an_additional_property' => 'an additional value',
-            ]
+            (new StudentBuilder('jack'))
+                ->without('id')
+                ->with('an_additional_property', 'an additional value')
+                ->build()
         )
             ->seeJsonEquals([
                 'status_code' => 400,
@@ -313,7 +262,7 @@ class StudentsTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('students', ['id' => 6]);
+            ->notSeeInDatabase('students', ['id' => $idNotToFind]);
 
         // @todo add invalid and minLength test
 
@@ -325,59 +274,37 @@ class StudentsTest extends TestCase
     public function testModifyById()
     {
 
+        $id = (new StudentBuilder('jane'))->build()['id'];
+
         // Success
         $this->json('PUT',
-            '/students/2',
-            [
-                'first_name' => 'Jane',
-                'last_name' => 'Doe',
-                'e_mail' => 'jane.doe@bar.com',
-                'phone' => '3333-11111111',
-                'nationality' => 'IE',
-            ]
+            '/students/' . $id,
+            (new StudentBuilder('jane'))->without('id')->with('nationality', 'IE')->build()
         )
             ->seeJsonEquals([
                 'status_code' => 200,
                 'status' => 'OK',
                 'message' => 'Resource successfully retrieved/created/modified',
-                'data' => [
-                    'id' => 2,
-                    'first_name' => 'Jane',
-                    'last_name' => 'Doe',
-                    'e_mail' => 'jane.doe@bar.com',
-                    'phone' => '3333-11111111',
-                    'nationality' => 'IE',
-                ]
+                'data' => (new StudentBuilder('jane'))->with('nationality', 'IE')->build()
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('students', ['id' => 2, 'nationality' => 'IE'])
-            ->notSeeInDatabase('students', ['id' => 2, 'nationality' => 'CA']);
+            ->seeInDatabase('students', ['id' => $id, 'nationality' => 'IE'])
+            ->notSeeInDatabase('students', ['id' => $id, 'nationality' => 'CA']);
 
-        // Success, removedphone number
+        // Success, removed phone number
         $this->json('PUT',
-            '/students/2',
-            [
-                'first_name' => 'Jane',
-                'last_name' => 'Doe',
-                'e_mail' => 'jane.doe@bar.com',
-                'nationality' => 'IE',
-            ]
+            '/students/' . $id,
+            (new StudentBuilder('jane'))->without('id')->without('phone')->build()
         )
             ->seeJsonEquals([
                 'status_code' => 200,
                 'status' => 'OK',
                 'message' => 'Resource successfully retrieved/created/modified',
-                'data' => [
-                    'id' => 2,
-                    'first_name' => 'Jane',
-                    'last_name' => 'Doe',
-                    'e_mail' => 'jane.doe@bar.com',
-                    'nationality' => 'IE',
-                ]
+                'data' => (new StudentBuilder('jane'))->without('phone')->build()
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('students', ['id' => 2, 'phone' => null])
-            ->notSeeInDatabase('students', ['id' => 2, 'phone' => '3333-11111111',]);
+            ->seeInDatabase('students', ['id' => $id, 'phone' => null])
+            ->notSeeInDatabase('students', ['id' => $id, 'phone' => '3333-11111111',]);
 
     }
 
@@ -390,13 +317,7 @@ class StudentsTest extends TestCase
         // Non existing student
         $this->json('PUT',
             '/students/999',
-            [
-                'first_name' => 'AAA',
-                'last_name' => 'BBB',
-                'e_mail' => 'aaa.bbb@ccc.com',
-                'phone' => '3333-11111111',
-                'nationality' => 'NO',
-            ]
+            (new StudentBuilder('aaa'))->build()
         )
             ->seeJsonEquals([
                 'status_code' => 404,
@@ -409,13 +330,7 @@ class StudentsTest extends TestCase
         // Non existing student
         $this->json('PUT',
             '/students/abc',
-            [
-                'first_name' => 'AAA',
-                'last_name' => 'BBB',
-                'e_mail' => 'aaa.bbb@ccc.com',
-                'phone' => '3333-11111111',
-                'nationality' => 'NO',
-            ]
+            (new StudentBuilder('aaa'))->build()
         )
             ->seeJsonEquals([
                 'status_code' => 400,
@@ -434,18 +349,17 @@ class StudentsTest extends TestCase
             ->seeStatusCode(400)
             ->notSeeInDatabase('students', ['id' => 'abc']);
 
+        $id = (new StudentBuilder('john'))->build()['id'];
 
         // Unallowed additional property.
         $this->json('PUT',
-            '/students/1',
-            [
-                'first_name' => 'John 1', // --> modified
-                'last_name' => 'Doe 1', // --> modified
-                'e_mail' => 'john.doe@foo.com',
-                'phone' => '1234-567890',
-                'nationality' => 'GB',
-                'an_additional_property' => 'an additional value',
-            ]
+            '/students/' . $id,
+            (new StudentBuilder('john'))
+                ->without('id')
+                ->with('first_name', 'John 1')
+                ->with('last_name', 'Doe 1')
+                ->with('an_additional_property', 'an additional value')
+                ->build()
         )
             ->seeJsonEquals([
                 'status_code' => 400,
@@ -459,8 +373,8 @@ class StudentsTest extends TestCase
                     ]
                 ]
             ])
-            ->seeInDatabase('students', ['id' => 1])
-            ->notSeeInDatabase('students', ['id' => 1, 'first_name' => 'John 1', 'last_name' => 'Doe 1']);
+            ->seeInDatabase('students', ['id' => $id])
+            ->notSeeInDatabase('students', ['id' => $id, 'first_name' => 'John 1', 'last_name' => 'Doe 1']);
 
         // @todo add required and minLength tests
 
@@ -472,29 +386,33 @@ class StudentsTest extends TestCase
     public function testDeleteById()
     {
 
+        $id = (new StudentBuilder('jane'))->build()['id'];
+
         // Existing student
-        $this->json('DELETE', '/students/2')
+        $this->json('DELETE', '/students/' . $id)
             ->seeJsonEquals([
                 'status_code' => 200,
                 'status' => 'OK',
                 'message' => 'Resource deleted',
             ])
             ->seeStatusCode(200)
-            ->notSeeInDatabase('students', ['id' => 2]);
+            ->notSeeInDatabase('students', ['id' => $id]);
+
+        $id = (new StudentBuilder('john'))->build()['id'];
 
         // Existing student with annotation, internship and educational activity attendance
-        $this->json('DELETE', '/students/1')
+        $this->json('DELETE', '/students/' . $id)
             ->seeJsonEquals([
                 'status_code' => 200,
                 'status' => 'OK',
                 'message' => 'Resource deleted',
             ])
             ->seeStatusCode(200)
-            ->notSeeInDatabase('students', ['id' => 1])
-            ->notSeeInDatabase('annotations', ['id' => 1, 'student_id' => 1])
-            ->notSeeInDatabase('internships', ['id' => 1, 'student_id' => 1])
-            ->notSeeInDatabase('evaluations', ['id' => 1, 'student_id' => 1])
-            ->notSeeInDatabase('educational_activity_attendances', ['id' => 1, 'student_id' => 1]);
+            ->notSeeInDatabase('students', ['id' => $id])
+            ->notSeeInDatabase('annotations', ['id' => 1, 'student_id' => $id])
+            ->notSeeInDatabase('internships', ['id' => 1, 'student_id' => $id])
+            ->notSeeInDatabase('evaluations', ['id' => 1, 'student_id' => $id])
+            ->notSeeInDatabase('educational_activity_attendances', ['id' => 1, 'student_id' => $id]);
 
     }
 
