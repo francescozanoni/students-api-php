@@ -15,19 +15,9 @@ class AnnotationsTest extends TestCase
                 'status' => 'OK',
                 'message' => 'Resource(s) found',
                 'data' => [
-                    [
-                        'id' => 1,
-                        'title' => 'First title',
-                        'content' => 'First content',
-                        'student' => [
-                            'id' => 1,
-                            'first_name' => 'John',
-                            'last_name' => 'Doe',
-                            'e_mail' => 'john.doe@foo.com',
-                            'phone' => '1234-567890',
-                            'nationality' => 'GB',
-                        ],
-                    ],
+                    (new AnnotationBuilder('first'))
+                        ->with('student', (new StudentBuilder('john'))->build())
+                        ->build()
                 ]
             ])
             ->seeStatusCode(200);
@@ -39,25 +29,17 @@ class AnnotationsTest extends TestCase
     public function testGetById()
     {
 
+        $data = (new AnnotationBuilder('first'))
+            ->with('student', (new StudentBuilder('john'))->build())
+            ->build();
+
         // Existing
-        $this->json('GET', '/annotations/1')
+        $this->json('GET', '/annotations/' . $data['id'])
             ->seeJsonEquals([
                 'status_code' => 200,
                 'status' => 'OK',
                 'message' => 'Resource successfully retrieved/created/modified',
-                'data' => [
-                    'id' => 1,
-                    'title' => 'First title',
-                    'content' => 'First content',
-                    'student' => [
-                        'id' => 1,
-                        'first_name' => 'John',
-                        'last_name' => 'Doe',
-                        'e_mail' => 'john.doe@foo.com',
-                        'phone' => '1234-567890',
-                        'nationality' => 'GB',
-                    ],
-                ],
+                'data' => $data,
             ])
             ->seeStatusCode(200);
 
@@ -104,18 +86,16 @@ class AnnotationsTest extends TestCase
     public function testGetRelatedToStudent()
     {
 
+        $student = (new StudentBuilder('john'))->build();
+
         // Existing
-        $this->json('GET', '/students/1/annotations')
+        $this->json('GET', '/students/' . $student['id'] . '/annotations')
             ->seeJsonEquals([
                 'status_code' => 200,
                 'status' => 'OK',
                 'message' => 'Resource(s) found',
                 'data' => [
-                    [
-                        'id' => 1,
-                        'title' => 'First title',
-                        'content' => 'First content',
-                    ]
+                    (new AnnotationBuilder('first'))->build()
                 ],
             ])
             ->seeStatusCode(200);
@@ -129,7 +109,7 @@ class AnnotationsTest extends TestCase
     {
 
         // Non existing annotations
-        $this->json('GET', '/students/2/annotations')
+        $this->json('GET', '/students/' . (new StudentBuilder('jane'))->build()['id'] . '/annotations')
             ->seeJsonEquals([
                 'status_code' => 404,
                 'status' => 'Not Found',
@@ -172,27 +152,23 @@ class AnnotationsTest extends TestCase
     public function testCreateRelatedToStudent()
     {
 
+        $student = (new StudentBuilder('john'))->build();
+        $data = (new AnnotationBuilder('second'))->build();
+
         // Existing student
         $this->json('POST',
-            '/students/1/annotations',
-            [
-                'title' => 'Second title',
-                'content' => 'Second content',
-            ]
+            '/students/' . $student['id'] . '/annotations',
+            (new AnnotationBuilder('second'))->without('id')->build()
         )
             ->seeJsonEquals([
                 'status_code' => 200,
                 'status' => 'OK',
                 'message' => 'Resource successfully retrieved/created/modified',
-                'data' => [
-                    'id' => 2,
-                    'title' => 'Second title',
-                    'content' => 'Second content',
-                ],
+                'data' => $data,
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('annotations', ['id' => 2, 'student_id' => 1])
-            ->notSeeInDatabase('annotations', ['id' => 3]);
+            ->seeInDatabase('annotations', ['id' => $data['id'], 'student_id' => $student['id']])
+            ->notSeeInDatabase('annotations', ['id' => $data['id'] + 1]);
 
     }
 
@@ -202,13 +178,14 @@ class AnnotationsTest extends TestCase
     public function testCreateRelatedToStudentFailure()
     {
 
+        $idNotNoFind = (new AnnotationBuilder('second'))->build()['id'] + 1;
+        $deletedStudentId = (new StudentBuilder('jim'))->build()['id'];
+        $studentId = (new StudentBuilder('john'))->build()['id'];
+
         // Non existing student
         $this->json('POST',
             '/students/999/annotations',
-            [
-                'title' => 'Second title',
-                'content' => 'Second content',
-            ]
+            (new AnnotationBuilder('second'))->without('id')->build()
         )
             ->seeJsonEquals([
                 'status_code' => 404,
@@ -216,16 +193,13 @@ class AnnotationsTest extends TestCase
                 'message' => 'Resource(s) not found',
             ])
             ->seeStatusCode(404)
-            ->notSeeInDatabase('annotations', ['id' => 3])
+            ->notSeeInDatabase('annotations', ['id' => $idNotNoFind])
             ->notSeeInDatabase('annotations', ['student_id' => 999]);
 
         // Deleted student
         $this->json('POST',
-            '/students/3/annotations',
-            [
-                'title' => 'Second title',
-                'content' => 'Second content',
-            ]
+            '/students/' . $deletedStudentId . '/annotations',
+            (new AnnotationBuilder('second'))->without('id')->build()
         )
             ->seeJsonEquals([
                 'status_code' => 404,
@@ -233,16 +207,13 @@ class AnnotationsTest extends TestCase
                 'message' => 'Resource(s) not found',
             ])
             ->seeStatusCode(404)
-            ->notSeeInDatabase('annotations', ['id' => 3])
-            ->notSeeInDatabase('annotations', ['student_id' => 999]);
+            ->notSeeInDatabase('annotations', ['id' => $idNotNoFind])
+            ->notSeeInDatabase('annotations', ['student_id' => $deletedStudentId]);
 
         // Invalid student ID
         $this->json('POST',
             '/students/abc/annotations',
-            [
-                'title' => 'Second title',
-                'content' => 'Second content',
-            ]
+            (new AnnotationBuilder('second'))->without('id')->build()
         )
             ->seeJsonEquals([
                 'status_code' => 400,
@@ -259,15 +230,13 @@ class AnnotationsTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('annotations', ['id' => 3])
+            ->notSeeInDatabase('annotations', ['id' => $idNotNoFind])
             ->notSeeInDatabase('annotations', ['student_id' => 'abc']);
 
         // Missing required title
         $this->json('POST',
-            '/students/1/annotations',
-            [
-                'content' => 'Second content',
-            ]
+            '/students/' . $studentId . '/annotations',
+            (new AnnotationBuilder('second'))->without('id')->without('title')->build()
         )
             ->seeJsonEquals([
                 'status_code' => 400,
@@ -281,15 +250,12 @@ class AnnotationsTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('annotations', ['id' => 3]);
+            ->notSeeInDatabase('annotations', ['id' => $idNotNoFind]);
 
         // Too short title
         $this->json('POST',
-            '/students/1/annotations',
-            [
-                'title' => 'A',
-                'content' => 'Second content',
-            ]
+            '/students/' . $studentId . '/annotations',
+            (new AnnotationBuilder('second'))->without('id')->with('title', 'A')->build()
         )
             ->seeJsonEquals([
                 'status_code' => 400,
@@ -306,14 +272,12 @@ class AnnotationsTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('annotations', ['id' => 3]);
+            ->notSeeInDatabase('annotations', ['id' => $idNotNoFind]);
 
         // Missing required content
         $this->json('POST',
-            '/students/1/annotations',
-            [
-                'title' => 'Second title',
-            ]
+            '/students/' . $studentId . '/annotations',
+            (new AnnotationBuilder('second'))->without('id')->without('content')->build()
         )
             ->seeJsonEquals([
                 'status_code' => 400,
@@ -327,15 +291,12 @@ class AnnotationsTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('annotations', ['id' => 3]);
+            ->notSeeInDatabase('annotations', ['id' => $idNotNoFind]);
 
         // Too short content
         $this->json('POST',
-            '/students/1/annotations',
-            [
-                'title' => 'Second title',
-                'content' => 'A',
-            ]
+            '/students/' . $studentId . '/annotations',
+            (new AnnotationBuilder('second'))->without('id')->with('content', 'A')->build()
         )
             ->seeJsonEquals([
                 'status_code' => 400,
@@ -352,16 +313,12 @@ class AnnotationsTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('annotations', ['id' => 3]);
+            ->notSeeInDatabase('annotations', ['id' => $idNotNoFind]);
 
         // Unallowed additional property.
         $this->json('POST',
-            '/students/1/annotations',
-            [
-                'title' => 'Second title',
-                'content' => 'Second content',
-                'an_additional_property' => 'an additional value',
-            ]
+            '/students/' . $studentId . '/annotations',
+            (new AnnotationBuilder('second'))->without('id')->with('an_additional_property', 'an additional value')->build()
         )
             ->seeJsonEquals([
                 'status_code' => 400,
@@ -376,7 +333,7 @@ class AnnotationsTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400)
-            ->notSeeInDatabase('annotations', ['id' => 3]);
+            ->notSeeInDatabase('annotations', ['id' => $idNotNoFind]);
 
     }
 
@@ -386,35 +343,26 @@ class AnnotationsTest extends TestCase
     public function testModifyById()
     {
 
+        $id = (new AnnotationBuilder('first'))->build()['id'];
+        $title = (new AnnotationBuilder('first'))->build()['title'];
+
         // Success
         $this->json('PUT',
-            '/annotations/1',
-            [
-                'title' => 'First title modified',
-                'content' => 'First content',
-            ]
+            '/annotations/' . $id,
+            (new AnnotationBuilder('first'))->without('id')->with('title', 'First title modified')->build()
         )
             ->seeJsonEquals([
                 'status_code' => 200,
                 'status' => 'OK',
                 'message' => 'Resource successfully retrieved/created/modified',
-                'data' => [
-                    'id' => 1,
-                    'title' => 'First title modified',
-                    'content' => 'First content',
-                    'student' => [
-                        'id' => 1,
-                        'first_name' => 'John',
-                        'last_name' => 'Doe',
-                        'e_mail' => 'john.doe@foo.com',
-                        'phone' => '1234-567890',
-                        'nationality' => 'GB',
-                    ],
-                ]
+                'data' => (new AnnotationBuilder('first'))
+                    ->with('title', 'First title modified')
+                    ->with('student', (new StudentBuilder('john'))->build())
+                    ->build()
             ])
             ->seeStatusCode(200)
-            ->seeInDatabase('annotations', ['id' => 1, 'title' => 'First title modified'])
-            ->notSeeInDatabase('annotations', ['id' => 1, 'title' => 'First title']);
+            ->seeInDatabase('annotations', ['id' => $id, 'title' => 'First title modified'])
+            ->notSeeInDatabase('annotations', ['id' => $id, 'title' => $title]);
 
     }
 
@@ -424,13 +372,12 @@ class AnnotationsTest extends TestCase
     public function testModifyByIdFailure()
     {
 
+        $idNotToBeFound = (new AnnotationBuilder('second'))->build()['id'] + 1;
+
         // Invalid ID
         $this->json('PUT',
             '/annotations/abc',
-            [
-                'title' => 'Second title',
-                'content' => 'Second content',
-            ]
+            (new AnnotationBuilder('second'))->without('id')->build()
         )
             ->seeJsonEquals([
                 'status_code' => 400,
@@ -448,15 +395,12 @@ class AnnotationsTest extends TestCase
             ])
             ->seeStatusCode(400)
             ->notSeeInDatabase('annotations', ['id' => 'abc'])
-            ->notSeeInDatabase('annotations', ['id' => 3]);
+            ->notSeeInDatabase('annotations', ['id' => $idNotToBeFound]);
 
         // Non existing ID
         $this->json('PUT',
             '/annotations/999',
-            [
-                'title' => 'Second title',
-                'content' => 'Second content',
-            ]
+            (new AnnotationBuilder('second'))->without('id')->build()
         )
             ->seeJsonEquals([
                 'status_code' => 404,
@@ -465,16 +409,19 @@ class AnnotationsTest extends TestCase
             ])
             ->seeStatusCode(404)
             ->notSeeInDatabase('annotations', ['id' => 999])
-            ->notSeeInDatabase('annotations', ['id' => 3]);
+            ->notSeeInDatabase('annotations', ['id' => $idNotToBeFound]);
+
+        $unmodifiedAnnotationId = (new AnnotationBuilder('first'))->build()['id'];
 
         // Unallowed additional property.
         $this->json('PUT',
-            '/annotations/1',
-            [
-                'title' => 'First title 1', // --> modified
-                'content' => 'First content 1', // --> modified
-                'an_additional_property' => 'an additional value',
-            ]
+            '/annotations/' . $unmodifiedAnnotationId,
+            (new AnnotationBuilder('first'))
+                ->without('id')
+                ->with('title', 'First title 1')
+                ->with('content', 'First content 1')
+                ->with('an_additional_property', 'an additional value')
+                ->build()
         )
             ->seeJsonEquals([
                 'status_code' => 400,
@@ -488,15 +435,13 @@ class AnnotationsTest extends TestCase
                     ]
                 ]
             ])
-            ->seeInDatabase('annotations', ['id' => 1])
-            ->notSeeInDatabase('annotations', ['id' => 1, 'title' => 'First title 1', 'content' => 'First content 1']);
+            ->seeInDatabase('annotations', ['id' => $unmodifiedAnnotationId])
+            ->notSeeInDatabase('annotations', ['id' => $unmodifiedAnnotationId, 'title' => 'First title 1', 'content' => 'First content 1']);
 
         // Missing required title
         $this->json('PUT',
-            '/annotations/1',
-            [
-                'content' => 'First content',
-            ]
+            '/annotations/' . $unmodifiedAnnotationId,
+            (new AnnotationBuilder('first'))->without('id')->without('title')->build()
         )
             ->seeJsonEquals([
                 'status_code' => 400,
@@ -513,10 +458,8 @@ class AnnotationsTest extends TestCase
 
         // Missing required content
         $this->json('PUT',
-            '/annotations/1',
-            [
-                'title' => 'First title',
-            ]
+            '/annotations/' . $unmodifiedAnnotationId,
+            (new AnnotationBuilder('first'))->without('id')->without('content')->build()
         )
             ->seeJsonEquals([
                 'status_code' => 400,
@@ -541,15 +484,17 @@ class AnnotationsTest extends TestCase
     public function testDeleteById()
     {
 
+        $deletedAnnotationId = (new AnnotationBuilder('first'))->build()['id'];
+
         // Existing annotation
-        $this->json('DELETE', '/annotations/1')
+        $this->json('DELETE', '/annotations/' . $deletedAnnotationId)
             ->seeJsonEquals([
                 'status_code' => 200,
                 'status' => 'OK',
                 'message' => 'Resource deleted',
             ])
             ->seeStatusCode(200)
-            ->notSeeInDatabase('annotations', ['id' => 1]);
+            ->notSeeInDatabase('annotations', ['id' => $deletedAnnotationId]);
 
     }
 

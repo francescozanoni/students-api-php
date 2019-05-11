@@ -68,7 +68,7 @@ class StudentBuilderTest extends TestCase
     {
         $this->assertEquals(
             [],
-            (new StudentBuilder('inexistent_alias'))->without('phone')->build()
+            (new StudentBuilder('inexistent_alias'))->build()
         );
     }
 
