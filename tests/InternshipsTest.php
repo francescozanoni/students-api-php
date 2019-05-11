@@ -46,7 +46,7 @@ class InternshipsTest extends TestCase
                         'id' => 3,
                         'location' => 'Location 1',
                         'sub_location' => 'Sub-location 1',
-                        'student' => (new StudentBuilder('jonn'))->build(),
+                        'student' => (new StudentBuilder('joan'))->build(),
                         'start_date' => '2019-01-26',
                         'end_date' => '2019-01-31',
                         'hour_amount' => 34,
@@ -58,7 +58,7 @@ class InternshipsTest extends TestCase
                         'id' => 4,
                         'location' => 'Location 1',
                         'sub_location' => 'Sub-location 1',
-                        'student' => (new StudentBuilder('jonn'))->build(),
+                        'student' => (new StudentBuilder('joan'))->build(),
                         // 10 days in the future.
                         'start_date' => (new DateTime())->add(new DateInterval('P10D'))->format('Y-m-d'),
                         // 20 days in the future.

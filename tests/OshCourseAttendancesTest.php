@@ -25,7 +25,7 @@ class OshCourseAttendancesTest extends TestCase
                         'id' => 3,
                         'start_date' => '2018-12-14',
                         'end_date' => '2019-12-13',
-                        'student' => (new StudentBuilder('jonn'))->build(),
+                        'student' => (new StudentBuilder('joan'))->build(),
                     ],
                 ]
             ])
