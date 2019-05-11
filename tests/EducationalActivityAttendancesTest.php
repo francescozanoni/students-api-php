@@ -22,14 +22,7 @@ class EducationalActivityAttendancesTest extends TestCase
                         'start_date' => '2019-01-08',
                         'end_date' => '2019-01-09',
                         'credits' => 1.2,
-                        'student' => [
-                            'id' => 1,
-                            'first_name' => 'John',
-                            'last_name' => 'Doe',
-                            'e_mail' => 'john.doe@foo.com',
-                            'phone' => '1234-567890',
-                            'nationality' => 'GB',
-                        ],
+                        'student' => (new StudentBuilder('john'))->build(),
                     ],
                 ],
             ])
@@ -55,14 +48,7 @@ class EducationalActivityAttendancesTest extends TestCase
                     'start_date' => '2019-01-08',
                     'end_date' => '2019-01-09',
                     'credits' => 1.2,
-                    'student' => [
-                        'id' => 1,
-                        'first_name' => 'John',
-                        'last_name' => 'Doe',
-                        'e_mail' => 'john.doe@foo.com',
-                        'phone' => '1234-567890',
-                        'nationality' => 'GB',
-                    ],
+                    'student' => (new StudentBuilder('john'))->build(),
                 ],
             ])
             ->seeStatusCode(200);
@@ -488,14 +474,7 @@ class EducationalActivityAttendancesTest extends TestCase
                     'start_date' => '2019-01-09',
                     'end_date' => '2019-01-10',
                     'credits' => 1.0,
-                    'student' => [
-                        'id' => 1,
-                        'first_name' => 'John',
-                        'last_name' => 'Doe',
-                        'e_mail' => 'john.doe@foo.com',
-                        'phone' => '1234-567890',
-                        'nationality' => 'GB',
-                    ],
+                    'student' => (new StudentBuilder('john'))->build(),
                 ],
             ])
             ->seeStatusCode(200)
@@ -523,14 +502,7 @@ class EducationalActivityAttendancesTest extends TestCase
                     'educational_activity' => 'First educational activity',
                     'start_date' => '2019-01-09',
                     'credits' => 1.0,
-                    'student' => [
-                        'id' => 1,
-                        'first_name' => 'John',
-                        'last_name' => 'Doe',
-                        'e_mail' => 'john.doe@foo.com',
-                        'phone' => '1234-567890',
-                        'nationality' => 'GB',
-                    ],
+                    'student' => (new StudentBuilder('john'))->build(),
                 ],
             ])
             ->seeStatusCode(200)

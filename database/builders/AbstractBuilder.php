@@ -4,7 +4,8 @@ declare(strict_types = 1);
 /**
  * Class AbstractBuilder
  *
- * Build data for testing/development purposes, by Test Data Builder Pattern.
+ * Build data for testing/development purposes, with Test Data Builder Pattern,
+ * via a fluent interface.
  * Inspired by http://geekswithblogs.net/Podwysocki/archive/2008/01/08/118362.aspx.
  *
  * Examples with StudentBuilder:
@@ -85,7 +86,7 @@ abstract class AbstractBuilder
      * Add a property to data being built.
      *
      * @param string $property
-     * @param $value
+     * @param string|integer|float $value
      *
      * @return AbstractBuilder
      */

@@ -11,11 +11,10 @@ class AnnotationsTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('annotations')->insert([
-            'id' => 1,
-            'student_id' => 1,
-            'title' => 'First title',
-            'content' => 'First content',
-        ]);
+        DB::table('annotations')->insert(
+            (new AnnotationBuilder('first'))
+                ->with('student_id', (new StudentBuilder('john'))->build()['id'])
+                ->build()
+        );
     }
 }

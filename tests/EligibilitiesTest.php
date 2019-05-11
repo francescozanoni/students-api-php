@@ -21,27 +21,14 @@ class EligibilitiesTest extends TestCase
                         'end_date' => '2019-12-01',
                         'notes' => 'First eligibility notes',
                         'is_eligible' => true,
-                        'student' => [
-                            'id' => 1,
-                            'first_name' => 'John',
-                            'last_name' => 'Doe',
-                            'e_mail' => 'john.doe@foo.com',
-                            'phone' => '1234-567890',
-                            'nationality' => 'GB',
-                        ],
+                        'student' => (new StudentBuilder('john'))->build(),
                     ],
                     [
                         'id' => 3,
                         'start_date' => '2019-01-01',
                         'end_date' => '2019-12-01',
                         'is_eligible' => false,
-                        'student' => [
-                            'id' => 2,
-                            'first_name' => 'Jane',
-                            'last_name' => 'Doe',
-                            'e_mail' => 'jane.doe@bar.com',
-                            'nationality' => 'CA',
-                        ],
+                        'student' => (new StudentBuilder('jane'))->build(),
                     ]
                 ]
             ])
@@ -66,14 +53,7 @@ class EligibilitiesTest extends TestCase
                     'end_date' => '2019-12-01',
                     'notes' => 'First eligibility notes',
                     'is_eligible' => true,
-                    'student' => [
-                        'id' => 1,
-                        'first_name' => 'John',
-                        'last_name' => 'Doe',
-                        'e_mail' => 'john.doe@foo.com',
-                        'phone' => '1234-567890',
-                        'nationality' => 'GB',
-                    ],
+                    'student' => (new StudentBuilder('john'))->build(),
                 ],
             ])
             ->seeStatusCode(200);
@@ -582,14 +562,7 @@ class EligibilitiesTest extends TestCase
                     'end_date' => '2019-12-01',
                     'notes' => 'First eligibility notes modified', // --> modified
                     'is_eligible' => true,
-                    'student' => [
-                        'id' => 1,
-                        'first_name' => 'John',
-                        'last_name' => 'Doe',
-                        'e_mail' => 'john.doe@foo.com',
-                        'phone' => '1234-567890',
-                        'nationality' => 'GB',
-                    ],
+                    'student' => (new StudentBuilder('john'))->build(),
                 ]
             ])
             ->seeStatusCode(200)
@@ -614,14 +587,7 @@ class EligibilitiesTest extends TestCase
                     'start_date' => '2019-02-01', // --> modified
                     'end_date' => '2019-12-01',
                     'is_eligible' => true,
-                    'student' => [
-                        'id' => 1,
-                        'first_name' => 'John',
-                        'last_name' => 'Doe',
-                        'e_mail' => 'john.doe@foo.com',
-                        'phone' => '1234-567890',
-                        'nationality' => 'GB',
-                    ],
+                    'student' => (new StudentBuilder('john'))->build(),
                 ]
             ])
             ->seeStatusCode(200)

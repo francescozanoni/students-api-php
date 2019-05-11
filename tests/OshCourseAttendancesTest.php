@@ -19,26 +19,13 @@ class OshCourseAttendancesTest extends TestCase
                         'id' => 1,
                         'start_date' => '2018-12-08',
                         'end_date' => '2019-12-07',
-                        'student' => [
-                            'id' => 1,
-                            'first_name' => 'John',
-                            'last_name' => 'Doe',
-                            'e_mail' => 'john.doe@foo.com',
-                            'phone' => '1234-567890',
-                            'nationality' => 'GB',
-                        ],
+                        'student' => (new StudentBuilder('john'))->build(),
                     ],
                     [
                         'id' => 3,
                         'start_date' => '2018-12-14',
                         'end_date' => '2019-12-13',
-                        'student' => [
-                            'id' => 4,
-                            'first_name' => 'Joan',
-                            'last_name' => 'Doe',
-                            'e_mail' => 'joan.doe@foo.com',
-                            'nationality' => 'IE',
-                        ],
+                        'student' => (new StudentBuilder('jonn'))->build(),
                     ],
                 ]
             ])
@@ -61,14 +48,7 @@ class OshCourseAttendancesTest extends TestCase
                     'id' => 1,
                     'start_date' => '2018-12-08',
                     'end_date' => '2019-12-07',
-                    'student' => [
-                        'id' => 1,
-                        'first_name' => 'John',
-                        'last_name' => 'Doe',
-                        'e_mail' => 'john.doe@foo.com',
-                        'phone' => '1234-567890',
-                        'nationality' => 'GB',
-                    ],
+                    'student' => (new StudentBuilder('john'))->build(),
                 ],
             ])
             ->seeStatusCode(200);
@@ -495,14 +475,7 @@ class OshCourseAttendancesTest extends TestCase
                     'id' => 1,
                     'start_date' => '2018-12-18', // --> modified
                     'end_date' => '2019-11-07', // --> modified
-                    'student' => [
-                        'id' => 1,
-                        'first_name' => 'John',
-                        'last_name' => 'Doe',
-                        'e_mail' => 'john.doe@foo.com',
-                        'phone' => '1234-567890',
-                        'nationality' => 'GB',
-                    ],
+                    'student' => (new StudentBuilder('john'))->build(),
                 ]
             ])
             ->seeStatusCode(200)
