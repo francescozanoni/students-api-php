@@ -37,13 +37,12 @@ declare(strict_types = 1);
  *                'nationality' => 'GB',
  *                'new_property' => 'new value', ---------------> ADDED PROPERTY
  *              ]
- *  - (new StudentBuilder('john'))->without('phone')->build()
+ *  - (new StudentBuilder('john'))->without('phone', 'nationality')->build()
  *      returns [
  *                'id' => 1,
  *                'first_name' => 'John',
  *                'last_name' => 'Doe',
  *                'e_mail' => 'john.doe@foo.com',
- *                'nationality' => 'GB,
  *              ]
  *  - (new StudentBuilder('inexistent_alias'))->build()
  *      returns []
@@ -86,7 +85,7 @@ abstract class AbstractBuilder
      * Add a property to data being built.
      *
      * @param string $property
-     * @param string|integer|float $value
+     * @param mixed $value
      *
      * @return AbstractBuilder
      */
@@ -100,7 +99,7 @@ abstract class AbstractBuilder
     }
 
     /**
-     * Remove a property from data being built.
+     * Remove properties from data being built.
      *
      * @param array $properties
      *
