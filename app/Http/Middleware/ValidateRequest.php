@@ -10,6 +10,7 @@ use App\Models\Eligibility;
 use App\Models\Internship;
 use App\Models\InterruptionReport;
 use App\Models\OshCourseAttendance;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
@@ -26,7 +27,7 @@ class ValidateRequest
     /**
      * Validate request
      *
-     * @param $request
+     * @param Request $request
      * @param \Closure $next
      *
      * @return mixed
@@ -39,7 +40,7 @@ class ValidateRequest
      *
      * @todo find a way to refactor this VERY LONG method
      */
-    public function handle($request, \Closure $next)
+    public function handle(Request $request, \Closure $next)
     {
 
         // STEP 1: validation against OpenAPI schema
@@ -411,6 +412,16 @@ class ValidateRequest
 
             default:
 
+        }
+
+        // -------------------------------------------------------------------------------------------------------------
+
+        // PATCH: in case of creation/modification of a resource/property, body is required,
+        //        but package hkarlstrom/openapi-validation-middleware does not handle empty body correctly,
+        //        therefore the following additional check is required.
+        if (preg_match('/^(create|update)/', app('current_route_alias')) === 1 &&
+            count($request->request) === 0) {
+            throw ValidationException::withMessages(['requestBody' => ['code error_required']]);
         }
 
         // -------------------------------------------------------------------------------------------------------------
