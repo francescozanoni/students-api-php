@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Http\Middleware;
 
+use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
 /**
@@ -15,12 +16,12 @@ class HandleNegativeResponseContent
     /**
      * Handle responses reporting negative results.
      *
-     * @param $request
+     * @param Request $request
      * @param \Closure $next
      *
      * @return mixed
      */
-    public function handle($request, \Closure $next)
+    public function handle(Request $request, \Closure $next)
     {
 
         $response = $next($request);

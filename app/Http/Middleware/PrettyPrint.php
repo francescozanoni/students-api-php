@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace App\Http\Middleware;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 /**
@@ -16,11 +17,12 @@ class PrettyPrint
     /**
      * Apply pretty print if designated
      *
-     * @param $request
+     * @param Request $request
      * @param \Closure $next
+     *
      * @return mixed
      */
-    public function handle($request, \Closure $next)
+    public function handle(Request $request, \Closure $next)
     {
 
         $response = $next($request);

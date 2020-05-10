@@ -11,6 +11,7 @@ use App\Http\Resources\Internship as InternshipResource;
 use App\Http\Resources\InterruptionReport as InterruptionReportResource;
 use App\Http\Resources\OshCourseAttendance as OshCourseAttendanceResource;
 use App\Http\Resources\Student as StudentResource;
+use Illuminate\Http\Request;
 
 /**
  * Class ApplyResourceTransformers
@@ -22,12 +23,12 @@ class ApplyResourceTransformers
     /**
      * Add response metadata
      *
-     * @param $request
+     * @param Request $request
      * @param \Closure $next
      *
      * @return mixed
      */
-    public function handle($request, \Closure $next)
+    public function handle(Request $request, \Closure $next)
     {
 
         $response = $next($request);

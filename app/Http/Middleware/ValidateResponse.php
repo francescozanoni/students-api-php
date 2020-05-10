@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace App\Http\Middleware;
 
 use App\Http\Middleware\Traits\UsesOpenApiValidator;
+use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
 /**
@@ -18,7 +19,7 @@ class ValidateResponse
     /**
      * Validate response
      *
-     * @param $request
+     * @param Request $request
      * @param \Closure $next
      *
      * @return mixed
@@ -29,7 +30,7 @@ class ValidateResponse
      *                                  with the following warning:
      *                                  "Exception 'ValidationException' is never thrown in the function"
      */
-    public function handle($request, \Closure $next)
+    public function handle(Request $request, \Closure $next)
     {
 
         $response = $next($request);
