@@ -1,4 +1,5 @@
 vendor/
+node_modules/
 
 # Laravel 5 & Lumen specific
 storage/*.key
@@ -12,6 +13,7 @@ phpunit.xml
 public/docs/
 public/phpliteadmin/*
 !public/phpliteadmin/phpliteadmin.config.app.php
+public/client.js
 
 # IDE specific
 .vscode/

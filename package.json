@@ -1,0 +1,15 @@
+{
+  "name": "students-api-php",
+  "version": "1.0.0",
+  "main": "resources/client.js",
+  "repository": "https://github.com/francescozanoni/students-api-php",
+  "author": "Francesco Zanoni <francesco.zanoni@nubilaria.com>",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "jsonform": "^2.1.6",
+    "openapi-json-schemextractor": "^1.1.3",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11"
+  }
+}

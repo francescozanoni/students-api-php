@@ -1,0 +1,14 @@
+<!doctype html>
+<html>
+<head>
+    <title>Getting Started</title>
+</head>
+<body>
+    <script src="client.js"></script>
+    <script>
+        (async () => {
+            console.log(await libraries.SchemExtractor.fromFile("http://localhost:8080/openapi.yaml"));
+        })();
+    </script>
+</body>
+</html>
