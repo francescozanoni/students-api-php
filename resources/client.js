@@ -1,3 +1,3 @@
 module.exports = {
-    SchemExtractor: require("openapi-json-schemextractor")
+    SchemExtractor: require("openapi-json-schemextractor"),
 };

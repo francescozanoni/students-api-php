@@ -1,24 +1,51 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
-    <title>Getting Started</title>
+    <meta charset="utf-8"/>
+    <title>Getting started with JSON Form</title>
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/jsonform@2.1.6/deps/opt/bootstrap.css"/>
 </head>
 <body>
-    <script src="client.js"></script>
-    <script>
-        (async () => {
-            var baseUrl = window.location.protocol + "//" + window.location.host;
+<h1>Getting started with JSON Form</h1>
+<select id="model">
+    <option value=""></option>
+</select>
+<form></form>
+<div id="res" class="alert"></div>
+<script type="text/javascript" src="https://unpkg.com/jsonform@2.1.6/deps/jquery.min.js"></script>
+<script type="text/javascript" src="https://unpkg.com/jsonform@2.1.6/deps/underscore.js"></script>
+<script type="text/javascript" src="https://unpkg.com/jsonform@2.1.6/deps/opt/jsv.js"></script>
+<script type="text/javascript" src="https://unpkg.com/jsonform@2.1.6/lib/jsonform.js"></script>
+<script type="text/javascript" src="client.js"></script>
+<script>
+    (async () => {
+        var baseUrl = window.location.protocol + "//" + window.location.host;
 
-            var allJsonSchemas = await libraries.SchemExtractor.fromFile(baseUrl + "/openapi.yaml");
-            var jsonSchemas = {};
+        var allJsonSchemas = await libraries.SchemExtractor.fromFile(baseUrl + "/openapi.yaml");
+        var jsonSchemas = {};
 
-            // Remove parameter JSON schemas and JSON schemas related to entities not manually editable.
-            Object.keys(allJsonSchemas)
-                .filter((key) => key.indexOf("/") === -1 && key.indexOf("Audit") === -1)
-                .forEach((key) => jsonSchemas[key] = allJsonSchemas[key]);
+        // Remove parameter JSON schemas and JSON schemas related to entities not manually editable.
+        Object.keys(allJsonSchemas)
+            .filter(key => key.indexOf("/") === -1 && key.indexOf("Audit") === -1)
+            .forEach(key => jsonSchemas[key] = allJsonSchemas[key]);
 
-            console.log(jsonSchemas);
-        })();
-    </script>
+        Object.keys(jsonSchemas).forEach(key => $("#model").append(new Option(key, key)));
+
+        $("#model").change(function () {
+            $("form").html("");
+            $("form").jsonForm({
+                schema: jsonSchemas[$(this).val()],
+                onSubmit: function (errors, values) {
+                    if (errors) {
+                        $("#res").html("<p>" + JSON.stringify(error) + "</p>");
+                    } else {
+                        $("#res").html("<p>" + JSON.stringify(values) + "</p>");
+                    }
+                }
+            });
+        })
+
+    })();
+</script>
 </body>
 </html>
