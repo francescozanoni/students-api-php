@@ -7,7 +7,17 @@
     <script src="client.js"></script>
     <script>
         (async () => {
-            console.log(await libraries.SchemExtractor.fromFile("http://localhost:8080/openapi.yaml"));
+            var baseUrl = window.location.protocol + "//" + window.location.host;
+
+            var allJsonSchemas = await libraries.SchemExtractor.fromFile(baseUrl + "/openapi.yaml");
+            var jsonSchemas = {};
+
+            // Remove parameter JSON schemas and JSON schemas related to entities not manually editable.
+            Object.keys(allJsonSchemas)
+                .filter((key) => key.indexOf("/") === -1 && key.indexOf("Audit") === -1)
+                .forEach((key) => jsonSchemas[key] = allJsonSchemas[key]);
+
+            console.log(jsonSchemas);
         })();
     </script>
 </body>

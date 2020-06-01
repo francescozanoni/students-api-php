@@ -2028,16 +2028,15 @@ once@^1.3.0, once@^1.3.1, once@^1.4.0:
   dependencies:
     wrappy "1"
 
-openapi-json-schemextractor@^1.1.3:
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/openapi-json-schemextractor/-/openapi-json-schemextractor-1.1.3.tgz#6642d81b885459b2f82380d1cbc33d0c854a4f15"
-  integrity sha512-hNmZylKP9MTPLNkIX6gNesrtNJwBLm8EmxOFhqz4tt2wpnReR/lg8gAFNhqE0+jWya+5DFAb+GiR7LoXDQwlzA==
+openapi-json-schemextractor@^1.1.4:
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/openapi-json-schemextractor/-/openapi-json-schemextractor-1.1.4.tgz#b6c3e8b515c455b484fdc55314ec61062f0d0ab9"
+  integrity sha512-lxg8oRnXFbhku5sVYl7RtA3sSSKDAvk0JBna0NGhOvM2DZd+MQ2oCnnZOg60JwEaKthk0r+cDQ6DUYQuYQWLvA==
   dependencies:
     "@apidevtools/json-schema-ref-parser" "^9.0.1"
     "@openapi-contrib/openapi-schema-to-json-schema" "^3.0.0"
     js-yaml "^3.14.0"
     json-schema-merge-allof "^0.7.0"
-    underscore "^1.10.2"
 
 os-browserify@^0.3.0:
   version "0.3.0"
@@ -2796,11 +2795,6 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
-
-underscore@^1.10.2:
-  version "1.10.2"
-  resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.10.2.tgz#73d6aa3668f3188e4adb0f1943bd12cfd7efaaaf"
-  integrity sha512-N4P+Q/BuyuEKFJ43B9gYuOj4TQUHXX+j2FqguVOpjkssLUUrnJofCcBccJSCoeturDoZU6GorDTHSvUDlSQbTg==
 
 union-value@^1.0.0:
   version "1.0.1"
