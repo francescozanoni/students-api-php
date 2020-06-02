@@ -16,6 +16,8 @@ const baseUrl = window.location.protocol + "//" + window.location.host;
         .forEach(key => {
             jsonSchemas[key] = lib.adaptJsonSchemaToDraft03(allJsonSchemas[key]);
             jsonSchemas[key] = lib.removeJsonSchemaProperty(jsonSchemas[key], "audits");
+            jsonSchemas[key] = lib.removeJsonSchemaProperty(jsonSchemas[key], "student");
+            jsonSchemas[key] = lib.removeJsonSchemaProperty(jsonSchemas[key], "internship");
         });
 
     // List relevant JSON schemas within select box.
@@ -37,8 +39,8 @@ const baseUrl = window.location.protocol + "//" + window.location.host;
         form.jsonForm({
             schema: jsonSchemas[modelSelector.val()],
             /* If onSubmit() is provided, onSubmitValid() is not executed
-            onSubmit: (errors, values) => {},
-            */
+             * onSubmit: (errors, values) => {},
+             */
             onSubmitValid: function (values) {
                 $.ajax({
                     method: "POST",
