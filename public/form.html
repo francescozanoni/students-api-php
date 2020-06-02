@@ -3,13 +3,13 @@
 <head>
     <meta charset="utf-8"/>
     <title>Getting started with JSON Form</title>
-    <style>
-        h2 {
-            font-weight: 200;
-            margin-top: 0;
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/jsonform@2.1.6/deps/opt/bootstrap.css"/>
+    <style rel="stylesheet" type="text/css">
+        pre {
+            background-color: transparent;
         }
 
-        #form .add-on {
+        form .add-on {
             border: none;
             background-color: inherit;
         }
@@ -32,6 +32,10 @@
             color: red;
         }
 
+        .jsonform-errortext {
+            color: red;
+        }
+
         form.jsonform-hasrequired:after {
             content: '* Required field';
             display: block;
@@ -39,21 +43,21 @@
             padding-top: 1em;
         }
     </style>
-    <link rel="stylesheet" type="text/css" href="https://unpkg.com/jsonform@2.1.6/deps/opt/bootstrap.css"/>
 </head>
 <body>
 
 <div class="container">
     <div class="row">
-        <h1>Getting started with JSON Form</h1>
+        <h1>Students management</h1>
     </div>
     <div class="row">
-        <div class="col-md-5">
+        <div class="col-md-4">
+            <label for="model-selector">Model:</label>
             <select id="model-selector">
                 <option value=""></option>
             </select>
         </div>
-        <div class="col-md-7">
+        <div class="col-md-8">
             <form></form>
             <pre id="res" class="alert"></pre>
         </div>
@@ -65,82 +69,55 @@
 <script type="text/javascript" src="https://unpkg.com/jsonform@2.1.6/deps/opt/jsv.js"></script>
 <script type="text/javascript" src="https://unpkg.com/jsonform@2.1.6/lib/jsonform.js"></script>
 <script type="text/javascript" src="client.js"></script>
-<script>
+<script type="text/javascript">
 
-    /**
-     *
-     * @param {Object} inputSchema e.g. {
-     *                                    "type": "object",
-     *                                    "required": ["last_name"],
-     *                                    "additionalProperties": false,
-     *                                    "properties": {
-     *                                      "first_name": {
-     *                                        "type": "string",
-     *                                        "minLength": 2
-     *                                      },
-     *                                      "last_name": {
-     *                                        "type": "string",
-     *                                        "minLength": 2
-     *                                      }
-     *                                    },
-     *                                    "$schema": "http://json-schema.org/draft-04/schema#"
-     *                                  }
-     *
-     * @returns {Object} e.g. {
-     *                          "type": "object",
-     *                          "additionalProperties": false,
-     *                          "properties": {
-     *                            "first_name": {
-     *                              "type": "string",
-     *                              "minLength": 2
-     *                            },
-     *                            "last_name": {
-     *                              "type": "string",
-     *                              "minLength": 2,
-     *                              "required": true
-     *                            }
-     *                          },
-     *                          "$schema": "http://json-schema.org/draft-03/schema#"
-     *                        }
-     */
-    function adaptToDraft03(inputSchema) {
-        const schema = Object.assign({}, inputSchema);
-        schema.$schema = "http://json-schema.org/draft-03/schema#";
-        if (schema.required) {
-            schema.required.forEach(key => schema.properties[key].required = true);
-        }
-        delete schema.required;
-        return schema;
-    }
+    const modelSelector = $("#model-selector");
+    const form = $("form");
+    const result = $("#res");
+
+    const baseUrl = window.location.protocol + "//" + window.location.host;
 
     (async () => {
-        var baseUrl = window.location.protocol + "//" + window.location.host;
 
-        var allJsonSchemas = await libraries.SchemExtractor.fromFile(baseUrl + "/openapi.yaml");
-        var jsonSchemas = {};
+        // Fetch all JSON schemas.
+        const allJsonSchemas = await libraries.SchemExtractor.fromFile(baseUrl + "/openapi.yaml");
 
-        // Remove parameter JSON schemas and JSON schemas related to entities not manually editable.
+        // Filter relevant JSON schemas.
+        const jsonSchemas = {};
         Object.keys(allJsonSchemas)
-            .filter(key => key.indexOf("/") === -1 && key.indexOf("Audit") === -1)
-            .forEach(key => jsonSchemas[key] = adaptToDraft03(allJsonSchemas[key]));
+            .filter(libraries.isRelevantJsonSchema)
+            .forEach(key => jsonSchemas[key] = libraries.adaptJsonSchemaToDraft03(allJsonSchemas[key]));
 
-        Object.keys(jsonSchemas).forEach(key => $("#model-selector").append(new Option(key, key)));
+        // List relevant JSON schemas within select box.
+        Object.keys(jsonSchemas).forEach(key => modelSelector.append(new Option(key, key)));
 
-        $("#model-selector").change(function () {
-            $("form").html("");
-            $("form").jsonForm({
-                schema: jsonSchemas[$(this).val()],
-                onSubmit: function (errors, values) {
-                    if (errors) {
-                        $("#res").addClass("alert-danger");
-                        $("#res").html("<p>" + JSON.stringify(errors, null, 2) + "</p>");
-                    } else {
-                        $("#res").addClass("alert-success");
-                        $("#res").html("<p>" + JSON.stringify(values, null, 2) + "</p>");
-                    }
+        modelSelector.change(() => {
+
+            result.html("")
+                .removeClass("alert-danger")
+                .removeClass("alert-success");
+
+            form.html("")
+                .removeClass("jsonform-hasrequired");
+
+            if (!modelSelector.val()) {
+                return;
+            }
+
+            form.jsonForm({
+                schema: jsonSchemas[modelSelector.val()],
+                onSubmit: (errors, values) => {
+                    result.removeClass("alert-danger")
+                        .removeClass("alert-success")
+                        .addClass("alert-" + (errors ? "danger" : "success"))
+                        .html(JSON.stringify(errors || values, null, 2));
+                },
+                onSubmitValid: (values) => {
+
                 }
             });
-        })
+
+        });
 
     })();
 </script>
