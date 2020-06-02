@@ -5,8 +5,8 @@ module.exports = {
     mode: "development",
     output: {
         path: path.resolve(__dirname, "public"),
-        filename: "client.js",
-        library: "libraries",
+        filename: "lib.js",
+        library: "lib",
         libraryTarget: "var",
     }
 };

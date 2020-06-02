@@ -13,7 +13,7 @@ phpunit.xml
 public/docs/
 public/phpliteadmin/*
 !public/phpliteadmin/phpliteadmin.config.app.php
-public/client.js
+public/lib.js
 
 # IDE specific
 .vscode/
