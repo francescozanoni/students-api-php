@@ -59,7 +59,7 @@
         </div>
         <div class="col-md-8">
             <form></form>
-            <pre id="res" class="alert"></pre>
+            <pre id="result" class="alert"></pre>
         </div>
     </div>
 </div>
@@ -73,7 +73,7 @@
 
     const modelSelector = $("#model-selector");
     const form = $("form");
-    const result = $("#res");
+    const result = $("#result");
 
     const baseUrl = window.location.protocol + "//" + window.location.host;
 
@@ -106,14 +106,29 @@
 
             form.jsonForm({
                 schema: jsonSchemas[modelSelector.val()],
+                /* If onSubmit() is provided, onSubmitValid() is not executed
                 onSubmit: (errors, values) => {
                     result.removeClass("alert-danger")
                         .removeClass("alert-success")
                         .addClass("alert-" + (errors ? "danger" : "success"))
                         .html(JSON.stringify(errors || values, null, 2));
                 },
-                onSubmitValid: (values) => {
-
+                */
+                onSubmitValid: function (values) {
+                    $.ajax({
+                        method: "POST",
+                        url: baseUrl + "/students",
+                        data: JSON.stringify(values),
+                        contentType: "application/json",
+                        dataType: "json",
+                        processData: false
+                    })
+                        .done((response) => {
+                            console.log(response);
+                        })
+                        .fail((response) => {
+                            console.log(response);
+                        });
                 }
             });
 
