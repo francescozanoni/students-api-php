@@ -3,21 +3,116 @@
 <head>
     <meta charset="utf-8"/>
     <title>Getting started with JSON Form</title>
+    <style>
+        h2 {
+            font-weight: 200;
+            margin-top: 0;
+        }
+
+        #form .add-on {
+            border: none;
+            background-color: inherit;
+        }
+
+        .expandable > legend:before {
+            content: '\25B8';
+            padding-right: 5px;
+        }
+
+        .expanded > legend:before {
+            content: '\25BE';
+        }
+
+        ._jsonform-array-buttons {
+            margin-left: 25px;
+        }
+
+        .jsonform-required > label:after {
+            content: ' *';
+            color: red;
+        }
+
+        form.jsonform-hasrequired:after {
+            content: '* Required field';
+            display: block;
+            color: red;
+            padding-top: 1em;
+        }
+    </style>
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/jsonform@2.1.6/deps/opt/bootstrap.css"/>
 </head>
 <body>
-<h1>Getting started with JSON Form</h1>
-<select id="model">
-    <option value=""></option>
-</select>
-<form></form>
-<div id="res" class="alert"></div>
+
+<div class="container">
+    <div class="row">
+        <h1>Getting started with JSON Form</h1>
+    </div>
+    <div class="row">
+        <div class="col-md-5">
+            <select id="model-selector">
+                <option value=""></option>
+            </select>
+        </div>
+        <div class="col-md-7">
+            <form></form>
+            <pre id="res" class="alert"></pre>
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript" src="https://unpkg.com/jsonform@2.1.6/deps/jquery.min.js"></script>
 <script type="text/javascript" src="https://unpkg.com/jsonform@2.1.6/deps/underscore.js"></script>
 <script type="text/javascript" src="https://unpkg.com/jsonform@2.1.6/deps/opt/jsv.js"></script>
 <script type="text/javascript" src="https://unpkg.com/jsonform@2.1.6/lib/jsonform.js"></script>
 <script type="text/javascript" src="client.js"></script>
 <script>
+
+    /**
+     *
+     * @param {Object} inputSchema e.g. {
+     *                                    "type": "object",
+     *                                    "required": ["last_name"],
+     *                                    "additionalProperties": false,
+     *                                    "properties": {
+     *                                      "first_name": {
+     *                                        "type": "string",
+     *                                        "minLength": 2
+     *                                      },
+     *                                      "last_name": {
+     *                                        "type": "string",
+     *                                        "minLength": 2
+     *                                      }
+     *                                    },
+     *                                    "$schema": "http://json-schema.org/draft-04/schema#"
+     *                                  }
+     *
+     * @returns {Object} e.g. {
+     *                          "type": "object",
+     *                          "additionalProperties": false,
+     *                          "properties": {
+     *                            "first_name": {
+     *                              "type": "string",
+     *                              "minLength": 2
+     *                            },
+     *                            "last_name": {
+     *                              "type": "string",
+     *                              "minLength": 2,
+     *                              "required": true
+     *                            }
+     *                          },
+     *                          "$schema": "http://json-schema.org/draft-03/schema#"
+     *                        }
+     */
+    function adaptToDraft03(inputSchema) {
+        const schema = Object.assign({}, inputSchema);
+        schema.$schema = "http://json-schema.org/draft-03/schema#";
+        if (schema.required) {
+            schema.required.forEach(key => schema.properties[key].required = true);
+        }
+        delete schema.required;
+        return schema;
+    }
+
     (async () => {
         var baseUrl = window.location.protocol + "//" + window.location.host;
 
@@ -27,19 +122,21 @@
         // Remove parameter JSON schemas and JSON schemas related to entities not manually editable.
         Object.keys(allJsonSchemas)
             .filter(key => key.indexOf("/") === -1 && key.indexOf("Audit") === -1)
-            .forEach(key => jsonSchemas[key] = allJsonSchemas[key]);
+            .forEach(key => jsonSchemas[key] = adaptToDraft03(allJsonSchemas[key]));
 
-        Object.keys(jsonSchemas).forEach(key => $("#model").append(new Option(key, key)));
+        Object.keys(jsonSchemas).forEach(key => $("#model-selector").append(new Option(key, key)));
 
-        $("#model").change(function () {
+        $("#model-selector").change(function () {
             $("form").html("");
             $("form").jsonForm({
                 schema: jsonSchemas[$(this).val()],
                 onSubmit: function (errors, values) {
                     if (errors) {
-                        $("#res").html("<p>" + JSON.stringify(error) + "</p>");
+                        $("#res").addClass("alert-danger");
+                        $("#res").html("<p>" + JSON.stringify(errors, null, 2) + "</p>");
                     } else {
-                        $("#res").html("<p>" + JSON.stringify(values) + "</p>");
+                        $("#res").addClass("alert-success");
+                        $("#res").html("<p>" + JSON.stringify(values, null, 2) + "</p>");
                     }
                 }
             });
