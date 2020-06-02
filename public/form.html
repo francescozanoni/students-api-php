@@ -36,9 +36,9 @@
             color: red;
         }
 
-        form.jsonform-hasrequired:after {
+        form.jsonform-hasrequired > div > div:last-child:after {
             content: '* Required field';
-            display: block;
+            float: right;
             color: red;
             padding-top: 1em;
         }
@@ -126,11 +126,16 @@
                         dataType: "json",
                         processData: false
                     })
-                        .done((response) => {
-                            console.log(response);
+                        .done(() => {
+                            result.removeClass("alert-danger")
+                                .addClass("alert-success");
                         })
-                        .fail((response) => {
-                            console.log(response);
+                        .fail(() => {
+                            result.removeClass("alert-success")
+                                .addClass("alert-danger");
+                        })
+                        .always((response) => {
+                            result.html(JSON.stringify(response, null, 2));
                         });
                 }
             });
