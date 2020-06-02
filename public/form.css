@@ -1,0 +1,38 @@
+pre {
+    background-color: transparent;
+    margin-top: 1em;
+}
+
+form .add-on {
+    border: none;
+    background-color: inherit;
+}
+
+.expandable > legend:before {
+    content: '\25B8';
+    padding-right: 5px;
+}
+
+.expanded > legend:before {
+    content: '\25BE';
+}
+
+._jsonform-array-buttons {
+    margin-left: 25px;
+}
+
+.jsonform-required > label:after {
+    content: ' *';
+    color: red;
+}
+
+.jsonform-errortext {
+    color: red;
+}
+
+form.jsonform-hasrequired > div > div:last-child:after {
+    content: '* Required field';
+    float: right;
+    color: red;
+    padding-top: 1em;
+}

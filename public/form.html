@@ -4,62 +4,25 @@
     <meta charset="utf-8"/>
     <title>Getting started with JSON Form</title>
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/jsonform@2.1.6/deps/opt/bootstrap.css"/>
-    <style rel="stylesheet" type="text/css">
-        pre {
-            background-color: transparent;
-            margin-top: 1em;
-        }
-
-        form .add-on {
-            border: none;
-            background-color: inherit;
-        }
-
-        .expandable > legend:before {
-            content: '\25B8';
-            padding-right: 5px;
-        }
-
-        .expanded > legend:before {
-            content: '\25BE';
-        }
-
-        ._jsonform-array-buttons {
-            margin-left: 25px;
-        }
-
-        .jsonform-required > label:after {
-            content: ' *';
-            color: red;
-        }
-
-        .jsonform-errortext {
-            color: red;
-        }
-
-        form.jsonform-hasrequired > div > div:last-child:after {
-            content: '* Required field';
-            float: right;
-            color: red;
-            padding-top: 1em;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="form.css"/>
 </head>
 <body>
 
+<nav class="navbar navbar-default navbar-static-top">
+    <div class="container">
+        <a class="navbar-brand" href="#">Students management</a>
+    </div>
+</nav>
 <div class="container">
     <div class="row">
-        <h1>Students management</h1>
-    </div>
-    <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-6">
             <label for="model-selector">Model:</label>
             <select id="model-selector">
                 <option value=""></option>
             </select>
-        </div>
-        <div class="col-md-8">
             <form></form>
+        </div>
+        <div class="col-md-6">
             <pre id="result" class="alert"></pre>
         </div>
     </div>
@@ -70,79 +33,6 @@
 <script type="text/javascript" src="https://unpkg.com/jsonform@2.1.6/deps/opt/jsv.js"></script>
 <script type="text/javascript" src="https://unpkg.com/jsonform@2.1.6/lib/jsonform.js"></script>
 <script type="text/javascript" src="lib.js"></script>
-<script type="text/javascript">
-
-    const modelSelector = $("#model-selector");
-    const form = $("form");
-    const result = $("#result");
-
-    const baseUrl = window.location.protocol + "//" + window.location.host;
-
-    (async () => {
-
-        // Fetch all JSON schemas.
-        const allJsonSchemas = await lib.SchemExtractor.fromFile(baseUrl + "/openapi.yaml");
-
-        // Filter relevant JSON schemas.
-        const jsonSchemas = {};
-        Object.keys(allJsonSchemas)
-            .filter(lib.isRelevantJsonSchema)
-            .forEach(key => {
-                jsonSchemas[key] = lib.adaptJsonSchemaToDraft03(allJsonSchemas[key]);
-                jsonSchemas[key] = lib.removeJsonSchemaProperty(jsonSchemas[key], "audits");
-            });
-
-        // List relevant JSON schemas within select box.
-        Object.keys(jsonSchemas).forEach(key => modelSelector.append(new Option(key, key)));
-
-        modelSelector.change(() => {
-
-            result.html("")
-                .removeClass("alert-danger")
-                .removeClass("alert-success");
-
-            form.html("")
-                .removeClass("jsonform-hasrequired");
-
-            if (!modelSelector.val()) {
-                return;
-            }
-
-            form.jsonForm({
-                schema: jsonSchemas[modelSelector.val()],
-                /* If onSubmit() is provided, onSubmitValid() is not executed
-                onSubmit: (errors, values) => {
-                    result.removeClass("alert-danger")
-                        .removeClass("alert-success")
-                        .addClass("alert-" + (errors ? "danger" : "success"))
-                        .html(JSON.stringify(errors || values, null, 2));
-                },
-                */
-                onSubmitValid: function (values) {
-                    $.ajax({
-                        method: "POST",
-                        url: baseUrl + "/students",
-                        data: JSON.stringify(values),
-                        contentType: "application/json",
-                        dataType: "json",
-                        processData: false
-                    })
-                        .done(response => {
-                            result.removeClass("alert-danger")
-                                .addClass("alert-success");
-                            result.html(JSON.stringify(response, null, 2));
-                        })
-                        .fail(response => {
-                            result.removeClass("alert-success")
-                                .addClass("alert-danger");
-                            result.html(JSON.stringify(response.responseJSON, null, 2));
-                        });
-                }
-            });
-
-        });
-
-    })();
-</script>
+<script type="text/javascript" src="form.js"></script>
 </body>
 </html>
