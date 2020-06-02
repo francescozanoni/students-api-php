@@ -7,6 +7,7 @@
     <style rel="stylesheet" type="text/css">
         pre {
             background-color: transparent;
+            margin-top: 1em;
         }
 
         form .add-on {
@@ -126,16 +127,15 @@
                         dataType: "json",
                         processData: false
                     })
-                        .done(() => {
+                        .done(response => {
                             result.removeClass("alert-danger")
                                 .addClass("alert-success");
+                            result.html(JSON.stringify(response, null, 2));
                         })
-                        .fail(() => {
+                        .fail(response => {
                             result.removeClass("alert-success")
                                 .addClass("alert-danger");
-                        })
-                        .always((response) => {
-                            result.html(JSON.stringify(response, null, 2));
+                            result.html(JSON.stringify(response.responseJSON, null, 2));
                         });
                 }
             });
