@@ -1455,9 +1455,9 @@ is-buffer@^1.1.5:
   integrity sha512-NcdALwpXkTm5Zvvbk7owOUSvVvBKDgKP5/ewfXEznmQFfs4ZRmanOeKBTjRVjka3QFoN6XJ+9F3USqfHqTaU5w==
 
 is-callable@^1.1.4, is-callable@^1.1.5:
-  version "1.1.5"
-  resolved "https://registry.yarnpkg.com/is-callable/-/is-callable-1.1.5.tgz#f7e46b596890456db74e7f6e976cb3273d06faab"
-  integrity sha512-ESKv5sMCJB2jnHTWZ3O5itG+O128Hsus4K4Qh1h2/cgn2vbgnLSVqfV46AeJA9D5EeeLa9w81KUXMtn34zhX+Q==
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/is-callable/-/is-callable-1.2.0.tgz#83336560b54a38e35e3a2df7afd0454d691468bb"
+  integrity sha512-pyVD9AaGLxtg6srb2Ng6ynWJqkHU9bEM087AKck0w8QwDarTfNcpIYoU8x8Hv2Icm8u6kFJM18Dag8lyqGkviw==
 
 is-data-descriptor@^0.1.4:
   version "0.1.4"
@@ -1552,11 +1552,11 @@ is-plain-object@^2.0.3, is-plain-object@^2.0.4:
     isobject "^3.0.1"
 
 is-regex@^1.0.4, is-regex@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/is-regex/-/is-regex-1.0.5.tgz#39d589a358bf18967f726967120b8fc1aed74eae"
-  integrity sha512-vlKW17SNq44owv5AQR3Cq0bQPEb8+kF3UKZ2fiZNOWtztYE5i0CzCZxFDwO58qAOWtxdBRVO/V5Qin1wjCqFYQ==
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/is-regex/-/is-regex-1.1.0.tgz#ece38e389e490df0dc21caea2bd596f987f767ff"
+  integrity sha512-iI97M8KTWID2la5uYXlkbSDQIg4F6o1sYboZKKTDpnDQMLtUL86zxhgDet3Q2SriaYsyGqZ6Mn2SjbRKeLHdqw==
   dependencies:
-    has "^1.0.3"
+    has-symbols "^1.0.1"
 
 is-stream@^1.1.0:
   version "1.1.0"
@@ -2024,9 +2024,9 @@ once@^1.3.0, once@^1.3.1, once@^1.4.0:
     wrappy "1"
 
 openapi-json-schemextractor@^1.1.4:
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/openapi-json-schemextractor/-/openapi-json-schemextractor-1.1.4.tgz#b6c3e8b515c455b484fdc55314ec61062f0d0ab9"
-  integrity sha512-lxg8oRnXFbhku5sVYl7RtA3sSSKDAvk0JBna0NGhOvM2DZd+MQ2oCnnZOg60JwEaKthk0r+cDQ6DUYQuYQWLvA==
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/openapi-json-schemextractor/-/openapi-json-schemextractor-1.1.5.tgz#1e75b4a3c09ba261c28c5e4f97c3f08f5bf69e06"
+  integrity sha512-dC95I2lazXwPCP+3i+kzBhxv2r4sANlDzgh8Qjqhs4lQL3St7UQEBQee4SQnQ3JyO97J9rxhz2XeZdAgsTeKIA==
   dependencies:
     "@apidevtools/json-schema-ref-parser" "^9.0.1"
     "@openapi-contrib/openapi-schema-to-json-schema" "^3.0.0"

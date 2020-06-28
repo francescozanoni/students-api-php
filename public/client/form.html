@@ -3,10 +3,12 @@
 <head>
     <meta charset="utf-8"/>
     <title>Getting started with JSON Form</title>
+    <link href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAAF0lEQVRIx2NgGAWjYBSMglEwCkbBSAcACBAAAeaR9cIAAAAASUVORK5CYII="
+          rel="icon" type="image/x-icon"/>
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/jsonform@2.1.6/deps/opt/bootstrap.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="form.css"/>
+    <link rel="stylesheet" type="text/css" href="style.css"/>
 </head>
 <body>
 
@@ -17,9 +19,15 @@
 </nav>
 
 <div class="container">
+
+    <!-- ########################################################################################################### -->
+
     <div class="row" data-page="students">
         <table id="students" class="display"></table>
     </div>
+
+    <!-- ########################################################################################################### -->
+
     <div class="row" data-page="student">
         <div class="col-md-6">
             <div class="form-group">
@@ -34,6 +42,9 @@
             <pre id="result" class="alert"></pre>
         </div>
     </div>
+
+    <!-- ########################################################################################################### -->
+
 </div>
 
 <script type="text/javascript" src="https://unpkg.com/jsonform@2.1.6/deps/jquery.min.js"></script>
@@ -46,14 +57,14 @@
 <script type="text/javascript" src="form.js"></script>
 <script type="text/javascript">
 
-    function handlePage(page) {
+    function switchPage(page) {
         $(".container > .row").hide();
         $(".container > .row[data-page='" + (page || "students") + "']").show();
     }
 
     $(document).ready(function () {
 
-        handlePage();
+        switchPage();
 
         $('#students').DataTable({
             "ajax": {
@@ -62,27 +73,11 @@
                 cache: true
             },
             columns: [
-                {
-                    data: "id",
-                    visible: false,
-                    searchable: false
-                },
-                {
-                    title: "First name",
-                    data: "first_name"
-                },
-                {
-                    title: "Last name",
-                    data: "last_name"
-                },
-                {
-                    title: "Nationality",
-                    data: "nationality"
-                },
-                {
-                    title: "E-mail",
-                    data: "e_mail"
-                },
+                {title: "ID", data: "id", visible: false, searchable: false},
+                {title: "First name", data: "first_name"},
+                {title: "Last name", data: "last_name"},
+                {title: "Nationality", data: "nationality"},
+                {title: "E-mail", data: "e_mail"},
                 {
                     title: "Phone number",
                     data: "phone",
@@ -93,7 +88,7 @@
                 },
                 {
                     render: function (data, type, row) {
-                        return "<a href='#" + row.id + "' onclick='handlePage(\"student\")'>edit</a>";
+                        return "<a href='#" + row.id + "' onclick='switchPage(\"student\")'>edit</a>";
                     },
                     searchable: false,
                     sortable: false

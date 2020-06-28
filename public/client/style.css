@@ -36,3 +36,10 @@ form.jsonform-hasrequired > div > div:last-child:after {
     color: red;
     padding-top: 1em;
 }
+
+dl div {
+    display: table-row;
+}
+dt, dd {
+    display: table-cell;
+}
