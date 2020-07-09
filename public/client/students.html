@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-    <title>Getting started with JSON Form</title>
+    <title>Students management</title>
     <link href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAAF0lEQVRIx2NgGAWjYBSMglEwCkbBSAcACBAAAeaR9cIAAAAASUVORK5CYII="
           rel="icon" type="image/x-icon"/>
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/jsonform@2.1.6/deps/opt/bootstrap.css"/>
@@ -33,8 +33,8 @@
 
     $(document).ready(function () {
 
-        $('#students').DataTable({
-            "ajax": {
+        var table = $("#students").DataTable({
+            ajax: {
                 url: "/students",
                 method: "GET",
                 cache: true
@@ -52,16 +52,25 @@
                     render: function (data) {
                         return data || "";
                     }
-                },
-                {
-                    render: function (data, type, row) {
-                        return "<a href='/client/student.html#" + row.id + "'>view</a>";
-                    },
-                    searchable: false,
-                    sortable: false
                 }
             ]
         });
+
+        $("#students tbody").on("click", "tr", function () {
+            /**
+             * @var {object} student e.g. {
+             *                              "id": 1,
+             *                              "first_name": "John",
+             *                              "last_name": "Doe",
+             *                              "e_mail": "john.doe@foo.com",
+             *                              "phone": "1234-567890",
+             *                              "nationality": "GB"
+             *                            }
+             */
+            var student = table.row(this).data();
+            window.location = "/client/student.html#" + student.id;
+        });
+
     });
 </script>
 </body>

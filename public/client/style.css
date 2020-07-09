@@ -37,9 +37,22 @@ form.jsonform-hasrequired > div > div:last-child:after {
     padding-top: 1em;
 }
 
-dl div {
-    display: table-row;
+/* ****************************************************************************************************************** */
+
+.container > .row {
+    padding-bottom: 2em;
 }
-dt, dd {
-    display: table-cell;
+
+/* ****************************************************************************************************************** */
+
+#students tbody tr {
+    cursor: pointer;
+}
+
+#details tbody tr td:first-child {
+    font-weight: bold;
+}
+
+table.dataTable.compact thead th {
+    padding-left: 4px
 }

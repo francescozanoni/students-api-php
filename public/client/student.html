@@ -22,7 +22,7 @@
     <div class="row">
         <div class="col-md-4">
             <h3>Details</h3>
-            <dl></dl>
+            <table id="details" class="display compact"></table>
         </div>
         <div class="col-md-8">
             <h3>Annotations</h3>
@@ -63,15 +63,46 @@
 
         var studentId = window.location.hash.substr(1);
 
-        $.get("/students/" + studentId)
-            .done(function (data, textStatus, jqXHR) {
-                delete data.data.id;
-                Object.keys(data.data)
-                    .forEach(key => $(".container .row dl").append("<div><dt>" + key + "</dt><dd>" + data.data[key] + "</dd></div>"));
-            })
-            .fail(function (jqXHR, textStatus, error) {
-                console.error(error);
-            });
+        $('#details').DataTable({
+            ajax: {
+                url: "/students/" + studentId,
+                method: "GET",
+                cache: true,
+                dataSrc: function (json) {
+                    /**
+                     * @var {object} student e.g. {
+                     *                              "id": 1,
+                     *                              "first_name": "John",
+                     *                              "last_name": "Doe",
+                     *                              "e_mail": "john.doe@foo.com",
+                     *                              "phone": "1234-567890",
+                     *                              "nationality": "GB"
+                     *                            }
+                     */
+                    var student = json.data;
+                    return Object.entries(student)
+                        .filter(function (entry) {
+                            return entry[0] !== "id"
+                        })
+                        .map(function (entry) {
+                            switch (entry[0]) {
+                                case "e_mail":
+                                    entry[0] = "E-mail";
+                                    break;
+                                default:
+                                    entry[0] = entry[0].substr(0, 1).toUpperCase() + entry[0].substr(1);
+                                    entry[0] = entry[0].replace(/[^a-zA-Z]/, " ");
+                            }
+                            return entry;
+                        });
+                }
+            },
+            paging: false,
+            searching: false,
+            ordering: false,
+            info: false,
+            columns: [{}, {}] // Headers are not used
+        });
 
         $('#annotations').DataTable({
             ajax: {
