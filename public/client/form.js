@@ -13,6 +13,14 @@ var modelsMethodsUrls = {
     Student: {
         method: "PUT",
         url: baseUrl + "/students/" + idFromHash,
+    },
+    NewAnnotation: {
+        method: "POST",
+        url: baseUrl + "/annotations",
+    },
+    Annotation: {
+        method: "PUT",
+        url: baseUrl + "/annotations/" + idFromHash,
     }
 };
 

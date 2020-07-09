@@ -57,7 +57,12 @@ $(document).ready(function () {
                 {title: "ID", data: "id", visible: false},
                 {title: "Date/time", data: "audits.0.created_at"},
                 {title: "Title", data: "title"},
-                {title: "Content", data: "content"}
+                {title: "Content", data: "content"},
+                {
+                    render: function (data, type, row) {
+                        return '<a href="edit.html#Annotation,' + row.id + '">edit</a>';
+                    }
+                }
             ]
         }
     );
