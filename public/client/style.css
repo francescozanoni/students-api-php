@@ -1,3 +1,5 @@
+/* JSON form */
+
 form, pre {
     background-color: transparent;
     margin-top: 1em;
@@ -44,6 +46,14 @@ form.jsonform-hasrequired > div > div:last-child:after {
 }
 
 /* ****************************************************************************************************************** */
+
+#model-selector-container {
+    display: none;
+}
+
+/* ****************************************************************************************************************** */
+
+/* DataTables */
 
 #students tbody tr {
     cursor: pointer;

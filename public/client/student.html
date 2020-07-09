@@ -2,10 +2,10 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-    <title>Getting started with JSON Form</title>
+    <title>Students management</title>
     <link href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAAF0lEQVRIx2NgGAWjYBSMglEwCkbBSAcACBAAAeaR9cIAAAAASUVORK5CYII="
           rel="icon" type="image/x-icon"/>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="style.css"/>
@@ -21,7 +21,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-4">
-            <h3>Details</h3>
+            <h3>Details <a href="edit.html">edit</a></h3>
             <table id="details" class="display compact"></table>
         </div>
         <div class="col-md-8">
@@ -53,154 +53,10 @@
     </div>
 </div>
 
-<script src="https://unpkg.com/jsonform@2.1.6/deps/jquery.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
-<script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap.min.js"></script>
-<script>
-
-    $(document).ready(function () {
-
-        var studentId = window.location.hash.substr(1);
-
-        $('#details').DataTable({
-            ajax: {
-                url: "/students/" + studentId,
-                method: "GET",
-                cache: true,
-                dataSrc: function (json) {
-                    /**
-                     * @var {object} student e.g. {
-                     *                              "id": 1,
-                     *                              "first_name": "John",
-                     *                              "last_name": "Doe",
-                     *                              "e_mail": "john.doe@foo.com",
-                     *                              "phone": "1234-567890",
-                     *                              "nationality": "GB"
-                     *                            }
-                     */
-                    var student = json.data;
-                    return Object.entries(student)
-                        .filter(function (entry) {
-                            return entry[0] !== "id"
-                        })
-                        .map(function (entry) {
-                            switch (entry[0]) {
-                                case "e_mail":
-                                    entry[0] = "E-mail";
-                                    break;
-                                default:
-                                    entry[0] = entry[0].substr(0, 1).toUpperCase() + entry[0].substr(1);
-                                    entry[0] = entry[0].replace(/[^a-zA-Z]/, " ");
-                            }
-                            return entry;
-                        });
-                }
-            },
-            paging: false,
-            searching: false,
-            ordering: false,
-            info: false,
-            columns: [{}, {}] // Headers are not used
-        });
-
-        $('#annotations').DataTable({
-            ajax: {
-                url: "/students/" + studentId + "/annotations?with_audits=true",
-                method: "GET",
-                cache: true
-            },
-            paging: false,
-            searching: false,
-            ordering: false,
-            info: false,
-            columns: [
-                {title: "ID", data: "id", visible: false},
-                {title: "Date/time", data: "audits.0.created_at"},
-                {title: "Title", data: "title"},
-                {title: "Content", data: "content"}
-            ]
-        });
-
-        $('#internships').DataTable({
-            ajax: {
-                url: "/students/" + studentId + "/internships",
-                method: "GET",
-                cache: true
-            },
-            paging: false,
-            searching: false,
-            ordering: false,
-            info: false,
-            columns: [
-                {title: "ID", data: "id", visible: false},
-                {title: "Start", data: "start_date"},
-                {title: "End", data: "end_date"},
-                {title: "Location", data: "location"},
-                {title: "Ward", data: "sub_location"},
-                {title: "Hour amount", data: "hour_amount"},
-                {title: "Other amount", data: "other_amount"},
-                {title: "Is optional", data: "is_optional"},
-                {title: "Is interrupted", data: "is_interrupted"}
-            ]
-        });
-
-        $('#eligibilities').DataTable({
-            ajax: {
-                url: "/students/" + studentId + "/eligibilities",
-                method: "GET",
-                cache: true
-            },
-            paging: false,
-            searching: false,
-            ordering: false,
-            info: false,
-            columns: [
-                {title: "ID", data: "id", visible: false},
-                {title: "Start", data: "start_date"},
-                {title: "End", data: "end_date"},
-                {title: "Is eligible", data: "is_eligible"},
-                {title: "Notes", data: "notes"},
-            ]
-        });
-
-        $('#osh_course_attendances').DataTable({
-            ajax: {
-                url: "/students/" + studentId + "/osh_course_attendances",
-                method: "GET",
-                cache: true
-            },
-            paging: false,
-            searching: false,
-            ordering: false,
-            info: false,
-            columns: [
-                {title: "ID", data: "id", visible: false},
-                {title: "Start", data: "start_date"},
-                {title: "End", data: "end_date"}
-            ]
-        });
-
-        $('#educational_activity_attendances').DataTable({
-            ajax: {
-                url: "/students/" + studentId + "/educational_activity_attendances",
-                method: "GET",
-                cache: true
-            },
-            paging: false,
-            searching: false,
-            ordering: false,
-            info: false,
-            columns: [
-                {title: "ID", data: "id", visible: false},
-                {title: "Start", data: "start_date"},
-                {title: "End", data: "end_date"},
-                {title: "Educational activity", data: "educational_activity"},
-                {title: "Credits", data: "credits"},
-            ]
-        });
-
-    });
-</script>
+<script type="text/javascript" src="https://unpkg.com/jsonform@2.1.6/deps/jquery.min.js"></script>
+<script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap.min.js"></script>
+<script type="text/javascript" src="student.js"></script>
 </body>
 </html>
