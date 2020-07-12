@@ -29,7 +29,7 @@ $(document).ready(function () {
     };
 
     var detailsSettings = Object.assign(
-        baseDataTableSettings("#details", "/students/" + studentId),
+        baseDataTableSettings("#details", "../students/" + studentId),
         {
             columns: [
                 {
@@ -51,7 +51,7 @@ $(document).ready(function () {
             });
     };
     var annotationsSettings = Object.assign(
-        baseDataTableSettings("#annotations", "/students/" + studentId + "/annotations?with_audits=true"),
+        baseDataTableSettings("#annotations", "../students/" + studentId + "/annotations?with_audits=true"),
         {
             columns: [
                 {title: "ID", data: "id", visible: false},
@@ -67,7 +67,7 @@ $(document).ready(function () {
         }
     );
     var internshipsSettings = Object.assign(
-        baseDataTableSettings("#internships", "/students/" + studentId + "/internships"),
+        baseDataTableSettings("#internships", "../students/" + studentId + "/internships"),
         {
             columns: [
                 {title: "ID", data: "id", visible: false},
@@ -95,7 +95,7 @@ $(document).ready(function () {
         }
     );
     var eligibilitiesSettings = Object.assign(
-        baseDataTableSettings("#eligibilities", "/students/" + studentId + "/eligibilities"),
+        baseDataTableSettings("#eligibilities", "../students/" + studentId + "/eligibilities"),
         {
             columns: [
                 {title: "ID", data: "id", visible: false},
@@ -119,7 +119,7 @@ $(document).ready(function () {
         }
     );
     var oshCourseAttendancesSettings = Object.assign(
-        baseDataTableSettings("#osh_course_attendances", "/students/" + studentId + "/osh_course_attendances"),
+        baseDataTableSettings("#osh_course_attendances", "../students/" + studentId + "/osh_course_attendances"),
         {
             columns: [
                 {title: "ID", data: "id", visible: false},
@@ -134,7 +134,7 @@ $(document).ready(function () {
         }
     );
     var educationalActivityAttendancesSettings = Object.assign(
-        baseDataTableSettings("#educational_activity_attendances", "/students/" + studentId + "/educational_activity_attendances"),
+        baseDataTableSettings("#educational_activity_attendances", "../students/" + studentId + "/educational_activity_attendances"),
         {
             columns: [
                 {title: "ID", data: "id", visible: false},

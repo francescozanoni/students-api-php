@@ -2,7 +2,7 @@ var modelSelector = $("#model-selector");
 var pageForm = $("form");
 var result = $("#result");
 
-var baseUrl = window.location.protocol + "//" + window.location.host;
+var baseUrl = "..";
 var modelFromHash = window.location.hash.substr(1).replace(/,.*$/, "");
 var idFromHash = window.location.hash.substr(1).replace(modelFromHash, "").replace(",", "");
 var modelsMethodsUrls = {
