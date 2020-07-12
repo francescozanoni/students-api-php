@@ -2,8 +2,14 @@ $(document).ready(function () {
 
     var studentId = window.location.hash.substr(1);
 
-    var h = $(".row a").attr("href");
-    $(".row a").attr("href", h + "#Student," + studentId);
+    // Hash of student details link.
+    var h = $(".row a.student").attr("href");
+    $(".row a.student").attr("href", h + "#Student," + studentId);
+
+    // Hashes of student attribute links.
+    $(".row a.student-attribute").each(function () {
+        $(this).attr("href", $(this).attr("href") + "," + studentId);
+    });
 
     var baseDataTableSettings = function (tableSelector, url) {
         return {
@@ -60,7 +66,7 @@ $(document).ready(function () {
                 {title: "Content", data: "content"},
                 {
                     render: function (data, type, row) {
-                        return '<a href="edit.html#Annotation,' + row.id + '">edit</a>';
+                        return '<a href="form.html#Annotation,' + row.id + '">edit</a>';
                     }
                 }
             ]
@@ -88,7 +94,7 @@ $(document).ready(function () {
                 {title: "Is interrupted", data: "is_interrupted"},
                 {
                     render: function (data, type, row) {
-                        return '<a href="edit.html#Internship,' + row.id + '">edit</a>';
+                        return '<a href="form.html#Internship,' + row.id + '">edit</a>';
                     }
                 }
             ]
@@ -112,7 +118,7 @@ $(document).ready(function () {
                 },
                 {
                     render: function (data, type, row) {
-                        return '<a href="edit.html#Eligibility,' + row.id + '">edit</a>';
+                        return '<a href="form.html#Eligibility,' + row.id + '">edit</a>';
                     }
                 }
             ]
@@ -127,7 +133,7 @@ $(document).ready(function () {
                 {title: "End", data: "end_date"},
                 {
                     render: function (data, type, row) {
-                        return '<a href="edit.html#OshCourseAttendance,' + row.id + '">edit</a>';
+                        return '<a href="form.html#OshCourseAttendance,' + row.id + '">edit</a>';
                     }
                 }
             ]
@@ -151,7 +157,7 @@ $(document).ready(function () {
                 {title: "Credits", data: "credits"},
                 {
                     render: function (data, type, row) {
-                        return '<a href="edit.html#EducationalActivityAttendance,' + row.id + '">edit</a>';
+                        return '<a href="form.html#EducationalActivityAttendance,' + row.id + '">edit</a>';
                     }
                 }
             ]

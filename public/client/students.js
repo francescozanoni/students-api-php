@@ -5,16 +5,20 @@ $(document).ready(function () {
             url: "../students",
             method: "GET",
             cache: true,
-                // https://stackoverflow.com/questions/32814120/jquery-datatables-show-no-results-message-on-404-ajax-response
-                error: function (jqXHR, textStatus, errorThrown) {
-                    // In case of no data found, no error must be reported.
-                    if (jqXHR.responseText === '{"status_code":404,"status":"Not Found","message":"Resource(s) not found"}') {
-                        $(tableSelector).DataTable().clear().draw();
-                    } else {
-                        throw errorThrown;
-                    }
+            // https://stackoverflow.com/questions/32814120/jquery-datatables-show-no-results-message-on-404-ajax-response
+            error: function (jqXHR, textStatus, errorThrown) {
+                // In case of no data found, no error must be reported.
+                if (jqXHR.responseText === '{"status_code":404,"status":"Not Found","message":"Resource(s) not found"}') {
+                    $(tableSelector).DataTable().clear().draw();
+                } else {
+                    throw errorThrown;
                 }
+            }
         },
+        paging: false,
+        searching: false,
+        ordering: false,
+        info: false,
         columns: [
             {title: "ID", data: "id", visible: false, searchable: false},
             {title: "First name", data: "first_name"},

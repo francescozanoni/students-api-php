@@ -1,8 +1,7 @@
 var modelSelector = $("#model-selector");
 var pageForm = $("form");
 var result = $("#result");
-
-var baseUrl = "..";
+var baseUrl = window.location.href.replace(/\/[^\/]+$/, "/..");
 var modelFromHash = window.location.hash.substr(1).replace(/,.*$/, "");
 var idFromHash = window.location.hash.substr(1).replace(modelFromHash, "").replace(",", "");
 var modelsMethodsUrls = {
@@ -17,7 +16,7 @@ var modelsMethodsUrls = {
 
     NewAnnotation: {
         method: "POST",
-        url: baseUrl + "/annotations",
+        url: baseUrl + "/students/" + idFromHash + "/annotations",
     },
     Annotation: {
         method: "PUT",
@@ -26,7 +25,7 @@ var modelsMethodsUrls = {
 
     NewInternship: {
         method: "POST",
-        url: baseUrl + "/internships",
+        url: baseUrl + "/students/" + idFromHash + "/internships",
     },
     Internship: {
         method: "PUT",
@@ -35,7 +34,7 @@ var modelsMethodsUrls = {
 
     NewEligibility: {
         method: "POST",
-        url: baseUrl + "/eligibilities",
+        url: baseUrl + "/students/" + idFromHash + "/eligibilities",
     },
     Eligibility: {
         method: "PUT",
@@ -44,7 +43,7 @@ var modelsMethodsUrls = {
 
     NewOshCourseAttendance: {
         method: "POST",
-        url: baseUrl + "/osh_course_attendances",
+        url: baseUrl + "/students/" + idFromHash + "/osh_course_attendances",
     },
     OshCourseAttendance: {
         method: "PUT",
@@ -53,7 +52,7 @@ var modelsMethodsUrls = {
 
     NewEducationalActivityAttendance: {
         method: "POST",
-        url: baseUrl + "/educational_activity_attendances",
+        url: baseUrl + "/students/" + idFromHash + "/educational_activity_attendances",
     },
     EducationalActivityAttendance: {
         method: "PUT",
@@ -72,35 +71,23 @@ var modelsMethodsUrls = {
 function populateForm(form, data) {
 
     $.each(data, function (key, value) {
-        var $ctrl = $("[name=" + key + "]", form);
-        if ($ctrl.is("select")) {
-            $("option", $ctrl).each(function () {
-                if (this.value === value) {
-                    this.selected = true;
-                }
+        var field = $("[name=" + key + "]", form);
+        if (field.is("select")) {
+            $("option", field).each(function () {
+                this.selected = (this.value === value);
             });
-        } else if ($ctrl.is("textarea")) {
-            $ctrl.val(value);
         } else {
-            switch ($ctrl.prop("type")) {
-                case "text" :
-                case "number" :
-                case "hidden":
-                case "date":
-                    $ctrl.val(value);
-                    break;
+            switch (field.prop("type")) {
                 case "radio" :
-                    $ctrl.each(function () {
-                        if ($(this).prop("value") === value) {
-                            $(this).prop("checked", true);
-                        }
+                    field.each(function () {
+                        $(this).prop("checked", $(this).prop("value") === value);
                     });
                     break;
                 case "checkbox":
-                    if (true === value) {
-                        $ctrl.prop("checked", true);
-                    }
+                    field.prop("checked", [true, 1, "1", "Y", "y", "Yes", "yes", "true", "TRUE"].indexOf(value) !== -1);
                     break;
+                default:
+                    field.val(value);
             }
         }
     });
