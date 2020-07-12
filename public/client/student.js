@@ -139,7 +139,14 @@ $(document).ready(function () {
             columns: [
                 {title: "ID", data: "id", visible: false},
                 {title: "Start", data: "start_date"},
-                {title: "End", data: "end_date"},
+                {
+                    title: "End",
+                    data: "end_date",
+                    // "end_date" is optional
+                    render: function (data) {
+                        return data || "";
+                    }
+                },
                 {title: "Educational activity", data: "educational_activity"},
                 {title: "Credits", data: "credits"},
                 {
