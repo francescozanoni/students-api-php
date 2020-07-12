@@ -29,7 +29,7 @@ $(document).ready(function () {
     };
 
     var detailsSettings = Object.assign(
-        baseDataTableSettings('#details', "/students/" + studentId),
+        baseDataTableSettings("#details", "/students/" + studentId),
         {
             columns: [
                 {
@@ -51,7 +51,7 @@ $(document).ready(function () {
             });
     };
     var annotationsSettings = Object.assign(
-        baseDataTableSettings('#annotations', "/students/" + studentId + "/annotations?with_audits=true"),
+        baseDataTableSettings("#annotations", "/students/" + studentId + "/annotations?with_audits=true"),
         {
             columns: [
                 {title: "ID", data: "id", visible: false},
@@ -67,23 +67,35 @@ $(document).ready(function () {
         }
     );
     var internshipsSettings = Object.assign(
-        baseDataTableSettings('#internships', "/students/" + studentId + "/internships"),
+        baseDataTableSettings("#internships", "/students/" + studentId + "/internships"),
         {
             columns: [
                 {title: "ID", data: "id", visible: false},
                 {title: "Start", data: "start_date"},
                 {title: "End", data: "end_date"},
                 {title: "Location", data: "location"},
-                {title: "Ward", data: "sub_location"},
+                {
+                    title: "Ward",
+                    data: "sub_location",
+                    // "sub_location" is optional
+                    render: function (data) {
+                        return data || "";
+                    }
+                },
                 {title: "Hour amount", data: "hour_amount"},
                 {title: "Other amount", data: "other_amount"},
                 {title: "Is optional", data: "is_optional"},
-                {title: "Is interrupted", data: "is_interrupted"}
+                {title: "Is interrupted", data: "is_interrupted"},
+                {
+                    render: function (data, type, row) {
+                        return '<a href="edit.html#Internship,' + row.id + '">edit</a>';
+                    }
+                }
             ]
         }
     );
     var eligibilitiesSettings = Object.assign(
-        baseDataTableSettings('#eligibilities', "/students/" + studentId + "/eligibilities"),
+        baseDataTableSettings("#eligibilities", "/students/" + studentId + "/eligibilities"),
         {
             columns: [
                 {title: "ID", data: "id", visible: false},
@@ -98,21 +110,31 @@ $(document).ready(function () {
                         return data || "";
                     }
                 },
+                {
+                    render: function (data, type, row) {
+                        return '<a href="edit.html#Eligibility,' + row.id + '">edit</a>';
+                    }
+                }
             ]
         }
     );
     var oshCourseAttendancesSettings = Object.assign(
-        baseDataTableSettings('#osh_course_attendances', "/students/" + studentId + "/osh_course_attendances"),
+        baseDataTableSettings("#osh_course_attendances", "/students/" + studentId + "/osh_course_attendances"),
         {
             columns: [
                 {title: "ID", data: "id", visible: false},
                 {title: "Start", data: "start_date"},
-                {title: "End", data: "end_date"}
+                {title: "End", data: "end_date"},
+                {
+                    render: function (data, type, row) {
+                        return '<a href="edit.html#OshCourseAttendance,' + row.id + '">edit</a>';
+                    }
+                }
             ]
         }
     );
     var educationalActivityAttendancesSettings = Object.assign(
-        baseDataTableSettings('#educational_activity_attendances', "/students/" + studentId + "/educational_activity_attendances"),
+        baseDataTableSettings("#educational_activity_attendances", "/students/" + studentId + "/educational_activity_attendances"),
         {
             columns: [
                 {title: "ID", data: "id", visible: false},
@@ -120,15 +142,20 @@ $(document).ready(function () {
                 {title: "End", data: "end_date"},
                 {title: "Educational activity", data: "educational_activity"},
                 {title: "Credits", data: "credits"},
+                {
+                    render: function (data, type, row) {
+                        return '<a href="edit.html#EducationalActivityAttendance,' + row.id + '">edit</a>';
+                    }
+                }
             ]
         }
     );
 
-    $('#details').DataTable(detailsSettings);
-    $('#annotations').DataTable(annotationsSettings);
-    $('#internships').DataTable(internshipsSettings);
-    $('#eligibilities').DataTable(eligibilitiesSettings);
-    $('#osh_course_attendances').DataTable(oshCourseAttendancesSettings);
-    $('#educational_activity_attendances').DataTable(educationalActivityAttendancesSettings);
+    $("#details").DataTable(detailsSettings);
+    $("#annotations").DataTable(annotationsSettings);
+    $("#internships").DataTable(internshipsSettings);
+    $("#eligibilities").DataTable(eligibilitiesSettings);
+    $("#osh_course_attendances").DataTable(oshCourseAttendancesSettings);
+    $("#educational_activity_attendances").DataTable(educationalActivityAttendancesSettings);
 
 });

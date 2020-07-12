@@ -20,22 +20,13 @@ $(document).ready(function () {
                     return data || "";
                 }
             }
-        ]
-    });
-
-    $("#students tbody").on("click", "tr", function () {
-        /**
-         * @var {object} student e.g. {
-         *                              "id": 1,
-         *                              "first_name": "John",
-         *                              "last_name": "Doe",
-         *                              "e_mail": "john.doe@foo.com",
-         *                              "phone": "1234-567890",
-         *                              "nationality": "GB"
-         *                            }
-         */
-        var student = table.row(this).data();
-        window.location = "/client/student.html#" + student.id;
+        ],
+        createdRow: function (row, data) {
+            $(row).prop("title", "Click to access student's details");
+            $(row).on("click", function () {
+                window.location = "/client/student.html#" + data.id;
+            });
+        }
     });
 
 });
