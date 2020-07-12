@@ -11,31 +11,8 @@ $(document).ready(function () {
         $(this).attr("href", $(this).attr("href") + "," + studentId);
     });
 
-    var baseDataTableSettings = function (tableSelector, url) {
-        return {
-            ajax: {
-                url: url,
-                method: "GET",
-                cache: true,
-                // https://stackoverflow.com/questions/32814120/jquery-datatables-show-no-results-message-on-404-ajax-response
-                error: function (jqXHR, textStatus, errorThrown) {
-                    // In case of no data found, no error must be reported.
-                    if (jqXHR.responseText === '{"status_code":404,"status":"Not Found","message":"Resource(s) not found"}') {
-                        $(tableSelector).DataTable().clear().draw();
-                    } else {
-                        throw errorThrown
-                    }
-                }
-            },
-            paging: false,
-            searching: false,
-            ordering: false,
-            info: false
-        };
-    };
-
-    var detailsSettings = Object.assign(
-        baseDataTableSettings("#details", "../students/" + studentId),
+    var studentSettings = Object.assign(
+        getBaseDataTableSettings("#student", "../students/" + studentId),
         {
             columns: [
                 {
@@ -49,7 +26,7 @@ $(document).ready(function () {
             ]
         }
     );
-    detailsSettings.ajax.dataSrc = function (json) {
+    studentSettings.ajax.dataSrc = function (json) {
         return Object.entries(json.data)
             .filter(function (entry) {
                 // ID is not displayed
@@ -57,7 +34,7 @@ $(document).ready(function () {
             });
     };
     var annotationsSettings = Object.assign(
-        baseDataTableSettings("#annotations", "../students/" + studentId + "/annotations?with_audits=true"),
+        getBaseDataTableSettings("#annotations", "../students/" + studentId + "/annotations?with_audits=true"),
         {
             columns: [
                 {title: "ID", data: "id", visible: false},
@@ -73,7 +50,7 @@ $(document).ready(function () {
         }
     );
     var internshipsSettings = Object.assign(
-        baseDataTableSettings("#internships", "../students/" + studentId + "/internships"),
+        getBaseDataTableSettings("#internships", "../students/" + studentId + "/internships"),
         {
             columns: [
                 {title: "ID", data: "id", visible: false},
@@ -101,7 +78,7 @@ $(document).ready(function () {
         }
     );
     var eligibilitiesSettings = Object.assign(
-        baseDataTableSettings("#eligibilities", "../students/" + studentId + "/eligibilities"),
+        getBaseDataTableSettings("#eligibilities", "../students/" + studentId + "/eligibilities"),
         {
             columns: [
                 {title: "ID", data: "id", visible: false},
@@ -125,7 +102,7 @@ $(document).ready(function () {
         }
     );
     var oshCourseAttendancesSettings = Object.assign(
-        baseDataTableSettings("#osh_course_attendances", "../students/" + studentId + "/osh_course_attendances"),
+        getBaseDataTableSettings("#osh_course_attendances", "../students/" + studentId + "/osh_course_attendances"),
         {
             columns: [
                 {title: "ID", data: "id", visible: false},
@@ -140,7 +117,7 @@ $(document).ready(function () {
         }
     );
     var educationalActivityAttendancesSettings = Object.assign(
-        baseDataTableSettings("#educational_activity_attendances", "../students/" + studentId + "/educational_activity_attendances"),
+        getBaseDataTableSettings("#educational_activity_attendances", "../students/" + studentId + "/educational_activity_attendances"),
         {
             columns: [
                 {title: "ID", data: "id", visible: false},
@@ -164,7 +141,7 @@ $(document).ready(function () {
         }
     );
 
-    $("#details").DataTable(detailsSettings);
+    $("#student").DataTable(studentSettings);
     $("#annotations").DataTable(annotationsSettings);
     $("#internships").DataTable(internshipsSettings);
     $("#eligibilities").DataTable(eligibilitiesSettings);

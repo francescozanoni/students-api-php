@@ -26,7 +26,7 @@
                 Details
                 <small><a class="student" href="form.html">edit</a></small>
             </h3>
-            <table id="details" class="display compact"></table>
+            <table id="student" class="display compact"></table>
         </div>
         <div class="col-md-8">
             <h3>
@@ -72,17 +72,11 @@
     </div>
 </div>
 
-<script>
-    window.onerror = function (msg, url, lineNo, columnNo, error) {
-        alert(msg + " (" + url + ":" + lineNo + ")");
-
-        return false;
-    }
-</script>
 <script type="text/javascript" src="https://unpkg.com/jsonform@2.1.6/deps/jquery.min.js"></script>
 <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap.min.js"></script>
+<script type="text/javascript" src="utils.js"></script>
 <script type="text/javascript" src="student.js"></script>
 </body>
 </html>

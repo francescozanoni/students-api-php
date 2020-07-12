@@ -1,9 +1,11 @@
-var modelSelector = $("#model-selector");
-var pageForm = $("form");
-var result = $("#result");
 var baseUrl = window.location.href.replace(/\/[^\/]+$/, "/..");
 var modelFromHash = window.location.hash.substr(1).replace(/,.*$/, "");
 var idFromHash = window.location.hash.substr(1).replace(modelFromHash, "").replace(",", "");
+
+var modelSelector = $("#model-selector");
+var pageForm = $("form");
+var result = $("#result");
+
 var modelsMethodsUrls = {
     NewStudent: {
         method: "POST",
@@ -59,40 +61,6 @@ var modelsMethodsUrls = {
         url: baseUrl + "/educational_activity_attendances/" + idFromHash,
     }
 };
-
-/**
- * Populate a form with the content of a JSON object.
- *
- * @param {object} form jQuery object wrapping a form
- * @param {object} data plain JSON object
- *
- * @see https://stackoverflow.com/questions/7298364/using-jquery-and-json-to-populate-forms
- */
-function populateForm(form, data) {
-
-    $.each(data, function (key, value) {
-        var field = $("[name=" + key + "]", form);
-        if (field.is("select")) {
-            $("option", field).each(function () {
-                this.selected = (this.value === value);
-            });
-        } else {
-            switch (field.prop("type")) {
-                case "radio" :
-                    field.each(function () {
-                        $(this).prop("checked", $(this).prop("value") === value);
-                    });
-                    break;
-                case "checkbox":
-                    field.prop("checked", [true, 1, "1", "Y", "y", "Yes", "yes", "true", "TRUE"].indexOf(value) !== -1);
-                    break;
-                default:
-                    field.val(value);
-            }
-        }
-    });
-
-}
 
 (async () => {
 
