@@ -4,12 +4,11 @@ declare(strict_types = 1);
 namespace App\Http\Resources;
 
 use App\Http\Resources\Audit as AuditResource;
-use App\Http\Resources\BareInternship as BareInternshipResource;
 use App\Http\Resources\Traits\OptionalAuditsAttribute;
 use App\Http\Resources\Traits\OptionalInternshipAttribute;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class Evaluation extends JsonResource
+class InterruptionReportWithoutInternship extends JsonResource
 {
 
     use OptionalInternshipAttribute;
@@ -22,14 +21,9 @@ class Evaluation extends JsonResource
 
             'id' => $this->id,
             'notes' => $this->notes,
-            'internship' => $this->when($this->withInternshipAttribute($request) === true, new BareInternshipResource($this->internship)),
             'audits' => $this->when($this->withAuditsAttribute($request) === true, AuditResource::collection($this->audits)),
 
         ];
-
-        foreach (config('internships.evaluations.items') as $item) {
-            $output[$item['name']] = $this->{$item['name']};
-        }
 
         return $output;
 

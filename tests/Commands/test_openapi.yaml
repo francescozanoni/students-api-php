@@ -1,20 +1,18 @@
 openapi: 3.0.0
 info:
-  title: 'Student management API'
+  title: Student management API
   version: 1.0.0
 servers:
-  -
-    url: 'http://localhost'
+  - url: http://localhost
 paths:
   /students:
     get:
-      summary: 'Returns a list of students'
+      summary: Returns a list of students
       operationId: getStudents
       tags:
         - students
       parameters:
-        -
-          $ref: '#/components/parameters/WithAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         200:
           $ref: '#/components/responses/Students'
@@ -23,7 +21,7 @@ paths:
         500:
           $ref: '#/components/responses/InternalServerError'
     post:
-      summary: 'Creates a new student'
+      summary: Creates a new student
       operationId: createStudent
       requestBody:
         required: true
@@ -34,8 +32,7 @@ paths:
       tags:
         - students
       parameters:
-        -
-          $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/UserId'
       responses:
         200:
           $ref: '#/components/responses/Student'
@@ -43,22 +40,20 @@ paths:
           $ref: '#/components/responses/BadRequest'
         500:
           $ref: '#/components/responses/InternalServerError'
-  '/students/{id}':
+  /students/{id}:
     get:
-      summary: 'Returns a student'
+      summary: Returns a student
       operationId: getStudentById
       tags:
         - students
       parameters:
-        -
-          name: id
+        - name: id
           in: path
           required: true
-          description: 'The ID of the student to retrieve'
+          description: The ID of the student to retrieve
           schema:
             type: integer
-        -
-          $ref: '#/components/parameters/WithAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         200:
           $ref: '#/components/responses/Student'
@@ -69,7 +64,7 @@ paths:
         500:
           $ref: '#/components/responses/InternalServerError'
     put:
-      summary: 'Updates a student'
+      summary: Updates a student
       operationId: updateStudentById
       requestBody:
         required: true
@@ -80,15 +75,13 @@ paths:
       tags:
         - students
       parameters:
-        -
-          name: id
+        - name: id
           in: path
           required: true
-          description: 'The ID of the student to update'
+          description: The ID of the student to update
           schema:
             type: integer
-        -
-          $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/UserId'
       responses:
         200:
           $ref: '#/components/responses/Student'
@@ -99,20 +92,18 @@ paths:
         500:
           $ref: '#/components/responses/InternalServerError'
     delete:
-      summary: 'Deletes a student'
+      summary: Deletes a student
       operationId: deleteStudentById
       tags:
         - students
       parameters:
-        -
-          name: id
+        - name: id
           in: path
           required: true
-          description: 'The ID of the student to delete'
+          description: The ID of the student to delete
           schema:
             type: integer
-        -
-          $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/UserId'
       responses:
         200:
           $ref: '#/components/responses/ResourceDeletion'
@@ -124,13 +115,12 @@ paths:
           $ref: '#/components/responses/InternalServerError'
   /annotations:
     get:
-      summary: 'Returns a list of annotations'
+      summary: Returns a list of annotations
       operationId: getAnnotations
       tags:
         - annotations
       parameters:
-        -
-          $ref: '#/components/parameters/WithAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         200:
           $ref: '#/components/responses/Annotations'
@@ -138,22 +128,20 @@ paths:
           $ref: '#/components/responses/NotFound'
         500:
           $ref: '#/components/responses/InternalServerError'
-  '/annotations/{id}':
+  /annotations/{id}:
     get:
-      summary: 'Returns an annotation'
+      summary: Returns an annotation
       operationId: getAnnotationById
       tags:
         - annotations
       parameters:
-        -
-          name: id
+        - name: id
           in: path
           required: true
-          description: 'The ID of the annotation to retrieve'
+          description: The ID of the annotation to retrieve
           schema:
             type: integer
-        -
-          $ref: '#/components/parameters/WithAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         200:
           $ref: '#/components/responses/Annotation'
@@ -164,7 +152,7 @@ paths:
         500:
           $ref: '#/components/responses/InternalServerError'
     put:
-      summary: 'Updates an annotation'
+      summary: Updates an annotation
       operationId: updateAnnotationById
       requestBody:
         required: true
@@ -175,15 +163,13 @@ paths:
       tags:
         - annotations
       parameters:
-        -
-          name: id
+        - name: id
           in: path
           required: true
-          description: 'The ID of the annotation to update'
+          description: The ID of the annotation to update
           schema:
             type: integer
-        -
-          $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/UserId'
       responses:
         200:
           $ref: '#/components/responses/Annotation'
@@ -194,20 +180,18 @@ paths:
         500:
           $ref: '#/components/responses/InternalServerError'
     delete:
-      summary: 'Deletes an annotation'
+      summary: Deletes an annotation
       operationId: deleteAnnotationById
       tags:
         - annotations
       parameters:
-        -
-          name: id
+        - name: id
           in: path
           required: true
-          description: 'The ID of the annotation to delete'
+          description: The ID of the annotation to delete
           schema:
             type: integer
-        -
-          $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/UserId'
       responses:
         200:
           $ref: '#/components/responses/ResourceDeletion'
@@ -217,22 +201,20 @@ paths:
           $ref: '#/components/responses/NotFound'
         500:
           $ref: '#/components/responses/InternalServerError'
-  '/students/{id}/annotations':
+  /students/{id}/annotations:
     get:
       summary: 'Returns the list of a student''s annotations'
       operationId: getStudentAnnotations
       tags:
         - annotations
       parameters:
-        -
-          name: id
+        - name: id
           in: path
           required: true
-          description: 'The ID of the student'
+          description: The ID of the student
           schema:
             type: integer
-        -
-          $ref: '#/components/parameters/WithAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         200:
           $ref: '#/components/responses/Annotations'
@@ -254,15 +236,13 @@ paths:
       tags:
         - annotations
       parameters:
-        -
-          name: id
+        - name: id
           in: path
           required: true
           description: 'The ID of the annotation''s student'
           schema:
             type: integer
-        -
-          $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/UserId'
       responses:
         200:
           $ref: '#/components/responses/Annotation'
@@ -274,13 +254,12 @@ paths:
           $ref: '#/components/responses/InternalServerError'
   /internships:
     get:
-      summary: 'Returns a list of internships'
+      summary: Returns a list of internships
       operationId: getInternships
       tags:
         - internships
       parameters:
-        -
-          $ref: '#/components/parameters/WithAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         200:
           $ref: '#/components/responses/Internships'
@@ -288,22 +267,20 @@ paths:
           $ref: '#/components/responses/NotFound'
         500:
           $ref: '#/components/responses/InternalServerError'
-  '/internships/{id}':
+  /internships/{id}:
     get:
-      summary: 'Returns an internship'
+      summary: Returns an internship
       operationId: getInternshipById
       tags:
         - internships
       parameters:
-        -
-          name: id
+        - name: id
           in: path
           required: true
-          description: 'The ID of the internship to retrieve'
+          description: The ID of the internship to retrieve
           schema:
             type: integer
-        -
-          $ref: '#/components/parameters/WithAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         200:
           $ref: '#/components/responses/Internship'
@@ -314,7 +291,7 @@ paths:
         500:
           $ref: '#/components/responses/InternalServerError'
     put:
-      summary: 'Updates an internship'
+      summary: Updates an internship
       operationId: updateInternshipById
       requestBody:
         required: true
@@ -325,15 +302,13 @@ paths:
       tags:
         - internships
       parameters:
-        -
-          name: id
+        - name: id
           in: path
           required: true
-          description: 'The ID of the internship to update'
+          description: The ID of the internship to update
           schema:
             type: integer
-        -
-          $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/UserId'
       responses:
         200:
           $ref: '#/components/responses/Internship'
@@ -344,20 +319,18 @@ paths:
         500:
           $ref: '#/components/responses/InternalServerError'
     delete:
-      summary: 'Deletes an internship'
+      summary: Deletes an internship
       operationId: deleteInternshipById
       tags:
         - internships
       parameters:
-        -
-          name: id
+        - name: id
           in: path
           required: true
-          description: 'The ID of the internship to delete'
+          description: The ID of the internship to delete
           schema:
             type: integer
-        -
-          $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/UserId'
       responses:
         200:
           $ref: '#/components/responses/ResourceDeletion'
@@ -367,22 +340,20 @@ paths:
           $ref: '#/components/responses/NotFound'
         500:
           $ref: '#/components/responses/InternalServerError'
-  '/students/{id}/internships':
+  /students/{id}/internships:
     get:
       summary: 'Returns the list of a student''s internships'
       operationId: getStudentInternships
       tags:
         - internships
       parameters:
-        -
-          name: id
+        - name: id
           in: path
           required: true
-          description: 'The ID of the student'
+          description: The ID of the student
           schema:
             type: integer
-        -
-          $ref: '#/components/parameters/WithAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         200:
           $ref: '#/components/responses/Internships'
@@ -404,15 +375,13 @@ paths:
       tags:
         - internships
       parameters:
-        -
-          name: id
+        - name: id
           in: path
           required: true
           description: 'The ID of the internship''s student'
           schema:
             type: integer
-        -
-          $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/UserId'
       responses:
         200:
           $ref: '#/components/responses/Internship'
@@ -424,13 +393,12 @@ paths:
           $ref: '#/components/responses/InternalServerError'
   /educational_activity_attendances:
     get:
-      summary: 'Returns a list of educational activity attendances'
+      summary: Returns a list of educational activity attendances
       operationId: getEducationalActivityAttendances
       tags:
         - educational_activity_attendances
       parameters:
-        -
-          $ref: '#/components/parameters/WithAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         200:
           $ref: '#/components/responses/EducationalActivityAttendances'
@@ -438,22 +406,20 @@ paths:
           $ref: '#/components/responses/NotFound'
         500:
           $ref: '#/components/responses/InternalServerError'
-  '/educational_activity_attendances/{id}':
+  /educational_activity_attendances/{id}:
     get:
-      summary: 'Returns an educational activity attendance'
+      summary: Returns an educational activity attendance
       operationId: getEducationalActivityAttendanceById
       tags:
         - educational_activity_attendances
       parameters:
-        -
-          name: id
+        - name: id
           in: path
           required: true
-          description: 'The ID of the educational activity attendance to retrieve'
+          description: The ID of the educational activity attendance to retrieve
           schema:
             type: integer
-        -
-          $ref: '#/components/parameters/WithAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         200:
           $ref: '#/components/responses/EducationalActivityAttendance'
@@ -464,7 +430,7 @@ paths:
         500:
           $ref: '#/components/responses/InternalServerError'
     put:
-      summary: 'Updates an educational activity attendance'
+      summary: Updates an educational activity attendance
       operationId: updateEducationalActivityAttendanceById
       requestBody:
         required: true
@@ -475,15 +441,13 @@ paths:
       tags:
         - educational_activity_attendances
       parameters:
-        -
-          name: id
+        - name: id
           in: path
           required: true
-          description: 'The ID of the educational activity attendance to update'
+          description: The ID of the educational activity attendance to update
           schema:
             type: integer
-        -
-          $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/UserId'
       responses:
         200:
           $ref: '#/components/responses/EducationalActivityAttendance'
@@ -494,20 +458,18 @@ paths:
         500:
           $ref: '#/components/responses/InternalServerError'
     delete:
-      summary: 'Deletes an educational activity attendance'
+      summary: Deletes an educational activity attendance
       operationId: deleteEducationalActivityAttendanceById
       tags:
         - educational_activity_attendances
       parameters:
-        -
-          name: id
+        - name: id
           in: path
           required: true
-          description: 'The ID of the educational activity attendance to delete'
+          description: The ID of the educational activity attendance to delete
           schema:
             type: integer
-        -
-          $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/UserId'
       responses:
         200:
           $ref: '#/components/responses/ResourceDeletion'
@@ -517,22 +479,20 @@ paths:
           $ref: '#/components/responses/NotFound'
         500:
           $ref: '#/components/responses/InternalServerError'
-  '/students/{id}/educational_activity_attendances':
+  /students/{id}/educational_activity_attendances:
     get:
       summary: 'Returns the list of a student''s educational activity attendances'
       operationId: getStudentEducationalActivityAttendances
       tags:
         - educational_activity_attendances
       parameters:
-        -
-          name: id
+        - name: id
           in: path
           required: true
-          description: 'The ID of the student'
+          description: The ID of the student
           schema:
             type: integer
-        -
-          $ref: '#/components/parameters/WithAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         200:
           $ref: '#/components/responses/EducationalActivityAttendances'
@@ -554,15 +514,13 @@ paths:
       tags:
         - educational_activity_attendances
       parameters:
-        -
-          name: id
+        - name: id
           in: path
           required: true
           description: 'The ID of the educational activity attendance''s student'
           schema:
             type: integer
-        -
-          $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/UserId'
       responses:
         200:
           $ref: '#/components/responses/EducationalActivityAttendance'
@@ -572,22 +530,20 @@ paths:
           $ref: '#/components/responses/NotFound'
         500:
           $ref: '#/components/responses/InternalServerError'
-  '/internships/{id}/evaluation':
+  /internships/{id}/evaluation:
     get:
       summary: 'Returns the internship''s evaluation'
       operationId: getInternshipEvaluation
       tags:
         - evaluations
       parameters:
-        -
-          name: id
+        - name: id
           in: path
           required: true
-          description: 'The ID of the internship'
+          description: The ID of the internship
           schema:
             type: integer
-        -
-          $ref: '#/components/parameters/WithAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         200:
           $ref: '#/components/responses/Evaluation'
@@ -609,15 +565,13 @@ paths:
       tags:
         - evaluations
       parameters:
-        -
-          name: id
+        - name: id
           in: path
           required: true
           description: 'The ID of the evaluation''s internship'
           schema:
             type: integer
-        -
-          $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/UserId'
       responses:
         200:
           $ref: '#/components/responses/Evaluation'
@@ -629,13 +583,12 @@ paths:
           $ref: '#/components/responses/InternalServerError'
   /evaluations:
     get:
-      summary: 'Returns a list of internship evaluations'
+      summary: Returns a list of internship evaluations
       operationId: getEvaluations
       tags:
         - evaluations
       parameters:
-        -
-          $ref: '#/components/parameters/WithAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         200:
           $ref: '#/components/responses/Evaluations'
@@ -643,22 +596,20 @@ paths:
           $ref: '#/components/responses/NotFound'
         500:
           $ref: '#/components/responses/InternalServerError'
-  '/evaluations/{id}':
+  /evaluations/{id}:
     get:
-      summary: 'Returns an internship evaluation'
+      summary: Returns an internship evaluation
       operationId: getEvaluationById
       tags:
         - evaluations
       parameters:
-        -
-          name: id
+        - name: id
           in: path
           required: true
-          description: 'The ID of the internship evaluation to retrieve'
+          description: The ID of the internship evaluation to retrieve
           schema:
             type: integer
-        -
-          $ref: '#/components/parameters/WithAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         200:
           $ref: '#/components/responses/Evaluation'
@@ -669,7 +620,7 @@ paths:
         500:
           $ref: '#/components/responses/InternalServerError'
     put:
-      summary: 'Updates an internship evaluation'
+      summary: Updates an internship evaluation
       operationId: updateEvaluationById
       requestBody:
         required: true
@@ -680,15 +631,13 @@ paths:
       tags:
         - evaluations
       parameters:
-        -
-          name: id
+        - name: id
           in: path
           required: true
-          description: 'The ID of the internship evaluation to update'
+          description: The ID of the internship evaluation to update
           schema:
             type: integer
-        -
-          $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/UserId'
       responses:
         200:
           $ref: '#/components/responses/Evaluation'
@@ -699,20 +648,18 @@ paths:
         500:
           $ref: '#/components/responses/InternalServerError'
     delete:
-      summary: 'Deletes an internship evaluation'
+      summary: Deletes an internship evaluation
       operationId: deleteEvaluationById
       tags:
         - evaluations
       parameters:
-        -
-          name: id
+        - name: id
           in: path
           required: true
-          description: 'The ID of the internship evaluation to delete'
+          description: The ID of the internship evaluation to delete
           schema:
             type: integer
-        -
-          $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/UserId'
       responses:
         200:
           $ref: '#/components/responses/ResourceDeletion'
@@ -722,22 +669,20 @@ paths:
           $ref: '#/components/responses/NotFound'
         500:
           $ref: '#/components/responses/InternalServerError'
-  '/internships/{id}/interruption_report':
+  /internships/{id}/interruption_report:
     get:
       summary: 'Returns the internship''s interruption report'
       operationId: getInternshipInterruptionReport
       tags:
         - interruption_reports
       parameters:
-        -
-          name: id
+        - name: id
           in: path
           required: true
-          description: 'The ID of the internship'
+          description: The ID of the internship
           schema:
             type: integer
-        -
-          $ref: '#/components/parameters/WithAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         200:
           $ref: '#/components/responses/InterruptionReport'
@@ -759,15 +704,13 @@ paths:
       tags:
         - interruption_reports
       parameters:
-        -
-          name: id
+        - name: id
           in: path
           required: true
           description: 'The ID of the interruption report''s internship'
           schema:
             type: integer
-        -
-          $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/UserId'
       responses:
         200:
           $ref: '#/components/responses/InterruptionReport'
@@ -779,13 +722,12 @@ paths:
           $ref: '#/components/responses/InternalServerError'
   /interruption_reports:
     get:
-      summary: 'Returns a list of internship interruption reports'
+      summary: Returns a list of internship interruption reports
       operationId: getInterruptionReports
       tags:
         - interruption_reports
       parameters:
-        -
-          $ref: '#/components/parameters/WithAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         200:
           $ref: '#/components/responses/InterruptionReports'
@@ -793,22 +735,20 @@ paths:
           $ref: '#/components/responses/NotFound'
         500:
           $ref: '#/components/responses/InternalServerError'
-  '/interruption_reports/{id}':
+  /interruption_reports/{id}:
     get:
-      summary: 'Returns an internship interruption report'
+      summary: Returns an internship interruption report
       operationId: getInterruptionReportById
       tags:
         - interruption_reports
       parameters:
-        -
-          name: id
+        - name: id
           in: path
           required: true
-          description: 'The ID of the internship interruption report to retrieve'
+          description: The ID of the internship interruption report to retrieve
           schema:
             type: integer
-        -
-          $ref: '#/components/parameters/WithAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         200:
           $ref: '#/components/responses/InterruptionReport'
@@ -819,7 +759,7 @@ paths:
         500:
           $ref: '#/components/responses/InternalServerError'
     put:
-      summary: 'Updates an internship interruption report'
+      summary: Updates an internship interruption report
       operationId: updateInterruptionReportById
       requestBody:
         required: true
@@ -830,15 +770,13 @@ paths:
       tags:
         - interruption_reports
       parameters:
-        -
-          name: id
+        - name: id
           in: path
           required: true
-          description: 'The ID of the internship interruption report to update'
+          description: The ID of the internship interruption report to update
           schema:
             type: integer
-        -
-          $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/UserId'
       responses:
         200:
           $ref: '#/components/responses/InterruptionReport'
@@ -849,20 +787,18 @@ paths:
         500:
           $ref: '#/components/responses/InternalServerError'
     delete:
-      summary: 'Deletes an internship interruption report'
+      summary: Deletes an internship interruption report
       operationId: deleteInterruptionReportById
       tags:
         - interruption_reports
       parameters:
-        -
-          name: id
+        - name: id
           in: path
           required: true
-          description: 'The ID of the internship interruption report to delete'
+          description: The ID of the internship interruption report to delete
           schema:
             type: integer
-        -
-          $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/UserId'
       responses:
         200:
           $ref: '#/components/responses/ResourceDeletion'
@@ -874,13 +810,12 @@ paths:
           $ref: '#/components/responses/InternalServerError'
   /eligibilities:
     get:
-      summary: 'Returns a list of eligibilities'
+      summary: Returns a list of eligibilities
       operationId: getEligibilities
       tags:
         - eligibilities
       parameters:
-        -
-          $ref: '#/components/parameters/WithAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         200:
           $ref: '#/components/responses/Eligibilities'
@@ -888,22 +823,20 @@ paths:
           $ref: '#/components/responses/NotFound'
         500:
           $ref: '#/components/responses/InternalServerError'
-  '/eligibilities/{id}':
+  /eligibilities/{id}:
     get:
-      summary: 'Returns an eligibility'
+      summary: Returns an eligibility
       operationId: getEligibilityById
       tags:
         - eligibilities
       parameters:
-        -
-          name: id
+        - name: id
           in: path
           required: true
-          description: 'The ID of the eligibility to retrieve'
+          description: The ID of the eligibility to retrieve
           schema:
             type: integer
-        -
-          $ref: '#/components/parameters/WithAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         200:
           $ref: '#/components/responses/Eligibility'
@@ -914,7 +847,7 @@ paths:
         500:
           $ref: '#/components/responses/InternalServerError'
     put:
-      summary: 'Updates an eligibility'
+      summary: Updates an eligibility
       operationId: updateEligibilityById
       requestBody:
         required: true
@@ -925,15 +858,13 @@ paths:
       tags:
         - eligibilities
       parameters:
-        -
-          name: id
+        - name: id
           in: path
           required: true
-          description: 'The ID of the eligibility to update'
+          description: The ID of the eligibility to update
           schema:
             type: integer
-        -
-          $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/UserId'
       responses:
         200:
           $ref: '#/components/responses/Eligibility'
@@ -944,20 +875,18 @@ paths:
         500:
           $ref: '#/components/responses/InternalServerError'
     delete:
-      summary: 'Deletes an eligibility'
+      summary: Deletes an eligibility
       operationId: deleteEligibilityById
       tags:
         - eligibilities
       parameters:
-        -
-          name: id
+        - name: id
           in: path
           required: true
-          description: 'The ID of the eligibility to delete'
+          description: The ID of the eligibility to delete
           schema:
             type: integer
-        -
-          $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/UserId'
       responses:
         200:
           $ref: '#/components/responses/ResourceDeletion'
@@ -967,22 +896,20 @@ paths:
           $ref: '#/components/responses/NotFound'
         500:
           $ref: '#/components/responses/InternalServerError'
-  '/students/{id}/eligibilities':
+  /students/{id}/eligibilities:
     get:
       summary: 'Returns the list of a student''s eligibilities'
       operationId: getStudentEligibilities
       tags:
         - eligibilities
       parameters:
-        -
-          name: id
+        - name: id
           in: path
           required: true
-          description: 'The ID of the student'
+          description: The ID of the student
           schema:
             type: integer
-        -
-          $ref: '#/components/parameters/WithAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         200:
           $ref: '#/components/responses/Eligibilities'
@@ -1004,15 +931,13 @@ paths:
       tags:
         - eligibilities
       parameters:
-        -
-          name: id
+        - name: id
           in: path
           required: true
           description: 'The ID of the eligibility''s student'
           schema:
             type: integer
-        -
-          $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/UserId'
       responses:
         200:
           $ref: '#/components/responses/Eligibility'
@@ -1024,13 +949,12 @@ paths:
           $ref: '#/components/responses/InternalServerError'
   /osh_course_attendances:
     get:
-      summary: 'Returns a list of Occupational Safety and Health course attendances'
+      summary: Returns a list of Occupational Safety and Health course attendances
       operationId: getOshCourseAttendances
       tags:
         - osh_course_attendances
       parameters:
-        -
-          $ref: '#/components/parameters/WithAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         200:
           $ref: '#/components/responses/OshCourseAttendances'
@@ -1040,20 +964,18 @@ paths:
           $ref: '#/components/responses/InternalServerError'
   '/osh_course_attendances/{id}':
     get:
-      summary: 'Returns an Occupational Safety and Health course attendance'
+      summary: Returns an Occupational Safety and Health course attendance
       operationId: getOshCourseAttendanceById
       tags:
         - osh_course_attendances
       parameters:
-        -
-          name: id
+        - name: id
           in: path
           required: true
-          description: 'The ID of the Occupational Safety and Health course attendance to retrieve'
+          description: The ID of the Occupational Safety and Health course attendance to retrieve
           schema:
             type: integer
-        -
-          $ref: '#/components/parameters/WithAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         200:
           $ref: '#/components/responses/OshCourseAttendance'
@@ -1064,7 +986,7 @@ paths:
         500:
           $ref: '#/components/responses/InternalServerError'
     put:
-      summary: 'Updates an Occupational Safety and Health course attendance'
+      summary: Updates an Occupational Safety and Health course attendance
       operationId: updateOshCourseAttendanceById
       requestBody:
         required: true
@@ -1075,15 +997,13 @@ paths:
       tags:
         - osh_course_attendances
       parameters:
-        -
-          name: id
+        - name: id
           in: path
           required: true
-          description: 'The ID of the Occupational Safety and Health course attendance to update'
+          description: The ID of the Occupational Safety and Health course attendance to update
           schema:
             type: integer
-        -
-          $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/UserId'
       responses:
         200:
           $ref: '#/components/responses/OshCourseAttendance'
@@ -1094,20 +1014,18 @@ paths:
         500:
           $ref: '#/components/responses/InternalServerError'
     delete:
-      summary: 'Deletes an Occupational Safety and Health course attendance'
+      summary: Deletes an Occupational Safety and Health course attendance
       operationId: deleteOshCourseAttendanceById
       tags:
         - osh_course_attendances
       parameters:
-        -
-          name: id
+        - name: id
           in: path
           required: true
-          description: 'The ID of the Occupational Safety and Health course attendance to delete'
+          description: The ID of the Occupational Safety and Health course attendance to delete
           schema:
             type: integer
-        -
-          $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/UserId'
       responses:
         200:
           $ref: '#/components/responses/ResourceDeletion'
@@ -1124,15 +1042,13 @@ paths:
       tags:
         - osh_course_attendances
       parameters:
-        -
-          name: id
+        - name: id
           in: path
           required: true
-          description: 'The ID of the student'
+          description: The ID of the student
           schema:
             type: integer
-        -
-          $ref: '#/components/parameters/WithAudits'
+        - $ref: '#/components/parameters/WithAudits'
       responses:
         200:
           $ref: '#/components/responses/OshCourseAttendances'
@@ -1154,15 +1070,13 @@ paths:
       tags:
         - osh_course_attendances
       parameters:
-        -
-          name: id
+        - name: id
           in: path
           required: true
-          description: 'The ID of the Occupational Safety and Health course attendance''''s student'
+          description: 'The ID of the Occupational Safety and Health course attendance''s student'
           schema:
             type: integer
-        -
-          $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/UserId'
       responses:
         200:
           $ref: '#/components/responses/OshCourseAttendance'
@@ -1177,20 +1091,20 @@ components:
     WithAudits:
       in: query
       name: with_audits
-      description: 'Flag indicating whether resources must be returned with audits'
+      description: Flag indicating whether resources must be returned with audits
       schema:
         type: boolean
       required: false
     UserId:
       in: header
       name: x-user-id
-      description: 'User ID, used to mark audit ownership'
+      description: User ID, used to mark audit ownership
       schema:
         type: integer
       required: false
   responses:
     BadRequest:
-      description: 'Response reporting invalid request'
+      description: Response reporting invalid request
       content:
         application/json:
           schema:
@@ -1198,16 +1112,16 @@ components:
             properties:
               status_code:
                 type: integer
-                description: 'HTTP status code'
+                description: HTTP status code
               status:
                 type: string
-                description: 'HTTP status description'
+                description: HTTP status description
               message:
                 type: string
-                description: 'Reason making request invalid'
+                description: Reason making request invalid
               data:
                 type: object
-                description: 'Input item(s) making request invalid'
+                description: Input item(s) making request invalid
             required:
               - status_code
               - status
@@ -1215,8 +1129,8 @@ components:
               - data
             example:
               status_code: 400
-              status: 'Bad Request'
-              message: 'Request is not valid'
+              status: Bad Request
+              message: Request is not valid
               data:
                 id:
                   - 'code error_type'
@@ -1224,7 +1138,7 @@ components:
                   - 'expected integer'
                   - 'used string'
     NotFound:
-      description: 'Generic response reporting no resource(s) found'
+      description: Generic response reporting no resource(s) found
       content:
         application/json:
           schema:
@@ -1232,10 +1146,10 @@ components:
             properties:
               status_code:
                 type: integer
-                description: 'HTTP status code'
+                description: HTTP status code
               status:
                 type: string
-                description: 'HTTP status description'
+                description: HTTP status description
               message:
                 type: string
             required:
@@ -1244,10 +1158,10 @@ components:
               - message
             example:
               status_code: 404
-              status: 'Not Found'
-              message: 'Resource(s) not found'
+              status: Not Found
+              message: Resource(s) not found
     InternalServerError:
-      description: 'Generic response reporting an unexpected error'
+      description: Generic response reporting an unexpected error
       content:
         application/json:
           schema:
@@ -1255,10 +1169,10 @@ components:
             properties:
               status_code:
                 type: integer
-                description: 'HTTP status code'
+                description: HTTP status code
               status:
                 type: string
-                description: 'HTTP status description'
+                description: HTTP status description
               message:
                 type: string
             required:
@@ -1267,10 +1181,10 @@ components:
               - message
             example:
               status_code: 500
-              status: 'Internal Server Error'
-              message: 'An internal server error occurred'
+              status: Internal Server Error
+              message: An internal server error occurred
     Students:
-      description: 'Response returning a list of students'
+      description: Response returning a list of students
       content:
         application/json:
           schema:
@@ -1278,10 +1192,10 @@ components:
             properties:
               status_code:
                 type: integer
-                description: 'HTTP status code'
+                description: HTTP status code
               status:
                 type: string
-                description: 'HTTP status description'
+                description: HTTP status description
               message:
                 type: string
               data:
@@ -1296,23 +1210,21 @@ components:
             example:
               status_code: 200
               status: OK
-              message: 'Resource(s) found'
+              message: Resource(s) found
               data:
-                -
-                  id: 1
+                - id: 1
                   first_name: John
                   last_name: Doe
                   e_mail: john.doe@foo.com
                   phone: 1234-567890
                   nationality: GB
-                -
-                  id: 2
+                - id: 2
                   first_name: Jane
                   last_name: Doe
                   e_mail: jane.doe@bar.com
                   nationality: CA
     Student:
-      description: 'Response returning a student'
+      description: Response returning a student
       content:
         application/json:
           schema:
@@ -1320,10 +1232,10 @@ components:
             properties:
               status_code:
                 type: integer
-                description: 'HTTP status code'
+                description: HTTP status code
               status:
                 type: string
-                description: 'HTTP status description'
+                description: HTTP status description
               message:
                 type: string
               data:
@@ -1336,7 +1248,7 @@ components:
             example:
               status_code: 200
               status: OK
-              message: 'Resource successfully retrieved/created/modified'
+              message: Resource successfully retrieved/created/modified
               data:
                 id: 1
                 first_name: John
@@ -1345,7 +1257,7 @@ components:
                 phone: 1234-567890
                 nationality: GB
     Annotations:
-      description: 'Response returning a list of annotations'
+      description: Response returning a list of annotations
       content:
         application/json:
           schema:
@@ -1353,10 +1265,10 @@ components:
             properties:
               status_code:
                 type: integer
-                description: 'HTTP status code'
+                description: HTTP status code
               status:
                 type: string
-                description: 'HTTP status description'
+                description: HTTP status description
               message:
                 type: string
               data:
@@ -1371,18 +1283,16 @@ components:
             example:
               status_code: 200
               status: OK
-              message: 'Resource(s) found'
+              message: Resource(s) found
               data:
-                -
-                  id: 1
-                  title: 'First annotation title'
-                  body: 'First annotation body'
-                -
-                  id: 2
-                  title: 'Second annotation title'
-                  body: 'Second annotation body'
+                - id: 1
+                  title: First annotation title
+                  body: First annotation body
+                - id: 2
+                  title: Second annotation title
+                  body: Second annotation body
     Annotation:
-      description: 'Response returning an annotation'
+      description: Response returning an annotation
       content:
         application/json:
           schema:
@@ -1390,10 +1300,10 @@ components:
             properties:
               status_code:
                 type: integer
-                description: 'HTTP status code'
+                description: HTTP status code
               status:
                 type: string
-                description: 'HTTP status description'
+                description: HTTP status description
               message:
                 type: string
               data:
@@ -1406,11 +1316,11 @@ components:
             example:
               status_code: 200
               status: OK
-              message: 'Resource successfully retrieved/created/modified'
+              message: Resource successfully retrieved/created/modified
               data:
                 id: 1
-                title: 'First annotation title'
-                content: 'First annotation body'
+                title: First annotation title
+                content: First annotation body
                 student:
                   id: 1
                   first_name: John
@@ -1419,7 +1329,7 @@ components:
                   phone: 1234-567890
                   nationality: GB
     Internships:
-      description: 'Response returning a list of internships'
+      description: Response returning a list of internships
       content:
         application/json:
           schema:
@@ -1427,10 +1337,10 @@ components:
             properties:
               status_code:
                 type: integer
-                description: 'HTTP status code'
+                description: HTTP status code
               status:
                 type: string
-                description: 'HTTP status description'
+                description: HTTP status description
               message:
                 type: string
               data:
@@ -1445,11 +1355,10 @@ components:
             example:
               status_code: 200
               status: OK
-              message: 'Resource(s) found'
+              message: Resource(s) found
               data:
-                -
-                  id: 1
-                  location: 'Location 1'
+                - id: 1
+                  location: Location 1
                   sub_location: 'Sub-location 1'
                   start_date: '2019-01-01'
                   end_date: '2019-01-20'
@@ -1464,9 +1373,8 @@ components:
                     e_mail: john.doe@foo.com
                     phone: 1234-567890
                     nationality: GB
-                -
-                  id: 2
-                  location: 'Location 2'
+                - id: 2
+                  location: Location 2
                   sub_location: 'Sub-location 2'
                   start_date: '2019-01-10'
                   end_date: '2019-01-18'
@@ -1481,7 +1389,7 @@ components:
                     e_mail: jane.doe@bar.com
                     nationality: CA
     Internship:
-      description: 'Response returning an internship'
+      description: Response returning an internship
       content:
         application/json:
           schema:
@@ -1489,10 +1397,10 @@ components:
             properties:
               status_code:
                 type: integer
-                description: 'HTTP status code'
+                description: HTTP status code
               status:
                 type: string
-                description: 'HTTP status description'
+                description: HTTP status description
               message:
                 type: string
               data:
@@ -1505,10 +1413,10 @@ components:
             example:
               status_code: 200
               status: OK
-              message: 'Resource successfully retrieved/created/modified'
+              message: Resource successfully retrieved/created/modified
               data:
                 id: 1
-                location: 'Location 1'
+                location: Location 1
                 sub_location: 'Sub-location 1'
                 start_date: '2019-01-01'
                 end_date: '2019-01-20'
@@ -1524,7 +1432,7 @@ components:
                   phone: 1234-567890
                   nationality: GB
     EducationalActivityAttendances:
-      description: 'Response returning a list of educational activity attendances'
+      description: Response returning a list of educational activity attendances
       content:
         application/json:
           schema:
@@ -1532,10 +1440,10 @@ components:
             properties:
               status_code:
                 type: integer
-                description: 'HTTP status code'
+                description: HTTP status code
               status:
                 type: string
-                description: 'HTTP status description'
+                description: HTTP status description
               message:
                 type: string
               data:
@@ -1550,11 +1458,10 @@ components:
             example:
               status_code: 200
               status: OK
-              message: 'Resource(s) found'
+              message: Resource(s) found
               data:
-                -
-                  id: 1
-                  educational_activity: 'First educational activity'
+                - id: 1
+                  educational_activity: First educational activity
                   start_date: '2019-01-19'
                   end_date: '2019-01-20'
                   credits: 1.2
@@ -1565,9 +1472,8 @@ components:
                     e_mail: john.doe@foo.com
                     phone: 1234-567890
                     nationality: GB
-                -
-                  id: 2
-                  educational_activity: 'First educational activity'
+                - id: 2
+                  educational_activity: First educational activity
                   start_date: '2019-01-21'
                   end_date: '2019-01-22'
                   credits: 1.2
@@ -1578,7 +1484,7 @@ components:
                     e_mail: jane.doe@bar.com
                     nationality: CA
     EducationalActivityAttendance:
-      description: 'Response returning an educational activity attendance'
+      description: Response returning an educational activity attendance
       content:
         application/json:
           schema:
@@ -1586,10 +1492,10 @@ components:
             properties:
               status_code:
                 type: integer
-                description: 'HTTP status code'
+                description: HTTP status code
               status:
                 type: string
-                description: 'HTTP status description'
+                description: HTTP status description
               message:
                 type: string
               data:
@@ -1602,10 +1508,10 @@ components:
             example:
               status_code: 200
               status: OK
-              message: 'Resource successfully retrieved/created/modified'
+              message: Resource successfully retrieved/created/modified
               data:
                 id: 1
-                educational_activity: 'First educational activity'
+                educational_activity: First educational activity
                 start_date: '2019-01-19'
                 end_date: '2019-01-20'
                 credits: 1.2
@@ -1617,7 +1523,7 @@ components:
                   phone: 1234-567890
                   nationality: GB
     Evaluations:
-      description: 'Response returning a list of internship evaluations'
+      description: Response returning a list of internship evaluations
       content:
         application/json:
           schema:
@@ -1625,10 +1531,10 @@ components:
             properties:
               status_code:
                 type: integer
-                description: 'HTTP status code'
+                description: HTTP status code
               status:
                 type: string
-                description: 'HTTP status description'
+                description: HTTP status description
               message:
                 type: string
               data:
@@ -1643,14 +1549,13 @@ components:
             example:
               status_code: 200
               status: OK
-              message: 'Resource(s) found'
+              message: Resource(s) found
               data:
-                -
-                  id: 1
-                  notes: 'First evaluation notes'
+                - id: 1
+                  notes: First evaluation notes
                   internship:
                     id: 1
-                    location: 'Location 1'
+                    location: Location 1
                     sub_location: 'Sub-location 1'
                     start_date: '2019-01-01'
                     end_date: '2019-01-20'
@@ -1665,12 +1570,11 @@ components:
                       e_mail: john.doe@foo.com
                       phone: 1234-567890
                       nationality: GB
-                -
-                  id: 2
-                  notes: 'Second evaluation notes'
+                - id: 2
+                  notes: Second evaluation notes
                   internship:
                     id: 2
-                    location: 'Location 2'
+                    location: Location 2
                     sub_location: 'Sub-location 2'
                     start_date: '2019-01-10'
                     end_date: '2019-01-18'
@@ -1685,7 +1589,7 @@ components:
                       e_mail: jane.doe@bar.com
                       nationality: CA
     Evaluation:
-      description: 'Response returning an internship evaluation'
+      description: Response returning an internship evaluation
       content:
         application/json:
           schema:
@@ -1693,10 +1597,10 @@ components:
             properties:
               status_code:
                 type: integer
-                description: 'HTTP status code'
+                description: HTTP status code
               status:
                 type: string
-                description: 'HTTP status description'
+                description: HTTP status description
               message:
                 type: string
               data:
@@ -1709,13 +1613,13 @@ components:
             example:
               status_code: 200
               status: OK
-              message: 'Resource successfully retrieved/created/modified'
+              message: Resource successfully retrieved/created/modified
               data:
                 id: 1
-                notes: 'First evaluation notes'
+                notes: First evaluation notes
                 internship:
                   id: 1
-                  location: 'Location 1'
+                  location: Location 1
                   sub_location: 'Sub-location 1'
                   start_date: '2019-01-01'
                   end_date: '2019-01-20'
@@ -1731,7 +1635,7 @@ components:
                     phone: 1234-567890
                     nationality: GB
     InterruptionReports:
-      description: 'Response returning a list of internship interruption reports'
+      description: Response returning a list of internship interruption reports
       content:
         application/json:
           schema:
@@ -1739,10 +1643,10 @@ components:
             properties:
               status_code:
                 type: integer
-                description: 'HTTP status code'
+                description: HTTP status code
               status:
                 type: string
-                description: 'HTTP status description'
+                description: HTTP status description
               message:
                 type: string
               data:
@@ -1757,14 +1661,13 @@ components:
             example:
               status_code: 200
               status: OK
-              message: 'Resource(s) found'
+              message: Resource(s) found
               data:
-                -
-                  id: 1
-                  notes: 'First interruption report notes'
+                - id: 1
+                  notes: First interruption report notes
                   internship:
                     id: 1
-                    location: 'Location 1'
+                    location: Location 1
                     sub_location: 'Sub-location 1'
                     start_date: '2019-01-01'
                     end_date: '2019-01-20'
@@ -1779,12 +1682,11 @@ components:
                       e_mail: john.doe@foo.com
                       phone: 1234-567890
                       nationality: GB
-                -
-                  id: 2
-                  notes: 'Second interruption report notes'
+                - id: 2
+                  notes: Second interruption report notes
                   internship:
                     id: 2
-                    location: 'Location 2'
+                    location: Location 2
                     sub_location: 'Sub-location 2'
                     start_date: '2019-01-10'
                     end_date: '2019-01-18'
@@ -1799,7 +1701,7 @@ components:
                       e_mail: jane.doe@bar.com
                       nationality: CA
     InterruptionReport:
-      description: 'Response returning an internship interruption report'
+      description: Response returning an internship interruption report
       content:
         application/json:
           schema:
@@ -1807,10 +1709,10 @@ components:
             properties:
               status_code:
                 type: integer
-                description: 'HTTP status code'
+                description: HTTP status code
               status:
                 type: string
-                description: 'HTTP status description'
+                description: HTTP status description
               message:
                 type: string
               data:
@@ -1823,13 +1725,13 @@ components:
             example:
               status_code: 200
               status: OK
-              message: 'Resource successfully retrieved/created/modified'
+              message: Resource successfully retrieved/created/modified
               data:
                 id: 1
-                notes: 'First interruption report notes'
+                notes: First interruption report notes
                 internship:
                   id: 1
-                  location: 'Location 1'
+                  location: Location 1
                   sub_location: 'Sub-location 1'
                   start_date: '2019-01-01'
                   end_date: '2019-01-20'
@@ -1845,7 +1747,7 @@ components:
                     phone: 1234-567890
                     nationality: GB
     Eligibilities:
-      description: 'Response returning a list of eligibilities'
+      description: Response returning a list of eligibilities
       content:
         application/json:
           schema:
@@ -1853,10 +1755,10 @@ components:
             properties:
               status_code:
                 type: integer
-                description: 'HTTP status code'
+                description: HTTP status code
               status:
                 type: string
-                description: 'HTTP status description'
+                description: HTTP status description
               message:
                 type: string
               data:
@@ -1871,13 +1773,12 @@ components:
             example:
               status_code: 200
               status: OK
-              message: 'Resource(s) found'
+              message: Resource(s) found
               data:
-                -
-                  id: 2
+                - id: 2
                   start_date: '2019-01-01'
                   end_date: '2019-12-01'
-                  notes: 'First eligibility notes'
+                  notes: First eligibility notes
                   is_eligible: true
                   student:
                     id: 1
@@ -1886,8 +1787,7 @@ components:
                     e_mail: john.doe@foo.com
                     phone: 1234-567890
                     nationality: GB
-                -
-                  id: 3
+                - id: 3
                   start_date: '2019-01-01'
                   end_date: '2019-12-01'
                   is_eligible: false
@@ -1898,7 +1798,7 @@ components:
                     e_mail: jane.doe@bar.com
                     nationality: CA
     Eligibility:
-      description: 'Response returning an eligibility'
+      description: Response returning an eligibility
       content:
         application/json:
           schema:
@@ -1906,10 +1806,10 @@ components:
             properties:
               status_code:
                 type: integer
-                description: 'HTTP status code'
+                description: HTTP status code
               status:
                 type: string
-                description: 'HTTP status description'
+                description: HTTP status description
               message:
                 type: string
               data:
@@ -1922,12 +1822,12 @@ components:
             example:
               status_code: 200
               status: OK
-              message: 'Resource successfully retrieved/created/modified'
+              message: Resource successfully retrieved/created/modified
               data:
                 id: 2
                 start_date: '2019-01-01'
                 end_date: '2019-12-01'
-                notes: 'First eligibility notes'
+                notes: First eligibility notes
                 is_eligible: true
                 student:
                   id: 1
@@ -1937,7 +1837,7 @@ components:
                   phone: 1234-567890
                   nationality: GB
     OshCourseAttendances:
-      description: 'Response returning a list of Occupational Safety and Health course attendances'
+      description: Response returning a list of Occupational Safety and Health course attendances
       content:
         application/json:
           schema:
@@ -1945,10 +1845,10 @@ components:
             properties:
               status_code:
                 type: integer
-                description: 'HTTP status code'
+                description: HTTP status code
               status:
                 type: string
-                description: 'HTTP status description'
+                description: HTTP status description
               message:
                 type: string
               data:
@@ -1963,10 +1863,9 @@ components:
             example:
               status_code: 200
               status: OK
-              message: 'Resource(s) found'
+              message: Resource(s) found
               data:
-                -
-                  id: 1
+                - id: 1
                   start_date: '2018-12-08'
                   end_date: '2019-12-07'
                   student:
@@ -1976,8 +1875,7 @@ components:
                     e_mail: john.doe@foo.com
                     phone: 1234-567890
                     nationality: GB
-                -
-                  id: 3
+                - id: 3
                   start_date: '2018-12-14'
                   end_date: '2019-12-13'
                   student:
@@ -1987,7 +1885,7 @@ components:
                     e_mail: joan.doe@foo.com
                     nationality: IE
     OshCourseAttendance:
-      description: 'Response returning an Occupational Safety and Health course attendance'
+      description: Response returning an Occupational Safety and Health course attendance
       content:
         application/json:
           schema:
@@ -1995,10 +1893,10 @@ components:
             properties:
               status_code:
                 type: integer
-                description: 'HTTP status code'
+                description: HTTP status code
               status:
                 type: string
-                description: 'HTTP status description'
+                description: HTTP status description
               message:
                 type: string
               data:
@@ -2011,7 +1909,7 @@ components:
             example:
               status_code: 200
               status: OK
-              message: 'Resource successfully retrieved/created/modified'
+              message: Resource successfully retrieved/created/modified
               data:
                 id: 1
                 start_date: '2018-12-08'
@@ -2024,7 +1922,7 @@ components:
                   phone: 1234-567890
                   nationality: GB
     ResourceDeletion:
-      description: 'Response confirming deletion of a resource'
+      description: Response confirming deletion of a resource
       content:
         application/json:
           schema:
@@ -2032,10 +1930,10 @@ components:
             properties:
               status_code:
                 type: integer
-                description: 'HTTP status code'
+                description: HTTP status code
               status:
                 type: string
-                description: 'HTTP status description'
+                description: HTTP status description
               message:
                 type: string
             required:
@@ -2045,7 +1943,7 @@ components:
             example:
               status_code: 200
               status: OK
-              message: 'Resource deleted'
+              message: Resource deleted
   schemas:
     Audit:
       type: object
@@ -2070,13 +1968,13 @@ components:
         id: 6
         event: updated
         old_values:
-          title: 'First title'
-          content: 'First content'
+          title: First title
+          content: First content
           student_id: 1
           id: 1
         new_values:
-          title: 'First modified title'
-          content: 'First modified content'
+          title: First modified title
+          content: First modified content
           student_id: 1
           id: 1
         user_id: 34
@@ -2090,27 +1988,25 @@ components:
             $ref: '#/components/schemas/Audit'
       example:
         audits:
-          -
-            id: 3
+          - id: 3
             event: created
             new_values:
-              title: 'First title'
-              content: 'First content'
+              title: First title
+              content: First content
               student_id: 1
               id: 1
             user_id: 12
             created_at: '2019-01-01 00:00:00'
-          -
-            id: 6
+          - id: 6
             event: updated
             old_values:
-              title: 'First title'
-              content: 'First content'
+              title: First title
+              content: First content
               student_id: 1
               id: 1
             new_values:
-              title: 'First modified title'
-              content: 'First modified content'
+              title: First modified title
+              content: First modified content
               student_id: 1
               id: 1
             user_id: 34
@@ -2145,12 +2041,9 @@ components:
         nationality: GB
     Student:
       allOf:
-        -
-          $ref: '#/components/schemas/NewStudent'
-        -
-          $ref: '#/components/schemas/Auditable'
-        -
-          type: object
+        - $ref: '#/components/schemas/NewStudent'
+        - $ref: '#/components/schemas/Auditable'
+        - type: object
           properties:
             id:
               type: integer
@@ -2178,16 +2071,13 @@ components:
         - content
       additionalProperties: false
       example:
-        title: 'First annotation title'
-        content: 'First annotation body'
+        title: First annotation title
+        content: First annotation body
     Annotation:
       allOf:
-        -
-          $ref: '#/components/schemas/NewAnnotation'
-        -
-          $ref: '#/components/schemas/Auditable'
-        -
-          type: object
+        - $ref: '#/components/schemas/NewAnnotation'
+        - $ref: '#/components/schemas/Auditable'
+        - type: object
           properties:
             id:
               type: integer
@@ -2195,11 +2085,12 @@ components:
               $ref: '#/components/schemas/Student'
           required:
             - id
+            # student is not required because it is omitted in case student ID is a path parameter
           additionalProperties: false
       example:
         id: 1
-        title: 'First annotation title'
-        content: 'First annotation body'
+        title: First annotation title
+        content: First annotation body
         student:
           id: 1
           first_name: John
@@ -2233,12 +2124,12 @@ components:
         - start_date
         - end_date
         - hour_amount
-        - other_amount
+        - other_amount # @todo asses whether this attribute can be optional
         - is_optional
         - is_interrupted
       additionalProperties: false
       example:
-        location: 'Location 1'
+        location: Location 1
         sub_location: 'Sub-location 1'
         start_date: '2019-01-01'
         end_date: '2019-01-20'
@@ -2248,12 +2139,9 @@ components:
         is_interrupted: false
     Internship:
       allOf:
-        -
-          $ref: '#/components/schemas/NewInternship'
-        -
-          $ref: '#/components/schemas/Auditable'
-        -
-          type: object
+        - $ref: '#/components/schemas/NewInternship'
+        - $ref: '#/components/schemas/Auditable'
+        - type: object
           properties:
             id:
               type: integer
@@ -2261,10 +2149,11 @@ components:
               $ref: '#/components/schemas/Student'
           required:
             - id
+            # student is not required because it is omitted in case student ID is a path parameter
           additionalProperties: false
       example:
         id: 1
-        location: 'Location 1'
+        location: Location 1
         sub_location: 'Sub-location 1'
         start_date: '2019-01-01'
         end_date: '2019-01-20'
@@ -2293,25 +2182,23 @@ components:
           format: date
         credits:
           type: number
-          minimum: 0.1
+          minimum: 0
+          exclusiveMinimum: true
       required:
         - educational_activity
         - start_date
         - credits
       additionalProperties: false
       example:
-        educational_activity: 'First educational activity'
+        educational_activity: First educational activity
         start_date: '2019-01-19'
         end_date: '2019-01-20'
         credits: 1.2
     EducationalActivityAttendance:
       allOf:
-        -
-          $ref: '#/components/schemas/NewEducationalActivityAttendance'
-        -
-          $ref: '#/components/schemas/Auditable'
-        -
-          type: object
+        - $ref: '#/components/schemas/NewEducationalActivityAttendance'
+        - $ref: '#/components/schemas/Auditable'
+        - type: object
           properties:
             id:
               type: integer
@@ -2319,10 +2206,11 @@ components:
               $ref: '#/components/schemas/Student'
           required:
             - id
+            # student is not required because it is omitted in case student ID is a path parameter
           additionalProperties: false
       example:
         id: 1
-        educational_activity: 'First educational activity'
+        educational_activity: First educational activity
         start_date: '2019-01-19'
         end_date: '2019-01-20'
         credits: 1.2
@@ -2340,15 +2228,12 @@ components:
           type: string
       additionalProperties: false
       example:
-        notes: 'First evaluation notes'
+        notes: First evaluation notes
     Evaluation:
       allOf:
-        -
-          $ref: '#/components/schemas/NewEvaluation'
-        -
-          $ref: '#/components/schemas/Auditable'
-        -
-          type: object
+        - $ref: '#/components/schemas/NewEvaluation'
+        - $ref: '#/components/schemas/Auditable'
+        - type: object
           properties:
             id:
               type: integer
@@ -2356,13 +2241,14 @@ components:
               $ref: '#/components/schemas/Internship'
           required:
             - id
+            # internship is not required because it is omitted in case internship ID is a path parameter
           additionalProperties: false
       example:
         id: 1
-        notes: 'First evaluation notes'
+        notes: First evaluation notes
         internship:
           id: 1
-          location: 'Location 1'
+          location: Location 1
           sub_location: 'Sub-location 1'
           start_date: '2019-01-01'
           end_date: '2019-01-20'
@@ -2387,15 +2273,12 @@ components:
         - notes
       additionalProperties: false
       example:
-        notes: 'First interruption report notes'
+        notes: First interruption report notes
     InterruptionReport:
       allOf:
-        -
-          $ref: '#/components/schemas/NewInterruptionReport'
-        -
-          $ref: '#/components/schemas/Auditable'
-        -
-          type: object
+        - $ref: '#/components/schemas/NewInterruptionReport'
+        - $ref: '#/components/schemas/Auditable'
+        - type: object
           properties:
             id:
               type: integer
@@ -2403,13 +2286,14 @@ components:
               $ref: '#/components/schemas/Internship'
           required:
             - id
+            # internship is not required because it is omitted in case internship ID is a path parameter
           additionalProperties: false
       example:
         id: 1
-        notes: 'First interruption report notes'
+        notes: First interruption report notes
         internship:
           id: 1
-          location: 'Location 1'
+          location: Location 1
           sub_location: 'Sub-location 1'
           start_date: '2019-01-01'
           end_date: '2019-01-20'
@@ -2445,16 +2329,13 @@ components:
       example:
         start_date: '2019-01-01'
         end_date: '2019-12-01'
-        notes: 'First eligibility notes'
+        notes: First eligibility notes
         is_eligible: true
     Eligibility:
       allOf:
-        -
-          $ref: '#/components/schemas/NewEligibility'
-        -
-          $ref: '#/components/schemas/Auditable'
-        -
-          type: object
+        - $ref: '#/components/schemas/NewEligibility'
+        - $ref: '#/components/schemas/Auditable'
+        - type: object
           properties:
             id:
               type: integer
@@ -2467,7 +2348,7 @@ components:
         id: 2
         start_date: '2019-01-01'
         end_date: '2019-12-01'
-        notes: 'First eligibility notes'
+        notes: First eligibility notes
         is_eligible: true
         student:
           id: 1
@@ -2494,12 +2375,9 @@ components:
         end_date: '2019-12-07'
     OshCourseAttendance:
       allOf:
-        -
-          $ref: '#/components/schemas/NewOshCourseAttendance'
-        -
-          $ref: '#/components/schemas/Auditable'
-        -
-          type: object
+        - $ref: '#/components/schemas/NewOshCourseAttendance'
+        - $ref: '#/components/schemas/Auditable'
+        - type: object
           properties:
             id:
               type: integer

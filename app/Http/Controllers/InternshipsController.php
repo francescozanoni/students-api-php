@@ -31,7 +31,8 @@ class InternshipsController extends Controller
     }
 
     /**
-     * Retrieve all internships of a student.
+     * Retrieve all internships of a student,
+     * with evaluations and interruption reports (if any).
      *
      * @param int $studentId
      *
@@ -40,6 +41,8 @@ class InternshipsController extends Controller
     public function getRelatedToStudent(int $studentId) : Collection
     {
         $internships = Student::findOrFail($studentId)->internships;
+        $internships->load('evaluation');
+        $internships->load('interruptionReport');
 
         if (count($internships) === 0) {
             throw new NotFoundHttpException();

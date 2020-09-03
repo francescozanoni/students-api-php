@@ -8,6 +8,7 @@ use App\Http\Resources\EducationalActivityAttendance as EducationalActivityAtten
 use App\Http\Resources\Eligibility as EligibilityResource;
 use App\Http\Resources\Evaluation as EvaluationResource;
 use App\Http\Resources\Internship as InternshipResource;
+use App\Http\Resources\InternshipWithEvaluationAndInterruptionReport as InternshipWithEvaluationAndInterruptionReportResource;
 use App\Http\Resources\InterruptionReport as InterruptionReportResource;
 use App\Http\Resources\OshCourseAttendance as OshCourseAttendanceResource;
 use App\Http\Resources\Student as StudentResource;
@@ -61,8 +62,11 @@ class ApplyResourceTransformers
                 break;
 
             case 'getInternships':
-            case 'getStudentInternships':
                 $response->setContent(InternshipResource::collection($response->original));
+                break;
+
+            case 'getStudentInternships':
+                $response->setContent(InternshipWithEvaluationAndInterruptionReportResource::collection($response->original));
                 break;
 
             case 'getInternshipById':
