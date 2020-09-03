@@ -164,7 +164,7 @@ function getFieldHelpText(field) {
     var fieldsAndHelpTexts = {
         "end_date": "YYYY-MM-DD format",
         "start_date": "YYYY-MM-DD format",
-        "nationality": "2-letter ISO format",
+        "nationality": "2-letter ISO country code format",
     }
     return fieldsAndHelpTexts[field] || "";
 }
