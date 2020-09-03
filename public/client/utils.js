@@ -99,7 +99,7 @@ function getFieldLabel(field) {
         "location": "Location",
         "nationality": "Nationality",
         "notes": "Notes",
-        "other_amount": "Other amount",
+        "other_amount": "Night shift amount",
         "phone": "Phone number",
         "start_date": "Start",
         "sub_location": "Ward",
