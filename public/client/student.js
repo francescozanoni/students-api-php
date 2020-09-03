@@ -73,6 +73,29 @@ $(document).ready(function () {
                     render: function (data, type, row) {
                         return '<a href="form.html#Internship,' + row.id + '">edit</a>';
                     }
+                },
+                {
+                    title: "Evaluation",
+                    render: function (data, type, row) {
+                        if (row.evaluation) {
+                            return '<a href="form.html#Evaluation,' + row.evaluation.id + '">edit</a>';
+                        } else {
+                            return '<a href="form.html#NewEvaluation,' + row.id + '">add</a>';
+                        }
+                    }
+                },
+                {
+                    title: "Interruption Report",
+                    render: function (data, type, row) {
+                        if (row.is_interrupted !== true) {
+                            return '';
+                        }
+                        if (row.interruption_report) {
+                            return '<a href="form.html#InterruptionReport,' + row.interruption_report.id + '">edit</a>';
+                        } else {
+                            return '<a href="form.html#NewInterruptionReport,' + row.id + '">add</a>';
+                        }
+                    }
                 }
             ]
         }

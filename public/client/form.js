@@ -59,7 +59,25 @@ var modelsMethodsUrls = {
     EducationalActivityAttendance: {
         method: "PUT",
         url: baseUrl + "/educational_activity_attendances/" + idFromHash,
-    }
+    },
+
+    NewEvaluation: {
+        method: "POST",
+        url: baseUrl + "/internships/" + idFromHash + "/evaluation",
+    },
+    Evaluation: {
+        method: "PUT",
+        url: baseUrl + "/evaluations/" + idFromHash,
+    },
+
+    NewInterruptionReport: {
+        method: "POST",
+        url: baseUrl + "/internships/" + idFromHash + "/interruption_report",
+    },
+    InterruptionReport: {
+        method: "PUT",
+        url: baseUrl + "/interruption_reports/" + idFromHash,
+    },
 };
 
 (async () => {
