@@ -17,9 +17,7 @@ $(document).ready(function () {
             columns: [
                 {
                     render: function (data) {
-                        return (data.substr(0, 1).toUpperCase() + data.substr(1))
-                            .replace(/[^a-zA-Z]/, " ")
-                            .replace(/E m/, "E-m");
+                        return getFieldLabel(data);
                     }
                 },
                 {}
@@ -37,10 +35,10 @@ $(document).ready(function () {
         getBaseDataTableSettings("#annotations", "../students/" + studentId + "/annotations?with_audits=true"),
         {
             columns: [
-                {title: "ID", data: "id", visible: false},
-                {title: "Date/time", data: "audits.0.created_at"},
-                {title: "Title", data: "title"},
-                {title: "Content", data: "content"},
+                {title: getFieldLabel("id"), data: "id", visible: false},
+                {title: getFieldLabel("audits.0.created_at"), data: "audits.0.created_at"},
+                {title: getFieldLabel("title"), data: "title"},
+                {title: getFieldLabel("content"), data: "content"},
                 {
                     render: function (data, type, row) {
                         return '<a href="form.html#Annotation,' + row.id + '">edit</a>';
@@ -53,22 +51,22 @@ $(document).ready(function () {
         getBaseDataTableSettings("#internships", "../students/" + studentId + "/internships"),
         {
             columns: [
-                {title: "ID", data: "id", visible: false},
-                {title: "Start", data: "start_date"},
-                {title: "End", data: "end_date"},
-                {title: "Location", data: "location"},
+                {title: getFieldLabel("id"), data: "id", visible: false},
+                {title: getFieldLabel("start_date"), data: "start_date"},
+                {title: getFieldLabel("end_date"), data: "end_date"},
+                {title: getFieldLabel("location"), data: "location"},
                 {
-                    title: "Ward",
+                    title: getFieldLabel("sub_location"),
                     data: "sub_location",
                     // "sub_location" is optional
                     render: function (data) {
                         return data || "";
                     }
                 },
-                {title: "Hour amount", data: "hour_amount"},
-                {title: "Other amount", data: "other_amount"},
-                {title: "Is optional", data: "is_optional"},
-                {title: "Is interrupted", data: "is_interrupted"},
+                {title: getFieldLabel("hour_amount"), data: "hour_amount"},
+                {title: getFieldLabel("other_amount"), data: "other_amount"},
+                {title: getFieldLabel("is_optional"), data: "is_optional"},
+                {title: getFieldLabel("is_interrupted"), data: "is_interrupted"},
                 {
                     render: function (data, type, row) {
                         return '<a href="form.html#Internship,' + row.id + '">edit</a>';
@@ -104,12 +102,12 @@ $(document).ready(function () {
         getBaseDataTableSettings("#eligibilities", "../students/" + studentId + "/eligibilities"),
         {
             columns: [
-                {title: "ID", data: "id", visible: false},
-                {title: "Start", data: "start_date"},
-                {title: "End", data: "end_date"},
-                {title: "Is eligible", data: "is_eligible"},
+                {title: getFieldLabel("id"), data: "id", visible: false},
+                {title: getFieldLabel("start_date"), data: "start_date"},
+                {title: getFieldLabel("end_date"), data: "end_date"},
+                {title: getFieldLabel("is_eligible"), data: "is_eligible"},
                 {
-                    title: "Notes",
+                    title: getFieldLabel("notes"),
                     data: "notes",
                     // "notes" is optional
                     render: function (data) {
@@ -128,9 +126,9 @@ $(document).ready(function () {
         getBaseDataTableSettings("#osh_course_attendances", "../students/" + studentId + "/osh_course_attendances"),
         {
             columns: [
-                {title: "ID", data: "id", visible: false},
-                {title: "Start", data: "start_date"},
-                {title: "End", data: "end_date"},
+                {title: getFieldLabel("id"), data: "id", visible: false},
+                {title: getFieldLabel("start_date"), data: "start_date"},
+                {title: getFieldLabel("end_date"), data: "end_date"},
                 {
                     render: function (data, type, row) {
                         return '<a href="form.html#OshCourseAttendance,' + row.id + '">edit</a>';
@@ -143,18 +141,18 @@ $(document).ready(function () {
         getBaseDataTableSettings("#educational_activity_attendances", "../students/" + studentId + "/educational_activity_attendances"),
         {
             columns: [
-                {title: "ID", data: "id", visible: false},
-                {title: "Start", data: "start_date"},
+                {title: getFieldLabel("id"), data: "id", visible: false},
+                {title: getFieldLabel("start_date"), data: "start_date"},
                 {
-                    title: "End",
+                    title: getFieldLabel("end_date"),
                     data: "end_date",
                     // "end_date" is optional
                     render: function (data) {
                         return data || "";
                     }
                 },
-                {title: "Educational activity", data: "educational_activity"},
-                {title: "Credits", data: "credits"},
+                {title: getFieldLabel("educational_activity"), data: "educational_activity"},
+                {title: getFieldLabel("credits"), data: "credits"},
                 {
                     render: function (data, type, row) {
                         return '<a href="form.html#EducationalActivityAttendance,' + row.id + '">edit</a>';

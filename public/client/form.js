@@ -6,6 +6,8 @@ var modelSelector = $("#model-selector");
 var pageForm = $("form");
 var result = $("#result");
 
+// @todo load all countries, locations and sublocations, to be used as enum values
+
 var modelsMethodsUrls = {
     NewStudent: {
         method: "POST",
@@ -85,7 +87,7 @@ var modelsMethodsUrls = {
     // Fetch all JSON schemas.
     var allJsonSchemas = await lib.SchemExtractor.fromFile(baseUrl + "/openapi.yaml");
 
-    // Filter relevant JSON schemas.
+    // Filter relevant JSON schemas (this mainly removes schemas of related models).
     var jsonSchemas = {};
     Object.keys(allJsonSchemas)
         .filter(lib.isRelevantJsonSchema)
@@ -94,11 +96,21 @@ var modelsMethodsUrls = {
             jsonSchemas[key] = lib.removeJsonSchemaProperty(jsonSchemas[key], "id");
             jsonSchemas[key] = lib.removeJsonSchemaProperty(jsonSchemas[key], "audits");
             jsonSchemas[key] = lib.removeJsonSchemaProperty(jsonSchemas[key], "student");
-            jsonSchemas[key] = lib.removeJsonSchemaProperty(jsonSchemas[key], "internship");
+            jsonSchemas[key] = lib.removeJsonSchemaProperty(jsonSchemas[key], "internship"),
+            jsonSchemas[key] = lib.removeJsonSchemaProperty(jsonSchemas[key], "evaluation"),
+            jsonSchemas[key] = lib.removeJsonSchemaProperty(jsonSchemas[key], "interruption_report");
         });
 
     // List relevant JSON schemas within select box.
-    Object.keys(jsonSchemas).forEach(key => modelSelector.append(new Option(key, key)));
+    Object.keys(jsonSchemas)
+        .forEach(key => modelSelector.append(new Option(key, key)));
+
+    // "title" attribute is added to all properties, to be used as form field label.
+    Object.keys(jsonSchemas)
+        .forEach(key => Object.keys(jsonSchemas[key].properties).forEach(property => {
+            jsonSchemas[key].properties[property].title = getFieldLabel(property);
+            jsonSchemas[key].properties[property].description = getFieldHelpText(property);
+        }));
 
     modelSelector.change(() => {
 
@@ -152,6 +164,11 @@ var modelsMethodsUrls = {
                                 type: "textarea",
                                 fieldHtmlClass: "form-control" // Bootstrap CSS class
                             };
+                        }
+                        if (property === "nationality" ||
+                            property === "location" ||
+                            property === "sub_location") {
+                            // @todo switch to select box
                         }
                         /*
                         if (property === "start_date" ||

@@ -74,6 +74,52 @@ function getBaseDataTableSettings(tableSelector, url) {
     };
 }
 
+/**
+ * @param {string} field
+ *
+ * @returns {string}
+ */
+function getFieldLabel(field) {
+    var fieldsAndLabels = {
+        "content": "Content",
+        "credits": "Credits",
+        "audits.0.created_at": "Date/time",
+        "educational_activity": "Educational activity",
+        "end_date": "End",
+        "hour_amount": "Hour amount",
+        "id": "ID",
+        "is_eligible": "Is eligible",
+        "is_interrupted": "Is interrupted",
+        "is_optional": "Is optional",
+        "location": "Location",
+        "sub_location": "Ward",
+        "other_amount": "Other amount",
+        "start_date": "Start",
+        "title": "Title",
+        "notes": "Notes",
+        "first_name": "First name",
+        "last_name": "Last name",
+        "e_mail": "E-mail",
+        "nationality": "Nationality",
+        "phone": "Phone number",
+    }
+    return fieldsAndLabels[field] || field;
+}
+
+/**
+ * @param {string} field
+ *
+ * @returns {string}
+ */
+function getFieldHelpText(field) {
+    var fieldsAndHelpTexts = {
+        "end_date": "YYYY-MM-DD format",
+        "start_date": "YYYY-MM-DD format",
+        "nationality": "2-letter ISO format",
+    }
+    return fieldsAndHelpTexts[field] || "";
+}
+
 window.onerror = function (msg, url, lineNo, columnNo, error) {
     alert(msg + " (" + url + ":" + lineNo + ")");
     return false;
