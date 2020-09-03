@@ -169,6 +169,33 @@ function getFieldHelpText(field) {
     return fieldsAndHelpTexts[field] || "";
 }
 
+/**
+ * @param {*} data
+ *
+ * @returns {string}
+ */
+function renderOptionalData(data) {
+    return data || "";
+}
+
+/**
+ * @param {boolean} data
+ *
+ * @returns {string}
+ */
+function renderBooleanData(data) {
+    return data ? "yes" : "no";
+}
+
+/**
+ * @param {string} data
+ *
+ * @returns {string}
+ */
+function renderMultiLineData(data) {
+    return data.replace(/ /g, "&nbsp;").replace(/\r?\n/g, "<br />");
+}
+
 window.onerror = function (msg, url, lineNo, columnNo, error) {
     alert(msg + " (" + url + ":" + lineNo + ")");
     return false;

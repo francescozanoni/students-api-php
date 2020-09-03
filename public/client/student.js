@@ -18,11 +18,7 @@ $(document).ready(function () {
         getBaseDataTableSettings("#student", "../students/" + studentId),
         {
             columns: [
-                {
-                    render: function (data) {
-                        return getFieldLabel(data);
-                    }
-                },
+                {render: getFieldLabel},
                 {}
             ]
         }
@@ -50,9 +46,7 @@ $(document).ready(function () {
                 {
                     title: getFieldLabel("content"),
                     data: "content",
-                    render: function (data, type, row) {
-                        return data.replace(/ /g, "&nbsp;").replace(/\r?\n/g, "<br />");
-                    }
+                    render: renderMultiLineData
                 },
                 {
                     render: function (data, type, row) {
@@ -78,44 +72,37 @@ $(document).ready(function () {
                 {
                     title: getFieldLabel("sub_location"),
                     data: "sub_location",
-                    // "sub_location" is optional
-                    render: function (data) {
-                        return data || "";
-                    }
+                    render: renderOptionalData
                 },
                 {title: getFieldLabel("hour_amount"), data: "hour_amount"},
                 {title: getFieldLabel("other_amount"), data: "other_amount"},
                 {
                     title: getFieldLabel("is_optional"),
                     data: "is_optional",
-                    render: function (data) {
-                        return data ? "yes" : "no";
-                    }
+                    render: renderBooleanData
                 },
                 {
                     title: getFieldLabel("is_interrupted"),
                     data: "is_interrupted",
-                    render: function (data) {
-                        return data ? "yes" : "no";
-                    }
+                    render: renderBooleanData
                 },
                 {
                     render: function (data, type, row) {
-                        var output = 'evaluation ';
+                        var output = '<div class="text-right">evaluation ';
                         if (row.evaluation) {
                             output += '<a href="form.html#Evaluation,' + row.evaluation.id + '">' + editIconTag + '</a>';
                         } else {
                             output += '<a href="form.html#NewEvaluation,' + row.id + '">' + addIconTag + '</a>';
                         }
-                        if (row.is_interrupted !== true) {
-                            return output;
+                        if (row.is_interrupted === true) {
+                            output += '<br />interruption report ';
+                            if (row.interruption_report) {
+                                output += '<a href="form.html#InterruptionReport,' + row.interruption_report.id + '">' + editIconTag + '</a>';
+                            } else {
+                                output += '<a href="form.html#NewInterruptionReport,' + row.id + '">' + addIconTag + '</a>';
+                            }
                         }
-                        output += '<br />interruption report ';
-                        if (row.interruption_report) {
-                            output += '<a href="form.html#InterruptionReport,' + row.interruption_report.id + '">' + editIconTag + '</a>';
-                        } else {
-                            output += '<a href="form.html#NewInterruptionReport,' + row.id + '">' + addIconTag + '</a>';
-                        }
+                        output += '</div>';
                         return output;
                     }
                 },
@@ -132,17 +119,12 @@ $(document).ready(function () {
                 {
                     title: getFieldLabel("is_eligible"),
                     data: "is_eligible",
-                    render: function (data) {
-                        return data ? "yes" : "no";
-                    }
+                    render: renderBooleanData
                 },
                 {
                     title: getFieldLabel("notes"),
                     data: "notes",
-                    // "notes" is optional
-                    render: function (data) {
-                        return data || "";
-                    }
+                    render: renderOptionalData
                 },
                 {
                     render: function (data, type, row) {
@@ -176,10 +158,7 @@ $(document).ready(function () {
                 {
                     title: getFieldLabel("end_date"),
                     data: "end_date",
-                    // "end_date" is optional
-                    render: function (data) {
-                        return data || "";
-                    }
+                    render: renderOptionalData
                 },
                 {title: getFieldLabel("educational_activity"), data: "educational_activity"},
                 {title: getFieldLabel("credits"), data: "credits"},
