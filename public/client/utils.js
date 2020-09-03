@@ -83,12 +83,12 @@ function getBaseDataTableSettings(tableSelector, url) {
  */
 function getFieldLabel(field) {
     var fieldsAndLabels = {
-        "audits.0.created_at": "Date/time",
+        "audits.0.created_at": "Date",
         "content": "Content",
         "credits": "Credits",
         "e_mail": "E-mail",
         "educational_activity": "Educational activity",
-        "end_date": "End",
+        "end_date": "To",
         "first_name": "First name",
         "hour_amount": "Hour amount",
         "id": "ID",
@@ -101,7 +101,7 @@ function getFieldLabel(field) {
         "notes": "Notes",
         "other_amount": "Night shift amount",
         "phone": "Phone number",
-        "start_date": "Start",
+        "start_date": "From",
         "sub_location": "Ward",
         "title": "Title",
         // Evaluation item labels: to be loaded dynamically from configuration or database

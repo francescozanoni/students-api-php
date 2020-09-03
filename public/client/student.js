@@ -1,3 +1,6 @@
+var editIconTag = '<span class="glyphicon glyphicon-edit" aria-hidden="true" title="Edit..."></span>';
+var addIconTag = '<span class="glyphicon glyphicon-plus-sign" aria-hidden="true" title="Create new..."></span>';
+
 $(document).ready(function () {
 
     var studentId = window.location.hash.substr(1);
@@ -36,14 +39,26 @@ $(document).ready(function () {
         {
             columns: [
                 {title: getFieldLabel("id"), data: "id", visible: false},
-                {title: getFieldLabel("audits.0.created_at"), data: "audits.0.created_at"},
+                {
+                    title: getFieldLabel("audits.0.created_at"),
+                    data: "audits.0.created_at",
+                    render: function (data, type, row) {
+                        return data.substr(0, 10);
+                    }
+                },
                 {title: getFieldLabel("title"), data: "title"},
-                {title: getFieldLabel("content"), data: "content"},
+                {
+                    title: getFieldLabel("content"),
+                    data: "content",
+                    render: function (data, type, row) {
+                        return data.replace(/ /g, "&nbsp;").replace(/\r?\n/g, "<br />");
+                    }
+                },
                 {
                     render: function (data, type, row) {
-                        return '<a href="form.html#Annotation,' + row.id + '">edit</a>';
+                        return '<a href="form.html#Annotation,' + row.id + '">' + editIconTag + '</a>';
                     }
-                }
+                },
             ]
         }
     );
@@ -51,6 +66,11 @@ $(document).ready(function () {
         getBaseDataTableSettings("#internships", "../students/" + studentId + "/internships"),
         {
             columns: [
+                {
+                    render: function (data, type, row) {
+                        return '<a href="form.html#Internship,' + row.id + '">' + editIconTag + '</a>';
+                    }
+                },
                 {title: getFieldLabel("id"), data: "id", visible: false},
                 {title: getFieldLabel("start_date"), data: "start_date"},
                 {title: getFieldLabel("end_date"), data: "end_date"},
@@ -65,36 +85,40 @@ $(document).ready(function () {
                 },
                 {title: getFieldLabel("hour_amount"), data: "hour_amount"},
                 {title: getFieldLabel("other_amount"), data: "other_amount"},
-                {title: getFieldLabel("is_optional"), data: "is_optional"},
-                {title: getFieldLabel("is_interrupted"), data: "is_interrupted"},
                 {
-                    render: function (data, type, row) {
-                        return '<a href="form.html#Internship,' + row.id + '">edit</a>';
+                    title: getFieldLabel("is_optional"),
+                    data: "is_optional",
+                    render: function (data) {
+                        return data ? "yes" : "no";
                     }
                 },
                 {
-                    title: "Evaluation",
+                    title: getFieldLabel("is_interrupted"),
+                    data: "is_interrupted",
+                    render: function (data) {
+                        return data ? "yes" : "no";
+                    }
+                },
+                {
                     render: function (data, type, row) {
+                        var output = 'evaluation ';
                         if (row.evaluation) {
-                            return '<a href="form.html#Evaluation,' + row.evaluation.id + '">edit</a>';
+                            output += '<a href="form.html#Evaluation,' + row.evaluation.id + '">' + editIconTag + '</a>';
                         } else {
-                            return '<a href="form.html#NewEvaluation,' + row.id + '">add</a>';
+                            output += '<a href="form.html#NewEvaluation,' + row.id + '">' + addIconTag + '</a>';
                         }
+                        if (row.is_interrupted !== true) {
+                            return output;
+                        }
+                        output += '<br />interruption report ';
+                        if (row.interruption_report) {
+                            output += '<a href="form.html#InterruptionReport,' + row.interruption_report.id + '">' + editIconTag + '</a>';
+                        } else {
+                            output += '<a href="form.html#NewInterruptionReport,' + row.id + '">' + addIconTag + '</a>';
+                        }
+                        return output;
                     }
                 },
-                {
-                    title: "Interruption Report",
-                    render: function (data, type, row) {
-                        if (row.is_interrupted !== true) {
-                            return '';
-                        }
-                        if (row.interruption_report) {
-                            return '<a href="form.html#InterruptionReport,' + row.interruption_report.id + '">edit</a>';
-                        } else {
-                            return '<a href="form.html#NewInterruptionReport,' + row.id + '">add</a>';
-                        }
-                    }
-                }
             ]
         }
     );
@@ -105,7 +129,13 @@ $(document).ready(function () {
                 {title: getFieldLabel("id"), data: "id", visible: false},
                 {title: getFieldLabel("start_date"), data: "start_date"},
                 {title: getFieldLabel("end_date"), data: "end_date"},
-                {title: getFieldLabel("is_eligible"), data: "is_eligible"},
+                {
+                    title: getFieldLabel("is_eligible"),
+                    data: "is_eligible",
+                    render: function (data) {
+                        return data ? "yes" : "no";
+                    }
+                },
                 {
                     title: getFieldLabel("notes"),
                     data: "notes",
@@ -116,9 +146,9 @@ $(document).ready(function () {
                 },
                 {
                     render: function (data, type, row) {
-                        return '<a href="form.html#Eligibility,' + row.id + '">edit</a>';
+                        return '<a href="form.html#Eligibility,' + row.id + '">' + editIconTag + '</a>';
                     }
-                }
+                },
             ]
         }
     );
@@ -131,9 +161,9 @@ $(document).ready(function () {
                 {title: getFieldLabel("end_date"), data: "end_date"},
                 {
                     render: function (data, type, row) {
-                        return '<a href="form.html#OshCourseAttendance,' + row.id + '">edit</a>';
+                        return '<a href="form.html#OshCourseAttendance,' + row.id + '">' + editIconTag + '</a>';
                     }
-                }
+                },
             ]
         }
     );
@@ -155,9 +185,9 @@ $(document).ready(function () {
                 {title: getFieldLabel("credits"), data: "credits"},
                 {
                     render: function (data, type, row) {
-                        return '<a href="form.html#EducationalActivityAttendance,' + row.id + '">edit</a>';
+                        return '<a href="form.html#EducationalActivityAttendance,' + row.id + '">' + editIconTag + '</a>';
                     }
-                }
+                },
             ]
         }
     );
