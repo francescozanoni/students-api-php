@@ -124,7 +124,7 @@ $(document).ready(function () {
                 {
                     title: getFieldLabel("notes"),
                     data: "notes",
-                    render: renderOptionalData
+                    render: renderMultiLineData
                 },
                 {
                     render: function (data, type, row) {

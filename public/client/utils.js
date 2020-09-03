@@ -92,9 +92,9 @@ function getFieldLabel(field) {
         "first_name": "First name",
         "hour_amount": "Hour amount",
         "id": "ID",
-        "is_eligible": "Is eligible",
-        "is_interrupted": "Is interrupted",
-        "is_optional": "Is optional",
+        "is_eligible": "Eligible",
+        "is_interrupted": "Interrupted",
+        "is_optional": "Optional",
         "last_name": "Last name",
         "location": "Location",
         "nationality": "Nationality",
@@ -193,7 +193,7 @@ function renderBooleanData(data) {
  * @returns {string}
  */
 function renderMultiLineData(data) {
-    return data.replace(/ /g, "&nbsp;").replace(/\r?\n/g, "<br />");
+    return renderOptionalData(data).replace(/ /g, "&nbsp;").replace(/\r?\n/g, "<br />");
 }
 
 window.onerror = function (msg, url, lineNo, columnNo, error) {
