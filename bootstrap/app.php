@@ -29,6 +29,7 @@ $app->configure('app');
 $app->configure('openapi');
 $app->configure('database');
 $app->configure('internships');
+// @todo investigate how to exclude erd-generator when in production
 $app->configure('erd-generator');
 $app->configure('audit');
 
