@@ -38,7 +38,23 @@ php artisan openapi:configure
 
 # Database structure
 php artisan migrate
+
+# [OPTIONAL] Test data
+php artisan db:seed
 ```
+
+If test data are not used, below tables must be filled with below Artisan commands:
+
+- countries
+- locations
+- sub_locations
+
+```bash
+php artisan country:add "United States of America" US
+php artisan location:add "Location A"
+php artisan sublocation:add "Sub-location A"
+```
+
 
 ### Uninstallation
 
