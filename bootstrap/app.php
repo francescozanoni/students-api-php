@@ -29,8 +29,10 @@ $app->configure('app');
 $app->configure('openapi');
 $app->configure('database');
 $app->configure('internships');
-// @todo investigate how to exclude erd-generator when in production
-$app->configure('erd-generator');
+if (env('APP_ENV') === 'local' ||
+    env('APP_ENV') === 'testing') {
+    $app->configure('erd-generator');
+}
 $app->configure('audit');
 
 /*
@@ -98,7 +100,10 @@ $app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 $app->register(App\Providers\RouteServiceProvider::class);
 $app->register(App\Providers\ValidationServiceProvider::class);
-$app->register(BeyondCode\ErdGenerator\ErdGeneratorServiceProvider::class);
+if (env('APP_ENV') === 'local' ||
+    env('APP_ENV') === 'testing') {
+    $app->register(BeyondCode\ErdGenerator\ErdGeneratorServiceProvider::class);
+}
 $app->register(OwenIt\Auditing\AuditingServiceProvider::class);
 
 /*
