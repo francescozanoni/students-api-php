@@ -30,8 +30,6 @@ class CreateInternshipsTable extends Migration
             $table->foreign('location_id')->references('id')->on('locations');
             $table->foreign('sub_location_id')->references('id')->on('sub_locations');
         });
-
-        // @todo assess whether to create a location and sub location importer
     }
 
     /**

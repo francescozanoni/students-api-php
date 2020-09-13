@@ -2124,7 +2124,7 @@ components:
         - start_date
         - end_date
         - hour_amount
-        - other_amount # @todo asses whether this attribute can be optional
+        - other_amount # @todo assess whether this attribute can be optional
         - is_optional
         - is_interrupted
       additionalProperties: false
