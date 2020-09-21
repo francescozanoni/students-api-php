@@ -64,7 +64,7 @@ abstract class TestCase extends Laravel\Lumen\Testing\TestCase
         }
 
         $expected = [$data];
-        for ($i = 1; $i <= $this->secondsToShiftCreatedUpdatedDeletedAt; $i++) {
+        for ($i = 0; $i <= $this->secondsToShiftCreatedUpdatedDeletedAt; $i++) {
             $expected[] = json_encode($this->shiftCreatedUpdatedDeletedAt(json_decode($data, true), $i));
         }
 
@@ -109,7 +109,7 @@ abstract class TestCase extends Laravel\Lumen\Testing\TestCase
         }
 
         $count = $this->app->make('db')->connection($onConnection)->table($table)->where($data);
-        for ($i = 1; $i <= $this->secondsToShiftCreatedUpdatedDeletedAt; $i++) {
+        for ($i = 0; $i <= $this->secondsToShiftCreatedUpdatedDeletedAt; $i++) {
             $count = $count->orWhere($this->shiftCreatedUpdatedDeletedAt($data, $i));
         }
         $count = $count->count();
