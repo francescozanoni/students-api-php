@@ -1077,15 +1077,7 @@ class AuditsTest extends TestCase
                     [
                         'id' => 5,
                         'event' => 'created',
-                        'new_values' => [
-                            'first_name' => 'John',
-                            'last_name' => 'Doe',
-                            'e_mail' => 'john.doe@foo.com',
-                            'phone' => '1234-567890',
-                            'nationality' => 'GB',
-                            'id' => 1
-                            // @todo investigate why not all populated fields are displayed
-                        ],
+                        'new_values' => $john,
                         'user_id' => 0,
                         'created_at' => '2019-01-01 00:00:00'
                     ]
@@ -1099,14 +1091,7 @@ class AuditsTest extends TestCase
                     [
                         'id' => 7,
                         'event' => 'created',
-                        'new_values' => [
-                            'first_name' => 'Jane',
-                            'last_name' => 'Doe',
-                            'e_mail' => 'jane.doe@bar.com',
-                            'nationality' => 'CA',
-                            'id' => 2,
-                            // @todo investigate why not all populated fields are displayed
-                        ],
+                        'new_values' => $jane,
                         'user_id' => 0,
                         'created_at' => '2019-01-02 00:00:00'
                     ]
@@ -1120,14 +1105,7 @@ class AuditsTest extends TestCase
                     [
                         'id' => 14,
                         'event' => 'created',
-                        'new_values' => [
-                            'first_name' => 'Joan',
-                            'last_name' => 'Doe',
-                            'e_mail' => 'joan.doe@foo.com',
-                            'nationality' => 'IE',
-                            'id' => 4,
-                            // @todo investigate why not all populated fields are displayed
-                        ],
+                        'new_values' => $joan,
                         'user_id' => 0,
                         'created_at' => '2019-01-05 00:00:00'
                     ]
