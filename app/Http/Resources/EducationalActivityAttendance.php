@@ -26,7 +26,7 @@ class EducationalActivityAttendance extends JsonResource
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
 
-            // These field is returned as string, but cannot understand why...
+            // This field is returned as string, but cannot understand why...
             'credits' => (float)$this->credits,
 
             'audits' => $this->when($this->withAuditsAttribute($request) === true, AuditResource::collection($this->audits)),

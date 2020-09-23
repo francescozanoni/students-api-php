@@ -9,7 +9,7 @@ abstract class TestCase extends Laravel\Lumen\Testing\TestCase
 {
 
     use DatabaseMigrations;
-    
+
     /**
      * @var int
      */
@@ -64,7 +64,7 @@ abstract class TestCase extends Laravel\Lumen\Testing\TestCase
         }
 
         $expected = [$data];
-        for ($i = 0; $i <= $this->secondsToShiftCreatedUpdatedDeletedAt; $i++) {
+        for ($i = -1; $i <= $this->secondsToShiftCreatedUpdatedDeletedAt; $i++) {
             $expected[] = json_encode($this->shiftCreatedUpdatedDeletedAt(json_decode($data, true), $i));
         }
 
@@ -109,7 +109,7 @@ abstract class TestCase extends Laravel\Lumen\Testing\TestCase
         }
 
         $count = $this->app->make('db')->connection($onConnection)->table($table)->where($data);
-        for ($i = 0; $i <= $this->secondsToShiftCreatedUpdatedDeletedAt; $i++) {
+        for ($i = -1; $i <= $this->secondsToShiftCreatedUpdatedDeletedAt; $i++) {
             $count = $count->orWhere($this->shiftCreatedUpdatedDeletedAt($data, $i));
         }
         $count = $count->count();
@@ -121,7 +121,7 @@ abstract class TestCase extends Laravel\Lumen\Testing\TestCase
         return $this;
 
     }
-    
+
     /**
      * Within input $data, shift "created_at", "updated_at" and "deleted_at" field values by $seconds seconds.
      *
@@ -132,14 +132,14 @@ abstract class TestCase extends Laravel\Lumen\Testing\TestCase
      */
     protected function shiftCreatedUpdatedDeletedAt(array $data, int $seconds) : array
     {
-    
+
         array_walk_recursive($data, function (&$item, $key) use ($seconds) {
-        
+
             if (in_array($key, ['created_at', 'updated_at', 'deleted_at']) === false ||
                 is_string($item) === false) {
                 return;
             }
-            
+
             $dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $item);
 
             // If the date/time field contains a very old value (typically,
@@ -152,11 +152,11 @@ abstract class TestCase extends Laravel\Lumen\Testing\TestCase
 
             $dateTime->sub(new DateInterval('PT' . abs($seconds) . 'S'));
             $item = $dateTime->format('Y-m-d H:i:s');
-        
+
         });
-        
+
         return $data;
-    
+
     }
 
 }

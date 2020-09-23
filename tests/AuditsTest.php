@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 class AuditsTest extends TestCase
 {
@@ -9,6 +9,8 @@ class AuditsTest extends TestCase
      */
     public function testGetAnnotations()
     {
+
+        $john = (new StudentBuilder('john'))->build();
 
         $this->json('GET', '/annotations?with_audits=true')
             ->seeJsonEquals([
@@ -20,14 +22,7 @@ class AuditsTest extends TestCase
                         'id' => 1,
                         'title' => 'First title',
                         'content' => 'First content',
-                        'student' => [
-                            'id' => 1,
-                            'first_name' => 'John',
-                            'last_name' => 'Doe',
-                            'e_mail' => 'john.doe@foo.com',
-                            'phone' => '1234-567890',
-                            'nationality' => 'GB',
-                        ],
+                        'student' => $john,
                         'audits' => [
                             [
                                 'id' => 6,
@@ -85,14 +80,7 @@ class AuditsTest extends TestCase
                     'id' => 1,
                     'title' => 'First title',
                     'content' => 'First content',
-                    'student' => [
-                        'id' => 1,
-                        'first_name' => 'John',
-                        'last_name' => 'Doe',
-                        'e_mail' => 'john.doe@foo.com',
-                        'phone' => '1234-567890',
-                        'nationality' => 'GB',
-                    ],
+                    'student' => $john,
                     'audits' => [
                         [
                             'id' => 6,
@@ -116,6 +104,8 @@ class AuditsTest extends TestCase
     public function testModifyAnnotation()
     {
 
+        $john = (new StudentBuilder('john'))->build();
+
         $this->json('PUT',
             '/annotations/1',
             [
@@ -137,14 +127,7 @@ class AuditsTest extends TestCase
                     'id' => 1,
                     'title' => 'First title modified',
                     'content' => 'First content',
-                    'student' => [
-                        'id' => 1,
-                        'first_name' => 'John',
-                        'last_name' => 'Doe',
-                        'e_mail' => 'john.doe@foo.com',
-                        'phone' => '1234-567890',
-                        'nationality' => 'GB',
-                    ],
+                    'student' => $john,
                     'audits' => [
                         [
                             'id' => 6,
@@ -183,6 +166,8 @@ class AuditsTest extends TestCase
     public function testGetEducationalActivityAttendances()
     {
 
+        $john = (new StudentBuilder('john'))->build();
+
         $this->json('GET', '/educational_activity_attendances?with_audits=true')
             ->seeJsonEquals([
                 'status_code' => 200,
@@ -195,14 +180,7 @@ class AuditsTest extends TestCase
                         'start_date' => '2019-01-08',
                         'end_date' => '2019-01-09',
                         'credits' => 1.2,
-                        'student' => [
-                            'id' => 1,
-                            'first_name' => 'John',
-                            'last_name' => 'Doe',
-                            'e_mail' => 'john.doe@foo.com',
-                            'phone' => '1234-567890',
-                            'nationality' => 'GB',
-                        ],
+                        'student' => $john,
                         'audits' => [
                             [
                                 'id' => 18,
@@ -268,14 +246,7 @@ class AuditsTest extends TestCase
                     'start_date' => '2019-01-08',
                     'end_date' => '2019-01-09',
                     'credits' => 1.2,
-                    'student' => [
-                        'id' => 1,
-                        'first_name' => 'John',
-                        'last_name' => 'Doe',
-                        'e_mail' => 'john.doe@foo.com',
-                        'phone' => '1234-567890',
-                        'nationality' => 'GB',
-                    ],
+                    'student' => $john,
                     'audits' => [
                         [
                             'id' => 18,
@@ -304,6 +275,9 @@ class AuditsTest extends TestCase
     public function testGetEligibilities()
     {
 
+        $john = (new StudentBuilder('john'))->build();
+        $jane = (new StudentBuilder('jane'))->build();
+
         $this->json('GET', '/eligibilities?with_audits=true')
             ->seeJsonEquals([
                 'status_code' => 200,
@@ -316,14 +290,7 @@ class AuditsTest extends TestCase
                         'end_date' => '2019-12-01',
                         'notes' => 'First eligibility notes',
                         'is_eligible' => true,
-                        'student' => [
-                            'id' => 1,
-                            'first_name' => 'John',
-                            'last_name' => 'Doe',
-                            'e_mail' => 'john.doe@foo.com',
-                            'phone' => '1234-567890',
-                            'nationality' => 'GB',
-                        ],
+                        'student' => $john,
                         'audits' => [
                             [
                                 'id' => 10,
@@ -346,13 +313,7 @@ class AuditsTest extends TestCase
                         'start_date' => '2019-01-01',
                         'end_date' => '2019-12-01',
                         'is_eligible' => false,
-                        'student' => [
-                            'id' => 2,
-                            'first_name' => 'Jane',
-                            'last_name' => 'Doe',
-                            'e_mail' => 'jane.doe@bar.com',
-                            'nationality' => 'CA',
-                        ],
+                        'student' => $jane,
                         'audits' => [
                             [
                                 'id' => 11,
@@ -417,14 +378,7 @@ class AuditsTest extends TestCase
                     'end_date' => '2019-12-01',
                     'notes' => 'First eligibility notes',
                     'is_eligible' => true,
-                    'student' => [
-                        'id' => 1,
-                        'first_name' => 'John',
-                        'last_name' => 'Doe',
-                        'e_mail' => 'john.doe@foo.com',
-                        'phone' => '1234-567890',
-                        'nationality' => 'GB',
-                    ],
+                    'student' => $john,
                     'audits' => [
                         [
                             'id' => 10,
@@ -453,6 +407,8 @@ class AuditsTest extends TestCase
     public function testGetEvaluations()
     {
 
+        $john = (new StudentBuilder('john'))->build();
+
         $this->json('GET', '/evaluations?with_audits=true')
             ->seeJsonEquals([
                 'status_code' => 200,
@@ -466,14 +422,7 @@ class AuditsTest extends TestCase
                                 'id' => 1,
                                 'location' => 'Location 1',
                                 'sub_location' => 'Sub-location 1',
-                                'student' => [
-                                    'id' => 1,
-                                    'first_name' => 'John',
-                                    'last_name' => 'Doe',
-                                    'e_mail' => 'john.doe@foo.com',
-                                    'phone' => '1234-567890',
-                                    'nationality' => 'GB',
-                                ],
+                                'student' => $john,
                                 'start_date' => '2019-01-10',
                                 'end_date' => '2019-01-24',
                                 'hour_amount' => 123,
@@ -548,14 +497,7 @@ class AuditsTest extends TestCase
                             'id' => 1,
                             'location' => 'Location 1',
                             'sub_location' => 'Sub-location 1',
-                            'student' => [
-                                'id' => 1,
-                                'first_name' => 'John',
-                                'last_name' => 'Doe',
-                                'e_mail' => 'john.doe@foo.com',
-                                'phone' => '1234-567890',
-                                'nationality' => 'GB',
-                            ],
+                            'student' => $john,
                             'start_date' => '2019-01-10',
                             'end_date' => '2019-01-24',
                             'hour_amount' => 123,
@@ -594,6 +536,9 @@ class AuditsTest extends TestCase
     public function testGetInternships()
     {
 
+        $john = (new StudentBuilder('john'))->build();
+        $joan = (new StudentBuilder('joan'))->build();
+
         $this->json('GET', '/internships?with_audits=true')
             ->seeJsonEquals([
                 'status_code' => 200,
@@ -604,14 +549,7 @@ class AuditsTest extends TestCase
                         'id' => 1,
                         'location' => 'Location 1',
                         'sub_location' => 'Sub-location 1',
-                        'student' => [
-                            'id' => 1,
-                            'first_name' => 'John',
-                            'last_name' => 'Doe',
-                            'e_mail' => 'john.doe@foo.com',
-                            'phone' => '1234-567890',
-                            'nationality' => 'GB',
-                        ],
+                        'student' => $john,
                         'start_date' => '2019-01-10',
                         'end_date' => '2019-01-24',
                         'hour_amount' => 123,
@@ -643,14 +581,7 @@ class AuditsTest extends TestCase
                         'id' => 2,
                         'location' => 'Location 1',
                         'sub_location' => 'Sub-location 1',
-                        'student' => [
-                            'id' => 1,
-                            'first_name' => 'John',
-                            'last_name' => 'Doe',
-                            'e_mail' => 'john.doe@foo.com',
-                            'phone' => '1234-567890',
-                            'nationality' => 'GB',
-                        ],
+                        'student' => $john,
                         'start_date' => '2019-01-26',
                         'end_date' => '2019-01-31',
                         'hour_amount' => 34,
@@ -682,13 +613,7 @@ class AuditsTest extends TestCase
                         'id' => 3,
                         'location' => 'Location 1',
                         'sub_location' => 'Sub-location 1',
-                        'student' => [
-                            'id' => 4,
-                            'first_name' => 'Joan',
-                            'last_name' => 'Doe',
-                            'e_mail' => 'joan.doe@foo.com',
-                            'nationality' => 'IE',
-                        ],
+                        'student' => $joan,
                         'start_date' => '2019-01-26',
                         'end_date' => '2019-01-31',
                         'hour_amount' => 34,
@@ -732,13 +657,7 @@ class AuditsTest extends TestCase
                         'id' => 4,
                         'location' => 'Location 1',
                         'sub_location' => 'Sub-location 1',
-                        'student' => [
-                            'id' => 4,
-                            'first_name' => 'Joan',
-                            'last_name' => 'Doe',
-                            'e_mail' => 'joan.doe@foo.com',
-                            'nationality' => 'IE',
-                        ],
+                        'student' => $joan,
                         // 10 days in the future.
                         'start_date' => (new DateTime())->add(new DateInterval('P10D'))->format('Y-m-d'),
                         // 20 days in the future.
@@ -867,13 +786,7 @@ class AuditsTest extends TestCase
                     'id' => 3,
                     'location' => 'Location 1',
                     'sub_location' => 'Sub-location 1',
-                    'student' => [
-                        'id' => 4,
-                        'first_name' => 'Joan',
-                        'last_name' => 'Doe',
-                        'e_mail' => 'joan.doe@foo.com',
-                        'nationality' => 'IE',
-                    ],
+                    'student' => $joan,
                     'start_date' => '2019-01-26',
                     'end_date' => '2019-01-31',
                     'hour_amount' => 34,
@@ -924,6 +837,8 @@ class AuditsTest extends TestCase
     public function testGetInterruptionReports()
     {
 
+        $john = (new StudentBuilder('john'))->build();
+
         $this->json('GET', '/interruption_reports?with_audits=true')
             ->seeJsonEquals([
                 'status_code' => 200,
@@ -937,14 +852,7 @@ class AuditsTest extends TestCase
                             'id' => 2,
                             'location' => 'Location 1',
                             'sub_location' => 'Sub-location 1',
-                            'student' => [
-                                'id' => 1,
-                                'first_name' => 'John',
-                                'last_name' => 'Doe',
-                                'e_mail' => 'john.doe@foo.com',
-                                'phone' => '1234-567890',
-                                'nationality' => 'GB'
-                            ],
+                            'student' => $john,
                             'start_date' => '2019-01-26',
                             'end_date' => '2019-01-31',
                             'hour_amount' => 34,
@@ -1007,14 +915,7 @@ class AuditsTest extends TestCase
                         'id' => 2,
                         'location' => 'Location 1',
                         'sub_location' => 'Sub-location 1',
-                        'student' => [
-                            'id' => 1,
-                            'first_name' => 'John',
-                            'last_name' => 'Doe',
-                            'e_mail' => 'john.doe@foo.com',
-                            'phone' => '1234-567890',
-                            'nationality' => 'GB'
-                        ],
+                        'student' => $john,
                         'start_date' => '2019-01-26',
                         'end_date' => '2019-01-31',
                         'hour_amount' => 34,
@@ -1047,6 +948,9 @@ class AuditsTest extends TestCase
     public function testGetOshCourseAttendances()
     {
 
+        $john = (new StudentBuilder('john'))->build();
+        $joan = (new StudentBuilder('joan'))->build();
+
         $this->json('GET', '/osh_course_attendances?with_audits=true')
             ->seeJsonEquals([
                 'status_code' => 200,
@@ -1057,14 +961,7 @@ class AuditsTest extends TestCase
                         'id' => 1,
                         'start_date' => '2018-12-08',
                         'end_date' => '2019-12-07',
-                        'student' => [
-                            'id' => 1,
-                            'first_name' => 'John',
-                            'last_name' => 'Doe',
-                            'e_mail' => 'john.doe@foo.com',
-                            'phone' => '1234-567890',
-                            'nationality' => 'GB',
-                        ],
+                        'student' => $john,
                         'audits' => [
                             [
                                 'id' => 2,
@@ -1084,13 +981,7 @@ class AuditsTest extends TestCase
                         'id' => 3,
                         'start_date' => '2018-12-14',
                         'end_date' => '2019-12-13',
-                        'student' => [
-                            'id' => 4,
-                            'first_name' => 'Joan',
-                            'last_name' => 'Doe',
-                            'e_mail' => 'joan.doe@foo.com',
-                            'nationality' => 'IE',
-                        ],
+                        'student' => $joan,
                         'audits' => [
                             [
                                 'id' => 4,
@@ -1148,14 +1039,7 @@ class AuditsTest extends TestCase
                     'id' => 1,
                     'start_date' => '2018-12-08',
                     'end_date' => '2019-12-07',
-                    'student' => [
-                        'id' => 1,
-                        'first_name' => 'John',
-                        'last_name' => 'Doe',
-                        'e_mail' => 'john.doe@foo.com',
-                        'phone' => '1234-567890',
-                        'nationality' => 'GB',
-                    ],
+                    'student' => $john,
                     'audits' => [
                         [
                             'id' => 2,
@@ -1182,80 +1066,84 @@ class AuditsTest extends TestCase
     public function testGetStudents()
     {
 
+        $john = (new StudentBuilder('john'))->build();
+        $jane = (new StudentBuilder('jane'))->build();
+        $joan = (new StudentBuilder('joan'))->build();
+
+        $johnWithAudits = (new StudentBuilder('john'))
+            ->with(
+                'audits',
+                [
+                    [
+                        'id' => 5,
+                        'event' => 'created',
+                        'new_values' => [
+                            'first_name' => 'John',
+                            'last_name' => 'Doe',
+                            'e_mail' => 'john.doe@foo.com',
+                            'phone' => '1234-567890',
+                            'nationality' => 'GB',
+                            'id' => 1
+                            // @todo investigate why not all populated fields are displayed
+                        ],
+                        'user_id' => 0,
+                        'created_at' => '2019-01-01 00:00:00'
+                    ]
+                ]
+            )
+            ->build();
+        $janeWithAudits = (new StudentBuilder('jane'))
+            ->with(
+                'audits',
+                [
+                    [
+                        'id' => 7,
+                        'event' => 'created',
+                        'new_values' => [
+                            'first_name' => 'Jane',
+                            'last_name' => 'Doe',
+                            'e_mail' => 'jane.doe@bar.com',
+                            'nationality' => 'CA',
+                            'id' => 2,
+                            // @todo investigate why not all populated fields are displayed
+                        ],
+                        'user_id' => 0,
+                        'created_at' => '2019-01-02 00:00:00'
+                    ]
+                ]
+            )
+            ->build();
+        $joanWithAudits = (new StudentBuilder('joan'))
+            ->with(
+                'audits',
+                [
+                    [
+                        'id' => 14,
+                        'event' => 'created',
+                        'new_values' => [
+                            'first_name' => 'Joan',
+                            'last_name' => 'Doe',
+                            'e_mail' => 'joan.doe@foo.com',
+                            'nationality' => 'IE',
+                            'id' => 4,
+                            // @todo investigate why not all populated fields are displayed
+                        ],
+                        'user_id' => 0,
+                        'created_at' => '2019-01-05 00:00:00'
+                    ]
+                ]
+            )
+            ->build();
+
         $this->json('GET', '/students?with_audits=true')
             ->seeJsonEquals([
                     'status_code' => 200,
                     'status' => 'OK',
                     'message' => 'Resource(s) found',
                     'data' => [
-                        [
-                            'id' => 1,
-                            'first_name' => 'John',
-                            'last_name' => 'Doe',
-                            'e_mail' => 'john.doe@foo.com',
-                            'phone' => '1234-567890',
-                            'nationality' => 'GB',
-                            'audits' => [
-                                [
-                                    'id' => 5,
-                                    'event' => 'created',
-                                    'new_values' => [
-                                        'first_name' => 'John',
-                                        'last_name' => 'Doe',
-                                        'e_mail' => 'john.doe@foo.com',
-                                        'phone' => '1234-567890',
-                                        'nationality' => 'GB',
-                                        'id' => 1
-                                    ],
-                                    'user_id' => 0,
-                                    'created_at' => '2019-01-01 00:00:00'
-                                ]
-                            ]
-                        ],
-                        [
-                            'id' => 2,
-                            'first_name' => 'Jane',
-                            'last_name' => 'Doe',
-                            'e_mail' => 'jane.doe@bar.com',
-                            'nationality' => 'CA',
-                            'audits' => [
-                                [
-                                    'id' => 7,
-                                    'event' => 'created',
-                                    'new_values' => [
-                                        'first_name' => 'Jane',
-                                        'last_name' => 'Doe',
-                                        'e_mail' => 'jane.doe@bar.com',
-                                        'nationality' => 'CA',
-                                        'id' => 2
-                                    ],
-                                    'user_id' => 0,
-                                    'created_at' => '2019-01-02 00:00:00'
-                                ]
-                            ]
-                        ],
-                        [
-                            'id' => 4,
-                            'first_name' => 'Joan',
-                            'last_name' => 'Doe',
-                            'e_mail' => 'joan.doe@foo.com',
-                            'nationality' => 'IE',
-                            'audits' => [
-                                [
-                                    'id' => 14,
-                                    'event' => 'created',
-                                    'new_values' => [
-                                        'first_name' => 'Joan',
-                                        'last_name' => 'Doe',
-                                        'e_mail' => 'joan.doe@foo.com',
-                                        'nationality' => 'IE',
-                                        'id' => 4
-                                    ],
-                                    'user_id' => 0,
-                                    'created_at' => '2019-01-05 00:00:00'
-                                ]
-                            ]
-                        ]
+                        $johnWithAudits,
+                        $janeWithAudits,
+                        $joanWithAudits
                     ]
                 ]
             )
@@ -1266,30 +1154,7 @@ class AuditsTest extends TestCase
                 'status_code' => 200,
                 'status' => 'OK',
                 'message' => 'Resource successfully retrieved/created/modified',
-                'data' => [
-                    'id' => 1,
-                    'first_name' => 'John',
-                    'last_name' => 'Doe',
-                    'e_mail' => 'john.doe@foo.com',
-                    'phone' => '1234-567890',
-                    'nationality' => 'GB',
-                    'audits' => [
-                        [
-                            'id' => 5,
-                            'event' => 'created',
-                            'new_values' => [
-                                'first_name' => 'John',
-                                'last_name' => 'Doe',
-                                'e_mail' => 'john.doe@foo.com',
-                                'phone' => '1234-567890',
-                                'nationality' => 'GB',
-                                'id' => 1,
-                            ],
-                            'user_id' => 0,
-                            'created_at' => '2019-01-01 00:00:00',
-                        ],
-                    ],
-                ],
+                'data' => $johnWithAudits
             ])
             ->seeStatusCode(200);
 

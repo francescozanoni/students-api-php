@@ -2131,6 +2131,20 @@ components:
         nationality:
           type: string
           pattern: '^[A-Z]{2}$'
+        text_field_a:
+          type: string
+        text_field_b:
+          type: string
+        date_field_a:
+          type: string
+          format: date
+        date_field_b:
+          type: string
+          format: date
+        amount_field_a:
+          type: integer
+        amount_field_b:
+          type: integer
       required:
         - first_name
         - last_name
