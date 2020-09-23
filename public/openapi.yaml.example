@@ -2027,6 +2027,20 @@ components:
         nationality:
           type: string
           pattern: '^[A-Z]{2}$'
+        text_field_a:
+          type: string
+        text_field_b:
+          type: string
+        date_field_a:
+          type: string
+          format: date
+        date_field_b:
+          type: string
+          format: date
+        amount_field_a:
+          type: integer
+        amount_field_b:
+          type: integer
       required:
         - first_name
         - last_name
@@ -2124,7 +2138,7 @@ components:
         - start_date
         - end_date
         - hour_amount
-        - other_amount # @todo asses whether this attribute can be optional
+        - other_amount # @todo assess whether this attribute can be optional
         - is_optional
         - is_interrupted
       #additionalProperties: false

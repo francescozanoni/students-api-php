@@ -20,6 +20,12 @@ class StudentBuilder extends AbstractBuilder
             'e_mail' => 'john.doe@foo.com',
             'phone' => '1234-567890',
             'nationality' => 'GB',
+            'text_field_a' => 'TEXT FIELD A VALUE',
+            'text_field_b' => 'TEXT FIELD B VALUE',
+            'date_field_a' => '2020-01-01',
+            'date_field_b' => '2020-01-31',
+            'amount_field_a' => 30,
+            'amount_field_b' => 120,
         ],
         'jane' => [
             'id' => 2,
@@ -27,6 +33,9 @@ class StudentBuilder extends AbstractBuilder
             'last_name' => 'Doe',
             'e_mail' => 'jane.doe@bar.com',
             'nationality' => 'CA',
+            'text_field_a' => 'ANOTHER TEXT FIELD A VALUE',
+            'date_field_a' => '2020-02-01',
+            'amount_field_a' => 40,
         ],
         'jim' => [
             'id' => 3,
@@ -41,6 +50,9 @@ class StudentBuilder extends AbstractBuilder
             'last_name' => 'Doe',
             'e_mail' => 'joan.doe@foo.com',
             'nationality' => 'IE',
+            'text_field_b' => 'ANOTHER TEXT FIELD B VALUE',
+            'date_field_b' => '2020-02-29',
+            'amount_field_b' => 50,
         ],
         'jack' => [
             'id' => 5,

@@ -71,4 +71,8 @@ php scripts/setdown.php
 
 ```bash
 php -S localhost:80 -t public public/router.php
+
+# Or with Docker
+docker build -t francescozanoni/students-api-php .
+docker run -d -p 80:80 --name students-api-php -v ${PWD}:/var/www/html francescozanoni/students-api-php
 ```

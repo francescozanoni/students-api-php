@@ -60,14 +60,14 @@ class OtherTest extends TestCase
                 'data' => [
                     'data.is_optional' => [
                         "code error_type",
-                        "value ",
+                        "value false",
                         "in body",
                         "expected integer",
                         "used boolean"
                     ],
                     "data.is_interrupted" => [
                         "code error_type",
-                        "value ",
+                        "value false",
                         "in body",
                         "expected integer",
                         "used boolean"

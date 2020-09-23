@@ -25,8 +25,6 @@ class CreateStudentsTable extends Migration
             $table->softDeletes();
             $table->foreign('nationality')->references('code')->on('countries');
         });
-
-        // @todo assess whether to create a country importer
     }
 
     /**
